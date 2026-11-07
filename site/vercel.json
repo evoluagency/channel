@@ -5,10 +5,22 @@
     {
       "source": "/downloads/Channel.mcaddon",
       "headers": [
-        {"key": "Content-Type", "value": "application/octet-stream"},
-        {"key": "Content-Disposition", "value": "attachment; filename=\"Channel.mcaddon\""},
-        {"key": "X-Content-Type-Options", "value": "nosniff"},
-        {"key": "Cache-Control", "value": "public, max-age=3600"}
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"Channel.mcaddon\""
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     }
   ]
