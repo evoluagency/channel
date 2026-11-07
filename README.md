@@ -1,29 +1,48 @@
 # EVOLU Channel
 
-Projeto público, gratuito e não oficial de um Add-on RPG de fantasia medieval para Minecraft Bedrock.
+Add-on RPG independente para Minecraft Bedrock (Android/PC), com economia e o primeiro núcleo construído de Valdora.
 
-## Estado atual
+## Um único download para testar
 
-**Prévia experimental v1.1.0.** A economia básica foi migrada do protótipo antigo. O primeiro reino, Valdora, ainda não possui vilas geradas nem NPCs próprios; estes são marcos futuros.
+**Versão experimental V-01B (pacotes 1.3.0)**
 
-## Funcionalidades desta prévia
+[**Baixar Channel.mcaddon**](experimental/Channel.mcaddon)
 
-- Dinheiro digital e físico, banco e conversão entre moedas.
-- Comércio simples por menu, recompensas em combate e transferências entre jogadores conectados.
-- Apresentação de Valdora como território inicial.
+O único arquivo reúne pacote de comportamento e pacote de recursos. Não é APK nem instalador independente: o Minecraft precisa estar instalado para importar o arquivo.
 
-## Implantação
+## Como entrar em Valdora
 
-O GitHub guarda arquivos e versões manuais, **sem GitHub Actions, workflows, cron jobs ou migrations**. O site estático deve ser publicado manualmente na Vercel. O arquivo `Channel.mcaddon` deve ser importado no Minecraft Android e ativado em um mundo de teste.
+1. Importe `Channel.mcaddon` no Minecraft.
+2. Crie um **mundo plano novo e descartável**, com o pacote Channel ativo.
+3. Ao entrar, use o menu **Preparar Valdora → Construir Valdora aqui** e confirme a alteração do terreno.
+4. O jogador será enviado à entrada segura da Praça Central. O ponto de renascimento ficará registrado ali.
+5. Se o menu não aparecer, use o item **Carteira Channel → Conhecer Valdora**.
 
-## Proteção de mundos antigos
+**Atenção:** a construção substitui blocos em uma área de aproximadamente 96×96; não use em mundos existentes ou importantes. O primeiro nascimento de um mundo totalmente novo ocorre naturalmente, antes da confirmação e construção do reino. Para já nascer dentro de uma cidade pré-construída, precisaremos de um mundo distribuído em formato `.mcworld`.
 
-Os UUIDs de pacotes e IDs internos do antigo protótipo (`erpg:*`) são preservados para compatibilidade de saldos, itens e inventários. Faça backup antes de atualizar.
+## O que já existe
 
-## Licenciamento e autoria
+- Oito estruturas de Valdora: praça, mercado, guilda/quartel, portão e quatro trechos de vias.
+- Carteira digital, banco, dinheiro físico, compras, vendas, recompensas em combate e transferências.
+- Entrada guiada e renascimento perto da praça após o reino ser criado.
+- Versão experimental não homologada em Minecraft real nesta entrega; testes simulados de economia e nascimento aprovados.
 
-Projeto independente, sem vínculo com Mojang ou Microsoft. Nenhum personagem ou história de terceiros está incorporado. Direitos autorais reservados até definição de licença pública para o código e os assets.
+## Compatibilidade Android
 
-## Valdora V-01A (experimental)
+O Android decide quais aplicativos aparecem em **Abrir com**. Embora Samsung já tenha reconhecido o arquivo em teste, **não é possível garantir a associação ao Minecraft em todo Android** apenas pelo conteúdo do `.mcaddon` ou pelo site. Não renomeie para `.apk`; se Minecraft não aparecer, consulte [o diagnóstico Android](docs/VALDORA_ANDROID_E_SPAWN_V01B.md).
 
-Primeira construção de 96×96 blocos, distribuída separadamente do download estável. [Guia de instalação](docs/VALDORA_INSTALACAO_V01A.md), [relatório técnico](docs/VALDORA_V01A_IMPLEMENTACAO.md), [planta](docs/VALDORA_Planta_V01A.png) e [Add-on experimental](experimental/Channel_Valdora_V01A.mcaddon). Use apenas em mundo plano descartável; não testado ainda no aplicativo Minecraft.
+## Documentos e código
+
+- [Documento técnico Valdora](docs/VALDORA_CADERNO_TECNICO_V01.md)
+- [Correção V-01B (Android e spawn)](docs/VALDORA_ANDROID_E_SPAWN_V01B.md)
+- [Código e scripts de teste](addon/Channel_BP/scripts/main.js)
+- [Estruturas da cidade](addon/Channel_BP/structures/channel/valdora/)
+- [Validação simulada de spawn](docs/tests/test_valdora_spawn.cjs)
+
+## Engenharia e direitos
+
+Sem GitHub Actions, workflows, cron jobs, banco externo ou deploy automático. A Vercel e o DNS são geridos separadamente pelo proprietário.
+
+UUIDs e IDs internos `erpg:*` são preservados para compatibilidade; faça backup dos mundos antes de atualizar.
+
+Projeto independente, não oficial da Mojang/Microsoft. Direitos reservados até a definição da licença pública do código e dos assets.

@@ -145,7 +145,7 @@ async function openMenu(p) {
     if(sel===4) await withdrawCashMenu(p);
     if(sel===5) await transferMenu(p);
     if(sel===6) await historyMenu(p);
-    if(sel===7) await form(p,'Valdora | Primeiro Reino','Valdora e o primeiro territorio de Channel. O Mercado, o Banco e as recompensas de combate formam sua economia inicial. Vilas, faccoes, novos NPCs e historia serao adicionados em versoes futuras.',['Voltar']);
+    if(sel===7) await openValdoraEntry(p);
   } finally { viewing.delete(p.id); }
 }
 function physicalTotal(p) {
@@ -250,8 +250,111 @@ system.beforeEvents.startup.subscribe(({itemComponentRegistry})=>{
     onUse(event){system.run(()=>{openMenu(event.source).catch(e=>say(event.source,`Erro: ${String(e)}`));});}
   });
 });
+// Valdora V-01B: as estruturas sao construidas somente com confirmacao explicita.
+// A instalacao do Add-on nao altera o mundo por conta propria.
+const VALDORA_WORLD = 'channel:valdora.v01b.site';
+const VALDORA_ENTRY = 'channel:valdora.v01b.entry';
+const VALDORA_MODULES = Object.freeze([
+  ['via_nw',0,0],['via_ne',48,0],['via_sw',0,48],['via_se',48,48],
+  ['portao',31,2],['praca',32,32],['mercado',65,35],['guilda',1,35]
+]);
+let valdoraBuilding = false;
+function storedValdora() {
+  try {
+    const raw = world.getDynamicProperty(VALDORA_WORLD);
+    if (typeof raw !== 'string') return null;
+    const value = JSON.parse(raw);
+    if (value?.dimension !== 'minecraft:overworld') return null;
+    if (![value.x,value.y,value.z].every(Number.isSafeInteger)) return null;
+    return value;
+  } catch { return null; }
+}
+function valdoraSpawnLocation(site) {
+  return { x: site.x + 47, y: site.y + 2, z: site.z + 61 };
+}
+function giveValdoraSpawn(player, site) {
+  // Apenas os jogadores deste mundo, preservando worlds sem Valdora.
+  try {
+    const pos = valdoraSpawnLocation(site);
+    player.setSpawnPoint({ ...pos, dimension:world.getDimension('overworld') });
+  } catch (e) { say(player,'Nao foi possivel definir o renascimento: '+String(e)); }
+}
+function goValdora(player, site) {
+  if (!player?.isValid) return;
+  const pos = valdoraSpawnLocation(site);
+  giveValdoraSpawn(player,site);
+  try {
+    player.teleport({x:pos.x+0.5,y:pos.y+0.05,z:pos.z+0.5},
+      {dimension:world.getDimension('overworld')});
+    player.setDynamicProperty(VALDORA_ENTRY,true);
+    say(player,'Voce chegou a Valdora. Seu ponto de renascimento fica na Praca Central.');
+  } catch(e) { say(player,'Falha ao entrar em Valdora: '+String(e)); }
+}
+async function constructValdora(player) {
+  if (valdoraBuilding) return say(player,'Construcao em andamento.');
+  const existing = storedValdora();
+  if (existing) return goValdora(player, existing);
+  if (player.dimension.id !== 'minecraft:overworld')
+    return say(player,'Volte para a superficie (Overworld) antes de construir Valdora.');
+  const choice = await form(player,'Criar Valdora — confirmar',
+    'A construcao ocupa aproximadamente 96 x 96 blocos e SUBSTITUI os blocos dessa area.\n\nUse exclusivamente um MUNDO NOVO E PLANO. Faca backup antes de confirmar. O processo nao pode ser desfeito.',
+    ['Cancelar','Construir Valdora aqui']);
+  if (choice !== 1 || !player?.isValid) return;
+  // A segunda validacao impede a corrida entre jogadores com a caixa de confirmacao aberta.
+  if (valdoraBuilding || storedValdora()) return say(player,'Valdora ja foi iniciada neste mundo.');
+  if (player.dimension.id !== 'minecraft:overworld') return;
+  const pos = player.location;
+  const origin = {x:Math.floor(pos.x)-48,y:Math.floor(pos.y)-1,z:Math.floor(pos.z)-48};
+  // A origem e registrada com o piso Y+1; o jogador nasce em Y+2.
+  if (origin.y < -60 || origin.y > 295) return say(player,'Altura inadequada para Valdora.');
+  valdoraBuilding = true;
+  try {
+    const dim = world.getDimension('overworld');
+    const mgr = world.structureManager;
+    for (const [name, dx, dz] of VALDORA_MODULES)
+      mgr.place('channel:valdora/'+name,dim,
+        {x:origin.x+dx,y:origin.y,z:origin.z+dz});
+    // Depois de aceitar todos os oito posicionamentos, registramos um unico local.
+    const site = {...origin,dimension:'minecraft:overworld'};
+    world.setDynamicProperty(VALDORA_WORLD, JSON.stringify(site));
+    const spawn = valdoraSpawnLocation(site);
+    try { dim.runCommand(`setworldspawn ${spawn.x} ${spawn.y} ${spawn.z}`); }
+    catch { say(player,'Nao foi possivel alterar o spawn geral; renascimento pessoal configurado.'); }
+    goValdora(player, site);
+    say(player,'Construcao enviada ao mundo. Aguarde a renderizacao dos setores.');
+  } catch (e) {
+    say(player,'Falha ao construir Valdora: '+String(e)+'. Partes do terreno podem ter sido alteradas. Use um mundo novo para tentar novamente.');
+  } finally { valdoraBuilding = false; }
+}
+async function openValdoraEntry(player) {
+  const site=storedValdora();
+  if (site) {
+    const choice=await form(player,'Valdora | Reino inicial',
+      'O primeiro reino ja foi construido neste mundo.',
+      ['Voltar a Praca Central','Cancelar']);
+    if(choice===0) goValdora(player,site);
+    return;
+  }
+  const choice=await form(player,'Valdora | Reino inicial',
+    'Valdora ainda nao existe neste mundo. Construa uma unica vez em um mundo plano novo. Nenhum bloco sera substituido sem confirmar.',
+    ['Preparar Valdora','Agora nao']);
+  if(choice===0) await constructValdora(player);
+}
 world.afterEvents.playerSpawn.subscribe((ev)=>{
-  system.runTimeout(()=>handWallet(ev.player),20);
+  system.runTimeout(()=>{
+    if (!ev.player?.isValid) return;
+    handWallet(ev.player);
+    const site=storedValdora();
+    if(site) {
+      giveValdoraSpawn(ev.player,site);
+      // Jogadores novos chegam a Valdora uma unica vez; veteranos mantem a posicao salva.
+      if(ev.initialSpawn && ev.player.getDynamicProperty(VALDORA_ENTRY)!==true)
+        system.runTimeout(()=>goValdora(ev.player,site),40);
+    } else if(ev.initialSpawn && ev.player.dimension.id==='minecraft:overworld') {
+      // Espera o carregamento do mundo para nao cancelar formularios na inicializacao.
+      system.runTimeout(()=>openValdoraEntry(ev.player).catch(e=>say(ev.player,String(e))),100);
+    }
+  },20);
 });
 world.afterEvents.entityDie.subscribe((ev)=>{
   try {

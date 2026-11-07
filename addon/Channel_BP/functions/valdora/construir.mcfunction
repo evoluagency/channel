@@ -1,4 +1,4 @@
-# Channel / Valdora V-01A — usar SOMENTE em mundo plano descartavel e com backup.
+# Channel / Valdora V-01B — usar SOMENTE em mundo plano descartavel e com backup.
 # Posicione-se no CANTO NOROESTE do terreno (X0,Z0) com os pes no nivel Y0+1.
 # As estruturas serao inseridas em 96x96 blocos. O comando nao desfaz a operacao.
 structure load channel:valdora/via_nw ~ ~-1 ~
