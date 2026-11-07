@@ -1,0 +1,22 @@
+; EVOLU Channel / Valdora - primeira fatia vertical independente
+config_version=5
+
+[application]
+config/name="EVOLU Channel — Valdora"
+run/main_scene="res://scenes/Main.tscn"
+config/description="Prototipo independente de RPG 3D medieval para Android"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/handheld/orientation=0
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+
+[physics]
+3d/default_gravity=23.0
