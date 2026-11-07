@@ -1,0 +1,58 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Channel | Economia e Banco (BP)",
+    "description": "Dinheiro fisico, carteira, banco, loja e recompensas. v1.0",
+    "uuid": "04d6bfac-4541-4e6a-ad3a-11ee52196623",
+    "version": [
+      1,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      90
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "fa2b8c58-6632-41e2-a6cc-fedd95bad462",
+      "version": [
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "7cde4180-d9d2-400a-a0c8-dc4e625875f8",
+      "version": [
+        1,
+        1,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.0.0"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "2.0.0"
+    },
+    {
+      "uuid": "2ad12bec-91b7-4b19-80db-0678c19d60ad",
+      "version": [
+        1,
+        1,
+        0
+      ]
+    }
+  ]
+}

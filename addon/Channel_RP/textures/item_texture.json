@@ -1,0 +1,18 @@
+{
+  "resource_pack_name": "Channel",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "erpg_carteira": {
+      "textures": "textures/items/carteira"
+    },
+    "erpg_moeda_1": {
+      "textures": "textures/items/moeda_1"
+    },
+    "erpg_moeda_10": {
+      "textures": "textures/items/moeda_10"
+    },
+    "erpg_nota_100": {
+      "textures": "textures/items/nota_100"
+    }
+  }
+}
