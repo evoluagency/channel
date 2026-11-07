@@ -1,5 +1,5 @@
 const fs=require('fs'), vm=require('vm'), assert=require('node:assert/strict');
-const source=fs.readFileSync(require('path').join(__dirname,'../addon/Channel_BP/scripts/main.js'),'utf8');
+const source=fs.readFileSync(require('path').join(__dirname,'../../addon/Channel_BP/scripts/main.js'),'utf8');
 const code=source.replace(/^import .*;\s*$/gm,'')+'\n globalThis.__vtest={constructValdora,storedValdora,goValdora,valdoraSpawnLocation,openValdoraEntry};';
 const calls=[];let replies=[];const store=new Map();
 class Player { constructor(name){this.id=name;this.name=name;this.isValid=true;this.dimension=dimension;this.location={x:48.5,y:64,z:48.5};this.dyn={};this.messages=[];}
