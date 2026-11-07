@@ -1,4 +1,4 @@
-# EVOLU Channel — Valdora | Alpha 0.1 (Godot)
+# EVOLU Channel — Valdora | Alpha 0.1.1 (Godot)
 
 Protótipo independente de RPG 3D medieval para Android. **Não é mais um Add-on de Minecraft.**
 
@@ -25,3 +25,17 @@ Protótipo independente de RPG 3D medieval para Android. **Não é mais um Add-o
 
 ## Segurança de distribuição
 Nunca publique keystore, senhas ou chaves de assinatura no GitHub público. Um novo APK instalado por atualização precisa manter identificador e assinatura. O arquivo `.apk` não pode ser produzido pela mera compactação dos arquivos deste projeto.
+
+
+## Validação no próprio Android (Godot 4.7.2)
+
+A Godot disponibiliza um **editor para Android** que pode executar este projeto e exportar um APK de teste sem instalar separadamente Android SDK/JDK. Ele é um **aplicativo de desenvolvimento**, não o jogo Channel. Fonte oficial: https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html
+
+1. Instale o [Godot Editor Android 4.7.2](https://godotengine.org/download/android/), da fonte oficial.
+2. Extraia este ZIP em uma pasta do armazenamento do celular (por exemplo `Downloads/Channel-Valdora/`). Não abra o ZIP como um projeto sem extraí-lo.
+3. No Godot Editor Android, **Importar projeto** → selecione `project.godot`.
+4. Execute a cena Valdora (`▶`). Ao aparecer o personagem perto da praça, toque **AUTO TESTE** (apenas na versão de desenvolvimento). A mensagem deve indicar **9/9 testes OK**.
+5. Caminhe até a mercadora e o banqueiro, use **INTERAGIR** e valide diálogos, movimentação e salvamento. Confira a guia `docs/TESTE_ANDROID.md`.
+6. Para gerar `Channel-Valdora-alpha.apk`, escolha **Projeto → Exportar → Android** e selecione **Exportar com depuração**. Se o editor solicitar templates, instale os da mesma versão; não use chaves de assinatura públicas.
+
+**Não é um APK pré-compilado.** Não classificamos a versão como homologada até executar o jogo e verificar a exportação em Samsung/Xiaomi.

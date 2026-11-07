@@ -145,14 +145,26 @@ func _tree(pos: Vector3) -> void:
     _cylinder("Copa topo", pos + Vector3(0, 7.0, 0), 1.5, 2.2, "#46663f", 0.0)
 
 func _building(name: String, pos: Vector3, width: float, depth: float, wall: String, roof: String) -> void:
-    _box(name + " fundacao", pos + Vector3(0, 0.3, 0), Vector3(width, 0.6, depth), "#7b7066", true)
-    _box(name + " fachada", pos + Vector3(0, 3.0, -depth / 2.0), Vector3(width, 5.4, 0.65), wall, true)
+    # A fundacao fica nivelada ao solo: CharacterBody3D nao possui degrau automatico.
+    _box(name + " fundacao", pos + Vector3(0, -0.18, 0), Vector3(width, 0.36, depth), "#7b7066", true)
+    # Fachada com vao real e livre (2.7 x 3.6 metros). Uma fachada unica
+    # com colisao bloquearia todas as portas apesar da aparencia do modelo.
+    var doorway_width := 2.7
+    var doorway_height := 3.6
+    var side_width := (width - doorway_width) / 2.0
+    var front := -depth / 2.0
+    for side in [-1.0, 1.0]:
+        var offset_x: float = float(side) * (doorway_width / 2.0 + side_width / 2.0)
+        _box(name + " fachada lateral", pos + Vector3(offset_x, 3.0, front), Vector3(side_width, 5.4, 0.65), wall, true)
+    var lintel_height := 5.4 - doorway_height
+    _box(name + " verga", pos + Vector3(0, doorway_height + lintel_height / 2.0 + 0.3, front), Vector3(doorway_width, lintel_height, 0.65), wall, true)
     _box(name + " fundo", pos + Vector3(0, 3.0, depth / 2.0), Vector3(width, 5.4, 0.65), wall, true)
     _box(name + " parede esq", pos + Vector3(-width / 2.0, 3.0, 0), Vector3(0.65, 5.4, depth), wall, true)
     _box(name + " parede dir", pos + Vector3(width / 2.0, 3.0, 0), Vector3(0.65, 5.4, depth), wall, true)
     _box(name + " telhado", pos + Vector3(0, 6.1, 0), Vector3(width + 1.0, 1.1, depth + 1.0), roof)
-    _box(name + " placa", pos + Vector3(0, 4.4, -depth / 2.0 - 0.55), Vector3(width * 0.45, 0.75, 0.25), "#80629b")
-    _box(name + " porta", pos + Vector3(0, 1.7, -depth / 2.0 - 0.56), Vector3(2.1, 3.4, 0.28), "#5f433a")
+    _box(name + " placa", pos + Vector3(0, 4.6, front - 0.55), Vector3(width * 0.45, 0.75, 0.25), "#80629b")
+    # A passagem central permanece aberta, sem malha/collider de porta ficticia.
+    _box(name + " soleira", pos + Vector3(0, -0.06, front - 0.25), Vector3(doorway_width, 0.12, 1.0), "#bca888")
     for side in [-1.0, 1.0]:
         _box(name + " janela", pos + Vector3(side * width * 0.28, 3.1, -depth / 2.0 - 0.58), Vector3(1.5, 1.7, 0.3), "#99b7bd")
 
@@ -378,6 +390,18 @@ func _build_ui() -> void:
     help.add_theme_color_override("font_color", Color("#eee6dc"))
     layer.add_child(help)
 
+    # Visivel apenas em versoes de desenvolvimento: diagnostico executado
+    # no proprio motor Godot, sem servidor nem dados da conta do jogador.
+    if OS.is_debug_build():
+        var diagnostic_button := Button.new()
+        diagnostic_button.name = "Auto teste Valdora"
+        diagnostic_button.text = "AUTO TESTE"
+        diagnostic_button.position = Vector2(viewport_size.x - 205, 78)
+        diagnostic_button.size = Vector2(175, 49)
+        diagnostic_button.add_theme_font_size_override("font_size", 17)
+        diagnostic_button.pressed.connect(_run_diagnostics)
+        layer.add_child(diagnostic_button)
+
     dialogue_layer = PanelContainer.new()
     dialogue_layer.name = "Dialogo"
     dialogue_layer.position = Vector2(viewport_size.x * 0.28, viewport_size.y * 0.53)
@@ -385,6 +409,38 @@ func _build_ui() -> void:
     dialogue_layer.add_theme_stylebox_override("panel", _make_panel("#181d30f5", 16))
     dialogue_layer.visible = false
     layer.add_child(dialogue_layer)
+
+func _run_diagnostics() -> void:
+    var results: Dictionary = {}
+    results["spawn_no_reino"] = absf(START_POS.x) <= WORLD_SIZE / 2.0 and absf(START_POS.z) <= WORLD_SIZE / 2.0
+    results["jogador"] = player != null and is_instance_valid(player)
+    results["camera"] = camera != null and is_instance_valid(camera) and camera.current
+    results["quatro_npcs"] = npcs.size() == 4
+    results["mercador"] = npcs.any(func(npc: Dictionary): return npc.get("kind") == "merchant")
+    results["banqueiro"] = npcs.any(func(npc: Dictionary): return npc.get("kind") == "bank")
+    results["economia_valida"] = coins >= 0 and bank_coins >= 0 and potions >= 0
+    results["interface"] = action_button != null and joystick_base != null and balance_label != null
+    # Testa gravacao no sandbox local sem tocar no progresso da pessoa.
+    var path := "user://channel_diagnostic.tmp"
+    var file := FileAccess.open(path, FileAccess.WRITE)
+    var writable := file != null
+    if writable:
+        file.store_string("VALDORA_TESTE")
+        file.close()
+        var readback := FileAccess.get_file_as_string(path)
+        writable = readback == "VALDORA_TESTE"
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+    results["armazenamento_local"] = writable
+    var passed := 0
+    for check in results.keys():
+        if results[check]:
+            passed += 1
+    var success := passed == results.size()
+    var summary := "VALDORA: %d/%d testes OK" % [passed, results.size()]
+    if not success:
+        summary = "VALDORA: %d/%d testes, verifique console" % [passed, results.size()]
+    _notify(summary)
+    print("[CHANNEL_DIAGNOSTIC] ", JSON.stringify({"success": success, "summary": summary, "checks": results}))
 
 func _input(event: InputEvent) -> void:
     if event is InputEventScreenTouch:
