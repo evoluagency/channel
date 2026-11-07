@@ -23,3 +23,7 @@ Os UUIDs de pacotes e IDs internos do antigo protótipo (`erpg:*`) são preserva
 ## Licenciamento e autoria
 
 Projeto independente, sem vínculo com Mojang ou Microsoft. Nenhum personagem ou história de terceiros está incorporado. Direitos autorais reservados até definição de licença pública para o código e os assets.
+
+## Valdora V-01A (experimental)
+
+Primeira construção de 96×96 blocos, distribuída separadamente do download estável. [Guia de instalação](docs/VALDORA_INSTALACAO_V01A.md), [relatório técnico](docs/VALDORA_V01A_IMPLEMENTACAO.md), [planta](docs/VALDORA_Planta_V01A.png) e [Add-on experimental](experimental/Channel_Valdora_V01A.mcaddon). Use apenas em mundo plano descartável; não testado ainda no aplicativo Minecraft.

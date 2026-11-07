@@ -2,11 +2,11 @@
   "format_version": 2,
   "header": {
     "name": "Channel | Itens e Texturas (RP)",
-    "description": "Moedas, cedulas e carteira do Channel v1.0",
+    "description": "Channel V1.2 | Economia e primeiro setor arquitetonico de Valdora",
     "uuid": "2ad12bec-91b7-4b19-80db-0678c19d60ad",
     "version": [
       1,
-      1,
+      2,
       0
     ],
     "min_engine_version": [
@@ -21,7 +21,7 @@
       "uuid": "2337e563-0818-4e60-a1c1-d845e61a9ef1",
       "version": [
         1,
-        1,
+        2,
         0
       ]
     }

@@ -1,0 +1,204 @@
+{
+  "version": [
+    1,
+    2,
+    0
+  ],
+  "palette_block_version": 18168865,
+  "modules": [
+    {
+      "name": "portao",
+      "size": [
+        33,
+        20,
+        19
+      ],
+      "position": [
+        31,
+        2
+      ],
+      "voxels_explicit": 4575,
+      "blocks": {
+        "minecraft:stone_bricks": 2381,
+        "minecraft:air": 1322,
+        "minecraft:polished_diorite": 483,
+        "minecraft:polished_andesite": 361,
+        "minecraft:purple_wool": 22,
+        "minecraft:gold_block": 4,
+        "minecraft:glowstone": 2
+      },
+      "bytes": 100923,
+      "sha256": "b27b0e03d94330de8b3f88a38aded20bfa7825a1266de2e839c84e70ff1eb2f8"
+    },
+    {
+      "name": "praca",
+      "size": [
+        31,
+        12,
+        31
+      ],
+      "position": [
+        32,
+        32
+      ],
+      "voxels_explicit": 2587,
+      "blocks": {
+        "minecraft:stone_bricks": 1543,
+        "minecraft:polished_diorite": 564,
+        "minecraft:oak_leaves": 136,
+        "minecraft:polished_andesite": 131,
+        "minecraft:grass_block": 100,
+        "minecraft:blue_stained_glass": 81,
+        "minecraft:oak_log": 12,
+        "minecraft:spruce_planks": 8,
+        "minecraft:gold_block": 6,
+        "minecraft:glowstone": 4,
+        "minecraft:purple_wool": 2
+      },
+      "bytes": 93170,
+      "sha256": "c669b2f55f51a724b096fe3fce82af0bebbe8a4b6c2a16ec68bca2fd3b4d3ccd"
+    },
+    {
+      "name": "mercado",
+      "size": [
+        30,
+        13,
+        25
+      ],
+      "position": [
+        65,
+        35
+      ],
+      "voxels_explicit": 2506,
+      "blocks": {
+        "minecraft:stone_bricks": 1116,
+        "minecraft:polished_diorite": 448,
+        "minecraft:dark_oak_planks": 250,
+        "minecraft:spruce_planks": 242,
+        "minecraft:bricks": 147,
+        "minecraft:polished_andesite": 138,
+        "minecraft:purple_wool": 95,
+        "minecraft:air": 18,
+        "minecraft:cobblestone": 15,
+        "minecraft:glass": 12,
+        "minecraft:yellow_wool": 10,
+        "minecraft:gold_block": 5,
+        "minecraft:bookshelf": 4,
+        "minecraft:glowstone": 3,
+        "minecraft:furnace": 1,
+        "minecraft:crafting_table": 1,
+        "minecraft:hay_block": 1
+      },
+      "bytes": 79143,
+      "sha256": "8ea372a87a804383a96e19e98a5d9a09e3b7f3962846286efea2859067114672"
+    },
+    {
+      "name": "guilda",
+      "size": [
+        30,
+        15,
+        25
+      ],
+      "position": [
+        1,
+        35
+      ],
+      "voxels_explicit": 2291,
+      "blocks": {
+        "minecraft:stone_bricks": 1250,
+        "minecraft:polished_diorite": 482,
+        "minecraft:dark_oak_planks": 336,
+        "minecraft:polished_andesite": 134,
+        "minecraft:white_wool": 21,
+        "minecraft:spruce_planks": 17,
+        "minecraft:air": 12,
+        "minecraft:glass": 12,
+        "minecraft:oak_log": 9,
+        "minecraft:bookshelf": 5,
+        "minecraft:gold_block": 4,
+        "minecraft:oak_planks": 3,
+        "minecraft:red_wool": 3,
+        "minecraft:glowstone": 2,
+        "minecraft:purple_wool": 1
+      },
+      "bytes": 91032,
+      "sha256": "c1a4ee5f3be7df8a51d20e3fc68e8898e052b29b476169db1dfbeef21c2d5692"
+    },
+    {
+      "name": "via_nw",
+      "size": [
+        48,
+        3,
+        48
+      ],
+      "position": [
+        0,
+        0
+      ],
+      "voxels_explicit": 188,
+      "blocks": {
+        "minecraft:stone_bricks": 168,
+        "minecraft:polished_diorite": 20
+      },
+      "bytes": 55629,
+      "sha256": "98dccffb312b932eeb0088c1ae4bf8cedfa5e0100c870026c57a817a40f91a4e"
+    },
+    {
+      "name": "via_sw",
+      "size": [
+        48,
+        3,
+        48
+      ],
+      "position": [
+        0,
+        48
+      ],
+      "voxels_explicit": 188,
+      "blocks": {
+        "minecraft:stone_bricks": 168,
+        "minecraft:polished_diorite": 20
+      },
+      "bytes": 55629,
+      "sha256": "b05c9b06b458245a1c818917b58d89659f30eedeaceae241f13bb5580aff4133"
+    },
+    {
+      "name": "via_ne",
+      "size": [
+        48,
+        3,
+        48
+      ],
+      "position": [
+        48,
+        0
+      ],
+      "voxels_explicit": 188,
+      "blocks": {
+        "minecraft:stone_bricks": 168,
+        "minecraft:polished_diorite": 20
+      },
+      "bytes": 55629,
+      "sha256": "c4fc7c9763a4722c99980fe7e609ba54b25fd9bd0dc0ea87bca79d0e87b5506c"
+    },
+    {
+      "name": "via_se",
+      "size": [
+        48,
+        3,
+        48
+      ],
+      "position": [
+        48,
+        48
+      ],
+      "voxels_explicit": 188,
+      "blocks": {
+        "minecraft:stone_bricks": 166,
+        "minecraft:polished_diorite": 22
+      },
+      "bytes": 55629,
+      "sha256": "44507e224fed36a2deb8345124f6be37e077f3e462a5e6aae5f575dac03721ff"
+    }
+  ]
+}
