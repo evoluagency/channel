@@ -1,4 +1,4 @@
-# EVOLU Channel — execução real no Android (Alpha 0.1.1)
+# EVOLU Channel — execução real no Android (Alpha 0.1.2)
 
 **Objetivo:** executar o motor Godot e exportar um APK **real**, sem Minecraft e sem serviços pagos. O código ainda não foi executado no Godot nesta sessão; nenhum APK foi gerado/homologado.
 
@@ -7,7 +7,7 @@
 - `project.godot`: abre a cena `scenes/Main.tscn` no renderizador Compatibility.
 - `export_presets.cfg`: exportação Android para arm64-v8a **e** armeabi-v7a (amplia a compatibilidade), ID `ink.evolu.channel`, versão 0.1.1 (código 2).
 - `scripts/main.gd`: Valdora com entrada no setor da praça, NPCs e economia local. Fachadas com passagens físicas abertas, sem colisão fictícia nas portas.
-- Botão **AUTO TESTE**: em execuções de desenvolvimento, verifica nascimento dentro do reino, personagem, câmera, quatro NPCs, comerciante, banqueiro, saldos, interface e gravação local (9 verificações). Registra `CHANNEL_DIAGNOSTIC` no console.
+- Botão **AUTO TESTE**: na versão Alpha, inclusive no editor Android, verifica nascimento dentro do reino, personagem, câmera, quatro NPCs, comerciante, banqueiro, saldos, interface e gravação local (9 verificações). Registra `CHANNEL_DIAGNOSTIC` no console.
 - `tests/smoke.gd`: teste automatizado que instancia a cena no próprio Godot, verifica diálogos sem transações e retorna código de saída 0/1. Não altera saldos do jogador.
 
 ## Caminho sem computador: Godot Editor Android

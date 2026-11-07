@@ -3,6 +3,8 @@ extends Node3D
 ## Protótipo com geometria 3D original, sem Minecraft e sem rede.
 
 const SAVE_PATH := "user://channel_save.json"
+# Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
+const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
 const WALK_SPEED := 7.5
 const WORLD_SIZE := 96.0
@@ -392,7 +394,7 @@ func _build_ui() -> void:
 
     # Visivel apenas em versoes de desenvolvimento: diagnostico executado
     # no proprio motor Godot, sem servidor nem dados da conta do jogador.
-    if OS.is_debug_build():
+    if ALPHA_DIAGNOSTICS_ENABLED:
         var diagnostic_button := Button.new()
         diagnostic_button.name = "Auto teste Valdora"
         diagnostic_button.text = "AUTO TESTE"
