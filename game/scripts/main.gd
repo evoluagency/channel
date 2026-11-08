@@ -10,6 +10,8 @@ const SAVE_STORE := preload("res://scripts/core/save_store.gd")
 const INPUT_ACTIONS := preload("res://scripts/core/input_actions.gd")
 const HERO_SYSTEM := preload("res://scripts/heroes/hero_system.gd")
 const HERO_PANEL := preload("res://scripts/ui/hero_panel.gd")
+const COMBAT_ENGINE := preload("res://scripts/combat/pve_engine.gd")
+const COMBAT_ARENA := preload("res://scripts/combat/arena_panel.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -39,6 +41,7 @@ var updater: Node
 var hero_catalog: Dictionary = {}
 var hero_state: Dictionary = {}
 var hero_panel: Control
+var combat_panel: Control
 
 func _ready() -> void:
     _setup_input()
@@ -343,7 +346,12 @@ func _physics_process(delta: float) -> void:
     if Input.is_action_just_pressed("channel_interact"):
         _interact()
     if Input.is_key_pressed(KEY_ESCAPE) and game_paused_for_dialogue:
-        _close_dialogue()
+        if combat_panel != null and combat_panel.visible:
+            _close_combat()
+        elif hero_panel != null and hero_panel.visible:
+            _close_heroes()
+        else:
+            _close_dialogue()
 
 func _make_panel(color_hex: String, radius: int = 14) -> StyleBoxFlat:
     var style := StyleBoxFlat.new()
@@ -366,7 +374,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "VALDORA       |       ALPHA 0.3 · HERÓIS"
+    brand.text = "VALDORA       |       ALPHA 0.4 · COMBATE"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))
@@ -467,7 +475,46 @@ func _build_ui() -> void:
     layer.add_child(hero_panel)
     hero_panel.visible = false
 
+    var combat_button := Button.new()
+    combat_button.name = "Abrir combate"
+    combat_button.text = "COMBATE"
+    combat_button.position = Vector2(viewport_size.x - 752, 78)
+    combat_button.size = Vector2(173, 49)
+    combat_button.add_theme_font_size_override("font_size", 17)
+    combat_button.pressed.connect(_open_combat)
+    layer.add_child(combat_button)
+
+    combat_panel = COMBAT_ARENA.new()
+    combat_panel.name = "Arena CP003"
+    combat_panel.configure(hero_catalog, hero_state)
+    combat_panel.close_requested.connect(_close_combat)
+    layer.add_child(combat_panel)
+    combat_panel.visible = false
+
+func _open_combat() -> void:
+    if combat_panel == null or hero_catalog.is_empty():
+        _notify("Arena de combate indisponível.")
+        return
+    if hero_panel != null and hero_panel.visible:
+        _close_heroes()
+    if dialogue_layer.visible:
+        _close_dialogue()
+    combat_panel.configure(hero_catalog, hero_state)
+    combat_panel.visible = true
+    game_paused_for_dialogue = true
+    joystick_touch_id = -1
+    mobile_axis = Vector2.ZERO
+
+func _close_combat() -> void:
+    if combat_panel != null:
+        combat_panel.visible = false
+    game_paused_for_dialogue = false
+    joystick_touch_id = -1
+    mobile_axis = Vector2.ZERO
+
 func _open_heroes() -> void:
+    if combat_panel != null and combat_panel.visible:
+        _close_combat()
     if hero_panel == null or hero_catalog.is_empty():
         _notify("Catálogo de heróis indisponível.")
         return
@@ -526,6 +573,15 @@ func _run_diagnostics() -> void:
     results["cp002_painel"] = hero_panel != null and is_instance_valid(hero_panel)
     var pietro: Dictionary = HERO_SYSTEM.hero_by_id(hero_catalog, "hero_pietro_001")
     results["cp002_atributos"] = HERO_SYSTEM.derived_stats(pietro).get("HP", 0) == 268
+    # CP003-C: checagens isoladas, sem modificar dados econômicos ou saves.
+    results["cp003_motor"] = COMBAT_ENGINE.RULE_VERSION == 1
+    var battle: Dictionary = COMBAT_ENGINE.begin_battle(hero_catalog, HERO_SYSTEM.default_roster(), COMBAT_ARENA.default_enemies(), 31415)
+    results["cp003_inicio"] = bool(battle.get("ok", false)) and int(battle.get("round", -1)) == 0
+    var round_a: Dictionary = COMBAT_ENGINE.advance_round(battle)
+    var round_b: Dictionary = COMBAT_ENGINE.advance_round(battle)
+    results["cp003_rodada"] = bool(round_a.get("ok", false)) and int(round_a.get("round", -1)) == 1
+    results["cp003_repetibilidade"] = JSON.stringify(round_a) == JSON.stringify(round_b)
+    results["cp003_arena"] = combat_panel != null and is_instance_valid(combat_panel) and combat_panel.has_method("take_turn")
     var passed := 0
     for check in results.keys():
         if results[check]:
@@ -538,6 +594,8 @@ func _run_diagnostics() -> void:
     print("[CHANNEL_DIAGNOSTIC] ", JSON.stringify({"success": success, "summary": summary, "checks": results}))
 
 func _input(event: InputEvent) -> void:
+    if combat_panel != null and combat_panel.visible:
+        return
     if hero_panel != null and hero_panel.visible:
         return
     if event is InputEventScreenTouch:
