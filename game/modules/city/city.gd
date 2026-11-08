@@ -1,5 +1,5 @@
 extends Control
-## Valdora CP005 - primeira cidade modular independente. Sem conexão com saldo legado.
+## Valdora CP007 - direção visual da cidade: paisagem viva e interface territorial.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
@@ -23,6 +23,10 @@ const TERRITORIES := ["Centro urbano", "Campos férteis", "Bosque de madeira", "
 
 var city: Dictionary = {}
 var selected_type := "fundacao"
+var build_buttons: Dictionary = {}
+var objective_label: Label
+var animation_phase := 0.0
+var animation_accumulator := 0.0
 var move_origin := Vector2i(-1, -1)
 var selected_tile := Vector2i(-1, -1)
 var zoom := 0.93
@@ -37,8 +41,9 @@ var resource_label: Label
 var status_label: Label
 var selected_label: Label
 var territory_label: Label
-var editor: ConfirmationDialog
+var editor_overlay: ColorRect
 var editor_input: LineEdit
+var editor_error: Label
 
 func _ready() -> void:
     mouse_filter = Control.MOUSE_FILTER_PASS
@@ -47,6 +52,16 @@ func _ready() -> void:
     queue_redraw()
     if str(city.get("name", "")).is_empty():
         call_deferred("_ask_name")
+
+func _process(delta: float) -> void:
+    # Animacao visual de baixa frequencia; zero alteracoes em economia/saves.
+    if not visible:
+        return
+    animation_accumulator += delta
+    if animation_accumulator >= 0.24:
+        animation_phase = fmod(animation_phase + animation_accumulator * 1.9, TAU)
+        animation_accumulator = 0.0
+        queue_redraw()
 
 func _new_city() -> Dictionary:
     return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140}, "buildings": [], "revision": 0}
@@ -170,12 +185,16 @@ func _button(text_value: String, action: Callable) -> Button:
     b.text = text_value
     b.custom_minimum_size = Vector2(79, 48)
     b.add_theme_font_size_override("font_size", 15)
+    b.add_theme_color_override("font_color", Color("#ffe7ae"))
+    b.add_theme_stylebox_override("normal", _style("#143751"))
+    b.add_theme_stylebox_override("hover", _style("#285a76"))
+    b.add_theme_stylebox_override("pressed", _style("#385e79"))
     b.pressed.connect(action)
     return b
 
 func _create_ui() -> void:
     var top := PanelContainer.new()
-    top.add_theme_stylebox_override("panel", _style("#102a40eb"))
+    top.add_theme_stylebox_override("panel", _style("#071e36f2"))
     top.set_anchors_preset(Control.PRESET_TOP_WIDE)
     top.offset_left = 10
     top.offset_right = -224 # reservado para o FECHAR MÓDULO do aplicativo-base
@@ -185,14 +204,14 @@ func _create_ui() -> void:
     var head := HBoxContainer.new()
     head.add_theme_constant_override("separation", 18)
     top.add_child(head)
-    title_label = _label("VALDORA · CIDADE", 24, Color("#ffe5a6"))
+    title_label = _label("VALDORA · MINHA CIDADE", 23, Color("#ffe0a0"))
     title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     head.add_child(title_label)
     resource_label = _label("", 18)
     head.add_child(resource_label)
 
     var side := PanelContainer.new()
-    side.add_theme_stylebox_override("panel", _style("#142c42ef"))
+    side.add_theme_stylebox_override("panel", _style("#0a253eef"))
     side.anchor_left = 1.0
     side.anchor_right = 1.0
     side.anchor_top = 0.0
@@ -203,19 +222,27 @@ func _create_ui() -> void:
     side.offset_bottom = -102
     add_child(side)
     var column := VBoxContainer.new()
-    column.add_theme_constant_override("separation", 10)
+    column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS DA CIDADE", 21, Color("#ffd986")))
+    column.add_child(_label("TERRITÓRIOS · CIDADE v4", 20, Color("#ffdb83")))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
-    rename.custom_minimum_size = Vector2(0, 42)
+    rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
-    selected_label = _label("Selecione uma construção e toque no terreno.", 17)
+    objective_label = _label("", 16, Color("#f8d68d"))
+    column.add_child(objective_label)
+    var divider := HSeparator.new()
+    column.add_child(divider)
+    selected_label = _label("Selecione a ação e toque no terreno.", 16)
     column.add_child(selected_label)
-    column.add_child(_label("Zonas existentes", 17, Color("#ffd986")))
+    var scroll := ScrollContainer.new()
+    scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+    column.add_child(scroll)
     territory_label = _label("", 15)
-    territory_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    column.add_child(territory_label)
-    status_label = _label("", 16, Color("#e2e6b8"))
+    territory_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    scroll.add_child(territory_label)
+    status_label = _label("", 15, Color("#f2dfb7"))
+    status_label.custom_minimum_size.y = 45
     column.add_child(status_label)
 
     var bottom := PanelContainer.new()
@@ -229,58 +256,167 @@ func _create_ui() -> void:
     bottom.offset_top = -92
     bottom.offset_bottom = -8
     add_child(bottom)
+    var button_scroll := ScrollContainer.new()
+    button_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+    button_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+    button_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    bottom.add_child(button_scroll)
     var row := HBoxContainer.new()
     row.add_theme_constant_override("separation", 7)
-    bottom.add_child(row)
+    button_scroll.add_child(row)
+    var inspect := _button("INSPECIONAR", Callable(self, "_select_type").bind("inspecionar"))
+    inspect.custom_minimum_size = Vector2(124, 49)
+    build_buttons["inspecionar"] = inspect
+    row.add_child(inspect)
     for kind in BUILD_TYPES:
-        row.add_child(_button(str(LABELS[kind]), Callable(self, "_select_type").bind(kind)))
-    row.add_child(_button("MOVER", Callable(self, "_select_type").bind("mover")))
-    row.add_child(_button("MELHORAR", Callable(self, "_select_type").bind("melhorar")))
-    var plus := _button("ZOOM +", Callable(self, "_change_zoom").bind(0.10))
-    plus.custom_minimum_size = Vector2(80, 48)
-    row.add_child(plus)
-    var minus := _button("ZOOM -", Callable(self, "_change_zoom").bind(-0.10))
-    minus.custom_minimum_size = Vector2(80, 48)
-    row.add_child(minus)
+        var b := _button(str(LABELS[kind]), Callable(self, "_select_type").bind(kind))
+        b.custom_minimum_size = Vector2(100, 49)
+        build_buttons[kind] = b
+        row.add_child(b)
+    for kind in ["mover", "melhorar"]:
+        var b := _button(kind.to_upper(), Callable(self, "_select_type").bind(kind))
+        b.custom_minimum_size = Vector2(104, 49)
+        build_buttons[kind] = b
+        row.add_child(b)
+    for caption in ["ZOOM +", "ZOOM -"]:
+        var diff := 0.10 if caption == "ZOOM +" else -0.10
+        var b := _button(caption, Callable(self, "_change_zoom").bind(diff))
+        b.custom_minimum_size = Vector2(99, 49)
+        row.add_child(b)
 
-    editor = ConfirmationDialog.new()
-    editor.title = "Nomear cidade de Valdora"
-    editor.ok_button_text = "SALVAR NOME"
-    editor.confirmed.connect(_save_name)
-    add_child(editor)
-    var wrap := VBoxContainer.new()
-    editor.add_child(wrap)
-    wrap.add_child(_label("Dê um nome à sua cidade (3 a 24 caracteres).", 16))
+    # CP006-UI: overlay no próprio jogo; não abre uma janela nativa maior que a tela.
+    editor_overlay = ColorRect.new()
+    editor_overlay.name = "Nomear cidade · Valdora"
+    editor_overlay.color = Color("#06172bdc")
+    editor_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    editor_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+    add_child(editor_overlay)
+
+    var editor_position := CenterContainer.new()
+    editor_position.anchor_left = 0.0
+    editor_position.anchor_top = 0.0
+    editor_position.anchor_right = 1.0
+    editor_position.anchor_bottom = 0.67  # mantém campo e botão acima do teclado Android.
+    editor_position.mouse_filter = Control.MOUSE_FILTER_STOP
+    editor_overlay.add_child(editor_position)
+
+    var editor_card := PanelContainer.new()
+    editor_card.custom_minimum_size = Vector2(480, 0)
+    editor_card.add_theme_stylebox_override("panel", _style("#112c42"))
+    editor_position.add_child(editor_card)
+
+    var form := VBoxContainer.new()
+    form.add_theme_constant_override("separation", 12)
+    editor_card.add_child(form)
+    form.add_child(_label("NOME DA CIDADE", 24, Color("#ffe5a6")))
+    form.add_child(_label("Escolha entre 3 e 24 caracteres.", 16))
+
+    var line := HBoxContainer.new()
+    line.add_theme_constant_override("separation", 10)
+    form.add_child(line)
     editor_input = LineEdit.new()
     editor_input.max_length = 24
-    editor_input.custom_minimum_size = Vector2(320, 45)
-    wrap.add_child(editor_input)
+    editor_input.placeholder_text = "Ex.: Nova Auren"
+    editor_input.custom_minimum_size = Vector2(288, 50)
+    editor_input.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    editor_input.text_submitted.connect(_on_name_submitted)
+    line.add_child(editor_input)
+
+    var save := _button("SALVAR", Callable(self, "_save_name"))
+    save.custom_minimum_size = Vector2(116, 50)
+    line.add_child(save)
+
+    editor_error = _label("Confirme com SALVAR ou Enter no teclado.", 15, Color("#b4d8d6"))
+    form.add_child(editor_error)
+    var cancel := _button("CANCELAR", Callable(self, "_cancel_name"))
+    cancel.custom_minimum_size = Vector2(110, 43)
+    form.add_child(cancel)
+    editor_overlay.hide()
     _refresh_ui()
+
+func _city_population() -> int:
+    var estimate := 0
+    for building in city["buildings"]:
+        if str(building["type"]) == "casa":
+            estimate += 6 * int(building.get("level", 1))
+    return estimate
+
+func _objective() -> String:
+    if str(city["name"]).is_empty():
+        return "ETAPA 1 · Nomeie sua cidade"
+    if not _has_foundation():
+        return "ETAPA 2 · Construa a fundação"
+    for kind in ["casa", "fazenda", "serraria", "pedreira", "torre"]:
+        if not _has_kind(kind):
+            return "PRÓXIMO OBJETIVO · %s" % LABELS[kind]
+    return "NÚCLEO URBANO · Pronto para expandir"
+
+func _has_kind(kind: String) -> bool:
+    for item in city["buildings"]:
+        if str(item["type"]) == kind:
+            return true
+    return false
+
+func _refresh_mode_buttons() -> void:
+    for key in build_buttons:
+        var b: Button = build_buttons[key]
+        b.modulate = Color("#ffd777") if str(key) == selected_type else Color.WHITE
 
 func _refresh_ui() -> void:
     title_label.text = "VALDORA · " + (str(city["name"]) if not str(city["name"]).is_empty() else "CIDADE SEM NOME")
-    resource_label.text = "Madeira: %d   Pedra: %d" % [int(city["resources"]["madeira"]), int(city["resources"]["pedra"])]
+    resource_label.text = "MADEIRA %d   PEDRA %d   POP. ~%d" % [int(city["resources"]["madeira"]), int(city["resources"]["pedra"]), _city_population()]
+    if objective_label != null:
+        objective_label.text = _objective()
     if BUILD_TYPES.has(selected_type):
         var cost: Dictionary = COSTS[selected_type]
-        selected_label.text = "Construção: %s\nCusto: %d madeira / %d pedra" % [LABELS[selected_type], cost["madeira"], cost["pedra"]]
+        selected_label.text = "%s · %d madeira / %d pedra" % [LABELS[selected_type], cost["madeira"], cost["pedra"]]
     elif selected_type == "mover":
-        selected_label.text = "MOVER: toque no edifício e depois no lote livre."
+        selected_label.text = "Mover: edifício → terreno vazio"
+    elif selected_type == "melhorar":
+        selected_label.text = "Melhorar: edifício até nível 3"
     else:
-        selected_label.text = "MELHORAR: selecione um edifício (até nível 3)."
-    var region_name := _territory(selected_tile.x, selected_tile.y) if _in_bounds(selected_tile) else "Toque num lote"
-    territory_label.text = "Área: %s\n\n%s\n\nMapa local: %d x %d lotes\nEstruturas: %d\n\nArraste o mapa.\nEdite vias e edifícios pelo menu." % [region_name, "\n".join(TERRITORIES), W, H, city["buildings"].size()]
+        selected_label.text = "Inspecionar: toque nos territórios"
+    var area_name := _territory(selected_tile.x, selected_tile.y) if _in_bounds(selected_tile) else "Escolha um lote no mapa"
+    var details := ""
+    if _in_bounds(selected_tile):
+        var building := _at(selected_tile)
+        if not building.is_empty():
+            details = "
+Estrutura: %s · Nível %d" % [LABELS[str(building["type"])], int(building.get("level", 1))]
+        else:
+            details = "
+Terreno livre" if _terrain(selected_tile.x, selected_tile.y) != "agua" else "
+Área de água"
+    territory_label.text = "REGIÃO
+%s%s
+
+LOTES: %d × %d
+CONSTRUÇÕES: %d
+
+Arraste o mapa para explorar. Use o menu inferior para construir e melhorar." % [area_name, details, W, H, city["buildings"].size()]
+    _refresh_mode_buttons()
 
 func _set_status(message: String) -> void:
     status_label.text = message
 
 func _ask_name() -> void:
     editor_input.text = str(city["name"])
-    editor.popup_centered()
-    editor_input.grab_focus()
+    editor_error.text = "Confirme com SALVAR ou Enter no teclado."
+    editor_overlay.show()
+    editor_overlay.move_to_front()
+    editor_input.call_deferred("grab_focus")
+
+func _cancel_name() -> void:
+    editor_overlay.hide()
+    editor_input.release_focus()
+
+func _on_name_submitted(_value: String) -> void:
+    _save_name()
 
 func _save_name() -> void:
     var clean := editor_input.text.strip_edges().replace("\n", "").replace("\r", "")
     if clean.length() < 3 or clean.length() > 24:
+        editor_error.text = "Nome inválido: informe de 3 a 24 caracteres."
         _set_status("Nome inválido: use de 3 a 24 caracteres.")
         return
     var next: Dictionary = city.duplicate(true)
@@ -288,17 +424,20 @@ func _save_name() -> void:
     next["revision"] = int(next["revision"]) + 1
     if _write_save(next):
         city = next
+        editor_overlay.hide()
+        editor_input.release_focus()
         _set_status("Cidade nomeada e salva no dispositivo.")
         _refresh_ui()
     else:
+        editor_error.text = "Não foi possível salvar. Tente novamente."
         _set_status("Falha ao salvar nome; dados anteriores preservados.")
 
 func _select_type(kind: String) -> void:
-    if BUILD_TYPES.has(kind) or kind in ["mover", "melhorar"]:
+    if BUILD_TYPES.has(kind) or kind in ["mover", "melhorar", "inspecionar"]:
         selected_type = kind
         move_origin = Vector2i(-1, -1)
         _refresh_ui()
-        _set_status("Escolha um lote." if BUILD_TYPES.has(kind) else ("Selecione um edifício para mover." if kind == "mover" else "Selecione um edifício para melhorar."))
+        _set_status("Toque em um lote para consultar." if kind == "inspecionar" else ("Escolha um lote." if BUILD_TYPES.has(kind) else ("Selecione um edifício para mover." if kind == "mover" else "Selecione um edifício para melhorar.")))
 
 func _change_zoom(diff: float) -> void:
     zoom = clampf(zoom + diff, 0.67, 1.35)
@@ -350,7 +489,9 @@ func _on_plot_clicked(pos: Vector2) -> void:
         return
     selected_tile = tile
     var current := _at(tile)
-    if selected_type == "mover":
+    if selected_type == "inspecionar":
+        _set_status("Território selecionado: %s" % _territory(tile.x, tile.y))
+    elif selected_type == "mover":
         _move_selection(tile)
     elif selected_type == "melhorar":
         _upgrade_building(tile)
@@ -405,6 +546,7 @@ func _try_build(tile: Vector2i) -> void:
     next["revision"] = int(next["revision"]) + 1
     if _write_save(next):
         city = next
+        selected_type = "inspecionar"
         _set_status("%s construída e salva!" % LABELS[selected_type])
     else:
         _set_status("Falha ao salvar. Nenhum recurso foi consumido.")
@@ -482,6 +624,8 @@ func _map_area(pos: Vector2) -> bool:
     return pos.x >= 12.0 and pos.x < size.x - 322.0 and pos.y >= 82.0 and pos.y < size.y - 105.0
 
 func _unhandled_input(event: InputEvent) -> void:
+    if editor_overlay != null and editor_overlay.visible:
+        return # impede construção/movimentação atrás do formulário.
     if event is InputEventMouseButton:
         var mb := event as InputEventMouseButton
         if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed and _map_area(mb.position):
@@ -539,9 +683,18 @@ func _unhandled_input(event: InputEvent) -> void:
             get_viewport().set_input_as_handled()
 
 func _draw() -> void:
-    draw_rect(Rect2(Vector2.ZERO, size), Color("#9cd6e8"))
-    draw_rect(Rect2(Vector2(8, 76), Vector2(maxf(50.0, size.x - 326.0), maxf(50.0, size.y - 175.0))), Color("#b4d4ac"))
-    # Tiles pintados primeiro; estruturas depois, para manter a ordem isométrica.
+    var map_right := maxf(150.0, size.x - 326.0)
+    var map_height := maxf(150.0, size.y - 175.0)
+    draw_rect(Rect2(Vector2.ZERO, size), Color("#9bd5e5"))
+    draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#86b6ab"))
+    # Fundo atmosférico leve e não interativo; as áreas de construção seguem independentes.
+    for i in range(7):
+        var mx := 40.0 + float(i) * 160.0
+        var peak := 98.0 + float((i * 31) % 57)
+        draw_colored_polygon(PackedVector2Array([Vector2(mx - 110, 310), Vector2(mx, peak), Vector2(mx + 145, 310)]), Color("#577a83"))
+        draw_colored_polygon(PackedVector2Array([Vector2(mx - 22, peak + 32), Vector2(mx, peak), Vector2(mx + 28, peak + 43), Vector2(mx + 14, peak + 36)]), Color("#d9e7dc"))
+    draw_rect(Rect2(Vector2(8, 340), Vector2(map_right, maxf(4, map_height - 264))), Color("#8aaf7e"))
+    # Primeiro o solo com profundidade. O lado rebaixado reforça leitura 2.5D.
     for y in range(H):
         for x in range(W):
             var p := _iso(float(x), float(y))
@@ -549,19 +702,28 @@ func _draw() -> void:
             var hh := HALF_H * zoom
             var tile := PackedVector2Array([p + Vector2(0, -hh), p + Vector2(hw, 0), p + Vector2(0, hh), p + Vector2(-hw, 0)])
             var ground := _terrain(x, y)
-            var c := Color("#8fbd65")
+            var c := Color("#92c469")
             match ground:
-                "agua": c = Color("#42a8d0")
-                "rocha": c = Color("#95a1a2")
-                "ruinas": c = Color("#c0be87")
-                "floresta": c = Color("#4c9d56")
-                "campo": c = Color("#d0c96c")
+                "agua": c = Color("#379ed0")
+                "rocha": c = Color("#a1aba7")
+                "ruinas": c = Color("#c5ba8c")
+                "floresta": c = Color("#57a65c")
+                "campo": c = Color("#d3cb70")
             if (x + y) % 2 == 0:
-                c = c.lightened(0.055)
+                c = c.lightened(0.07)
+            var height_px := 4.5 * zoom
+            if ground != "agua":
+                var skirt := PackedVector2Array([tile[3], tile[2], tile[1], tile[1] + Vector2(0, height_px), tile[2] + Vector2(0, height_px), tile[3] + Vector2(0, height_px)])
+                draw_colored_polygon(skirt, c.darkened(0.27))
             draw_colored_polygon(tile, c)
-            draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), c.darkened(0.16), 1.0)
+            draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), c.darkened(0.17), maxf(0.7, zoom))
+            if ground == "agua":
+                var wave := sin(animation_phase + float(x * 3 + y * 2)) * 3.0 * zoom
+                draw_line(p + Vector2(-15 * zoom, wave), p + Vector2(2 * zoom, wave - 3 * zoom), Color("#b0e7ef88"), 1.8 * zoom)
+                draw_line(p + Vector2(4 * zoom, 7 * zoom - wave), p + Vector2(20 * zoom, 7 * zoom - wave), Color("#d1f0e999"), 1.4 * zoom)
             if selected_tile == Vector2i(x, y):
-                draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), Color("#fcea60"), 4.0)
+                draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), Color("#f9d373"), 4.0)
+    # Pintura isométrica por profundidade. Cada construção é redesenhada independentemente.
     for depth in range(W + H - 1):
         for x in range(W):
             var y := depth - x
@@ -569,15 +731,36 @@ func _draw() -> void:
                 continue
             var kind := _terrain(x, y)
             var p := _iso(float(x), float(y))
-            if kind == "floresta" and _at(Vector2i(x, y)).is_empty():
-                _tree(p, 0.75)
-            elif kind == "rocha" and _at(Vector2i(x, y)).is_empty():
-                _stone(p)
-            elif kind == "ruinas" and _at(Vector2i(x, y)).is_empty() and (x + y) % 2 == 0:
-                _ruin(p)
             var building := _at(Vector2i(x, y))
-            if not building.is_empty():
+            if building.is_empty():
+                match kind:
+                    "floresta":
+                        _tree(p + Vector2(-9, 2) * zoom, 0.70)
+                        if (x + y) % 3 == 0:
+                            _tree(p + Vector2(14, 4) * zoom, 0.53)
+                    "rocha": _stone(p)
+                    "ruinas":
+                        if (x + y) % 2 == 0:
+                            _ruin(p)
+                    "campo":
+                        _field(p)
+                    "grama":
+                        if (x * 7 + y * 11) % 5 == 0:
+                            _bush(p)
+            else:
                 _draw_building(p, str(building["type"]), int(building.get("level", 1)))
+
+func _field(p: Vector2) -> void:
+    var s := zoom
+    for i in range(4):
+        var offset := float(i) * 6.0 - 9.0
+        draw_line(p + Vector2(-24, offset + 5) * s, p + Vector2(3, offset - 8) * s, Color("#f2d975"), 2.2 * s)
+
+func _bush(p: Vector2) -> void:
+    var s := zoom
+    draw_circle(p + Vector2(-5, -3) * s, 4.5 * s, Color("#2c8850"))
+    draw_circle(p + Vector2(3, -4) * s, 5.2 * s, Color("#3b9b58"))
+    draw_circle(p + Vector2(0, -8) * s, 4.0 * s, Color("#5da94e"))
 
 func _tree(p: Vector2, scale_factor: float = 1.0) -> void:
     var h := 30.0 * zoom * scale_factor
@@ -632,6 +815,26 @@ func _draw_building(p: Vector2, kind: String, level: int = 1) -> void:
         draw_rect(Rect2(p + Vector2(-w + 4*s, -h - 7*s), Vector2(8, 8)*s), Color("#f6d57b"))
     if level >= 3:
         draw_rect(Rect2(p + Vector2(w - 12*s, -h - 7*s), Vector2(8, 8)*s), Color("#f6d57b"))
+    # Props estilizados identificáveis em tela pequena, sem texturas pesadas.
+    if kind == "fundacao":
+        for n in range(3):
+            draw_rect(Rect2(p + Vector2(-w + float(n) * 13.0 * s, -h - 6*s), Vector2(8, 10)*s), Color("#d7c59d"))
+        draw_rect(Rect2(p + Vector2(-7, -5)*s, Vector2(14, 15)*s), Color("#66472d"))
+    elif kind == "casa":
+        draw_rect(Rect2(p + Vector2(3, -h + 12*s), Vector2(7, 8)*s), Color("#4e7490"))
+        draw_rect(Rect2(p + Vector2(-13, -h + 13*s), Vector2(7, 8)*s), Color("#d9a85d"))
+    elif kind == "fazenda":
+        for n in range(3):
+            draw_line(p + Vector2(-28+n*6, 4)*s, p + Vector2(-19+n*6, 12)*s, Color("#f1d65e"), 3*s)
+    elif kind == "serraria":
+        for n in range(3):
+            draw_line(p + Vector2(-26, 7+n*4)*s, p + Vector2(-10, 7+n*4)*s, Color("#79502e"), 4*s)
+    elif kind == "pedreira":
+        _stone(p + Vector2(20, 11)*s)
+    elif kind == "torre":
+        draw_rect(Rect2(p + Vector2(-5, -h+5*s), Vector2(11, 11)*s), Color("#4d5e68"))
+    if level >= 2 and kind != "estrada":
+        draw_circle(p + Vector2(0, -h-23*s), 3.1*s, Color("#fbe6a4"))
 
 func snapshot_for_test() -> Dictionary:
     return city.duplicate(true)
