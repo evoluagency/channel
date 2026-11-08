@@ -1,0 +1,5 @@
+VALDORA_CP007_ONE_SHOT_VALIDATION
+module=city-4.zip
+manifest_revision=5
+no_apk=true
+run_once=true
