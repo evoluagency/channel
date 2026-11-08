@@ -41,6 +41,8 @@ static func _event(state: Dictionary, event_type: String, data: Dictionary = {})
 
 static func _hero_actor(hero: Dictionary, slot: String) -> Dictionary:
     var stats: Dictionary = HERO_SYSTEM.derived_stats(hero)
+    var abilities: Dictionary = hero.get("skills", {})
+    var active: Dictionary = abilities.get("active_1", {})
     return {
         "id": str(hero["hero_id"]), "name": str(hero["display_name"]), "side": "heroes",
         "line": "front" if slot.begins_with("vanguarda") else "back",
@@ -50,7 +52,10 @@ static func _hero_actor(hero: Dictionary, slot: String) -> Dictionary:
         "attack_physical": int(stats["physical_attack"]), "attack_magic": int(stats["magic_attack"]),
         "defense_physical": int(stats["physical_defense"]), "defense_magic": int(stats["magic_defense"]),
         "initiative": int(stats["initiative"]), "crit_percent": float(stats["critical_percent"]),
-        "next_skill_round": 1, "skill_uses": 0, "shield_round": 0,
+        "next_skill_round": 1, "skill_uses": 0,
+        "skill_focus_cost": int(active.get("focus_cost_proposed", 0)),
+        "skill_cooldown": int(active.get("cooldown_rounds_proposed", 0)),
+        "shield_round": 0,
         "empowered": false, "vulnerable_until": 0, "first_hit_used": false,
         "mark_until": 0, "mark_consumed": false, "attack_type": "magical" if str(hero["class"]) == "clerigo" else "physical"
     }
@@ -90,6 +95,13 @@ static func begin_battle(catalog: Dictionary, roster: Dictionary, enemy_specs: A
         return _error("postura_invalida")
     if enemy_specs.is_empty() or enemy_specs.size() > MAX_ENEMIES:
         return _error("quantidade_inimigos_invalida")
+    # Custos e recargas vêm das fichas CP002-A, não são duplicados no código.
+    for hero in catalog.get("heroes", []):
+        var active: Dictionary = hero.get("skills", {}).get("active_1", {})
+        if int(active.get("focus_cost_proposed", 0)) < 1 or int(active.get("focus_cost_proposed", 0)) > 100:
+            return _error("custo_de_habilidade_invalido")
+        if int(active.get("cooldown_rounds_proposed", 0)) < 1 or int(active.get("cooldown_rounds_proposed", 0)) > MAX_ROUNDS:
+            return _error("recarga_de_habilidade_invalida")
     var enemies: Array = []
     var unique_enemy_ids: Dictionary = {}
     for spec in enemy_specs:
@@ -215,25 +227,17 @@ static func _try_skill(state: Dictionary, actor: Dictionary, mode: String, force
     if str(actor["side"]) != "heroes":
         return false
     var hero_id: String = str(actor["id"])
-    var cost: int = 0
-    var cooldown: int = 0
+    var cost: int = int(actor["skill_focus_cost"])
+    var cooldown: int = int(actor["skill_cooldown"])
     var action := ""
     match hero_id:
         "hero_pietro_001":
-            cost = 20
-            cooldown = 3
             action = "muralha"
         "hero_henzo_002":
-            cost = 15
-            cooldown = 2
             action = "trilha"
         "hero_giulia_003":
-            cost = 20
-            cooldown = 3
             action = "alento"
         "hero_arthur_004":
-            cost = 18
-            cooldown = 3
             action = "impeto"
         _:
             return false
