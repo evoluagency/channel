@@ -1,5 +1,5 @@
 # Valdora — Canal Android permanente
-Situação: preparado para migração única, sem publicação de APK nesta etapa.
+Situação: canal permanente ativo. Valdora 0.3.2-alpha (código 100) já foi instalado e homologado no Android. CP003-C será 0.3.3-alpha (código 101), como atualização do mesmo aplicativo.
 
 ## Decisões irrevogáveis após a migração
 - Identificador Android permanente: `ink.evolu.valdora`.
@@ -64,3 +64,10 @@ Depois de validar, remova somente os protótipos sem progresso necessário.
 - O novo workflow é **somente manual**; não executa a cada commit.
 - Não aciona Vercel intencionalmente; o site e seus endpoints permanecem inalterados.
 - Publicação e retenção de artefatos podem ter quotas e limites de serviço.
+
+## Atualização CP003-C — primeiro upgrade in-place
+- Versão: `0.3.3-alpha` / código `101`, mantendo o identificador `ink.evolu.valdora`.
+- Regras CP003-A/B e arena CP003-C validadas no Godot 4.7.2.
+- Verificação da mesma assinatura SHA-256 antes da distribuição.
+- Instalar sobre o Valdora 0.3.2-alpha **sem desinstalar**, para manter `user://channel_save.json` e `user://valdora_hero_roster_v1.json`.
+- O combate da arena ainda é um modo de demonstração sem recompensas.

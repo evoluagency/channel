@@ -374,7 +374,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "VALDORA       |       ALPHA 0.4 · COMBATE"
+    brand.text = "VALDORA       |       ALPHA 0.3.3 · COMBATE"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))

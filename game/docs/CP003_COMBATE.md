@@ -1,6 +1,6 @@
 # Valdora — CP003-A/B | Motor de combate PvE offline
 
-Estado: núcleo CP003-A/B **testado**, CP003-C integrado em **arena 3D de demonstração** na branch de desenvolvimento. O APK homologado v0.3.2-alpha ainda não muda nesta etapa.
+Estado: núcleo CP003-A/B **testado**, CP003-C integrado em **arena 3D de demonstração** na branch de desenvolvimento. O APK homologado v0.3.3-alpha será disponibilizado por atualização assinada do aplicativo já instalado.
 
 ## Fonte de verdade
 - GDD Mestre **v0.4.1**, §§6.2–6.3, 7, 8.1–8.11 e 15.3–15.4.
