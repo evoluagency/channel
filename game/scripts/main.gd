@@ -5,6 +5,9 @@ extends Node3D
 const SAVE_PATH := "user://channel_save.json"
 # Preserva salvamentos e a identidade Android da Alpha ja instalada.
 const CONTENT_UPDATER := preload("res://scripts/content_updater.gd")
+const ECONOMY := preload("res://scripts/core/economy.gd")
+const SAVE_STORE := preload("res://scripts/core/save_store.gd")
+const INPUT_ACTIONS := preload("res://scripts/core/input_actions.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -73,20 +76,7 @@ func _content_text(key: String, fallback: String) -> String:
     return fallback
 
 func _setup_input() -> void:
-    var mapping := {
-        "channel_left": [KEY_A, KEY_LEFT],
-        "channel_right": [KEY_D, KEY_RIGHT],
-        "channel_forward": [KEY_W, KEY_UP],
-        "channel_back": [KEY_S, KEY_DOWN],
-        "channel_interact": [KEY_E]
-    }
-    for action in mapping.keys():
-        if not InputMap.has_action(action):
-            InputMap.add_action(action)
-        for key_code in mapping[action]:
-            var key := InputEventKey.new()
-            key.physical_keycode = key_code
-            InputMap.action_add_event(action, key)
+    INPUT_ACTIONS.configure()
 
 func _mat(color_hex: String, rough: float = 1.0) -> StandardMaterial3D:
     var material := StandardMaterial3D.new()
@@ -474,6 +464,13 @@ func _run_diagnostics() -> void:
         writable = readback == "VALDORA_TESTE"
         DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
     results["armazenamento_local"] = writable
+    # CP001: testes puros, sem alterar inventário nem o salvamento.
+    var test_buy: Dictionary = ECONOMY.transact("buy_potion", 20, 0, 0)
+    results["cp001_compra"] = bool(test_buy["accepted"]) and int(test_buy["coins"]) == 10 and int(test_buy["potions"]) == 1
+    var test_deposit: Dictionary = ECONOMY.transact("deposit", 15, 0, 0)
+    results["cp001_banco"] = bool(test_deposit["accepted"]) and int(test_deposit["bank_coins"]) == 5
+    var test_rejected: Dictionary = ECONOMY.transact("withdraw", 0, 0, 0)
+    results["cp001_protecao"] = not bool(test_rejected["accepted"]) and int(test_rejected["coins"]) == 0
     var passed := 0
     for check in results.keys():
         if results[check]:
@@ -578,31 +575,15 @@ func _dialogue(title: String, description: String, choices: Array) -> void:
     mobile_axis = Vector2.ZERO
 
 func _dialog_action(code: String) -> void:
-    match code:
-        "buy_potion":
-            if coins >= 10:
-                coins -= 10
-                potions += 1
-                _save_game()
-                _notify("Poção comprada! Ela foi salva no seu inventário.")
-            else:
-                _notify("Você precisa de 10 moedas para comprar uma poção.")
-        "deposit":
-            if coins >= 5:
-                coins -= 5
-                bank_coins += 5
-                _save_game()
-                _notify("5 moedas depositadas no Banco Real.")
-            else:
-                _notify("Saldo insuficiente para o depósito.")
-        "withdraw":
-            if bank_coins >= 5:
-                bank_coins -= 5
-                coins += 5
-                _save_game()
-                _notify("5 moedas sacadas do Banco Real.")
-            else:
-                _notify("Saldo bancário insuficiente.")
+    var result: Dictionary = ECONOMY.transact(code, coins, bank_coins, potions)
+    if bool(result["accepted"]):
+        coins = int(result["coins"])
+        bank_coins = int(result["bank_coins"])
+        potions = int(result["potions"])
+        _save_game()
+    var message := str(result["message"])
+    if not message.is_empty():
+        _notify(message)
     _update_hud()
     _close_dialogue()
 
@@ -619,21 +600,10 @@ func _update_hud() -> void:
         balance_label.text = "Moedas: %d     Banco: %d     Poções: %d" % [coins, bank_coins, potions]
 
 func _save_game() -> void:
-    var save_data := {"version": 1, "coins": coins, "bank_coins": bank_coins, "potions": potions}
-    var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-    if file != null:
-        file.store_string(JSON.stringify(save_data))
-        file.flush()
+    SAVE_STORE.save_game(SAVE_PATH, coins, bank_coins, potions)
 
 func _load_save() -> void:
-    if not FileAccess.file_exists(SAVE_PATH):
-        return
-    var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
-    if file == null:
-        return
-    var parsed = JSON.parse_string(file.get_as_text())
-    if not parsed is Dictionary:
-        return
-    coins = maxi(0, int(parsed.get("coins", INITIAL_GOLD)))
-    bank_coins = maxi(0, int(parsed.get("bank_coins", 0)))
-    potions = maxi(0, int(parsed.get("potions", 0)))
+    var saved: Dictionary = SAVE_STORE.load_game(SAVE_PATH, INITIAL_GOLD)
+    coins = int(saved["coins"])
+    bank_coins = int(saved["bank_coins"])
+    potions = int(saved["potions"])
