@@ -41,7 +41,7 @@ updater=(G/"scripts/updates/update_manager.gd").read_text()
 main=(G/"scripts/main.gd").read_text()
 project=(G/"project.godot").read_text()
 checks["boot_load_order"] = project.index('ValdoraPacks=') < project.index('ValdoraUpdater=')
-checks["base_app_version"] = 'version/code=102' in (G/"export_presets.cfg").read_text()
+checks["base_app_version"] = 'version/code=103' in (G/"export_presets.cfg").read_text()
 checks["saves_untouched"] = all(x not in updater+boot for x in ["channel_save.json", "valdora_hero_roster_v1.json"])
 checks["safe_pack_mount"] = "load_resource_pack(ProjectSettings.globalize_path(path), false)" in boot
 checks["signed_pck_required"] = "Crypto.new().verify" in source and "PUBLIC_KEY" in source
