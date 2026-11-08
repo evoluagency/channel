@@ -13,6 +13,7 @@ const HERO_PANEL := preload("res://scripts/ui/hero_panel.gd")
 const COMBAT_ENGINE := preload("res://scripts/combat/pve_engine.gd")
 const COMBAT_ARENA := preload("res://scripts/combat/arena_panel.gd")
 const MODULE_PANEL := preload("res://scripts/updates/module_panel.gd")
+const BRAND_HOME := preload("res://scripts/ui/brand_home.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -47,6 +48,7 @@ var module_panel: Control
 var module_scene: Control
 var module_close_button: Button
 var module_layer: CanvasLayer
+var brand_home: Control
 
 func _ready() -> void:
     _setup_input()
@@ -59,7 +61,7 @@ func _ready() -> void:
     _build_player()
     _build_ui()
     _update_hud()
-    _notify("Bem-vindo a Valdora. Conheça o Mercado Real!")
+    _notify("Bem-vindo a Valdora.")
     _setup_content_updates()
 
 
@@ -80,10 +82,14 @@ func _on_ota_progress(done: int, total: int) -> void:
 func _on_modular_update_status(message: String) -> void:
     print("[VALDORA_OTA] ", message)
     _notify(message)
+    if brand_home != null:
+        brand_home.call("set_status", message)
 
 func _refresh_modules() -> void:
     if module_panel != null:
         module_panel.set_actions(ValdoraUpdater.get_actions())
+    if brand_home != null:
+        brand_home.call("set_city_available", ValdoraPacks.is_loaded("city"))
 
 func _manual_check_updates() -> void:
     if updater == null:
@@ -399,7 +405,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "VALDORA       |       ALPHA 0.4.0 · MÓDULOS"
+    brand.text = "VALDORA       |       ALPHA 0.4.1 · MÓDULOS"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))
@@ -546,6 +552,34 @@ func _build_ui() -> void:
     module_layer.add_child(module_close_button)
     module_close_button.visible = false
 
+    brand_home = BRAND_HOME.new()
+    brand_home.name = "VALDORA · Menu Principal"
+    brand_home.connect("city_requested", Callable(self, "_home_city"))
+    brand_home.connect("explore_requested", Callable(self, "_home_explore"))
+    brand_home.connect("heroes_requested", Callable(self, "_home_heroes"))
+    brand_home.connect("combat_requested", Callable(self, "_home_combat"))
+    layer.add_child(brand_home)
+    brand_home.call("set_city_available", ValdoraPacks.is_loaded("city"))
+
+func _home_city() -> void:
+    for item in ValdoraUpdater.get_actions():
+        if str(item.get("module_id", "")) == "city" and str(item.get("command", "")) == "open_scene":
+            brand_home.visible = false
+            _run_module_command(item)
+            return
+    brand_home.call("set_status", "Aguardando instalação da expansão Minha Cidade.")
+
+func _home_explore() -> void:
+    brand_home.visible = false
+
+func _home_heroes() -> void:
+    brand_home.visible = false
+    _open_heroes()
+
+func _home_combat() -> void:
+    brand_home.visible = false
+    _open_combat()
+
 func _open_modules() -> void:
     if combat_panel != null and combat_panel.visible:
         _close_combat()
@@ -582,7 +616,7 @@ func _run_module_command(action: Dictionary) -> void:
             if not ValdoraPacks.is_loaded(id) or entry != ValdoraPacks.get_entry(id):
                 _notify("Módulo não autorizado.")
                 return
-            var source = load(entry)
+            var source = ResourceLoader.load(entry, "", ResourceLoader.CACHE_MODE_REPLACE_DEEP)
             if not source is PackedScene:
                 _notify("Cena do módulo incompatível.")
                 return

@@ -4,6 +4,9 @@ config_version=5
 [application]
 config/name="EVOLU Channel — Valdora"
 run/main_scene="res://scenes/Main.tscn"
+config/icon="res://assets/branding/valdora_192.png"
+boot_splash/show_image=false
+boot_splash/bg_color=Color(0.027, 0.106, 0.192, 1)
 config/description="Valdora: RPG 3D medieval independente. Desenvolvido por EVOLU Channel."
 config/features=PackedStringArray("4.7", "GL Compatibility")
 

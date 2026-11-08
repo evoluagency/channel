@@ -1,5 +1,9 @@
 name: Valdora - Android release permanente
 on:
+  push:
+    branches: [release/valdora-android]
+    paths:
+      - game/release-control/build.request
   workflow_dispatch:
 permissions:
   contents: read
@@ -75,6 +79,7 @@ jobs:
           godot --headless --path game --script res://tests/combat_smoke.gd
           godot --headless --path game --script res://tests/update_smoke.gd
           godot --headless --path game --script res://tests/pck_smoke.gd
+          godot --headless --path game --script res://tests/cp006_live_smoke.gd
           godot --headless --path game --script res://tests/smoke.gd
           godot --headless --path game --script res://tests/remote_update_smoke.gd
       - name: Cache dos modelos Android (reduz downloads)
@@ -128,8 +133,8 @@ jobs:
           stat -c '%n %s bytes' game/dist/Valdora.apk
           "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools/35.0.1/aapt" dump badging game/dist/Valdora.apk | grep -m1 "^package:" | tee game/dist/PACKAGE.txt
           grep -q "name='ink.evolu.valdora'" game/dist/PACKAGE.txt
-          grep -q "versionCode='102'" game/dist/PACKAGE.txt
-          grep -q 'version_code=102' game/release-control/version.txt
+          grep -q "versionCode='103'" game/dist/PACKAGE.txt
+          grep -q 'version_code=103' game/release-control/version.txt
           "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools/35.0.1/apksigner" verify --verbose --print-certs game/dist/Valdora.apk > game/dist/SIGNATURE.txt
           grep -iq "c5950693bb5d5f36eeb8a38ef9a352202ed3962e68d3a27facc6db2aecbd76a7" game/dist/SIGNATURE.txt || {
             echo "::error::Assinatura do APK não corresponde ao certificado permanente."
