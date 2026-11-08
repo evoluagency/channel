@@ -88,9 +88,11 @@ jobs:
           GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
         run: |
           mkdir -p game/dist
-          godot --headless --path game --export-debug Android game/dist/Valdora-CP001-Tester.apk
+          godot --headless --path game --export-debug Android "$PWD/game/dist/Valdora-CP001-Tester.apk"
           test -s game/dist/Valdora-CP001-Tester.apk
           stat -c '%n %s bytes' game/dist/Valdora-CP001-Tester.apk
+          "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools/35.0.1/aapt" dump badging game/dist/Valdora-CP001-Tester.apk | grep -m1 "^package:" | tee game/dist/PACKAGE.txt
+          grep -q "name='ink.evolu.channel.cp001'" game/dist/PACKAGE.txt
           sha256sum game/dist/Valdora-CP001-Tester.apk > game/dist/SHA256.txt
       - name: Artefato APK
         uses: actions/upload-artifact@v4
