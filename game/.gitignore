@@ -7,3 +7,9 @@ dist/*.aab
 *.jks
 *.p12
 .env
+
+# Nunca publicar material de assinatura Android.
+**/*-release-android.p12
+**/*-release-android.jks
+**/VALDORA_GITHUB_KEYSTORE_BASE64_PRIVADO.txt
+**/VALDORA_CREDENCIAL_ASSINATURA_PRIVADA.txt
