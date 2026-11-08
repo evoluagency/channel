@@ -82,12 +82,19 @@ func _manifest_finished(result: int, status: int, body: PackedByteArray) -> void
     if int(m["revision"]) <= get_revision():
         _finish("Valdora atualizado: conteúdo v%d." % get_revision())
         return
-    # Impede regressão silenciosa de um módulo mesmo com revisão global maior.
+    # Uma versão publicada é imutável: mesmo id+versão nunca pode trocar bytes.
+    # Também impede regressão de módulos com revisão global artificialmente maior.
     for next_mod in m["modules"]:
         for active_mod in state.get("modules", []):
-            if str(next_mod["id"]) == str(active_mod["id"]) and int(next_mod["version"]) < int(active_mod["version"]):
+            if str(next_mod["id"]) != str(active_mod["id"]):
+                continue
+            if int(next_mod["version"]) < int(active_mod["version"]):
                 _finish("Atualização rejeitada: versão anterior de módulo.")
                 return
+            if int(next_mod["version"]) == int(active_mod["version"]):
+                if str(next_mod["sha256"]) != str(active_mod["sha256"]) or str(next_mod["kind"]) != str(active_mod["kind"]):
+                    _finish("Atualização rejeitada: módulo publicado alterado sem nova versão.")
+                    return
     pending = m
     index = 0
     _next_file()
@@ -197,12 +204,14 @@ func _cleanup_old_files() -> void:
     for name in folder.get_files():
         if keep.has(name):
             continue
-        # Não remove outros arquivos de usuário que não sejam pacotes do nosso protocolo.
-        if name.ends_with(".part") or name.ends_with(".pck") or name.ends_with(".json"):
-            var stem := name.get_basename()
-            var cut := stem.rfind("-")
-            if cut > 0 and CONTRACT.valid_id(stem.substr(0, cut)) and stem.substr(cut + 1).is_valid_int():
-                DirAccess.remove_absolute(ProjectSettings.globalize_path(CONTRACT.FILES + name))
+        # Somente arquivos cujo nome segue precisamente o protocolo podem ser excluídos.
+        var candidate: String = name.trim_suffix(".part") if name.ends_with(".part") else name
+        if not candidate.ends_with(".pck") and not candidate.ends_with(".json"):
+            continue
+        var stem := candidate.get_basename()
+        var cut := stem.rfind("-")
+        if cut > 0 and CONTRACT.valid_id(stem.substr(0, cut)) and stem.substr(cut + 1).is_valid_int():
+            DirAccess.remove_absolute(ProjectSettings.globalize_path(CONTRACT.FILES + name))
 
 func _remove_staging() -> void:
     if not staging_path.is_empty() and FileAccess.file_exists(staging_path):
