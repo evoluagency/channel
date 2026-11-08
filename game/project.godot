@@ -7,6 +7,10 @@ run/main_scene="res://scenes/Main.tscn"
 config/description="Valdora: RPG 3D medieval independente. Desenvolvido por EVOLU Channel."
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
+[autoload]
+ValdoraPacks="*res://scripts/updates/boot_loader.gd"
+ValdoraUpdater="*res://scripts/updates/update_manager.gd"
+
 [display]
 window/size/viewport_width=1280
 window/size/viewport_height=720

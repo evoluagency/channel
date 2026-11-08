@@ -1,0 +1,4 @@
+cp004-one-shot=e2fdda16766055af4d2e30166a83d8d2c7e8e552
+reason=verify-signed-zip-offline-and-test-godot
+attempt=2
+no-android-export=true

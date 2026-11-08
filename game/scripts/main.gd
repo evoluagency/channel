@@ -12,6 +12,7 @@ const HERO_SYSTEM := preload("res://scripts/heroes/hero_system.gd")
 const HERO_PANEL := preload("res://scripts/ui/hero_panel.gd")
 const COMBAT_ENGINE := preload("res://scripts/combat/pve_engine.gd")
 const COMBAT_ARENA := preload("res://scripts/combat/arena_panel.gd")
+const MODULE_PANEL := preload("res://scripts/updates/module_panel.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -42,6 +43,10 @@ var hero_catalog: Dictionary = {}
 var hero_state: Dictionary = {}
 var hero_panel: Control
 var combat_panel: Control
+var module_panel: Control
+var module_scene: Control
+var module_close_button: Button
+var module_layer: CanvasLayer
 
 func _ready() -> void:
     _setup_input()
@@ -64,6 +69,21 @@ func _setup_content_updates() -> void:
     updater.connect("status_changed", Callable(self, "_on_update_status"))
     updater.connect("content_changed", Callable(self, "_on_content_changed"))
     updater.call("check_for_updates")
+    ValdoraUpdater.status_changed.connect(_on_modular_update_status)
+    ValdoraUpdater.modules_changed.connect(_refresh_modules)
+    ValdoraUpdater.download_progress.connect(_on_ota_progress)
+    _refresh_modules()
+
+func _on_ota_progress(done: int, total: int) -> void:
+    _notify("Baixando módulo %d de %d..." % [done + 1, total])
+
+func _on_modular_update_status(message: String) -> void:
+    print("[VALDORA_OTA] ", message)
+    _notify(message)
+
+func _refresh_modules() -> void:
+    if module_panel != null:
+        module_panel.set_actions(ValdoraUpdater.get_actions())
 
 func _manual_check_updates() -> void:
     if updater == null:
@@ -71,6 +91,7 @@ func _manual_check_updates() -> void:
         return
     _notify("Consultando atualizações de Valdora...")
     updater.call("check_for_updates")
+    ValdoraUpdater.check_for_updates()
 
 func _on_update_status(message: String) -> void:
     print("[VALDORA_UPDATE] ", message)
@@ -350,6 +371,10 @@ func _physics_process(delta: float) -> void:
             _close_combat()
         elif hero_panel != null and hero_panel.visible:
             _close_heroes()
+        elif module_panel != null and module_panel.visible:
+            _close_modules()
+        elif module_scene != null and is_instance_valid(module_scene):
+            _close_module_scene()
         else:
             _close_dialogue()
 
@@ -374,7 +399,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "VALDORA       |       ALPHA 0.3.3 · COMBATE"
+    brand.text = "VALDORA       |       ALPHA 0.4.0 · MÓDULOS"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))
@@ -491,6 +516,99 @@ func _build_ui() -> void:
     layer.add_child(combat_panel)
     combat_panel.visible = false
 
+    var modules_button := Button.new()
+    modules_button.name = "Abrir módulos"
+    modules_button.text = "MÓDULOS"
+    modules_button.position = Vector2(viewport_size.x - 936, 78)
+    modules_button.size = Vector2(173, 49)
+    modules_button.add_theme_font_size_override("font_size", 16)
+    modules_button.pressed.connect(_open_modules)
+    layer.add_child(modules_button)
+
+    module_panel = MODULE_PANEL.new()
+    module_panel.name = "Módulos atualizáveis"
+    module_panel.command_requested.connect(_run_module_command)
+    module_panel.close_requested.connect(_close_modules)
+    layer.add_child(module_panel)
+    module_panel.set_actions(ValdoraUpdater.get_actions())
+    module_panel.visible = false
+
+    module_layer = CanvasLayer.new()
+    module_layer.name = "Expansões assinadas"
+    module_layer.layer = 2
+    add_child(module_layer)
+
+    module_close_button = Button.new()
+    module_close_button.text = "FECHAR MÓDULO"
+    module_close_button.position = Vector2(viewport_size.x - 220, 18)
+    module_close_button.size = Vector2(190, 49)
+    module_close_button.pressed.connect(_close_module_scene)
+    module_layer.add_child(module_close_button)
+    module_close_button.visible = false
+
+func _open_modules() -> void:
+    if combat_panel != null and combat_panel.visible:
+        _close_combat()
+    if hero_panel != null and hero_panel.visible:
+        _close_heroes()
+    if dialogue_layer != null and dialogue_layer.visible:
+        _close_dialogue()
+    module_panel.set_actions(ValdoraUpdater.get_actions())
+    module_panel.visible = true
+    game_paused_for_dialogue = true
+    joystick_touch_id = -1
+    mobile_axis = Vector2.ZERO
+
+func _close_modules() -> void:
+    if module_panel != null:
+        module_panel.visible = false
+    game_paused_for_dialogue = false
+
+func _run_module_command(action: Dictionary) -> void:
+    _close_modules()
+    match str(action.get("command", "")):
+        "message":
+            _notify(str(action.get("text", "")))
+        "open_heroes":
+            _open_heroes()
+        "open_combat":
+            _open_combat()
+        "economy":
+            _update_hud()
+            _notify("Moedas: %d | Banco: %d | Poções: %d" % [coins, bank_coins, potions])
+        "open_scene":
+            var id := str(action.get("module_id", ""))
+            var entry := str(action.get("scene_path", ""))
+            if not ValdoraPacks.is_loaded(id) or entry != ValdoraPacks.get_entry(id):
+                _notify("Módulo não autorizado.")
+                return
+            var source = load(entry)
+            if not source is PackedScene:
+                _notify("Cena do módulo incompatível.")
+                return
+            var node = source.instantiate()
+            if not node is Control:
+                node.queue_free()
+                _notify("Módulo precisa fornecer uma cena Control.")
+                return
+            _close_module_scene()
+            module_scene = node
+            module_layer.add_child(module_scene)
+            module_scene.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+            module_close_button.visible = true
+            module_close_button.move_to_front()
+            game_paused_for_dialogue = true
+        _:
+            _notify("Comando não suportado pelo aplicativo-base.")
+
+func _close_module_scene() -> void:
+    if module_scene != null and is_instance_valid(module_scene):
+        module_scene.queue_free()
+        module_scene = null
+    if module_close_button != null:
+        module_close_button.visible = false
+    game_paused_for_dialogue = false
+
 func _open_combat() -> void:
     if combat_panel == null or hero_catalog.is_empty():
         _notify("Arena de combate indisponível.")
@@ -595,6 +713,10 @@ func _run_diagnostics() -> void:
 
 func _input(event: InputEvent) -> void:
     if combat_panel != null and combat_panel.visible:
+        return
+    if module_scene != null and is_instance_valid(module_scene):
+        return
+    if module_panel != null and module_panel.visible:
         return
     if hero_panel != null and hero_panel.visible:
         return
