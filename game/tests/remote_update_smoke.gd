@@ -6,7 +6,7 @@ var http: HTTPRequest
 func _initialize() -> void:
     call_deferred("_run")
 
-func _get(url: String, limit: int) -> PackedByteArray:
+func _http_download(url: String, limit: int) -> PackedByteArray:
     http.download_file = ""
     http.body_size_limit = limit
     var error := http.request(url, PackedStringArray(["Cache-Control: no-cache", "Accept-Encoding: identity"]))
@@ -26,7 +26,7 @@ func _run() -> void:
     http.accept_gzip = false
     root.add_child(http)
 
-    var source: PackedByteArray = await _get(CONTRACT.ORIGIN + "manifest.json", CONTRACT.MAX_MANIFEST)
+    var source: PackedByteArray = await _http_download(CONTRACT.ORIGIN + "manifest.json", CONTRACT.MAX_MANIFEST)
     var manifest = JSON.parse_string(source.get_string_from_utf8())
     var passed: int = 0
     var total: int = 3
@@ -42,7 +42,7 @@ func _run() -> void:
     var rsa_ok := true
     for entry in modules:
         var mod: Dictionary = entry
-        var bytes: PackedByteArray = await _get(str(mod["url"]), int(mod["bytes"]) + 1)
+        var bytes: PackedByteArray = await _http_download(str(mod["url"]), int(mod["bytes"]) + 1)
         var hasher := HashingContext.new()
         hasher.start(HashingContext.HASH_SHA256)
         hasher.update(bytes)
