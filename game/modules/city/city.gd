@@ -546,8 +546,9 @@ func _try_build(tile: Vector2i) -> void:
     next["revision"] = int(next["revision"]) + 1
     if _write_save(next):
         city = next
+        var built_kind := selected_type
         selected_type = "inspecionar"
-        _set_status("%s construída e salva!" % LABELS[selected_type])
+        _set_status("Cidade fundada e salva!" if built_kind == "fundacao" else "%s construída e salva!" % LABELS[built_kind])
     else:
         _set_status("Falha ao salvar. Nenhum recurso foi consumido.")
 
