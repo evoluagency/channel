@@ -30,7 +30,7 @@ static func valid_sha(value: String) -> bool:
     return true
 
 static func file_path(module: Dictionary) -> String:
-    var suffix := ".pck" if str(module.get("kind", "")) == "pck" else ".json"
+    var suffix := ".json" if str(module.get("kind", "")) == "data" else (".zip" if str(module.get("kind", "")) == "zip" else ".pck")
     return FILES + str(module.get("id", "")) + "-" + str(module.get("version", 0)) + suffix
 
 static func validate_manifest(m: Dictionary) -> String:
@@ -60,7 +60,7 @@ static func validate_manifest(m: Dictionary) -> String:
         if not valid_id(id) or seen.has(id):
             return "identificador repetido ou inválido"
         seen[id] = true
-        if kind != "data" and kind != "pck":
+        if kind != "data" and kind != "pck" and kind != "zip":
             return "tipo de módulo não autorizado"
         if (typeof(ver) != TYPE_INT and typeof(ver) != TYPE_FLOAT) or int(ver) < 1:
             return "versão de módulo inválida"
@@ -69,13 +69,13 @@ static func validate_manifest(m: Dictionary) -> String:
         total += int(bytes_count)
         if total > MAX_TOTAL:
             return "orçamento de download excedido"
-        var suffix := ".pck" if kind == "pck" else ".json"
+        var suffix := ".json" if kind == "data" else (".zip" if kind == "zip" else ".pck")
         var expected := ORIGIN + "modules/" + id + "-" + str(int(ver)) + suffix
         if str(mod.get("url", "")) != expected:
             return "URL fora da origem autorizada"
         if not valid_sha(str(mod.get("sha256", "")).to_lower()):
             return "SHA-256 inválido"
-        if kind == "pck":
+        if kind == "pck" or kind == "zip":
             var entry := "res://valdora_modules/" + id + "/entry.tscn"
             if str(mod.get("entry", "")) != entry:
                 return "cena fora do namespace do módulo"
@@ -135,7 +135,7 @@ static func verify_file(mod: Dictionary, path: String) -> bool:
     var digest := file_digest(path)
     if digest.is_empty() or digest.hex_encode() != str(mod.get("sha256", "")).to_lower():
         return false
-    if str(mod.get("kind", "")) == "pck":
+    if str(mod.get("kind", "")) == "pck" or str(mod.get("kind", "")) == "zip":
         if not FileAccess.file_exists(PUBLIC_KEY):
             return false # fail closed; publisher must provision and protect signing key.
         var key := CryptoKey.new()

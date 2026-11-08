@@ -12,7 +12,7 @@ func _init() -> void:
     if not CONTRACT.valid_state(state):
         return
     for module in state.get("modules", []):
-        if str(module.get("kind", "")) != "pck":
+        if str(module.get("kind", "")) != "pck" and str(module.get("kind", "")) != "zip":
             continue
         var id := str(module["id"])
         var path := CONTRACT.file_path(module)

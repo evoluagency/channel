@@ -42,6 +42,19 @@ func _run() -> void:
     checks["comandos_validos"] = CONTRACT.validate_data(data, "guide")
     data["actions"][0]["command"] = "execute_script"
     checks["rejeita_codigo_remoto"] = not CONTRACT.validate_data(data, "guide")
+    var pack := {
+        "id": "welcome", "version": 1, "kind": "zip", "bytes": 394,
+        "url": CONTRACT.ORIGIN + "modules/welcome-1.zip",
+        "sha256": "55eec775557b4aa9126accff09ef609c16a6dd2aa5c2d41c65b4654c2af91ee6",
+        "entry": "res://valdora_modules/welcome/entry.tscn",
+        "signature_b64": "A".repeat(512)
+    }
+    wrong = manifest.duplicate(true)
+    wrong["modules"] = [pack]
+    checks["pack_zip_assinado_contrato"] = CONTRACT.validate_manifest(wrong).is_empty()
+    pack["entry"] = "res://scripts/main.gd"
+    wrong["modules"] = [pack]
+    checks["rejeita_zip_fora_namespace"] = not CONTRACT.validate_manifest(wrong).is_empty()
     checks["estado_vazio_invalido"] = not CONTRACT.valid_state({})
     var passed := 0
     for k in checks.keys():

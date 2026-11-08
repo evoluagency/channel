@@ -163,7 +163,7 @@ func _activate() -> void:
     _cleanup_old_files()
     var needs_restart := false
     for mod in state["modules"]:
-        if str(mod["kind"]) == "pck" and not ValdoraPacks.is_loaded(str(mod["id"])):
+        if (str(mod["kind"]) == "pck" or str(mod["kind"]) == "zip") and not ValdoraPacks.is_loaded(str(mod["id"])):
             needs_restart = true
     if needs_restart:
         _finish("Atualização instalada. Reinicie o Valdora para ativar novas cenas.")
@@ -186,7 +186,7 @@ func _load_actions() -> void:
                 action["module_id"] = id
                 action["module_title"] = str(data["title"])
                 actions.append(action)
-        elif str(mod["kind"]) == "pck" and ValdoraPacks.is_loaded(id):
+        elif (str(mod["kind"]) == "pck" or str(mod["kind"]) == "zip") and ValdoraPacks.is_loaded(id):
             actions.append({"id": id, "label": str(mod.get("label", id)), "command": "open_scene", "module_id": id, "scene_path": str(mod["entry"]), "module_title": "Expansão Valdora"})
     modules_changed.emit()
 
@@ -206,7 +206,7 @@ func _cleanup_old_files() -> void:
             continue
         # Somente arquivos cujo nome segue precisamente o protocolo podem ser excluídos.
         var candidate: String = name.trim_suffix(".part") if name.ends_with(".part") else name
-        if not candidate.ends_with(".pck") and not candidate.ends_with(".json"):
+        if not candidate.ends_with(".pck") and not candidate.ends_with(".zip") and not candidate.ends_with(".json"):
             continue
         var stem := candidate.get_basename()
         var cut := stem.rfind("-")

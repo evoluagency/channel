@@ -18,7 +18,7 @@ checks["unique_ids"] = len({m["id"] for m in manifest["modules"]}) == len(manife
 checks["resources_valid"] = True
 checks["declared_commands"] = True
 for m in manifest["modules"]:
-    name = f"{m['id']}-{m['version']}.{('pck' if m['kind']=='pck' else 'json')}"
+    name = f"{m['id']}-{m['version']}.{('json' if m['kind']=='data' else m['kind'])}"
     f = S / "modules" / name
     if not re.fullmatch(r"[a-z0-9_-]{3,40}", m["id"]) or not f.is_file():
         checks["resources_valid"] = False
@@ -28,7 +28,7 @@ for m in manifest["modules"]:
         checks["resources_valid"] = False
     if m["url"] != f"https://channel.evolu.ink/updates/v2/modules/{name}":
         checks["resources_valid"] = False
-    if m["kind"]=="pck":
+    if m["kind"] in {"pck", "zip"}:
         if not m.get("signature_b64") or m.get("entry") != f"res://valdora_modules/{m['id']}/entry.tscn":
             checks["resources_valid"] = False
     else:

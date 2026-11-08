@@ -21,9 +21,9 @@ def create(revision: int, minimum_client: int, private_key: Path | None) -> dict
     seen = set()
     total = 0
     for file in sorted(MODULES.iterdir()):
-        if not file.is_file() or file.suffix not in {".json", ".pck"}:
+        if not file.is_file() or file.suffix not in {".json", ".pck", ".zip"}:
             continue
-        match = re.fullmatch(r"([a-z0-9_-]{3,40})-([1-9][0-9]*)\.(json|pck)",file.name)
+        match = re.fullmatch(r"([a-z0-9_-]{3,40})-([1-9][0-9]*)\.(json|pck|zip)",file.name)
         if not match:
             raise ValueError(f"invalid module file name: {file.name}")
         identifier, version, ext = match.groups()
@@ -36,7 +36,7 @@ def create(revision: int, minimum_client: int, private_key: Path | None) -> dict
             raise ValueError("size budget exceeded")
         entry = {
             "id":identifier, "version":int(version),
-            "kind":"pck" if ext == "pck" else "data",
+            "kind":"data" if ext == "json" else ext,
             "url":ORIGIN+file.name, "bytes":len(data),
             "sha256":sha256(data).hexdigest()
         }

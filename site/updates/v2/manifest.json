@@ -13,6 +13,17 @@
       "url": "https://channel.evolu.ink/updates/v2/modules/guide-1.json",
       "bytes": 428,
       "sha256": "17fb42d1f59c0ae8f23b004eb0854a13246624c4d0bd71a65d9c0dcb02c41d5b"
+    },
+    {
+      "id": "welcome",
+      "version": 1,
+      "kind": "zip",
+      "url": "https://channel.evolu.ink/updates/v2/modules/welcome-1.zip",
+      "bytes": 394,
+      "sha256": "55eec775557b4aa9126accff09ef609c16a6dd2aa5c2d41c65b4654c2af91ee6",
+      "entry": "res://valdora_modules/welcome/entry.tscn",
+      "signature_b64": "lONQAHNN6EtKbmk3KEIsyFYLVj+8h0nyX5r1fU3EtahrizFCygwF00jo62IfD9wzJ80ZoKiKK6a8If7j0YuiOnoFMfyaJl2hg1Gs07Pv29+yuyBiMjH7hA5iv6iwd0EHeovRpkmUwnbAj2s98GCYK0Zwk5YJf3q0zbzJ1AX3o3CFrs2+07jXACmyJY1l4TwCMCVdzRhpNGdtE2xP8pnTJeVpnl7/JNsdOJ9jNkU3OXb6RLAnCeNKDdQTB3OeSHSGvt+oc8hMEQnlEPQI3CWU9zHR9WLK9oBUkZeDk9DweGEW4yPr7JiSMioD/j4vqqhqlkb5ueqjbys9QM8uDsobUpEey+knEG2FHPZxbaAJaM+oObmCv7f8NGzjACtP08myse+yPaP0POm57xS6qHfrJdW+pHyvEliMv0KRHJaTlDbt1IaINoFpHj85cbmQiQjR2HXolFFP6wxzf8CqPJUN9fK4I1qW4BZOXTbdd09x8mEMvaJBP2FJ5B9yHywDPBMR",
+      "label": "Bem-vindo a Valdora"
     }
   ]
 }
