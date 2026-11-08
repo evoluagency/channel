@@ -1,6 +1,6 @@
 # Valdora — CP003-A/B | Motor de combate PvE offline
 
-Estado: núcleo de regras implementado, ainda **não integrado à HUD ou arena 3D**. O APK homologado v0.3.2-alpha não muda nesta etapa.
+Estado: núcleo CP003-A/B **testado**, CP003-C integrado em **arena 3D de demonstração** na branch de desenvolvimento. O APK homologado v0.3.2-alpha ainda não muda nesta etapa.
 
 ## Fonte de verdade
 - GDD Mestre **v0.4.1**, §§6.2–6.3, 7, 8.1–8.11 e 15.3–15.4.
@@ -47,7 +47,7 @@ Cada evento tem `round`; os eventos de ataque e habilidade têm IDs de ator e/ou
 - Não gera APK nem modifica a assinatura permanente, o pacote `ink.evolu.valdora` ou o versionCode 100.
 - Não altera o save `user://channel_save.json`, nem `user://valdora_hero_roster_v1.json`.
 - Não distribui moedas, experiência, drops, saúde persistente ou recursos de vitória (campo `reward_issued=false`).
-- Não implementa arena, HUD de combate, animação, pathfinding, efeitos visuais ou estatísticas de FPS.
+- A branch CP003-C implementa arena 3D e HUD tática com avatares 3D simplificados, projéteis e pulsos visuais por evento, mas **não** modelos finais, rigging, animação esquelética, pathfinding ou medição de FPS.
 - Não implementa multiplayer, entidades autoritativas, Supabase, Intelligence ou lógica executável por atualização remota.
 
 ## Homologação técnica
@@ -56,3 +56,25 @@ Executar com Godot **4.7.2**:
 `godot --headless --path game --script res://tests/combat_smoke.gd`
 
 Uma workflow leve CP003 executa também os testes CP001/CP002 e o smoke da cena. Não baixa Android SDK nem gera APK. Após homologação, o plano é CP003-C (adaptador de eventos para arena isolada e UI de decisões). Só então consolidar uma nova atualização **sobre o mesmo aplicativo**, com mesma chave e versionCode > 100.
+
+## CP003-C — Integração visual em Godot
+
+**Arquivos:** `res://scripts/combat/arena_panel.gd`, `res://scripts/main.gd`, `res://tests/smoke.gd`.
+A nova interface abre pelo botão **COMBATE** na HUD e é um `SubViewport` com `World3D` próprio (separado do mundo explorável). O deslocamento do personagem fica suspenso enquanto a interface está visível.
+
+### Jornada interativa de teste
+1. Abrir **COMBATE**; arena provisória mostra os quatro heróis e dois inimigos com modelos low-poly de referência.
+2. Selecionar postura (equilibrada / cautelosa / agressiva), herói e foco de alvo.
+3. Usar **ATAQUE BÁSICO**, **SEMIAUTOMÁTICO** ou **ATIVAR HABILIDADE**; cada comando resolve uma rodada no motor CP003.
+4. A tela apresenta PV, número de rodadas, histórico textual e pulsos/projéteis associados a eventos do motor; nova ordem fica bloqueada até concluir a reprodução.
+5. A batalha termina em vitória, derrota ou empate por 8 rodadas. **REINICIAR** cria um encontro novo com seed registrada.
+6. **FECHAR** retorna ao cenário anterior; moedas, banco, poções e formação persistente permanecem intactos.
+
+Os avatares são **protótipos 3D estilizados e simplificados**. Não representam modelos finais nem retratos oficiais de Pietro, Henzo, Giulia ou Arthur. A formação CP002-A, inclusive os valores de habilidades e os atributos, continua sendo a fonte de verdade. Não há dependência de recursos remotos nem instalação de efeitos visuais externos.
+
+### Salvaguardas
+- Não há escrita de saves, distribuição de recompensas ou mudanças de estado fora do painel.
+- A arena consome somente cópias de catálogo e formação no início do encontro; fechar e reabrir não transfere PV/lesões para o mundo.
+- Aplicativo Android permanece `ink.evolu.valdora` com assinatura permanente. Próxima versão, quando aprovada, terá código superior a 100 e será **atualização sobre o mesmo app**, não novo pacote.
+- Testes CP001/002/003 e testes de abertura, pausa, turno, replay e fechamento da cena.
+- O demo CP003-C não substitui a futura arena PvE definitiva ou o combate territorial em larga escala.
