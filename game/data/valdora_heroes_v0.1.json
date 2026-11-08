@@ -1,0 +1,283 @@
+{
+  "schema": "valdora.hero_catalog.v0.1",
+  "catalog_version": 1,
+  "balance_version": 1,
+  "status": "proposed_not_implemented",
+  "season_1_days": 60,
+  "base_attribute_per_stat": 10,
+  "level1_bonus_points": 6,
+  "heroes": [
+    {
+      "hero_id": "hero_pietro_001",
+      "roster_id": 1,
+      "display_name": "Pietro",
+      "age_at_introduction": 22,
+      "appearance": {
+        "gender_presentation": "masculino",
+        "description": "Homem branco; cabelo louro de comprimento médio; textura do cabelo a confirmar; porte físico não especificado; 1,74 m.",
+        "height_cm": 174
+      },
+      "class": "guardiao",
+      "period_title_t1": "Defensor do clã",
+      "force": "ferro",
+      "combat_role": "defesa",
+      "formation_position": "vanguarda",
+      "availability": {
+        "first_season": 1,
+        "unlock_condition_proposal": "Capítulo de defesa do acampamento, na Temporada 1."
+      },
+      "attributes_level1": {
+        "VIG": 14,
+        "FOR": 10,
+        "TEC": 10,
+        "INT": 10,
+        "ESP": 12,
+        "AGI": 10
+      },
+      "derived_level1_no_equipment": {
+        "HP": 268,
+        "focus": 98,
+        "physical_attack": 60,
+        "magic_attack": 62,
+        "physical_defense": 38,
+        "magic_defense": 34,
+        "initiative": 20,
+        "critical_percent": 5
+      },
+      "lore_proposal": "Após uma expedição malsucedida, promete impedir que outras pessoas de sua comunidade sejam abandonadas. Aprende que proteger também exige escolher quando recuar.",
+      "personality_proposal": "Disciplinado, atento aos demais, cauteloso diante de riscos desnecessários.",
+      "visual_t1_proposal": "Cabelos louros médios; roupa de fibras naturais e peles; proteção artesanal leve; ferramenta de defesa de madeira e pedra; postura protetora, sem armadura de metal na T1.",
+      "skills": {
+        "basic": {
+          "name": "Golpe de Bastão",
+          "description": "Ataque físico corpo a corpo de alvo único."
+        },
+        "active_1": {
+          "name": "Muralha do Primeiro Povo",
+          "description": "Protege aliados da vanguarda e reduz em 15% o dano recebido por eles na próxima rodada. Não acumula com outra aplicação desta mesma habilidade.",
+          "focus_cost_proposed": 20,
+          "cooldown_rounds_proposed": 3
+        },
+        "active_2": null,
+        "active_3": null,
+        "passive": {
+          "name": "Vigília do Abrigo",
+          "description": "Quando Pietro ocupa a vanguarda, reduz em 5% o dano físico do primeiro ataque que ele recebe em cada batalha."
+        },
+        "ultimate": {
+          "name": "Bastião Ancestral",
+          "status": "locked_until_domain_stage_3"
+        },
+        "narrative_trait": {
+          "name": "Promessa do Guardião",
+          "description": "Diálogos e missões apresentam decisões de proteção, retirada e distribuição de suprimentos."
+        }
+      },
+      "weakness_proposal": "Dano individual limitado; vulnerável a ataques direcionados à retaguarda."
+    },
+    {
+      "hero_id": "hero_henzo_002",
+      "roster_id": 2,
+      "display_name": "Henzo",
+      "age_at_introduction": 28,
+      "appearance": {
+        "gender_presentation": "masculino",
+        "description": "Homem negro; cabelos cacheados; corpo magro; 1,80 m.",
+        "height_cm": 180
+      },
+      "class": "patrulheiro",
+      "period_title_t1": "Rastreador",
+      "force": "nevoa",
+      "combat_role": "reconhecimento",
+      "formation_position": "retaguarda",
+      "availability": {
+        "first_season": 1,
+        "unlock_condition_proposal": "Primeira missão de reconhecimento da região, na Temporada 1."
+      },
+      "attributes_level1": {
+        "VIG": 10,
+        "FOR": 10,
+        "TEC": 13,
+        "INT": 10,
+        "ESP": 10,
+        "AGI": 13
+      },
+      "derived_level1_no_equipment": {
+        "HP": 220,
+        "focus": 90,
+        "physical_attack": 63,
+        "magic_attack": 60,
+        "physical_defense": 30,
+        "magic_defense": 30,
+        "initiative": 23,
+        "critical_percent": 5.45
+      },
+      "lore_proposal": "Conhece caminhos que os demais evitam e registra sinais de migração, clima e presença de outros grupos. Precisa aprender a compartilhar informações sem comprometer pessoas vulneráveis.",
+      "personality_proposal": "Observador, reservado e inventivo nas rotas de exploração.",
+      "visual_t1_proposal": "Cabelos cacheados; porte esguio; roupa leve de fibras e peles adequada a deslocamento; bolsa de ferramentas; lança curta e equipamento de rastreamento compatíveis com a T1.",
+      "skills": {
+        "basic": {
+          "name": "Arremesso Preciso",
+          "description": "Ataque físico à distância de alvo único com alcance tático definido pela arena."
+        },
+        "active_1": {
+          "name": "Trilha Oculta",
+          "description": "Marca um inimigo: o próximo ataque aliado contra esse alvo causa 10% mais dano. A marca desaparece após o ataque ou ao fim da rodada seguinte; não acumula.",
+          "focus_cost_proposed": 15,
+          "cooldown_rounds_proposed": 2
+        },
+        "active_2": null,
+        "active_3": null,
+        "passive": {
+          "name": "Leitura de Rastros",
+          "description": "Em expedições PvE, revela uma pista contextual adicional quando o cenário possuir pistas configuradas."
+        },
+        "ultimate": {
+          "name": "Caminho Invisível",
+          "status": "locked_until_domain_stage_3"
+        },
+        "narrative_trait": {
+          "name": "Cartógrafo Oral",
+          "description": "Registra rotas e eventos em descrições do códice; não permite antecipar regiões bloqueadas por calendário."
+        }
+      },
+      "weakness_proposal": "Baixa resistência física relativa; perde efetividade com inimigos sem alvo marcável."
+    },
+    {
+      "hero_id": "hero_giulia_003",
+      "roster_id": 3,
+      "display_name": "Giulia",
+      "age_at_introduction": 21,
+      "appearance": {
+        "gender_presentation": "feminino",
+        "description": "Mulher negra; cabelos cacheados tipo 3B; corpo magro; 1,65 m.",
+        "height_cm": 165
+      },
+      "class": "clerigo",
+      "period_title_t1": "Cuidadora do clã",
+      "force": "aurora",
+      "combat_role": "suporte",
+      "formation_position": "retaguarda",
+      "availability": {
+        "first_season": 1,
+        "unlock_condition_proposal": "Missão de tratamento de feridos e coleta de plantas, na Temporada 1."
+      },
+      "attributes_level1": {
+        "VIG": 10,
+        "FOR": 10,
+        "TEC": 10,
+        "INT": 13,
+        "ESP": 13,
+        "AGI": 10
+      },
+      "derived_level1_no_equipment": {
+        "HP": 220,
+        "focus": 102,
+        "physical_attack": 60,
+        "magic_attack": 72,
+        "physical_defense": 30,
+        "magic_defense": 36,
+        "initiative": 20,
+        "critical_percent": 5
+      },
+      "lore_proposal": "Investiga plantas, ferimentos e fenômenos associados à Aurora. Seu arco contrapõe conhecimento compartilhado e preservação dos recursos raros da comunidade.",
+      "personality_proposal": "Curiosa, persistente e metódica no cuidado com os demais.",
+      "visual_t1_proposal": "Cachos 3B com volume natural; silhueta esguia; vestimentas de fibras naturais; bolsa de ervas e instrumentos simples de cuidado; efeitos de Aurora discretos, sem iconografia religiosa de períodos posteriores.",
+      "skills": {
+        "basic": {
+          "name": "Toque de Aurora",
+          "description": "Ataque arcano de alvo único, com VFX curto e de baixo custo."
+        },
+        "active_1": {
+          "name": "Alento da Aurora",
+          "description": "Restaura 12% dos PV máximos do aliado com menor percentual de vida, limitado à vida faltante. Não ressuscita unidades derrotadas.",
+          "focus_cost_proposed": 20,
+          "cooldown_rounds_proposed": 3
+        },
+        "active_2": null,
+        "active_3": null,
+        "passive": {
+          "name": "Conhecimento de Ervas",
+          "description": "Em expedições PvE com coleta de plantas habilitada, concede 5% de chance adicional de obter um ingrediente comum, sujeito ao limite de recompensas da missão."
+        },
+        "ultimate": {
+          "name": "Círculo do Alvorecer",
+          "status": "locked_until_domain_stage_3"
+        },
+        "narrative_trait": {
+          "name": "Guardadora de Saberes",
+          "description": "Desbloqueia textos e escolhas narrativas sobre práticas de cuidado e observação natural."
+        }
+      },
+      "weakness_proposal": "Dano direto menor; cura limitada por Foco, recarga e disponibilidade de aliados vivos."
+    },
+    {
+      "hero_id": "hero_arthur_004",
+      "roster_id": 4,
+      "display_name": "Arthur",
+      "age_at_introduction": 23,
+      "appearance": {
+        "gender_presentation": "masculino",
+        "description": "Homem branco; cabelos lisos e louros; corpo magro; 1,75 m.",
+        "height_cm": 175
+      },
+      "class": "berserker",
+      "period_title_t1": "Caçador de vanguarda",
+      "force": "brasa",
+      "combat_role": "ofensiva",
+      "formation_position": "vanguarda",
+      "availability": {
+        "first_season": 1,
+        "unlock_condition_proposal": "Primeira missão de combate ou caçada coordenada, na Temporada 1."
+      },
+      "attributes_level1": {
+        "VIG": 10,
+        "FOR": 14,
+        "TEC": 10,
+        "INT": 10,
+        "ESP": 10,
+        "AGI": 12
+      },
+      "derived_level1_no_equipment": {
+        "HP": 220,
+        "focus": 90,
+        "physical_attack": 72,
+        "magic_attack": 60,
+        "physical_defense": 30,
+        "magic_defense": 30,
+        "initiative": 22,
+        "critical_percent": 5.3
+      },
+      "lore_proposal": "Demonstra coragem em situações de risco, mas aprende que a bravura individual não substitui a coordenação com o clã.",
+      "personality_proposal": "Competitivo, impulsivo e leal a quem considera parte de sua comunidade.",
+      "visual_t1_proposal": "Cabelos lisos louros; porte magro; roupa funcional para caçadas; arma de madeira e pedra; marcas visuais de Brasa discretas; sem armas de fogo ou equipamento metálico na T1.",
+      "skills": {
+        "basic": {
+          "name": "Investida de Caça",
+          "description": "Ataque físico corpo a corpo contra o inimigo na linha de frente."
+        },
+        "active_1": {
+          "name": "Ímpeto da Chama",
+          "description": "Seu próximo ataque físico causa 1,20× do dano-base; após atacar, sofre 5% a mais de dano até o fim da rodada seguinte. Não acumula consigo mesmo.",
+          "focus_cost_proposed": 18,
+          "cooldown_rounds_proposed": 3
+        },
+        "active_2": null,
+        "active_3": null,
+        "passive": {
+          "name": "Coragem Instintiva",
+          "description": "Quando Arthur estiver com menos de 50% dos PV, seu ataque físico recebe bônus de 5%; efeito único e não cumulativo."
+        },
+        "ultimate": {
+          "name": "Ruptura da Brasa",
+          "status": "locked_until_domain_stage_3"
+        },
+        "narrative_trait": {
+          "name": "Primeiro Passo",
+          "description": "Oferece escolhas narrativas de iniciativa, risco calculado e liderança em caçadas."
+        }
+      },
+      "weakness_proposal": "Baixa durabilidade para combate prolongado e penalidade após sua habilidade ofensiva."
+    }
+  ]
+}

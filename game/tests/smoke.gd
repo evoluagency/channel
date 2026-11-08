@@ -39,6 +39,12 @@ func _run_smoke() -> void:
     else:
         results["merchant_dialogue"] = false
         results["bank_dialogue"] = false
+    var hero_panel: Control = game.get("hero_panel") as Control
+    results["hero_panel_built"] = hero_panel != null and is_instance_valid(hero_panel)
+    game.call("_open_heroes")
+    results["hero_panel_open"] = hero_panel != null and hero_panel.visible
+    game.call("_close_heroes")
+    results["hero_panel_close"] = hero_panel != null and not hero_panel.visible
     game.call("_run_diagnostics")
     var passed := 0
     for key in results.keys():

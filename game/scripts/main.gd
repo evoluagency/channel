@@ -8,6 +8,8 @@ const CONTENT_UPDATER := preload("res://scripts/content_updater.gd")
 const ECONOMY := preload("res://scripts/core/economy.gd")
 const SAVE_STORE := preload("res://scripts/core/save_store.gd")
 const INPUT_ACTIONS := preload("res://scripts/core/input_actions.gd")
+const HERO_SYSTEM := preload("res://scripts/heroes/hero_system.gd")
+const HERO_PANEL := preload("res://scripts/ui/hero_panel.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -34,10 +36,15 @@ var game_paused_for_dialogue := false
 var npcs: Array[Dictionary] = []
 var clock: float = 0.0
 var updater: Node
+var hero_catalog: Dictionary = {}
+var hero_state: Dictionary = {}
+var hero_panel: Control
 
 func _ready() -> void:
     _setup_input()
     _load_save()
+    hero_catalog = HERO_SYSTEM.load_catalog()
+    hero_state = HERO_SYSTEM.load_roster(hero_catalog)
     _build_environment()
     _build_terrain()
     _build_valdora()
@@ -359,7 +366,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "VALDORA       |       ALPHA 0.2"
+    brand.text = "VALDORA       |       ALPHA 0.3 · CP002"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))
@@ -443,6 +450,48 @@ func _build_ui() -> void:
     dialogue_layer.visible = false
     layer.add_child(dialogue_layer)
 
+    var heroes_button := Button.new()
+    heroes_button.name = "Abrir herois"
+    heroes_button.text = "HERÓIS"
+    heroes_button.position = Vector2(viewport_size.x - 570, 78)
+    heroes_button.size = Vector2(173, 49)
+    heroes_button.add_theme_font_size_override("font_size", 17)
+    heroes_button.pressed.connect(_open_heroes)
+    layer.add_child(heroes_button)
+
+    hero_panel = HERO_PANEL.new()
+    hero_panel.name = "Painel de herois CP002"
+    hero_panel.set_catalog_and_roster(hero_catalog, hero_state)
+    hero_panel.roster_changed.connect(_on_hero_roster_changed)
+    hero_panel.close_requested.connect(_close_heroes)
+    layer.add_child(hero_panel)
+    hero_panel.visible = false
+
+func _open_heroes() -> void:
+    if hero_panel == null or hero_catalog.is_empty():
+        _notify("Catálogo de heróis indisponível.")
+        return
+    if dialogue_layer.visible:
+        _close_dialogue()
+    hero_panel.set_catalog_and_roster(hero_catalog, hero_state)
+    hero_panel.visible = true
+    game_paused_for_dialogue = true
+    mobile_axis = Vector2.ZERO
+
+func _close_heroes() -> void:
+    if hero_panel != null:
+        hero_panel.visible = false
+    game_paused_for_dialogue = false
+    mobile_axis = Vector2.ZERO
+
+func _on_hero_roster_changed(next_state: Dictionary) -> void:
+    var normalized: Dictionary = HERO_SYSTEM.normalize_roster(next_state, hero_catalog)
+    if not HERO_SYSTEM.save_roster(HERO_SYSTEM.SAVE_PATH, normalized, hero_catalog):
+        _notify("Não foi possível salvar a formação.")
+        return
+    hero_state = normalized
+    _notify("Formação de heróis salva neste aparelho.")
+
 func _run_diagnostics() -> void:
     var results: Dictionary = {}
     results["spawn_no_reino"] = absf(START_POS.x) <= WORLD_SIZE / 2.0 and absf(START_POS.z) <= WORLD_SIZE / 2.0
@@ -471,6 +520,12 @@ func _run_diagnostics() -> void:
     results["cp001_banco"] = bool(test_deposit["accepted"]) and int(test_deposit["bank_coins"]) == 5
     var test_rejected: Dictionary = ECONOMY.transact("withdraw", 0, 0, 0)
     results["cp001_protecao"] = not bool(test_rejected["accepted"]) and int(test_rejected["coins"]) == 0
+    results["cp002_catalogo"] = HERO_SYSTEM.catalog_is_valid(hero_catalog)
+    results["cp002_selecao"] = HERO_SYSTEM.hero_by_id(hero_catalog, str(hero_state.get("selected_hero_id", ""))).size() > 0
+    results["cp002_formacao"] = HERO_SYSTEM.roster_is_valid(hero_state, hero_catalog)
+    results["cp002_painel"] = hero_panel != null and is_instance_valid(hero_panel)
+    var pietro: Dictionary = HERO_SYSTEM.hero_by_id(hero_catalog, "hero_pietro_001")
+    results["cp002_atributos"] = HERO_SYSTEM.derived_stats(pietro).get("HP", 0) == 268
     var passed := 0
     for check in results.keys():
         if results[check]:
@@ -483,6 +538,8 @@ func _run_diagnostics() -> void:
     print("[CHANNEL_DIAGNOSTIC] ", JSON.stringify({"success": success, "summary": summary, "checks": results}))
 
 func _input(event: InputEvent) -> void:
+    if hero_panel != null and hero_panel.visible:
+        return
     if event is InputEventScreenTouch:
         var touch := event as InputEventScreenTouch
         if touch.pressed and joystick_touch_id == -1 and touch.position.x < get_viewport().get_visible_rect().size.x * 0.42 and touch.position.y > get_viewport().get_visible_rect().size.y * 0.50:
