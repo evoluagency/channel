@@ -1,0 +1,5 @@
+VALDORA_CP007_HOTFIX_CIDADE_V5
+manifest_revision=6
+validation=one-shot
+no_apk=true
+reason=regression_build_confirm
