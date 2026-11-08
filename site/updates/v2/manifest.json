@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "game": "Valdora",
+  "studio": "EVOLU Channel",
+  "channel": "alpha",
+  "revision": 1,
+  "min_client_code": 102,
+  "modules": [
+    {
+      "id": "guide",
+      "version": 1,
+      "kind": "data",
+      "url": "https://channel.evolu.ink/updates/v2/modules/guide-1.json",
+      "bytes": 428,
+      "sha256": "17fb42d1f59c0ae8f23b004eb0854a13246624c4d0bd71a65d9c0dcb02c41d5b"
+    }
+  ]
+}
