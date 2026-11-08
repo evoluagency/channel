@@ -18,7 +18,7 @@ checks['diagnostic_checks_present'] = source.count('results["') == 22 and 'CHANN
 checks['diagnostic_enabled_for_alpha'] = 'const ALPHA_DIAGNOSTICS_ENABLED := true' in source and 'if ALPHA_DIAGNOSTICS_ENABLED:' in source and 'if OS.is_debug_build():' not in source
 checks['no_live_cloud_required'] = all(s not in source for s in ['Supabase','MultiplayerPeer']) and (root/'scripts/content_updater.gd').exists()
 checks['android_32_64'] = all(s in presets for s in ('architectures/armeabi-v7a=true','architectures/arm64-v8a=true'))
-checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.valdora','version/code=102','version/name="0.4.0-alpha"'))
+checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.valdora','version/code=103','version/name="0.4.1-alpha"'))
 checks['engine_smoke_script'] = (root/'tests/smoke.gd').is_file() and 'CHANNEL_ENGINE_SMOKE' in (root/'tests/smoke.gd').read_text()
 for key, ok in checks.items():
  print(('PASS' if ok else 'FAIL')+' '+key)
@@ -40,14 +40,14 @@ updater = (root/'scripts/content_updater.gd').read_text()
 checks_update = {
     'game_label': 'package/name="Valdora"' in presets and 'brand.text = "VALDORA' in source,
     'package_id_isolated': 'package/unique_name="ink.evolu.valdora"' in presets,
-    'version_advanced': 'version/code=102' in presets,
+    'version_advanced': 'version/code=103' in presets,
     'internet_permission': 'permissions/internet=true' in presets,
     'manifest_contract': manifest['game']=='Valdora' and manifest['required_client_version']=='0.2.0',
     'content_integrity': sha256(payload_path.read_bytes()).hexdigest()==manifest['content']['sha256'],
     'content_schema': payload['schema_version']==1 and payload['content_version']==manifest['content_version'],
     'whitelisted_texts': set(payload['strings']) <= {'welcome','merchant','bank','blacksmith','guard'},
     'no_executable_downloads': 'load_resource_pack' not in updater and updater.count('HTTPRequest.new()') == 2,
-    'offline_savings_preserved': 'user://channel_save.json' in source and 'user://valdora_content_state.json' in updater and 'config/name="EVOLU Channel — Valdora"' in (root/'project.godot').read_text(),
+    'offline_savings_preserved': 'user://channel_save.json' in source and 'user://valdora_content_state.json' in updater and 'config/name="Valdora"' in (root/'project.godot').read_text(),
     'domain_restriction': 'https://channel.evolu.ink/updates/content/' in updater and 'SHA256' in updater,
     'manual_update_button': 'ATUALIZAR' in source and 'check_for_updates' in updater,
 }
@@ -88,6 +88,6 @@ assert 'ENGINE.advance_round(' in arena and 'playback_queue' in arena
 assert all(command in arena for command in ['take_turn("none")', 'take_turn("auto")', 'take_turn("manual")'])
 assert 'COMBAT_ARENA.new()' in source and 'combat_panel.configure(hero_catalog, hero_state)' in source
 assert 'cp003_repetibilidade' in source and 'cp003_arena' in source
-assert 'package/unique_name="ink.evolu.valdora"' in presets and 'version/code=102' in presets
+assert 'package/unique_name="ink.evolu.valdora"' in presets and 'version/code=103' in presets
 assert 'FileAccess' not in arena and 'SAVE_PATH' not in arena
 print('PASS: CP003-C arena, tactical controls, save isolation and stable Android identity.')
