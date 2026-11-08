@@ -25,6 +25,7 @@ jobs:
           mkdir -p game/tests/fixtures
           cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
           cp site/updates/v2/modules/welcome-1.zip game/tests/fixtures/welcome-1.zip
+          (cd game/modules/city && zip -q -r ../../tests/fixtures/city-1.zip valdora_modules)
       - name: Godot oficial e hash
         run: |
           curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
@@ -40,4 +41,5 @@ jobs:
           godot --headless --path game --script res://tests/combat_smoke.gd
           godot --headless --path game --script res://tests/update_smoke.gd
           godot --headless --path game --script res://tests/pck_smoke.gd
+          godot --headless --path game --script res://tests/cp005_city_smoke.gd
           godot --headless --path game --script res://tests/smoke.gd

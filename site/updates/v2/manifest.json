@@ -3,7 +3,7 @@
   "game": "Valdora",
   "studio": "EVOLU Channel",
   "channel": "alpha",
-  "revision": 1,
+  "revision": 2,
   "min_client_code": 102,
   "modules": [
     {
@@ -24,6 +24,17 @@
       "entry": "res://valdora_modules/welcome/entry.tscn",
       "signature_b64": "lONQAHNN6EtKbmk3KEIsyFYLVj+8h0nyX5r1fU3EtahrizFCygwF00jo62IfD9wzJ80ZoKiKK6a8If7j0YuiOnoFMfyaJl2hg1Gs07Pv29+yuyBiMjH7hA5iv6iwd0EHeovRpkmUwnbAj2s98GCYK0Zwk5YJf3q0zbzJ1AX3o3CFrs2+07jXACmyJY1l4TwCMCVdzRhpNGdtE2xP8pnTJeVpnl7/JNsdOJ9jNkU3OXb6RLAnCeNKDdQTB3OeSHSGvt+oc8hMEQnlEPQI3CWU9zHR9WLK9oBUkZeDk9DweGEW4yPr7JiSMioD/j4vqqhqlkb5ueqjbys9QM8uDsobUpEey+knEG2FHPZxbaAJaM+oObmCv7f8NGzjACtP08myse+yPaP0POm57xS6qHfrJdW+pHyvEliMv0KRHJaTlDbt1IaINoFpHj85cbmQiQjR2HXolFFP6wxzf8CqPJUN9fK4I1qW4BZOXTbdd09x8mEMvaJBP2FJ5B9yHywDPBMR",
       "label": "Bem-vindo a Valdora"
+    },
+    {
+      "id": "city",
+      "version": 1,
+      "kind": "zip",
+      "url": "https://channel.evolu.ink/updates/v2/modules/city-1.zip",
+      "bytes": 6760,
+      "sha256": "2d193c428c801b1657d0445e3170267eaf1218fd4795af88e4ae77afd01e7ea2",
+      "entry": "res://valdora_modules/city/entry.tscn",
+      "signature_b64": "ejYSwYeC2r0R6nmDEyKd7OjG43hheBvV2puPlb2i9T/jrLtQt0+p0KoWyrO+6Mt4HAHPapaQc5zfaUFVokeuPBhz3biaHxM0PjEHardriRCksb053ngl9bGrTEpRPRyQF3h6k1WVxO73xeOrnNaWvo0aFm0o6bQWjnyj9XucYXZYFD7p/uQX3uc2w1aMDiK0lkBh9WxiMU+QisagZ6bOrdJZiL8zkibM6Xl1G5azEKv700GtNOk6jhpP+BWwCy5lCY7mHEEDmB/rZkuy8ZSJNATdnmzvwP3qvtV9oLK+mkkoxDptU+tKpbb+WyouyUeIpJolU7R6NVPAxagy4OriruFrbaRAIN7jhUTgqCeBZaCyO1AvO4wcB6t7PyenIkavnJuQVzYFWP4+VlBWP/Pxhzp4qzdBc8Q5fp4GtqDHDpdIi/G4jSEZAoWoaoK9+AW4QKyXqNYNf32InzlCZraCd1jQkc+kJ8Ud7Rl5w/PG/WbNA16Ewa82TKKhkAfNCbzS",
+      "label": "Minha cidade · CP005"
     }
   ]
 }
