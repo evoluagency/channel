@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CP003 static controls: no new APK, no persistence, no network, no authority escalation."""
+"""CP003 combat isolation survives CP004 base APK version bump (no remote combat authority)."""
 import json
 from pathlib import Path
 
@@ -26,7 +26,7 @@ checks = {
     "gdtest_exists": (game / "tests/combat_smoke.gd").is_file() and "VALDORA_CP003_COMBAT" in smoke,
     "four_approved_heroes": [x["display_name"] for x in catalog["heroes"]] == ["Pietro", "Henzo", "Giulia", "Arthur"],
     "no_change_android_identity": 'package/unique_name="ink.evolu.valdora"' in preset,
-    "no_change_android_version": "version/code=101" in preset and 'version/name="0.3.3-alpha"' in preset,
+    "no_change_android_version": "version/code=102" in preset and 'version/name="0.4.0-alpha"' in preset,
     "arena_no_file_io": all(s not in (game / "scripts/combat/arena_panel.gd").read_text() for s in ["FileAccess", "DirAccess", "user://", "HTTPRequest", "Supabase"]),
     "arena_isolated_render": "SubViewport.new()" in (game / "scripts/combat/arena_panel.gd").read_text(),
     "no_change_release_artifact": 'export_path="dist/Valdora.apk"' in preset,

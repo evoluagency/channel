@@ -50,3 +50,11 @@ GET \`https://channel.evolu.ink/updates/v2/manifest.json\` (sem redirects), JSON
 - Sem Supabase, Intelligence, login, monetização ou multiplayer nesta etapa.
 - Sem carregar patches de core como \`res://scripts/main.gd\`: o mecanismo PCK usa \`replace_files=false\`, e novos sistemas entram como módulos isolados.
 - O carregador PCK é fase de plataforma, ainda **não homologado em Godot nem Android**; dependente de chave de assinatura, testes de integridade e protótipo de PCK real.
+
+## Pendências de release (não mascarar como concluído)
+
+- Nenhum APK 0.4.0 foi compilado/instalado ou homologado nesta branch.
+- A chave pública OTA ainda precisa ser provisionada em `game/updates/trust/valdora_ota.pub`, com a privada protegida fora do repositório; PCK permanece bloqueado.
+- O site v2 existe no Git, mas ainda não está distribuído pelo domínio de produção; portanto, o atualizador retorna modo offline/indisponível até a publicação.
+- Godot headless e Android físico não foram executados neste trabalho; os arquivos de teste e workflow apenas preparam a validação.
+- Antes do merge de release: atualizar `release-control/version.txt`, preflight para code 102, tornar workflow release somente manual e validar patch assinado com rollback.
