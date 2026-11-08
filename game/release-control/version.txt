@@ -4,3 +4,4 @@ version_code=100
 package=ink.evolu.valdora
 channel=release-android
 purpose=first_stable_signed_install
+build_request=02
