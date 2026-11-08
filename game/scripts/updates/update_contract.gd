@@ -10,7 +10,7 @@ const MAX_MANIFEST := 65536
 const MAX_PACKAGE := 104857600
 const MAX_TOTAL := 209715200
 const MAX_MODULES := 24
-const CLIENT_CODE := 102
+const CLIENT_CODE := 103
 const COMMANDS := ["message", "open_heroes", "open_combat", "economy"]
 
 static func valid_id(value: String) -> bool:
