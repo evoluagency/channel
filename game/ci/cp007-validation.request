@@ -3,3 +3,5 @@ module=city-4.zip
 manifest_revision=5
 no_apk=true
 run_once=true
+retry=1
+reason=update_cp006_name_smoke_to_active_manifest
