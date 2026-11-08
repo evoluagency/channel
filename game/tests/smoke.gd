@@ -63,6 +63,12 @@ func _run_smoke() -> void:
     results["arena_closes"] = arena_panel != null and not arena_panel.visible
     results["world_unpaused_after_arena"] = not bool(game.get("game_paused_for_dialogue"))
     results["economy_intact_after_combat"] = int(game.get("coins")) >= 0 and int(game.get("bank_coins")) >= 0
+    var module_panel = game.get("module_panel") as Control
+    results["ota_module_panel_created"] = module_panel != null
+    game.call("_open_modules")
+    results["ota_module_panel_opens"] = module_panel != null and module_panel.visible
+    game.call("_close_modules")
+    results["ota_module_panel_closes"] = module_panel != null and not module_panel.visible
     game.call("_run_diagnostics")
     var passed := 0
     for key in results.keys():

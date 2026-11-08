@@ -82,6 +82,12 @@ func _manifest_finished(result: int, status: int, body: PackedByteArray) -> void
     if int(m["revision"]) <= get_revision():
         _finish("Valdora atualizado: conteúdo v%d." % get_revision())
         return
+    # Impede regressão silenciosa de um módulo mesmo com revisão global maior.
+    for next_mod in m["modules"]:
+        for active_mod in state.get("modules", []):
+            if str(next_mod["id"]) == str(active_mod["id"]) and int(next_mod["version"]) < int(active_mod["version"]):
+                _finish("Atualização rejeitada: versão anterior de módulo.")
+                return
     pending = m
     index = 0
     _next_file()
@@ -147,6 +153,7 @@ func _activate() -> void:
     state = pending.duplicate(true)
     pending = {}
     _load_actions()
+    _cleanup_old_files()
     var needs_restart := false
     for mod in state["modules"]:
         if str(mod["kind"]) == "pck" and not ValdoraPacks.is_loaded(str(mod["id"])):
@@ -175,6 +182,27 @@ func _load_actions() -> void:
         elif str(mod["kind"]) == "pck" and ValdoraPacks.is_loaded(id):
             actions.append({"id": id, "label": str(mod.get("label", id)), "command": "open_scene", "module_id": id, "scene_path": str(mod["entry"]), "module_title": "Expansão Valdora"})
     modules_changed.emit()
+
+func _cleanup_old_files() -> void:
+    # Conserva somente os dois estados recuperáveis; limpa versões obsoletas.
+    var keep: Dictionary = {}
+    for data in [CONTRACT.read_json(CONTRACT.ACTIVE), CONTRACT.read_json(CONTRACT.PREVIOUS)]:
+        if not CONTRACT.valid_state(data):
+            continue
+        for mod in data.get("modules", []):
+            keep[CONTRACT.file_path(mod).get_file()] = true
+    var folder := DirAccess.open(CONTRACT.FILES)
+    if folder == null:
+        return
+    for name in folder.get_files():
+        if keep.has(name):
+            continue
+        # Não remove outros arquivos de usuário que não sejam pacotes do nosso protocolo.
+        if name.ends_with(".part") or name.ends_with(".pck") or name.ends_with(".json"):
+            var stem := name.get_basename()
+            var cut := stem.rfind("-")
+            if cut > 0 and CONTRACT.valid_id(stem.substr(0, cut)) and stem.substr(cut + 1).is_valid_int():
+                DirAccess.remove_absolute(ProjectSettings.globalize_path(CONTRACT.FILES + name))
 
 func _remove_staging() -> void:
     if not staging_path.is_empty() and FileAccess.file_exists(staging_path):

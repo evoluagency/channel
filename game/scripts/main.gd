@@ -71,7 +71,11 @@ func _setup_content_updates() -> void:
     updater.call("check_for_updates")
     ValdoraUpdater.status_changed.connect(_on_modular_update_status)
     ValdoraUpdater.modules_changed.connect(_refresh_modules)
+    ValdoraUpdater.download_progress.connect(_on_ota_progress)
     _refresh_modules()
+
+func _on_ota_progress(done: int, total: int) -> void:
+    _notify("Baixando módulo %d de %d..." % [done + 1, total])
 
 func _on_modular_update_status(message: String) -> void:
     print("[VALDORA_OTA] ", message)
@@ -367,6 +371,10 @@ func _physics_process(delta: float) -> void:
             _close_combat()
         elif hero_panel != null and hero_panel.visible:
             _close_heroes()
+        elif module_panel != null and module_panel.visible:
+            _close_modules()
+        elif module_scene != null and is_instance_valid(module_scene):
+            _close_module_scene()
         else:
             _close_dialogue()
 
@@ -588,6 +596,7 @@ func _run_module_command(action: Dictionary) -> void:
             module_layer.add_child(module_scene)
             module_scene.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
             module_close_button.visible = true
+            module_close_button.move_to_front()
             game_paused_for_dialogue = true
         _:
             _notify("Comando não suportado pelo aplicativo-base.")
