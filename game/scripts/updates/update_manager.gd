@@ -159,16 +159,18 @@ func _activate() -> void:
         return
     state = pending.duplicate(true)
     pending = {}
+    var deferred: Array[String] = []
+    for mod in state["modules"]:
+        if str(mod["kind"]) not in ["zip", "pck"]:
+            continue
+        if not ValdoraPacks.mount_verified(mod, CONTRACT.file_path(mod)):
+            deferred.append(str(mod["id"]))
     _load_actions()
     _cleanup_old_files()
-    var needs_restart := false
-    for mod in state["modules"]:
-        if (str(mod["kind"]) == "pck" or str(mod["kind"]) == "zip") and not ValdoraPacks.is_loaded(str(mod["id"])):
-            needs_restart = true
-    if needs_restart:
-        _finish("Atualização instalada. Reinicie o Valdora para ativar novas cenas.")
+    if deferred.is_empty():
+        _finish("Valdora atualizado: novas cenas disponíveis sem reiniciar.")
     else:
-        _finish("Atualização instalada e comandos disponíveis no jogo.")
+        _finish("Conteúdo salvo; ativação na próxima abertura para: " + ", ".join(deferred))
 
 func _load_actions() -> void:
     actions.clear()
