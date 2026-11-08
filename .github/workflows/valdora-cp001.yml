@@ -41,7 +41,14 @@ jobs:
         run: |
           godot --headless --path game --script res://tests/core_smoke.gd
           godot --headless --path game --script res://tests/smoke.gd
+      - name: Cache dos modelos Android (reduz downloads)
+        id: godot-templates
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates/4.7.2.stable
+          key: valdora-godot-4.7.2-android-templates-v1
       - name: Modelos Android oficiais
+        if: steps.godot-templates.outputs.cache-hit != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -51,11 +58,17 @@ jobs:
           unzip -q /tmp/templates.tpz "templates/android_debug.apk" "templates/android_release.apk" "templates/version.txt" -d /tmp/godot-export
           cp /tmp/godot-export/templates/android_debug.apk /tmp/godot-export/templates/android_release.apk /tmp/godot-export/templates/version.txt ~/.local/share/godot/export_templates/4.7.2.stable/
           rm /tmp/templates.tpz
+      - name: Instalar ferramentas Android do runner
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
       - name: Preparar Android SDK e certificado de TESTE
         shell: bash
         run: |
           set -euo pipefail
-          sdkmanager --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.1"
+          SDK_DIR="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-$HOME/.android/sdk}}"
+          echo "SDK_DIR=$SDK_DIR" >> "$GITHUB_ENV"
+          sdkmanager --sdk_root="$SDK_DIR" "platform-tools" "platforms;android-35" "build-tools;35.0.1"
           keytool -genkeypair -noprompt -keystore /tmp/valdora-cp001-debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=Valdora CP001 Test,O=EVOLU Channel,C=BR"
           mkdir -p ~/.config/godot
           python3 - <<'PYTHON'
