@@ -1,9 +1,7 @@
-VALDORA_CP004_ONE_SHOT_ANDROID_RELEASE
-version=0.4.0-alpha
-version_code=102
-source_pr=1
+VALDORA_CP006_ONE_SHOT_ANDROID_RELEASE
+version=0.4.1-alpha
+version_code=103
+source_pr=3
 require_signed_release=true
 require_ota_public_key=true
-
-retry=1
-reason=reserved-method-name-fixed
+build_generation=1
