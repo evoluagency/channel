@@ -18,7 +18,7 @@ checks['diagnostic_checks_present'] = source.count('results["') == 9 and 'CHANNE
 checks['diagnostic_enabled_for_alpha'] = 'const ALPHA_DIAGNOSTICS_ENABLED := true' in source and 'if ALPHA_DIAGNOSTICS_ENABLED:' in source and 'if OS.is_debug_build():' not in source
 checks['no_live_cloud_required'] = all(s not in source for s in ['Supabase','MultiplayerPeer']) and (root/'scripts/content_updater.gd').exists()
 checks['android_32_64'] = all(s in presets for s in ('architectures/armeabi-v7a=true','architectures/arm64-v8a=true'))
-checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.channel','version/code=4','version/name="0.2.0-alpha"'))
+checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.channel','version/code=5','version/name="0.2.1-alpha"'))
 checks['engine_smoke_script'] = (root/'tests/smoke.gd').is_file() and 'CHANNEL_ENGINE_SMOKE' in (root/'tests/smoke.gd').read_text()
 for key, ok in checks.items():
  print(('PASS' if ok else 'FAIL')+' '+key)
@@ -40,7 +40,7 @@ updater = (root/'scripts/content_updater.gd').read_text()
 checks_update = {
     'game_label': 'package/name="Valdora"' in presets and 'brand.text = "VALDORA' in source,
     'package_id_preserved': 'package/unique_name="ink.evolu.channel"' in presets,
-    'version_advanced': 'version/code=4' in presets,
+    'version_advanced': 'version/code=5' in presets,
     'internet_permission': 'permissions/internet=true' in presets,
     'manifest_contract': manifest['game']=='Valdora' and manifest['required_client_version']=='0.2.0',
     'content_integrity': sha256(payload_path.read_bytes()).hexdigest()==manifest['content']['sha256'],
@@ -54,3 +54,13 @@ checks_update = {
 for key,ok in checks_update.items(): print(('PASS' if ok else 'FAIL')+' '+key)
 assert all(checks_update.values())
 print('PASS %d content update contracts; engine/network still require device validation.' % len(checks_update))
+
+# Diagnosticos: status de erro exposto ao HUD e codigos Godot/HTTP no log.
+updater_code=(root/'scripts/content_updater.gd').read_text()
+assert '_explain_network_error("manifesto", result, response_code)' in updater_code
+assert '_explain_network_error("conteudo", result, response_code)' in updater_code
+assert 'HTTPRequest.RESULT_CANT_RESOLVE' in updater_code
+assert 'HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR' in updater_code
+assert 'stage=%s result=%d http=%d' in updater_code
+assert '_notify(message)' in source
+print('PASS alpha 0.2.1: HTTP/DNS/TLS diagnostics shown and offline preserved')

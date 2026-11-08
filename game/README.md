@@ -1,4 +1,4 @@
-# Valdora — Alpha 0.2.0
+# Valdora — Alpha 0.2.1
 
 **Valdora** é um RPG 3D independente para Android, desenvolvido por **EVOLU Channel**. O nome interno do projeto Godot permanece legado exclusivamente para preservar a pasta de salvamento; o APK e o HUD exibem Valdora.
 
@@ -23,3 +23,13 @@ Esta Alpha mantém Valdora, praça, NPCs, economia local, controles móveis, nas
 - [Instruções anteriores de exportação](docs/EXPORTAR_ANDROID.md).
 
 **Estado:** código preparado e testes estruturais executados localmente. A atualização via HTTPS no Android e o novo APK ainda precisam de teste real e validação de disponibilidade pública no domínio. Multiplayer simultâneo e atualização de mapas via `.pck` não implementados.
+
+## Diagnostico de rede (Alpha 0.2.1)
+A falha capturada no Android anterior nao distinguia o status da requisicao.
+Agora o jogo exibe a causa e registra `[VALDORA_UPDATE] stage=manifesto result=N http=N reason=...` na Saida.
+Isso nao altera o dominio remoto nem corrige automaticamente problemas DNS/HTTP; permite identifica-los antes de outra distribuicao.
+O cliente continua compativel com o manifesto de conteudo `required_client_version: 0.2.0` (versao do protocolo de conteudo, nao do APK).
+
+Teste adicional sem instalar APK: abra `https://channel.evolu.ink/updates/manifest.json` no navegador do proprio aparelho.
+Se aparecer JSON, o servidor responde no navegador; se 404, login ou pagina HTML, anote essa resposta.
+Nao desinstale a Alpha anterior; ao exportar um novo APK mantenha `ink.evolu.channel` e a assinatura digital original.

@@ -1,5 +1,5 @@
 extends Node
-## Valdora Alpha 0.2 — atualizador de conteúdo exclusivamente declarativo.
+## Valdora Alpha 0.2.1 — atualizador de conteúdo exclusivamente declarativo.
 ## Nenhum script, APK, executável ou pacote PCK é baixado nesta fase.
 ## HTTPS obrigatório; somente um domínio e caminho fixos; SHA-256 conferido.
 
@@ -45,7 +45,8 @@ func check_for_updates() -> void:
     checking = true
     var error := manifest_http.request(MANIFEST_URL, PackedStringArray(["Accept: application/json", "Cache-Control: no-cache"]))
     if error != OK:
-        _finish("Sem conexão com o serviço de atualizações; jogo offline disponível")
+        print("[VALDORA_UPDATE] request-init manifesto error=", error)
+        _finish("Consulta nao iniciada (erro %d); jogo offline disponivel" % error)
 
 func text_for(key: String, fallback: String) -> String:
     if current_texts.has(key):
@@ -56,9 +57,41 @@ func _finish(message: String) -> void:
     checking = false
     status_changed.emit(message)
 
+# A UI da Alpha 0.2 escondia a causa do erro; esta rotina preserva
+# o estado offline e identifica etapa, resultado Godot e status HTTP.
+# Nao registra corpo de resposta, credenciais ou dados pessoais.
+func _explain_network_error(stage: String, result: int, response_code: int) -> String:
+    var reason := "Rede (%d)" % result
+    match result:
+        HTTPRequest.RESULT_SUCCESS:
+            if response_code == 401 or response_code == 403:
+                reason = "acesso negado (HTTP %d)" % response_code
+            elif response_code == 404:
+                reason = "arquivo nao encontrado (HTTP 404)"
+            elif response_code >= 300 and response_code < 400:
+                reason = "redirecionamento HTTP %d" % response_code
+            else:
+                reason = "resposta HTTP %d" % response_code
+        HTTPRequest.RESULT_CANT_RESOLVE:
+            reason = "falha de DNS"
+        HTTPRequest.RESULT_CANT_CONNECT:
+            reason = "servidor inacessivel"
+        HTTPRequest.RESULT_CONNECTION_ERROR:
+            reason = "conexao interrompida"
+        HTTPRequest.RESULT_TLS_HANDSHAKE_ERROR:
+            reason = "falha de certificado/TLS"
+        HTTPRequest.RESULT_TIMEOUT:
+            reason = "tempo de resposta esgotado"
+        HTTPRequest.RESULT_REDIRECT_LIMIT_REACHED:
+            reason = "redirecionamento bloqueado"
+        _:
+            reason = "rede: codigo %d" % result
+    print("[VALDORA_UPDATE] stage=%s result=%d http=%d reason=%s" % [stage, result, response_code, reason])
+    return "Atualizacao indisponivel: %s. Progresso preservado." % reason
+
 func _on_manifest_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
     if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-        _finish("Sem acesso às atualizações; conteúdo local preservado")
+        _finish(_explain_network_error("manifesto", result, response_code))
         return
     if body.size() == 0 or body.size() > MAX_MANIFEST_BYTES:
         _finish("Manifesto de atualização inválido")
@@ -97,11 +130,12 @@ func _on_manifest_completed(result: int, response_code: int, _headers: PackedStr
     pending_hash = hash_hex
     var error := content_http.request(url, PackedStringArray(["Accept: application/json"]))
     if error != OK:
-        _finish("Download não iniciado; conteúdo local preservado")
+        print("[VALDORA_UPDATE] request-init conteudo error=", error)
+        _finish("Download nao iniciado (erro %d); conteudo local preservado" % error)
 
 func _on_content_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
     if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-        _finish("Falha no download; conteúdo local preservado")
+        _finish(_explain_network_error("conteudo", result, response_code))
         return
     if body.size() == 0 or body.size() > MAX_CONTENT_BYTES or _sha256(body) != pending_hash:
         _finish("Arquivo não passou na verificação SHA-256")

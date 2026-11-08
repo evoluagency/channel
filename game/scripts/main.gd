@@ -61,8 +61,8 @@ func _manual_check_updates() -> void:
 
 func _on_update_status(message: String) -> void:
     print("[VALDORA_UPDATE] ", message)
-    if message.begins_with("Valdora: ") or message.begins_with("Há uma versão nova"):
-        _notify(message)
+    # Sempre informar o resultado ao jogador (sucesso ou falha).
+    _notify(message)
 
 func _on_content_changed(_payload: Dictionary) -> void:
     print("[VALDORA_UPDATE] Novo conteúdo disponível neste aparelho")
