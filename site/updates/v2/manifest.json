@@ -30,10 +30,10 @@
       "version": 1,
       "kind": "zip",
       "url": "https://channel.evolu.ink/updates/v2/modules/city-1.zip",
-      "bytes": 6760,
-      "sha256": "2d193c428c801b1657d0445e3170267eaf1218fd4795af88e4ae77afd01e7ea2",
+      "bytes": 6809,
+      "sha256": "60683a981ce5a956ea7ff641fa10dad520fa3492c0ab755580f4eb35d94a579d",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "ejYSwYeC2r0R6nmDEyKd7OjG43hheBvV2puPlb2i9T/jrLtQt0+p0KoWyrO+6Mt4HAHPapaQc5zfaUFVokeuPBhz3biaHxM0PjEHardriRCksb053ngl9bGrTEpRPRyQF3h6k1WVxO73xeOrnNaWvo0aFm0o6bQWjnyj9XucYXZYFD7p/uQX3uc2w1aMDiK0lkBh9WxiMU+QisagZ6bOrdJZiL8zkibM6Xl1G5azEKv700GtNOk6jhpP+BWwCy5lCY7mHEEDmB/rZkuy8ZSJNATdnmzvwP3qvtV9oLK+mkkoxDptU+tKpbb+WyouyUeIpJolU7R6NVPAxagy4OriruFrbaRAIN7jhUTgqCeBZaCyO1AvO4wcB6t7PyenIkavnJuQVzYFWP4+VlBWP/Pxhzp4qzdBc8Q5fp4GtqDHDpdIi/G4jSEZAoWoaoK9+AW4QKyXqNYNf32InzlCZraCd1jQkc+kJ8Ud7Rl5w/PG/WbNA16Ewa82TKKhkAfNCbzS",
+      "signature_b64": "WRXEtLfq1sCKaAoOWPlPAzvgwpnhH4gGWCyapEuFVNr9EvgPjZnL6yaxrpPpAAJkiKZLBDfBzcMckCFyhuxWbbxBZO0s5mzSP6Bn3dz4UgqzLJTrXj8peiLiXwYi3yKXUAOOJOjq60h1wnBMcKKsa39PDEAMXPmqt/jZyqjaCrqUqlAROnqkGzG9Ii5Jf3axeB054XZfqTH9yfnkeNeudXkp+D0E90uW3oZnnnRJUyiCNgateQq3fgXUYivHhc98NcDB7cNyXAAKpwHiDKnoGDU3US6aO2Fld6l1LOe61tX7b5Cq2sf9z9g6opjkWYPCoy/G/4dBhij4AZYaqaI4uA83HaU6R6aJh5rn9lICQjncVfVgrt1haxqrmKLx3JocVIR7bHvcVhGThffumRHa9dOWtB1klqSuBcbch3y1Z0slIgmJolKgSLo8WBOM3oRnlKbb9RS+s8QcUFJ8bca93f6aNo7xdCPZ2+rX7wuXA6g937hDvuMe7cLqCMWRDGPh",
       "label": "Minha cidade · CP005"
     }
   ]
