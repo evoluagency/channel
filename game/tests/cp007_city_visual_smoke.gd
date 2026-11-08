@@ -12,9 +12,9 @@ func _run() -> void:
     for item in manifest.get("modules", []):
         if str(item.get("id", "")) == "city":
             info = item
-    var zip_path := "res://tests/fixtures/city-4.zip"
-    checks["revision5"] = manifest.get("revision") == 5
-    checks["signed_v4"] = info.get("version") == 4 and CONTRACT.verify_file(info, zip_path)
+    var zip_path := "res://tests/fixtures/city-5.zip"
+    checks["revision6"] = manifest.get("revision") == 6
+    checks["signed_v5"] = info.get("version") == 5 and CONTRACT.verify_file(info, zip_path)
     checks["mounted"] = ProjectSettings.load_resource_pack(ProjectSettings.globalize_path(zip_path), false)
     if not checks["mounted"]:
         _report(checks)
@@ -47,6 +47,18 @@ func _run() -> void:
     checks["population_derived"] = city._city_population() == 12
     checks["mission_progress"] = city._objective().contains("Fazenda")
     checks["model_unchanged"] = city._valid_city(city.city)
+    # Regressão de construção: salvar e mudar de ferramenta sem perder o tipo original.
+    city.city = city._new_city()
+    city._select_type("fundacao")
+    city._try_build(Vector2i(5,5))
+    checks["foundation_built"] = city._has_foundation() and city.selected_type == "inspecionar"
+    checks["foundation_status"] = city.status_label.text.contains("Cidade fundada")
+    city._select_type("casa")
+    city._try_build(Vector2i(6,5))
+    checks["house_built"] = city._at(Vector2i(6,5)).get("type") == "casa"
+    checks["house_status"] = city.status_label.text.contains("Casa construída")
+    checks["resources_paid"] = city.city["resources"]["madeira"] == 155 and city.city["resources"]["pedra"] == 130
+    checks["save_disk"] = city._read_save(city.SAVE_PATH).get("buildings", []).size() == 2
     city.queue_free()
     _report(checks)
 

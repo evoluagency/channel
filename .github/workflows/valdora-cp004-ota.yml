@@ -21,7 +21,7 @@ jobs:
           mkdir -p game/tests/fixtures
           cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
           cp site/updates/v2/modules/welcome-1.zip game/tests/fixtures/welcome-1.zip
-          cp site/updates/v2/modules/city-4.zip game/tests/fixtures/city-4.zip
+          cp site/updates/v2/modules/city-5.zip game/tests/fixtures/city-5.zip
           cp site/updates/v2/modules/city-3.zip game/tests/fixtures/city-3.zip
           (cd game/modules/city && zip -q -r ../../tests/fixtures/city-1.zip valdora_modules)
       - name: Godot oficial e hash

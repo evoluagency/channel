@@ -3,7 +3,7 @@
   "game": "Valdora",
   "studio": "EVOLU Channel",
   "channel": "alpha",
-  "revision": 5,
+  "revision": 6,
   "min_client_code": 102,
   "modules": [
     {
@@ -27,14 +27,14 @@
     },
     {
       "id": "city",
-      "version": 4,
+      "version": 5,
       "kind": "zip",
-      "url": "https://channel.evolu.ink/updates/v2/modules/city-4.zip",
-      "bytes": 10005,
-      "sha256": "f20155325616678a546a567e561a9b44cf6e2777a2da3df173ed9f790b2f99d6",
+      "url": "https://channel.evolu.ink/updates/v2/modules/city-5.zip",
+      "bytes": 10029,
+      "sha256": "7ce6ba194e98324d2b4017a2a697dbeb6305700821ca714c2cd445815d5b8d13",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "chGZbXq4VoyZibckLZg8rR+M5cjeDW6YJeCBXsp0bJ0HPIEFBYHz80ArAnoA/nCEia71edNX1fmBok48wc6fxmoKbrxUjsJtB5Ku2hiOSXpmJvSDQ5Vu/nrUx50ha5KUBZ28Ds3sTA22J4kBScgThFRWjJ1sA/BFzetLcf55+mMlecHmHhxmTg9nXnUMMZRa5pGYKdxeIn0PKwJNsQwSzJwuS/dSY8P9gM7e3K9a1sB2ge7Ww75le8IjUHwK03VZieLl2ubqcNYTOC8QpBtzCl7vJUitVW5SnuoGvva/ZZ2Wa+uWpv4qXmK+R7EKE1AMsNVXxPJx0jrpX9jtqzyW1m7l+ORvoQu8szEslpvs9j+tHaVQsuN94OWG7CRjlED01I5M+xVnWtj7xocynqEiUqr7t1ti2ccM//IH1oBa7Q0/kYATFsHoVFpeKrh0eZIk4tzjG7MuwcnX9B8J37m6+oZClOY/otP5PZw/JVoaPz4E8x49RKFI0XpKOz8IjwtO",
-      "label": "Minha cidade · Visual e territórios v4"
+      "signature_b64": "cIl2n2+76RNUzs8StwJGXDgc6vsYndoJjSyk/Conws0938xaEsM6Evias0bc0a3+NbeX9XzN8sgA8gsrMLsK4ppY1Yygp0yuKlKy30tKAU1OK5n2x4AV/hLswKa4N04kgmeN/XrBocAwBclQdvIMPOT8fG4/6PSPIOlCFMX8DuZSLHFY/5WdPYq4sM2K2sxT00qbhuBxzICGNWSlO8vMSXpWfx2C/SI4Uxvj1Rn0KN01fQ7fC4YumlYgNCbQyp/XwShifZ51aYLnvVuWk+shsw0habkgrdAKAzazgByp2AiBYtfa2k/1XcDTxLW24FX+Ikk7YNc3vU9Gs3YJ0G4tPRlvbF/HJ7rVAa3Xippss4J+Le+vSgs0idywCtwlSHiOKoh2WpfWPR2EBg+Vgz1oU4DM8QyLAAkqnUGJzb8E0wRUoWiU35hbpgSDUdz2C9WFRuh+DFo105I0kQMSdyguO4a5mNjLP+6nOTtT9dT2Cf/VqCIWF/ETAEuO62zjvyG5",
+      "label": "Minha cidade · Visual e construção v5"
     }
   ]
 }
