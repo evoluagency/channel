@@ -18,9 +18,9 @@ func _run() -> void:
         if str(item.get("id", "")) == "city":
             module = item
             break
-    var archive := "res://tests/fixtures/city-3.zip"
-    checks["revision4"] = manifest.get("revision") == 4
-    checks["signed_city_v3"] = module.get("version") == 3 and CONTRACT.verify_file(module, archive)
+    var archive := "res://tests/fixtures/city-4.zip"
+    checks["current_revision"] = manifest.get("revision") == 5
+    checks["signed_city_latest"] = module.get("version") == 4 and CONTRACT.verify_file(module, archive)
     checks["zip_mounted"] = ProjectSettings.load_resource_pack(ProjectSettings.globalize_path(archive), false)
     if not checks["zip_mounted"]:
         _report(checks)
