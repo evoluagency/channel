@@ -4,3 +4,6 @@ version_code=102
 source_pr=1
 require_signed_release=true
 require_ota_public_key=true
+
+retry=1
+reason=reserved-method-name-fixed
