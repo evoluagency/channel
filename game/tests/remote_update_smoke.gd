@@ -17,7 +17,7 @@ func _get(url: String, limit: int) -> PackedByteArray:
     if int(response[0]) != HTTPRequest.RESULT_SUCCESS or int(response[1]) != 200:
         printerr("[VALDORA_OTA_REMOTE] falha HTTP: ", response[0], " / ", response[1])
         return PackedByteArray()
-    return response[3] as PackedByteArray
+    return response[3]
 
 func _run() -> void:
     http = HTTPRequest.new()
@@ -43,7 +43,11 @@ func _run() -> void:
     for entry in modules:
         var mod: Dictionary = entry
         var bytes: PackedByteArray = await _get(str(mod["url"]), int(mod["bytes"]) + 1)
-        if bytes.size() != int(mod["bytes"]) or bytes.sha256_text() != str(mod["sha256"]):
+        var hasher := HashingContext.new()
+        hasher.start(HashingContext.HASH_SHA256)
+        hasher.update(bytes)
+        var digest := hasher.finish()
+        if bytes.size() != int(mod["bytes"]) or digest.hex_encode() != str(mod["sha256"]):
             content_ok = false
             break
         if str(mod["kind"]) == "zip" or str(mod["kind"]) == "pck":
@@ -51,7 +55,7 @@ func _run() -> void:
             if pub.load(CONTRACT.PUBLIC_KEY, true) != OK:
                 rsa_ok = false
                 break
-            if not Crypto.new().verify(HashingContext.HASH_SHA256, bytes.sha256_buffer(),
+            if not Crypto.new().verify(HashingContext.HASH_SHA256, digest,
                     Marshalls.base64_to_raw(str(mod["signature_b64"])), pub):
                 rsa_ok = false
                 break
