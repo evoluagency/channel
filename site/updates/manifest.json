@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "game": "Valdora",
+  "studio": "EVOLU Channel",
+  "channel": "alpha",
+  "required_client_version": "0.2.0",
+  "content_version": 1,
+  "content": {
+    "url": "https://channel.evolu.ink/updates/content/valdora-1.json",
+    "sha256": "bf04c4df36594ced9d3a103f51f6bc40a32669ea7995cd8d7e293f4420c6b465",
+    "bytes": 419
+  },
+  "notes": "Conteúdo inicial de teste para atualização remota de diálogos. Não distribui código."
+}
