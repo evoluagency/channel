@@ -1,11 +1,11 @@
-# EVOLU Channel — execução real no Android (Alpha 0.1.2)
+# EVOLU Channel — execução real no Android (Alpha 0.2.0)
 
 **Objetivo:** executar o motor Godot e exportar um APK **real**, sem Minecraft e sem serviços pagos. O código ainda não foi executado no Godot nesta sessão; nenhum APK foi gerado/homologado.
 
 ## O que está preparado
 
 - `project.godot`: abre a cena `scenes/Main.tscn` no renderizador Compatibility.
-- `export_presets.cfg`: exportação Android para arm64-v8a **e** armeabi-v7a (amplia a compatibilidade), ID `ink.evolu.channel`, versão 0.1.1 (código 2).
+- `export_presets.cfg`: exportação Android para arm64-v8a **e** armeabi-v7a (amplia a compatibilidade), ID `ink.evolu.channel`, versão 0.2.0-alpha (código 4).
 - `scripts/main.gd`: Valdora com entrada no setor da praça, NPCs e economia local. Fachadas com passagens físicas abertas, sem colisão fictícia nas portas.
 - Botão **AUTO TESTE**: na versão Alpha, inclusive no editor Android, verifica nascimento dentro do reino, personagem, câmera, quatro NPCs, comerciante, banqueiro, saldos, interface e gravação local (9 verificações). Registra `CHANNEL_DIAGNOSTIC` no console.
 - `tests/smoke.gd`: teste automatizado que instancia a cena no próprio Godot, verifica diálogos sem transações e retorna código de saída 0/1. Não altera saldos do jogador.
@@ -13,7 +13,7 @@
 ## Caminho sem computador: Godot Editor Android
 
 1. Instale a versão 4.7.2 do [Godot Editor para Android](https://godotengine.org/download/android/) ou sua página oficial na Google Play.
-2. Descompacte `EVOLU_Channel_Valdora_Godot_Alpha011.zip` na pasta Downloads (precisa conter `project.godot` na raiz da pasta extraída).
+2. Descompacte `Valdora_Godot_Alpha_02.zip` na pasta Downloads (precisa conter `project.godot` na raiz da pasta extraída).
 3. No Godot Android, permita acesso aos arquivos e **Importar** → localize `project.godot`.
 4. Execute o projeto. Se aparecer erro de código no painel inferior, registre o texto exato do erro e a linha; não considere o build aprovado.
 5. Se o jogo iniciar, toque **AUTO TESTE** e verifique se aparece `VALDORA: 9/9 testes OK`.
@@ -28,7 +28,7 @@
 ```bash
 godot --headless --path . --editor --quit
 godot --headless --path . --script res://tests/smoke.gd
-godot --headless --path . --export-debug Android dist/Channel-Valdora-alpha.apk
+godot --headless --path . --export-debug Android dist/Valdora-Alpha-0.2.apk
 ```
 
 Para exportar em Linux/Windows/macOS, é necessário instalar os templates da versão 4.7.2 e preparar as ferramentas Android conforme a [documentação oficial](https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html).

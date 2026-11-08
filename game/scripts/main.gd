@@ -1,8 +1,10 @@
 extends Node3D
-## EVOLU Channel — Valdora, primeira fatia vertical.
+## Valdora — RPG 3D, produzido pelo estudio EVOLU Channel.
 ## Protótipo com geometria 3D original, sem Minecraft e sem rede.
 
 const SAVE_PATH := "user://channel_save.json"
+# Preserva salvamentos e a identidade Android da Alpha ja instalada.
+const CONTENT_UPDATER := preload("res://scripts/content_updater.gd")
 # Habilitado explicitamente apenas na Alpha; desativar antes de publicar uma versao final.
 const ALPHA_DIAGNOSTICS_ENABLED := true
 const INITIAL_GOLD := 30
@@ -28,6 +30,7 @@ var mobile_axis := Vector2.ZERO
 var game_paused_for_dialogue := false
 var npcs: Array[Dictionary] = []
 var clock: float = 0.0
+var updater: Node
 
 func _ready() -> void:
     _setup_input()
@@ -39,6 +42,35 @@ func _ready() -> void:
     _build_ui()
     _update_hud()
     _notify("Bem-vindo a Valdora. Conheça o Mercado Real!")
+    _setup_content_updates()
+
+
+func _setup_content_updates() -> void:
+    updater = CONTENT_UPDATER.new()
+    add_child(updater)
+    updater.connect("status_changed", Callable(self, "_on_update_status"))
+    updater.connect("content_changed", Callable(self, "_on_content_changed"))
+    updater.call("check_for_updates")
+
+func _manual_check_updates() -> void:
+    if updater == null:
+        _notify("Atualizador ainda não foi iniciado")
+        return
+    _notify("Consultando atualizações de Valdora...")
+    updater.call("check_for_updates")
+
+func _on_update_status(message: String) -> void:
+    print("[VALDORA_UPDATE] ", message)
+    if message.begins_with("Valdora: ") or message.begins_with("Há uma versão nova"):
+        _notify(message)
+
+func _on_content_changed(_payload: Dictionary) -> void:
+    print("[VALDORA_UPDATE] Novo conteúdo disponível neste aparelho")
+
+func _content_text(key: String, fallback: String) -> String:
+    if updater != null:
+        return str(updater.call("text_for", key, fallback))
+    return fallback
 
 func _setup_input() -> void:
     var mapping := {
@@ -337,7 +369,7 @@ func _build_ui() -> void:
 
     var brand := Label.new()
     brand.name = "Marca"
-    brand.text = "EVOLU  CHANNEL       |       REINO DE VALDORA"
+    brand.text = "VALDORA       |       ALPHA 0.2"
     brand.position = Vector2(24, 18)
     brand.add_theme_font_size_override("font_size", 24)
     brand.add_theme_color_override("font_color", Color("#fff3dd"))
@@ -387,7 +419,7 @@ func _build_ui() -> void:
 
     var help := Label.new()
     help.position = Vector2(viewport_size.x - 480, 18)
-    help.text = "WASD / setas  •  E para conversar"
+    help.text = "EVOLU CHANNEL  •  ESTÚDIO"
     help.add_theme_font_size_override("font_size", 16)
     help.add_theme_color_override("font_color", Color("#eee6dc"))
     layer.add_child(help)
@@ -403,6 +435,15 @@ func _build_ui() -> void:
         diagnostic_button.add_theme_font_size_override("font_size", 17)
         diagnostic_button.pressed.connect(_run_diagnostics)
         layer.add_child(diagnostic_button)
+
+    var updates_button := Button.new()
+    updates_button.name = "Verificar atualizacoes"
+    updates_button.text = "ATUALIZAR"
+    updates_button.position = Vector2(viewport_size.x - 388, 78)
+    updates_button.size = Vector2(173, 49)
+    updates_button.add_theme_font_size_override("font_size", 16)
+    updates_button.pressed.connect(_manual_check_updates)
+    layer.add_child(updates_button)
 
     dialogue_layer = PanelContainer.new()
     dialogue_layer.name = "Dialogo"
@@ -495,18 +536,18 @@ func _interact() -> void:
         return
     match npc["kind"]:
         "merchant":
-            _dialogue(npc["label"], "Bem-vindo ao Mercado Real. Uma poção custa 10 moedas.", [
+            _dialogue(npc["label"], _content_text("merchant", "Bem-vindo ao Mercado Real. Uma poção custa 10 moedas."), [
                 {"name":"Comprar poção · 10 moedas", "code":"buy_potion"},
                 {"name":"Voltar", "code":"close"}])
         "bank":
-            _dialogue(npc["label"], "O banco guarda suas moedas. Depósito e saque: 5 moedas por operação.", [
+            _dialogue(npc["label"], _content_text("bank", "O banco guarda suas moedas. Depósito e saque: 5 moedas por operação."), [
                 {"name":"Depositar 5 moedas", "code":"deposit"},
                 {"name":"Sacar 5 moedas", "code":"withdraw"},
                 {"name":"Voltar", "code":"close"}])
         "blacksmith":
-            _dialogue(npc["label"], "As forjas de Valdora estão abertas. Equipamentos especiais chegarão em versões futuras.", [{"name":"Entendido", "code":"close"}])
+            _dialogue(npc["label"], _content_text("blacksmith", "As forjas de Valdora estão abertas. Equipamentos especiais chegarão em versões futuras."), [{"name":"Entendido", "code":"close"}])
         "guard":
-            _dialogue(npc["label"], "Bem-vindo, aventureiro. A Guilda ainda prepara as primeiras expedições.", [{"name":"Entendido", "code":"close"}])
+            _dialogue(npc["label"], _content_text("guard", "Bem-vindo, aventureiro. A Guilda ainda prepara as primeiras expedições."), [{"name":"Entendido", "code":"close"}])
 
 func _dialogue(title: String, description: String, choices: Array) -> void:
     for child in dialogue_layer.get_children():

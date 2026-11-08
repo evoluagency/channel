@@ -1,4 +1,4 @@
-# EVOLU Channel — Exportação Android, Alpha 0.1.1
+# EVOLU Channel — Exportação Android, Alpha 0.2.0
 
 Esta é uma aplicação **Godot independente**. Ela não depende do Minecraft.
 
@@ -10,7 +10,7 @@ Esta é uma aplicação **Godot independente**. Ela não depende do Minecraft.
 4. Acesse **Projeto → Exportar**, escolha o preset **Android** do projeto, instale os templates oficiais 4.7.2 se o editor solicitar, selecione **Debug** e salve o APK.
 5. Instale o APK em outro celular e teste como um aplicativo independente.
 
-**Godot 4.7:** o editor Android pode exportar o jogo sem instalar separadamente Java SDK/Android SDK. Para exportação com Gradle, siga os passos adicionais da documentação oficial. Não confunda o APK do *Godot Editor* com o APK do *EVOLU Channel*.
+**Godot 4.7:** o editor Android pode exportar o jogo sem instalar separadamente Java SDK/Android SDK. Para exportação com Gradle, siga os passos adicionais da documentação oficial. Não confunda o APK do *Godot Editor* com o APK do jogo *Valdora*.
 
 Referência: https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html
 
@@ -19,14 +19,14 @@ Referência: https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_
 - Instale **Godot Engine 4.7.2 Standard** e seus templates de exportação correspondentes.
 - Configure OpenJDK 17 e Android SDK nas preferências do editor. A documentação oficial especifica versões dos componentes Android; siga-a em vez de instalar SDKs arbitrários.
 - Abra `project.godot` e execute a cena. Após corrigir erros de importação/GDScript, verifique o teste automatizado no motor.
-- Exporte o preset Android como APK de depuração em `dist/Channel-Valdora-alpha.apk`.
+- Exporte o preset Android como APK de depuração em `dist/Valdora-Alpha-0.2.apk`.
 
 Com ambiente preparado, comandos:
 
 ```bash
 godot --headless --path . --editor --quit
 godot --headless --path . --script res://tests/smoke.gd
-godot --headless --path . --export-debug Android dist/Channel-Valdora-alpha.apk
+godot --headless --path . --export-debug Android dist/Valdora-Alpha-0.2.apk
 ```
 
 ## Assinatura e distribuição

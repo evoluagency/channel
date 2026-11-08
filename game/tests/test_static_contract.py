@@ -16,16 +16,41 @@ checks['foundation_level_ground'] = 'pos + Vector3(0, -0.18, 0), Vector3(width, 
 checks['threshold_level_ground'] = 'pos + Vector3(0, -0.06, front - 0.25), Vector3(doorway_width, 0.12, 1.0)' in source
 checks['diagnostic_checks_present'] = source.count('results["') == 9 and 'CHANNEL_DIAGNOSTIC' in source
 checks['diagnostic_enabled_for_alpha'] = 'const ALPHA_DIAGNOSTICS_ENABLED := true' in source and 'if ALPHA_DIAGNOSTICS_ENABLED:' in source and 'if OS.is_debug_build():' not in source
-checks['no_live_cloud_required'] = all(s not in source for s in ['HTTPClient','HTTPRequest','Supabase','MultiplayerPeer'])
+checks['no_live_cloud_required'] = all(s not in source for s in ['Supabase','MultiplayerPeer']) and (root/'scripts/content_updater.gd').exists()
 checks['android_32_64'] = all(s in presets for s in ('architectures/armeabi-v7a=true','architectures/arm64-v8a=true'))
-checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.channel','version/code=3','version/name="0.1.2"'))
+checks['android_package_and_version'] = all(s in presets for s in ('ink.evolu.channel','version/code=4','version/name="0.2.0-alpha"'))
 checks['engine_smoke_script'] = (root/'tests/smoke.gd').is_file() and 'CHANNEL_ENGINE_SMOKE' in (root/'tests/smoke.gd').read_text()
 for key, ok in checks.items():
  print(('PASS' if ok else 'FAIL')+' '+key)
 assert all(checks.values()), 'contract validation failed'
 print('PASS: %d static contract tests. Godot runtime not executed.' % len(checks))
+
 # Alpha 0.1.2: teste visivel mesmo quando o Android nao sinaliza debug.
 assert "const ALPHA_DIAGNOSTICS_ENABLED := true" in source
 assert "if ALPHA_DIAGNOSTICS_ENABLED:" in source
 assert "if OS.is_debug_build():" not in source
-print("OK alpha 0.1.2: diagnostic button not tied to debug build")
+print("OK alpha 0.2: diagnostic button remains enabled for development")
+
+# Contract checks for a data-only, non-executable, HTTPS update channel.
+from hashlib import sha256
+manifest = __import__('json').loads((root/'site_updates/manifest.json').read_text())
+payload_path = root/'site_updates/content/valdora-1.json'
+payload = __import__('json').loads(payload_path.read_text())
+updater = (root/'scripts/content_updater.gd').read_text()
+checks_update = {
+    'game_label': 'package/name="Valdora"' in presets and 'brand.text = "VALDORA' in source,
+    'package_id_preserved': 'package/unique_name="ink.evolu.channel"' in presets,
+    'version_advanced': 'version/code=4' in presets,
+    'internet_permission': 'permissions/internet=true' in presets,
+    'manifest_contract': manifest['game']=='Valdora' and manifest['required_client_version']=='0.2.0',
+    'content_integrity': sha256(payload_path.read_bytes()).hexdigest()==manifest['content']['sha256'],
+    'content_schema': payload['schema_version']==1 and payload['content_version']==manifest['content_version'],
+    'whitelisted_texts': set(payload['strings']) <= {'welcome','merchant','bank','blacksmith','guard'},
+    'no_executable_downloads': 'load_resource_pack' not in updater and updater.count('HTTPRequest.new()') == 2,
+    'offline_savings_preserved': 'user://channel_save.json' in source and 'user://valdora_content_state.json' in updater and 'config/name="EVOLU Channel — Valdora"' in (root/'project.godot').read_text(),
+    'domain_restriction': 'https://channel.evolu.ink/updates/content/' in updater and 'SHA256' in updater,
+    'manual_update_button': 'ATUALIZAR' in source and 'check_for_updates' in updater,
+}
+for key,ok in checks_update.items(): print(('PASS' if ok else 'FAIL')+' '+key)
+assert all(checks_update.values())
+print('PASS %d content update contracts; engine/network still require device validation.' % len(checks_update))
