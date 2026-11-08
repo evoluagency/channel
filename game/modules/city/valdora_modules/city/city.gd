@@ -49,19 +49,24 @@ func _ready() -> void:
 func _new_city() -> Dictionary:
     return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140}, "buildings": [], "revision": 0}
 
+func _whole_number(value: Variant) -> bool:
+    if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
+        return false
+    return float(value) == float(int(value))
+
 func _valid_city(value: Variant) -> bool:
     if typeof(value) != TYPE_DICTIONARY:
         return false
     var data: Dictionary = value
     if data.get("schema_version") != SCHEMA or typeof(data.get("name")) != TYPE_STRING:
         return false
-    if str(data["name"]).length() > 24 or typeof(data.get("revision")) != TYPE_INT:
+    if str(data["name"]).length() > 24 or not _whole_number(data.get("revision")) or int(data["revision"]) < 0:
         return false
     var resources = data.get("resources")
     if typeof(resources) != TYPE_DICTIONARY:
         return false
     for key in ["madeira", "pedra"]:
-        if typeof(resources.get(key)) != TYPE_INT or int(resources[key]) < 0 or int(resources[key]) > 999999:
+        if not _whole_number(resources.get(key)) or int(resources[key]) < 0 or int(resources[key]) > 999999:
             return false
     var all_buildings = data.get("buildings")
     if typeof(all_buildings) != TYPE_ARRAY or all_buildings.size() > W * H:
@@ -73,7 +78,7 @@ func _valid_city(value: Variant) -> bool:
             return false
         var item: Dictionary = raw
         var kind := str(item.get("type", ""))
-        if not BUILD_TYPES.has(kind) or typeof(item.get("x")) != TYPE_INT or typeof(item.get("y")) != TYPE_INT:
+        if not BUILD_TYPES.has(kind) or not _whole_number(item.get("x")) or not _whole_number(item.get("y")):
             return false
         var x: int = item["x"]
         var y: int = item["y"]
