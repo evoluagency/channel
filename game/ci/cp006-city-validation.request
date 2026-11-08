@@ -2,3 +2,5 @@ VALDORA_CP006_CITY_V2_ONE_SHOT_TEST
 module=city-2.zip
 manifest_revision=3
 no_android_build=true
+retry=2
+reason=corrected-checkout-paths
