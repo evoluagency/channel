@@ -47,7 +47,7 @@ checks_update = {
     'content_schema': payload['schema_version']==1 and payload['content_version']==manifest['content_version'],
     'whitelisted_texts': set(payload['strings']) <= {'welcome','merchant','bank','blacksmith','guard'},
     'no_executable_downloads': 'load_resource_pack' not in updater and updater.count('HTTPRequest.new()') == 2,
-    'offline_savings_preserved': 'user://channel_save.json' in source and 'user://valdora_content_state.json' in updater and 'config/name="Valdora"' in (root/'project.godot').read_text(),
+    'offline_savings_preserved': 'user://channel_save.json' in source and 'user://valdora_content_state.json' in updater and 'config/name="EVOLU Channel — Valdora"' in (root/'project.godot').read_text(),
     'domain_restriction': 'https://channel.evolu.ink/updates/content/' in updater and 'SHA256' in updater,
     'manual_update_button': 'ATUALIZAR' in source and 'check_for_updates' in updater,
 }
