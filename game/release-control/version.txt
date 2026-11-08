@@ -1,7 +1,7 @@
 VALDORA_ANDROID_RELEASE
-version_name=0.4.0-alpha
-version_code=102
+version_name=0.4.1-alpha
+version_code=103
 package=ink.evolu.valdora
 channel=release-android
-purpose=cp004_ota_bootstrap_one_time_upgrade
-release_source=55d784d8600e8f812334fd5f297cb1bf44a4b7f1
+purpose=cp006_live_ota_branding
+upgrade_from=102
