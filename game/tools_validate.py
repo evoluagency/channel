@@ -48,5 +48,6 @@ for index,ch in enumerate('\n'.join(pruned)):
 assert not stack,'Unclosed bracket(s): '+str(stack)
 # Static architectural guardrail: no Godot mono backend or Android signing private key.
 assert 'gl_compatibility' in (root/'project.godot').read_text()
-assert 'ink.evolu.channel' in (root/'export_presets.cfg').read_text()
+# Releases must retain the permanent Android package id across subsequent versions.
+assert 'package/unique_name="ink.evolu.valdora"' in (root/'export_presets.cfg').read_text()
 print('OK: basic source structural checks passed. Godot runtime NOT tested here.')
