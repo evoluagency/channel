@@ -21,7 +21,7 @@ jobs:
           python3 game/tests/test_static_contract.py
           python3 game/tests/test_combat_static_contract.py
           python3 game/tests/test_ota_contract.py
-          python3 tools/ota_manifest.py --revision 1 > /dev/null
+          python3 tools/ota_manifest.py --verify-existing
           mkdir -p game/tests/fixtures
           cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
           cp site/updates/v2/modules/welcome-1.zip game/tests/fixtures/welcome-1.zip

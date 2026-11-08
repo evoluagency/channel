@@ -65,13 +65,57 @@ def create(revision: int, minimum_client: int, private_key: Path | None) -> dict
         "min_client_code":minimum_client, "modules":entries
     }
 
+def verify_existing() -> None:
+    """Read-only verification of all published module files and signatures."""
+    manifest = json.loads((UPDATES / "manifest.json").read_text(encoding="utf-8"))
+    key = ROOT / "game" / "updates" / "trust" / "valdora_ota.pub"
+    assert manifest["game"] == "Valdora" and manifest["schema_version"] == 2
+    assert key.is_file(), "OTA public key is missing"
+    seen = set()
+    for module in manifest["modules"]:
+        mid = module["id"]
+        assert mid not in seen, "duplicate module"
+        seen.add(mid)
+        ext = "json" if module["kind"] == "data" else module["kind"]
+        expected = MODULES / f"{mid}-{module['version']}.{ext}"
+        assert expected.is_file(), "missing module: " + expected.name
+        data = expected.read_bytes()
+        assert len(data) == module["bytes"], "wrong size: " + mid
+        assert sha256(data).hexdigest() == module["sha256"], "wrong digest: " + mid
+        assert module["url"] == ORIGIN + expected.name, "unexpected URL"
+        if module["kind"] in {"pck", "zip"}:
+            assert module["entry"] == f"res://valdora_modules/{mid}/entry.tscn"
+            raw_signature = base64.b64decode(module["signature_b64"], validate=True)
+            with tempfile.TemporaryDirectory() as work:
+                signature_file = Path(work) / "signature.bin"
+                signature_file.write_bytes(raw_signature)
+                result = subprocess.run(
+                    ["openssl", "dgst", "-sha256", "-verify", str(key),
+                     "-signature", str(signature_file), str(expected)],
+                    capture_output=True, text=True, check=False
+                )
+                assert result.returncode == 0 and "Verified OK" in result.stdout,                     "RSA signature verification failed: " + mid
+        elif module["kind"] == "data":
+            payload = json.loads(data)
+            assert payload["module_id"] == mid and payload["schema_version"] == 1
+        else:
+            raise ValueError("Unknown kind: " + str(module["kind"]))
+    print(f"PASS: {len(manifest['modules'])} OTA modules verified using public key only")
+
+
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument("--revision",type=int,required=True)
+    ap.add_argument("--revision",type=int)
     ap.add_argument("--min-client-code",type=int,default=102)
     ap.add_argument("--key-file",type=Path)
     ap.add_argument("--write",action="store_true",help="Write staged site manifest; never deploy")
+    ap.add_argument("--verify-existing",action="store_true")
     args=ap.parse_args()
+    if args.verify_existing:
+        verify_existing()
+        return
+    if args.revision is None:
+        ap.error("--revision is required for manifest generation")
     result=create(args.revision,args.min_client_code,args.key_file)
     content=json.dumps(result,ensure_ascii=False,indent=2)+"\n"
     if args.write:
