@@ -75,7 +75,7 @@ assert all(sum(h['attributes_level1'].values()) == 66 for h in hero_data['heroes
 assert 'user://valdora_hero_roster_v1.json' in hero_system and 'user://channel_save.json' not in hero_system
 assert 'HERO_SYSTEM.load_catalog()' in source and 'HERO_PANEL.new()' in source
 assert '22' in str(source.count('results["'))
-assert 'include_filter="data/*.json"' in presets
+assert 'data/*.json' in presets and 'updates/trust/*.pub' in presets
 assert 'ink.evolu.valdora' in presets
 assert (root/'tests/hero_smoke.gd').is_file()
 print('PASS: CP002-B catalog, formation, persistence and Android package contracts.')

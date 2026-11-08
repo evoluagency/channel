@@ -58,3 +58,7 @@ GET \`https://channel.evolu.ink/updates/v2/manifest.json\` (sem redirects), JSON
 - O site v2 existe no Git, mas ainda não está distribuído pelo domínio de produção; portanto, o atualizador retorna modo offline/indisponível até a publicação.
 - Godot headless e Android físico não foram executados neste trabalho; os arquivos de teste e workflow apenas preparam a validação.
 - Antes do merge de release: atualizar `release-control/version.txt`, preflight para code 102, tornar workflow release somente manual e validar patch assinado com rollback.
+
+## Segurança do workflow de release
+
+O workflow Android nesta branch passa a ser exclusivamente `workflow_dispatch`, não mais `push`, e exigirá `version_code=102` no arquivo `game/release-control/version.txt`. Esse arquivo **permanece com 101 nesta branch**, intencionalmente: o build de release fica bloqueado até validação final e autorização da migração para 0.4.0. O workflow CP004 de testes também é exclusivamente manual.
