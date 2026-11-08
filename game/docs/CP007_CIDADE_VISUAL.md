@@ -21,3 +21,6 @@
 3. Outras suítes CP001–CP006 preservadas e workflow retorna ao modo manual após one-shot.
 4. Publicação do manifesto na Vercel e respostas HTTP 200 verificadas.
 5. Aprovação visual e fluidez no Android pelo usuário antes de considerar o próximo checkpoint fechado.
+
+## Revisão 6 — Cidade v5
+Corrige a confirmação após construir um edifício: preserva o tipo da obra para gerar a mensagem antes de alternar para INSPECIONAR. Inclusão de regressão com fundação e casa reais, verificação do débito, estado salvo e indicador de sucesso. O pacote da Cidade v4 permanece imutável, sem alterar o APK ou os dados do jogador.
