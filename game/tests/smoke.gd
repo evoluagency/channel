@@ -45,6 +45,24 @@ func _run_smoke() -> void:
     results["hero_panel_open"] = hero_panel != null and hero_panel.visible
     game.call("_close_heroes")
     results["hero_panel_close"] = hero_panel != null and not hero_panel.visible
+    var arena_panel: Control = game.get("combat_panel") as Control
+    results["arena_built"] = arena_panel != null and is_instance_valid(arena_panel)
+    results["arena_has_subviewport"] = arena_panel != null and (arena_panel.get("viewport_3d") as SubViewport) != null
+    game.call("_open_combat")
+    results["arena_opens"] = arena_panel != null and arena_panel.visible
+    results["arena_pauses_world"] = bool(game.get("game_paused_for_dialogue"))
+    var combat_initial: Dictionary = arena_panel.get("battle_state") if arena_panel != null else {}
+    results["arena_battle_active"] = str(combat_initial.get("status", "")) == "active"
+    var combat_start_round: int = int(combat_initial.get("round", -1))
+    var round_ok: bool = arena_panel.take_turn("manual") if arena_panel != null else false
+    var combat_advanced: Dictionary = arena_panel.get("battle_state") if arena_panel != null else {}
+    results["arena_manual_turn"] = round_ok and int(combat_advanced.get("round", -1)) == combat_start_round + 1
+    results["arena_animates_events"] = bool(arena_panel.get("animating")) if arena_panel != null else false
+    results["arena_blocks_multiple_taps"] = not bool(arena_panel.take_turn("auto")) if arena_panel != null else false
+    game.call("_close_combat")
+    results["arena_closes"] = arena_panel != null and not arena_panel.visible
+    results["world_unpaused_after_arena"] = not bool(game.get("game_paused_for_dialogue"))
+    results["economy_intact_after_combat"] = int(game.get("coins")) >= 0 and int(game.get("bank_coins")) >= 0
     game.call("_run_diagnostics")
     var passed := 0
     for key in results.keys():

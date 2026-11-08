@@ -14,7 +14,7 @@ checks['door_has_real_opening'] = all(s in source for s in ['var doorway_width :
 checks['door_passable_by_capsule'] = 2.7 > 2*0.42 and 3.6 > 2.4
 checks['foundation_level_ground'] = 'pos + Vector3(0, -0.18, 0), Vector3(width, 0.36, depth)' in source
 checks['threshold_level_ground'] = 'pos + Vector3(0, -0.06, front - 0.25), Vector3(doorway_width, 0.12, 1.0)' in source
-checks['diagnostic_checks_present'] = source.count('results["') == 17 and 'CHANNEL_DIAGNOSTIC' in source
+checks['diagnostic_checks_present'] = source.count('results["') == 22 and 'CHANNEL_DIAGNOSTIC' in source
 checks['diagnostic_enabled_for_alpha'] = 'const ALPHA_DIAGNOSTICS_ENABLED := true' in source and 'if ALPHA_DIAGNOSTICS_ENABLED:' in source and 'if OS.is_debug_build():' not in source
 checks['no_live_cloud_required'] = all(s not in source for s in ['Supabase','MultiplayerPeer']) and (root/'scripts/content_updater.gd').exists()
 checks['android_32_64'] = all(s in presets for s in ('architectures/armeabi-v7a=true','architectures/arm64-v8a=true'))
@@ -74,8 +74,20 @@ assert len({h['hero_id'] for h in hero_data['heroes']}) == 4
 assert all(sum(h['attributes_level1'].values()) == 66 for h in hero_data['heroes'])
 assert 'user://valdora_hero_roster_v1.json' in hero_system and 'user://channel_save.json' not in hero_system
 assert 'HERO_SYSTEM.load_catalog()' in source and 'HERO_PANEL.new()' in source
-assert '17' in str(source.count('results["'))
+assert '22' in str(source.count('results["'))
 assert 'include_filter="data/*.json"' in presets
 assert 'ink.evolu.valdora' in presets
 assert (root/'tests/hero_smoke.gd').is_file()
 print('PASS: CP002-B catalog, formation, persistence and Android package contracts.')
+
+# CP003-C: arena visual, controles táticos e assinatura preservada.
+arena=(root/'scripts/combat/arena_panel.gd').read_text()
+assert 'SubViewportContainer.new()' in arena and 'SubViewport.new()' in arena
+assert 'own_world_3d = true' in arena and 'scene_camera.current = true' in arena
+assert 'ENGINE.advance_round(' in arena and 'playback_queue' in arena
+assert all(command in arena for command in ['take_turn("none")', 'take_turn("auto")', 'take_turn("manual")'])
+assert 'COMBAT_ARENA.new()' in source and 'combat_panel.configure(hero_catalog, hero_state)' in source
+assert 'cp003_repetibilidade' in source and 'cp003_arena' in source
+assert 'package/unique_name="ink.evolu.valdora"' in presets and 'version/code=100' in presets
+assert 'FileAccess' not in arena and 'SAVE_PATH' not in arena
+print('PASS: CP003-C arena, tactical controls, save isolation and stable Android identity.')
