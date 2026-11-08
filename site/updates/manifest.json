@@ -7,8 +7,8 @@
   "content_version": 1,
   "content": {
     "url": "https://channel.evolu.ink/updates/content/valdora-1.json",
-    "sha256": "bf04c4df36594ced9d3a103f51f6bc40a32669ea7995cd8d7e293f4420c6b465",
-    "bytes": 419
+    "sha256": "5c378814049551934f427bedc0191312dea8ebb3a12ad406d9e8df7eba30a1be",
+    "bytes": 418
   },
   "notes": "Conteúdo inicial de teste para atualização remota de diálogos. Não distribui código."
 }
