@@ -16,7 +16,7 @@ func _run() -> void:
     if not checks["scene_loaded"]:
         _report(checks)
         return
-    var city: Control = source.instantiate()
+    var city = source.instantiate()
     checks["root_control"] = city is Control
     root.add_child(city)
     await process_frame
@@ -33,7 +33,7 @@ func _run() -> void:
     checks["house"] = city.snapshot_for_test()["buildings"].size() == 2
     var saved: Dictionary = city._read_save(city.SAVE_PATH)
     checks["persistence"] = saved.get("name") == "Auren Nova" and saved.get("buildings", []).size() == 2
-    var before := city.snapshot_for_test()
+    var before: Dictionary = city.snapshot_for_test()
     city._on_plot_clicked(city._iso(6.0, 5.0))
     checks["no_duplicate_debit"] = city.snapshot_for_test() == before
     checks["reject_corruption"] = not city._valid_city({"schema_version":1,"name":"x","revision":1,"resources":{"madeira":-1,"pedra":10},"buildings":[]})
