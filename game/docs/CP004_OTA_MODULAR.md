@@ -68,3 +68,7 @@ O workflow Android nesta branch passa a ser exclusivamente `workflow_dispatch`, 
 A chave pública RSA-3072 para OTA foi gerada independentemente da assinatura Android, com fingerprint SHA-256 (DER/SPKI) `d88fb6ad0d4787a3820c13238fc86ef3f2bdfffed833492cc47ce6f83b4007ef`. A privada foi depositada na pasta de acesso restrito `Google Drive/Channel/Seguranca - Assinatura Android/VALDORA_OTA_RSA3072_PRIVATE.pem`; **nunca** deve ser adicionada ao GitHub ou aos arquivos públicos da Vercel. Recomenda-se migração futura para cofre/KMS.
 
 O tipo `zip` do Godot é aceito como resource pack, além do `pck`. O primeiro pacote `welcome-1.zip` foi criado sem scripts e assinado com a chave OTA. A assinatura RSA/PKCS#1 v1.5 + SHA-256 foi validada com OpenSSL localmente. Ainda requer prova de montagem no Godot e Android. Publicar `manifest.json` v2 e módulos apenas após teste do pipeline.
+
+## Publicação de arquivos v2 e release Android
+
+O catálogo v2 e seus dois primeiros módulos foram publicados na `main` do projeto Vercel Channel sob o commit `898a4f83e943688288ec5607ed3827011400c0ef`; o endpoint HTTPS respondeu 200. A suíte CP004 Godot passou na execução `42510225034`, incluindo RSA/ZIP e cena. A versão-base 0.4.0 passa a usar code 102. O workflow de release possui gatilho de push restrito a `game/release-control/build.request` **temporariamente**, para permitir uma única compilação controlada, já que a integração não disponibiliza dispatch; removê-lo após o build. Não marcar APK como homologado antes de instalação física sobre 0.3.3 sem perder dados.

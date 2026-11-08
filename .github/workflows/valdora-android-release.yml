@@ -1,5 +1,9 @@
 name: Valdora - Android release permanente
 on:
+  push:
+    branches: [release/valdora-android]
+    paths:
+      - game/release-control/build.request
   workflow_dispatch:
 permissions:
   contents: read
@@ -50,6 +54,12 @@ jobs:
         run: |
           python3 game/tools_validate.py
           python3 game/tests/test_static_contract.py
+          python3 game/tests/test_combat_static_contract.py
+          python3 game/tests/test_ota_contract.py
+          python3 tools/ota_manifest.py --verify-existing
+          mkdir -p game/tests/fixtures
+          cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
+          cp site/updates/v2/modules/welcome-1.zip game/tests/fixtures/welcome-1.zip
       - name: Godot 4.7.2 oficial e integridade
         shell: bash
         run: |
@@ -66,7 +76,11 @@ jobs:
         run: |
           godot --headless --path game --script res://tests/core_smoke.gd
           godot --headless --path game --script res://tests/hero_smoke.gd
+          godot --headless --path game --script res://tests/combat_smoke.gd
+          godot --headless --path game --script res://tests/update_smoke.gd
+          godot --headless --path game --script res://tests/pck_smoke.gd
           godot --headless --path game --script res://tests/smoke.gd
+          godot --headless --path game --script res://tests/remote_update_smoke.gd
       - name: Cache dos modelos Android (reduz downloads)
         id: godot-templates
         uses: actions/cache@v4
