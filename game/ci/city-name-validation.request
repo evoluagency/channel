@@ -1,0 +1,5 @@
+VALDORA_CP006_CITY_NAME_FIX
+validation=one-shot
+source=city-3.zip
+manifest_revision=4
+expected_client=102_or_103
