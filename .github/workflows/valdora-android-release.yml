@@ -1,9 +1,5 @@
 name: Valdora - Android release permanente
 on:
-  push:
-    branches: [release/valdora-android]
-    paths:
-      - game/release-control/build.request
   workflow_dispatch:
 permissions:
   contents: read
