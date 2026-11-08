@@ -1,9 +1,5 @@
 name: Valdora CP004 — validação OTA (manual, sem APK)
 on:
-  push:
-    branches: [fix/valdora-cp007-build-status-city-v5]
-    paths:
-      - game/ci/cp007-build-fix.request
   workflow_dispatch:
 permissions:
   contents: read
