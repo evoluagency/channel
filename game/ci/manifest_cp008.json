@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "game": "Valdora",
+  "studio": "EVOLU Channel",
+  "channel": "alpha",
+  "revision": 7,
+  "min_client_code": 102,
+  "modules": [
+    {
+      "id": "guide",
+      "version": 1,
+      "kind": "data",
+      "url": "https://channel.evolu.ink/updates/v2/modules/guide-1.json",
+      "bytes": 428,
+      "sha256": "17fb42d1f59c0ae8f23b004eb0854a13246624c4d0bd71a65d9c0dcb02c41d5b"
+    },
+    {
+      "id": "welcome",
+      "version": 1,
+      "kind": "zip",
+      "url": "https://channel.evolu.ink/updates/v2/modules/welcome-1.zip",
+      "bytes": 394,
+      "sha256": "55eec775557b4aa9126accff09ef609c16a6dd2aa5c2d41c65b4654c2af91ee6",
+      "entry": "res://valdora_modules/welcome/entry.tscn",
+      "signature_b64": "lONQAHNN6EtKbmk3KEIsyFYLVj+8h0nyX5r1fU3EtahrizFCygwF00jo62IfD9wzJ80ZoKiKK6a8If7j0YuiOnoFMfyaJl2hg1Gs07Pv29+yuyBiMjH7hA5iv6iwd0EHeovRpkmUwnbAj2s98GCYK0Zwk5YJf3q0zbzJ1AX3o3CFrs2+07jXACmyJY1l4TwCMCVdzRhpNGdtE2xP8pnTJeVpnl7/JNsdOJ9jNkU3OXb6RLAnCeNKDdQTB3OeSHSGvt+oc8hMEQnlEPQI3CWU9zHR9WLK9oBUkZeDk9DweGEW4yPr7JiSMioD/j4vqqhqlkb5ueqjbys9QM8uDsobUpEey+knEG2FHPZxbaAJaM+oObmCv7f8NGzjACtP08myse+yPaP0POm57xS6qHfrJdW+pHyvEliMv0KRHJaTlDbt1IaINoFpHj85cbmQiQjR2HXolFFP6wxzf8CqPJUN9fK4I1qW4BZOXTbdd09x8mEMvaJBP2FJ5B9yHywDPBMR",
+      "label": "Bem-vindo a Valdora"
+    },
+    {
+      "id": "city",
+      "version": 6,
+      "kind": "zip",
+      "url": "https://channel.evolu.ink/updates/v2/modules/city-6.zip",
+      "bytes": 12157,
+      "sha256": "a2d955bf5dd636e018e8478f8102f77f1cc4ab27169dec1e78d47c2516b5af9f",
+      "entry": "res://valdora_modules/city/entry.tscn",
+      "signature_b64": "egM2oBPYsvjHLFQ8aQqw61hWUMyJwHqZIsl0a6YdxA/BJVBuE8uDlJXcNoaRQDImADGwrvwUqBkiNIWiGVOdaV04wKZbA1FGT4Fz9lnbGfPK16IBQhrz6/vQ9iS8hFm2lJfg3XWfVIz6Xkc9k0SBP6bAn1+UnhQi403LadZN0Jz+SzA/99X9TpBwB1rknhBaWGmwLIJJLjCqz3jr1gRif14s3eBlgvCI9xkMVBNDlTn7qWbx2tb0UlNQ6QdTzaCq2DFyY9TPnIRW4eWqFBqoiTv0na2msmkY2B6wuh6FbQW5V2bF9KTk7jlrL1UNImufuMid2lYptKB3wZ3BG3Rqs4R8j/d31SwRHmPyKa32pkWMXeNPMIl+hIbXqgZ41FHRyCF6jGD3cKMX3czvOn/Rt3lJA9qsXgVdZ3b8VXiTLa39ruaWarrk9Qm2QdMcjFk1kGCVFJaJ/dO5QXSUmKX1P0vnvv5vRqenzwDd/xNTCIknwIl4/FruShF/ekpVtx1i",
+      "label": "Minha cidade · Visual v6"
+    }
+  ]
+}
