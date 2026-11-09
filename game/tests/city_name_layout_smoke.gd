@@ -12,7 +12,7 @@ func _save_visible(n: Node) -> bool:
     return false
 func _run() -> void:
     var checks: Dictionary = {}
-    var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/manifest.json"))
+    var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/manifest_city5.json"))
     var module: Dictionary = {}
     for item in manifest.get("modules", []):
         if str(item.get("id", "")) == "city":
