@@ -1,5 +1,5 @@
 extends Control
-## Valdora CP009 - Cidade v7: atividade urbana e produção offline com limite.
+## Valdora CP010 - Cidade v8: governo local, missões, abastecimento e cidade NPC.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
@@ -7,6 +7,8 @@ const SCHEMA := 1
 const PRODUCE_SECONDS := 600 # ciclo 10 minutos
 const MAX_IDLE_CYCLES := 48 # máximo 8 horas offline por coleta
 const RESOURCE_LIMIT := 999999
+const TRADE_COOLDOWN := 900 # 15 minutos, mundo offline; não sincronizado com multiplayer
+const MISSION_IDS := ["fundacao", "abrigo", "primeira_safra", "industria", "servicos", "vizinhanca", "intercambio"]
 const PRODUCTIVE_TYPES := ["fazenda", "serraria", "pedreira"]
 const W := 12
 const H := 10
@@ -36,6 +38,9 @@ var build_buttons: Dictionary = {}
 var objective_label: Label
 var production_label: Label
 var production_button: Button
+var civic_overlay: ColorRect
+var civic_scroll_content: VBoxContainer
+var civic_map: Control
 var production_ui_accumulator := 0.0
 var resident_clock := 0.0
 var animation_phase := 0.0
@@ -86,7 +91,7 @@ func _process(delta: float) -> void:
         queue_redraw()
 
 func _new_city() -> Dictionary:
-    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140, "alimentos": 0}, "buildings": [], "revision": 0, "visual_style": "azul", "last_collection_unix": _now(), "collection_count": 0}
+    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140, "alimentos": 0}, "buildings": [], "revision": 0, "visual_style": "azul", "last_collection_unix": _now(), "collection_count": 0, "claimed_missions": [], "npc_discovered": false, "npc_trades": 0, "npc_relation": 0, "last_trade_unix": 0, "food_shortage_cycles": 0}
 
 func _whole_number(value: Variant) -> bool:
     if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
@@ -116,6 +121,24 @@ func _valid_city(value: Variant) -> bool:
     if data.has("last_collection_unix") and (not _whole_number(data["last_collection_unix"]) or int(data["last_collection_unix"]) < 0 or int(data["last_collection_unix"]) > 4102444800):
         return false
     if data.has("collection_count") and (not _whole_number(data["collection_count"]) or int(data["collection_count"]) < 0 or int(data["collection_count"]) > 1000000):
+        return false
+    # Contratos CP010 opcionais e sem ampliação do schema para preservar saves CP005-CP009.
+    var claimed = data.get("claimed_missions", [])
+    if typeof(claimed) != TYPE_ARRAY or claimed.size() > MISSION_IDS.size():
+        return false
+    var claimed_seen: Dictionary = {}
+    for mission in claimed:
+        if typeof(mission) != TYPE_STRING or str(mission) not in MISSION_IDS or claimed_seen.has(mission):
+            return false
+        claimed_seen[mission] = true
+    if data.has("npc_discovered") and typeof(data["npc_discovered"]) != TYPE_BOOL:
+        return false
+    for key in ["npc_trades", "npc_relation", "food_shortage_cycles"]:
+        if data.has(key) and (not _whole_number(data[key]) or int(data[key]) < 0 or int(data[key]) > 1000000):
+            return false
+    if data.has("npc_relation") and int(data["npc_relation"]) > 100:
+        return false
+    if data.has("last_trade_unix") and (not _whole_number(data["last_trade_unix"]) or int(data["last_trade_unix"]) < 0 or int(data["last_trade_unix"]) > 4102444800):
         return false
     var all_buildings = data.get("buildings")
     if typeof(all_buildings) != TYPE_ARRAY or all_buildings.size() > W * H:
@@ -172,6 +195,13 @@ func _load_city() -> void:
     if not city.has("collection_count"):
         city["collection_count"] = 0
         migrated = true
+    for key in ["claimed_missions", "npc_discovered", "npc_trades", "npc_relation", "last_trade_unix", "food_shortage_cycles"]:
+        if not city.has(key):
+            match key:
+                "claimed_missions": city[key] = []
+                "npc_discovered": city[key] = false
+                _: city[key] = 0
+            migrated = true
     if migrated:
         _write_save(city)
 
@@ -269,10 +299,13 @@ func _create_ui() -> void:
     var column := VBoxContainer.new()
     column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS · CIDADE v7", 20, Color("#ffdb83")))
+    column.add_child(_label("TERRITÓRIOS · CIDADE v8", 20, Color("#ffdb83")))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
     rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
+    var government := _button("GOVERNO · MISSÕES · REGIÃO", Callable(self, "_open_civic"))
+    government.custom_minimum_size = Vector2(0, 42)
+    column.add_child(government)
     objective_label = _label("", 16, Color("#f8d68d"))
     column.add_child(objective_label)
     production_label = _label("", 14, Color("#badce9"))
@@ -391,6 +424,7 @@ func _create_ui() -> void:
     cancel.custom_minimum_size = Vector2(110, 43)
     form.add_child(cancel)
     editor_overlay.hide()
+    _create_civic_overlay()
     _refresh_ui()
 
 func _city_population() -> int:
@@ -410,7 +444,10 @@ func _objective() -> String:
             return "PRÓXIMO OBJETIVO · %s" % LABELS[kind]
     if int(city.get("collection_count", 0)) == 0:
         return "PRÓXIMO OBJETIVO · Coletar produção"
-    return "NÚCLEO URBANO · Economia em desenvolvimento"
+    for mission in _mission_definitions():
+        if str(mission["id"]) not in city.get("claimed_missions", []) and _mission_ready(str(mission["id"])):
+            return "MISSÃO DISPONÍVEL · %s" % str(mission["title"])
+    return "NÚCLEO URBANO · Governo e região disponíveis"
 
 func _has_kind(kind: String) -> bool:
     for item in city["buildings"]:
@@ -747,8 +784,8 @@ func _map_area(pos: Vector2) -> bool:
     return pos.x >= 12.0 and pos.x < size.x - 322.0 and pos.y >= 82.0 and pos.y < size.y - 105.0
 
 func _unhandled_input(event: InputEvent) -> void:
-    if editor_overlay != null and editor_overlay.visible:
-        return # impede construção/movimentação atrás do formulário.
+    if (editor_overlay != null and editor_overlay.visible) or (civic_overlay != null and civic_overlay.visible):
+        return # impede construção/movimentação atrás dos painéis.
     if event is InputEventMouseButton:
         var mb := event as InputEventMouseButton
         if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed and _map_area(mb.position):
@@ -878,7 +915,7 @@ func _draw() -> void:
     if dusk_mode:
         draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#091f4f38"))
     # A small in-scene content revision identifier; the APK version stays unchanged.
-    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v7  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
+    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v8  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
 
 func _field(p: Vector2) -> void:
     var s := zoom
@@ -1046,6 +1083,260 @@ func _draw_building(p: Vector2, kind: String, level: int = 1, tile: Vector2i = V
     if level>=3:
         draw_circle(p+Vector2(width-7,-height-9)*s,3.0*s,Color("#ffe29b"))
 
+func _food_upkeep_rate() -> int:
+    # Duas unidades de alimento por residência nível 1 a cada ciclo de 10 min.
+    # Taxa escalonada com a população; o jogo permanece funcional sem alimentos.
+    if not _has_foundation():
+        return 0
+    return int(ceili(float(_city_population()) / 6.0)) * 2
+
+func _services_report() -> Dictionary:
+    var residents := _city_population()
+    var service_capacity := 0
+    var defense := 0
+    for item in city["buildings"]:
+        var level := int(item.get("level", 1))
+        match str(item["type"]):
+            "poco": service_capacity += 12 * level
+            "praca": service_capacity += 14 * level
+            "jardim": service_capacity += 5 * level
+            "mercado": service_capacity += 15 * level
+            "torre": defense += 10 * level
+            "quartel": defense += 18 * level
+    var service_score := 100 if residents == 0 else mini(100, int(floor(100.0 * float(service_capacity) / float(residents))))
+    var food_rate := _food_upkeep_rate()
+    var gross_food := int(_production_rates()["alimentos"])
+    var supply := "SEM MORADORES" if residents == 0 else ("ESTÁVEL" if gross_food >= food_rate else "ATENÇÃO")
+    return {"population": residents, "service_coverage": service_score, "service_capacity": service_capacity, "defense": defense, "food_upkeep": food_rate, "food_production": gross_food, "food_status": supply, "shortage_cycles": int(city.get("food_shortage_cycles", 0))}
+
+func _mission_definitions() -> Array[Dictionary]:
+    return [
+        {"id":"fundacao", "title":"Primeiro assentamento", "hint":"Nomeie e funde sua cidade", "wood":20, "stone":10, "food":0},
+        {"id":"abrigo", "title":"Abrigo para moradores", "hint":"Construa uma casa", "wood":12, "stone":0, "food":15},
+        {"id":"primeira_safra", "title":"Primeira colheita", "hint":"Construa uma fazenda", "wood":0, "stone":0, "food":25},
+        {"id":"industria", "title":"Ofícios e materiais", "hint":"Construa serraria e pedreira", "wood":30, "stone":20, "food":0},
+        {"id":"servicos", "title":"Qualidade de vida", "hint":"Construa poço e praça", "wood":12, "stone":15, "food":20},
+        {"id":"vizinhanca", "title":"Primeiro contato", "hint":"Descubra a cidade vizinha Valeverde", "wood":15, "stone":0, "food":25},
+        {"id":"intercambio", "title":"Acordo comercial", "hint":"Conclua uma troca com Valeverde", "wood":20, "stone":20, "food":0}
+    ]
+
+func _mission_ready(id: String) -> bool:
+    match id:
+        "fundacao": return not str(city.get("name", "")).is_empty() and _has_foundation()
+        "abrigo": return _has_kind("casa")
+        "primeira_safra": return _has_kind("fazenda")
+        "industria": return _has_kind("serraria") and _has_kind("pedreira")
+        "servicos": return _has_kind("poco") and _has_kind("praca")
+        "vizinhanca": return bool(city.get("npc_discovered", false))
+        "intercambio": return int(city.get("npc_trades", 0)) > 0
+    return false
+
+func _claim_mission(id: String) -> bool:
+    if id not in MISSION_IDS or id in city.get("claimed_missions", []) or not _mission_ready(id):
+        _set_status("Missão não disponível ou já resgatada.")
+        return false
+    var mission: Dictionary = {}
+    for item in _mission_definitions():
+        if str(item["id"]) == id:
+            mission = item
+            break
+    if mission.is_empty():
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["claimed_missions"].append(id)
+    for kind in ["madeira", "pedra", "alimentos"]:
+        var reward_key := "wood" if kind == "madeira" else ("stone" if kind == "pedra" else "food")
+        next["resources"][kind] = mini(RESOURCE_LIMIT, int(next["resources"].get(kind, 0)) + int(mission[reward_key]))
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Falha ao gravar a missão. Recompensa não concedida.")
+        return false
+    city = next
+    _refresh_ui()
+    _set_status("Missão concluída: %s" % str(mission["title"]))
+    _refresh_civic()
+    return true
+
+func _discover_neighbor() -> bool:
+    if bool(city.get("npc_discovered", false)):
+        _set_status("Valeverde já aparece no mapa regional.")
+        return false
+    if not _has_foundation() or not _has_kind("casa"):
+        _set_status("Construa a fundação e uma casa para explorar a região.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["npc_discovered"] = true
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Não foi possível registrar a descoberta.")
+        return false
+    city = next
+    _refresh_ui()
+    _set_status("Valeverde descoberta. Relações comerciais liberadas.")
+    _refresh_civic()
+    return true
+
+func _trade_neighbor(kind: String, now: int) -> bool:
+    if not bool(city.get("npc_discovered", false)) or not _has_kind("mercado"):
+        _set_status("Descubra Valeverde e construa um mercado para negociar.")
+        return false
+    var offers := {
+        "food": {"cost": "madeira", "cost_amount": 24, "receive": "alimentos", "receive_amount": 36},
+        "stone": {"cost": "alimentos", "cost_amount": 30, "receive": "pedra", "receive_amount": 18}
+    }
+    if not offers.has(kind):
+        return false
+    var last := int(city.get("last_trade_unix", 0))
+    if now < last or (last > 0 and now - last < TRADE_COOLDOWN):
+        _set_status("A caravana de Valeverde retorna em breve (15 min).")
+        return false
+    var offer: Dictionary = offers[kind]
+    if int(city["resources"].get(str(offer["cost"]), 0)) < int(offer["cost_amount"]):
+        _set_status("Recursos insuficientes para o comércio regional.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["resources"][str(offer["cost"])] = int(next["resources"][str(offer["cost"])]) - int(offer["cost_amount"])
+    next["resources"][str(offer["receive"])] = mini(RESOURCE_LIMIT, int(next["resources"].get(str(offer["receive"]), 0)) + int(offer["receive_amount"]))
+    next["npc_trades"] = mini(1000000, int(next.get("npc_trades", 0)) + 1)
+    next["npc_relation"] = mini(100, int(next.get("npc_relation", 0)) + 5)
+    next["last_trade_unix"] = now
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Troca não registrada. Recursos preservados.")
+        return false
+    city = next
+    _refresh_ui()
+    _set_status("Troca confirmada com Valeverde. Relação +5.")
+    _refresh_civic()
+    return true
+
+func _open_civic() -> void:
+    if editor_overlay != null and editor_overlay.visible:
+        return
+    civic_overlay.show()
+    civic_overlay.move_to_front()
+    _refresh_civic()
+
+func _close_civic() -> void:
+    civic_overlay.hide()
+
+func _civic_text(text_value: String, color: Color = Color("#d4e6e7")) -> Label:
+    var label := _label(text_value, 16, color)
+    label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    return label
+
+func _create_civic_overlay() -> void:
+    civic_overlay = ColorRect.new()
+    civic_overlay.color = Color("#06182bdf")
+    civic_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    civic_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+    add_child(civic_overlay)
+    var frame := CenterContainer.new()
+    frame.anchor_right = 1.0
+    frame.anchor_bottom = 1.0
+    civic_overlay.add_child(frame)
+    var panel := PanelContainer.new()
+    panel.custom_minimum_size = Vector2(770, 0)
+    panel.add_theme_stylebox_override("panel", _style("#102b40"))
+    frame.add_child(panel)
+    var column := VBoxContainer.new()
+    column.custom_minimum_size = Vector2(710, 0)
+    column.add_theme_constant_override("separation", 7)
+    panel.add_child(column)
+    var header := HBoxContainer.new()
+    column.add_child(header)
+    var title := _label("CONSELHO DA CIDADE · VALDORA", 22, Color("#f3d58c"))
+    title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    header.add_child(title)
+    header.add_child(_button("FECHAR", Callable(self, "_close_civic")))
+    var scroll := ScrollContainer.new()
+    scroll.custom_minimum_size = Vector2(710, 380)
+    scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+    column.add_child(scroll)
+    civic_scroll_content = VBoxContainer.new()
+    civic_scroll_content.add_theme_constant_override("separation", 10)
+    civic_scroll_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    scroll.add_child(civic_scroll_content)
+    civic_overlay.hide()
+
+func _refresh_civic() -> void:
+    if civic_scroll_content == null:
+        return
+    for previous in civic_scroll_content.get_children():
+        civic_scroll_content.remove_child(previous)
+        previous.queue_free()
+    var health := _services_report()
+    civic_scroll_content.add_child(_civic_text("SERVIÇOS PÚBLICOS", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("Moradores: %d   Cobertura: %d%%   Defesa: %d" % [health["population"],health["service_coverage"],health["defense"]]))
+    civic_scroll_content.add_child(_civic_text("Alimentos: +%d / -%d por ciclo · %s" % [health["food_production"],health["food_upkeep"],health["food_status"]]))
+    if int(health["shortage_cycles"]) > 0:
+        civic_scroll_content.add_child(_civic_text("Histórico de falta de alimentos: %d ciclo(s)." % int(health["shortage_cycles"]), Color("#ffd59c")))
+    civic_scroll_content.add_child(HSeparator.new())
+    civic_scroll_content.add_child(_civic_text("MISSÕES DA CIDADE", Color("#ffe4a2")))
+    for quest in _mission_definitions():
+        var mission_id := str(quest["id"])
+        var claimed := mission_id in city.get("claimed_missions", [])
+        var ready := _mission_ready(mission_id)
+        var line := HBoxContainer.new()
+        civic_scroll_content.add_child(line)
+        var message := _civic_text("%s · %s" % [str(quest["title"]), str(quest["hint"])])
+        line.add_child(message)
+        var reward := _button("CONCLUÍDA" if claimed else ("RESGATAR" if ready else "PENDENTE"), Callable(self,"_claim_mission").bind(mission_id))
+        reward.custom_minimum_size = Vector2(110, 45)
+        reward.disabled = claimed or not ready
+        line.add_child(reward)
+    civic_scroll_content.add_child(HSeparator.new())
+    civic_scroll_content.add_child(_civic_text("REGIÃO · VALEVERDE", Color("#ffe4a2")))
+    var region := Control.new()
+    region.custom_minimum_size = Vector2(680, 147)
+    region.draw.connect(Callable(self,"_draw_region_preview").bind(region))
+    civic_scroll_content.add_child(region)
+    civic_scroll_content.add_child(_civic_text("Uma cidade administrada por NPCs. Diplomacia local offline; sem jogadores reais."))
+    var known := bool(city.get("npc_discovered", false))
+    civic_scroll_content.add_child(_civic_text("Estado: %s   ·   Relação: %d/100   ·   Trocas: %d" % [("DESCONHECIDA" if not known else "DESCOBERTA"), int(city.get("npc_relation", 0)), int(city.get("npc_trades", 0))]))
+    var discover := _button("EXPLORAR FRONTEIRA", Callable(self,"_discover_neighbor"))
+    discover.disabled = known or not _has_kind("casa") or not _has_foundation()
+    civic_scroll_content.add_child(discover)
+    if known:
+        civic_scroll_content.add_child(_civic_text("Comércio requer mercado. Uma caravana a cada 15 minutos."))
+        for offer in [
+            {"kind":"food", "text":"Trocar 24 madeira por 36 alimentos"},
+            {"kind":"stone", "text":"Trocar 30 alimentos por 18 pedra"}
+        ]:
+            var button := _button(str(offer["text"]), Callable(self,"_on_trade").bind(str(offer["kind"])))
+            button.disabled = not _has_kind("mercado")
+            civic_scroll_content.add_child(button)
+
+func _draw_region_preview(canvas: Control) -> void:
+    # Miniatura geográfica procedural, isolada do mapa construível e sem texturas.
+    var w := maxf(580.0, canvas.size.x)
+    var h := 147.0
+    canvas.draw_rect(Rect2(0, 0, w, h), Color("#164868"))
+    var land := PackedVector2Array([
+        Vector2(10, 70),Vector2(52, 33),Vector2(148, 17),Vector2(271, 43),
+        Vector2(375, 19),Vector2(514, 34),Vector2(w-10, 83),
+        Vector2(w-49, 127),Vector2(510, 138),Vector2(350, 122),
+        Vector2(227, 140),Vector2(94, 123)
+    ])
+    canvas.draw_colored_polygon(land,Color("#598f5a"))
+    canvas.draw_polyline(land, Color("#b6c480"), 2.0)
+    canvas.draw_line(Vector2(161, 82),Vector2(w-162, 83), Color("#d1b27c"), 5.0)
+    canvas.draw_line(Vector2(161, 82),Vector2(w-162, 83), Color("#7b684f"), 1.0)
+    for i in range(7):
+        var x := 59.0 + float(i) * 68.0
+        canvas.draw_colored_polygon(PackedVector2Array([Vector2(x,52),Vector2(x+20,19),Vector2(x+39,52)]),Color("#345b49"))
+    canvas.draw_circle(Vector2(161, 82),17,Color("#e5bf64"))
+    canvas.draw_circle(Vector2(161, 82),10,Color("#2c6598"))
+    var known := bool(city.get("npc_discovered", false))
+    canvas.draw_circle(Vector2(w-162, 83),17,Color("#d4b17e" if known else "#78858c"))
+    canvas.draw_circle(Vector2(w-162, 83),10,Color("#5b9c72" if known else "#455b6a"))
+    canvas.draw_string(ThemeDB.fallback_font,Vector2(85,118),"SUA CIDADE",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("#ffffff"))
+    canvas.draw_string(ThemeDB.fallback_font,Vector2(w-254,118),"VALEVERDE" if known else "REGIÃO A EXPLORAR",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("#ffffff"))
+
+func _on_trade(kind: String) -> void:
+    _trade_neighbor(kind, _now())
+
 func _now() -> int:
     return int(Time.get_unix_time_from_system())
 
@@ -1082,7 +1373,8 @@ func _refresh_production_label() -> void:
         if production_button != null:
             production_button.disabled = true
         return
-    production_label.text = "POR 10 MIN: +%d madeira / +%d pedra / +%d alimento\nDISPONÍVEL: +%d / +%d / +%d" % [int(rate["madeira"]), int(rate["pedra"]), int(rate["alimentos"]), int(gains["madeira"]), int(gains["pedra"]), int(gains["alimentos"])]
+    var upkeep := _food_upkeep_rate()
+    production_label.text = "A CADA 10 MIN: +%d madeira / +%d pedra / +%d alimentos\nMORADORES: -%d alimento/ciclo  ·  A COLETAR: %d ciclos" % [int(rate["madeira"]), int(rate["pedra"]), int(rate["alimentos"]), upkeep, int(estimate["cycles"])]
     if production_button != null:
         production_button.disabled = int(estimate["cycles"]) < 1
 
@@ -1107,6 +1399,14 @@ func _collect_production_at(now: int) -> bool:
         var final_amount := mini(RESOURCE_LIMIT, old_amount + int(estimate["gains"][key]))
         next["resources"][key] = final_amount
         received.append(final_amount - old_amount)
+    # Abastecimento: desconta alimentos somente na coleta, na mesma transação do ganho.
+    # Nunca torna o saldo negativo ou destrói estruturas; carência é sinalizada ao governo.
+    var food_before := int(next["resources"].get("alimentos", 0))
+    var upkeep := mini(RESOURCE_LIMIT, _food_upkeep_rate() * cycles)
+    next["resources"]["alimentos"] = maxi(0, food_before - upkeep)
+    var shortage := maxi(0, upkeep - food_before)
+    var shortage_cycles := 0 if shortage == 0 else int(ceili(float(shortage) / float(maxi(1, _food_upkeep_rate()))))
+    next["food_shortage_cycles"] = mini(1000000, int(city.get("food_shortage_cycles", 0)) + shortage_cycles)
     # Se o jogador ficou mais de 8 h offline, descarta o excesso com limite de recuperação.
     next["last_collection_unix"] = now if bool(estimate["capped"]) else int(city.get("last_collection_unix", now)) + cycles * PRODUCE_SECONDS
     next["collection_count"] = mini(1000000, int(city.get("collection_count", 0)) + 1)
@@ -1116,7 +1416,8 @@ func _collect_production_at(now: int) -> bool:
         return false
     city = next
     _refresh_ui()
-    _set_status("Coletado: +%d madeira, +%d pedra, +%d alimento." % received)
+    var shortage_note := " · ATENÇÃO: faltaram alimentos." if shortage > 0 else ""
+    _set_status("Produção: +%d madeira, +%d pedra; alimentos líquidos: %d.%s" % [int(received[0]), int(received[1]), int(city["resources"].get("alimentos", 0)), shortage_note])
     return true
 
 func _draw_city_life_details() -> void:
