@@ -1,5 +1,5 @@
 extends Control
-## Valdora CP007 - direção visual da cidade: paisagem viva e interface territorial.
+## Valdora CP008 - Cidade v6, identidade 2.5D mobile e personalização persistente.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
@@ -8,8 +8,8 @@ const W := 12
 const H := 10
 const HALF_W := 40.0
 const HALF_H := 21.0
-const BUILD_TYPES := ["fundacao", "casa", "fazenda", "serraria", "pedreira", "torre", "estrada"]
-const LABELS := {"fundacao": "Fundar", "casa": "Casa", "fazenda": "Fazenda", "serraria": "Serraria", "pedreira": "Pedreira", "torre": "Torre", "estrada": "Estrada"}
+const BUILD_TYPES := ["fundacao", "casa", "fazenda", "serraria", "pedreira", "torre", "estrada", "jardim", "praca", "poco", "quartel", "mercado"]
+const LABELS := {"fundacao": "Fundar", "casa": "Casa", "fazenda": "Fazenda", "serraria": "Serraria", "pedreira": "Pedreira", "torre": "Torre", "estrada": "Estrada", "jardim": "Jardim", "praca": "Praça", "poco": "Poço", "quartel": "Quartel", "mercado": "Mercado"}
 const COSTS := {
     "fundacao": {"madeira": 0, "pedra": 0},
     "casa": {"madeira": 25, "pedra": 10},
@@ -17,7 +17,12 @@ const COSTS := {
     "serraria": {"madeira": 15, "pedra": 15},
     "pedreira": {"madeira": 20, "pedra": 15},
     "torre": {"madeira": 30, "pedra": 40},
-    "estrada": {"madeira": 5, "pedra": 0}
+    "estrada": {"madeira": 5, "pedra": 0},
+    "jardim": {"madeira": 8, "pedra": 2},
+    "praca": {"madeira": 16, "pedra": 24},
+    "poco": {"madeira": 10, "pedra": 15},
+    "quartel": {"madeira": 45, "pedra": 55},
+    "mercado": {"madeira": 35, "pedra": 20}
 }
 const TERRITORIES := ["Centro urbano", "Campos férteis", "Bosque de madeira", "Pedreira", "Rio e doca", "Ruínas antigas", "Mina de ferro", "Torre de vigia"]
 
@@ -27,10 +32,14 @@ var build_buttons: Dictionary = {}
 var objective_label: Label
 var animation_phase := 0.0
 var animation_accumulator := 0.0
+var show_grid := false
+var dusk_mode := false
+var grid_button: Button
+var dusk_button: Button
 var move_origin := Vector2i(-1, -1)
 var selected_tile := Vector2i(-1, -1)
 var zoom := 0.93
-var map_origin := Vector2(493, 147)
+var map_origin := Vector2(450, 149)
 var dragging := false
 var dragging_touch := false
 var press_position := Vector2.ZERO
@@ -64,7 +73,7 @@ func _process(delta: float) -> void:
         queue_redraw()
 
 func _new_city() -> Dictionary:
-    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140}, "buildings": [], "revision": 0}
+    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140}, "buildings": [], "revision": 0, "visual_style": "azul"}
 
 func _whole_number(value: Variant) -> bool:
     if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
@@ -78,6 +87,9 @@ func _valid_city(value: Variant) -> bool:
     if data.get("schema_version") != SCHEMA or typeof(data.get("name")) != TYPE_STRING:
         return false
     if str(data["name"]).length() > 24 or not _whole_number(data.get("revision")) or int(data["revision"]) < 0:
+        return false
+    # Campo opcional: saves anteriores ao CP008 continuam válidos.
+    if str(data.get("visual_style", "azul")) not in ["azul", "terracota", "bosque"]:
         return false
     var resources = data.get("resources")
     if typeof(resources) != TYPE_DICTIONARY:
@@ -224,7 +236,7 @@ func _create_ui() -> void:
     var column := VBoxContainer.new()
     column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS · CIDADE v4", 20, Color("#ffdb83")))
+    column.add_child(_label("TERRITÓRIOS · CIDADE v6", 20, Color("#ffdb83")))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
     rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
@@ -278,6 +290,15 @@ func _create_ui() -> void:
         b.custom_minimum_size = Vector2(104, 49)
         build_buttons[kind] = b
         row.add_child(b)
+    var style_btn := _button("ESTILO", Callable(self, "_cycle_style"))
+    style_btn.custom_minimum_size = Vector2(108, 49)
+    row.add_child(style_btn)
+    grid_button = _button("GRADE", Callable(self, "_toggle_grid"))
+    grid_button.custom_minimum_size = Vector2(101, 49)
+    row.add_child(grid_button)
+    dusk_button = _button("CREPÚSCULO", Callable(self, "_toggle_dusk"))
+    dusk_button.custom_minimum_size = Vector2(137, 49)
+    row.add_child(dusk_button)
     for caption in ["ZOOM +", "ZOOM -"]:
         var diff := 0.10 if caption == "ZOOM +" else -0.10
         var b := _button(caption, Callable(self, "_change_zoom").bind(diff))
@@ -394,7 +415,12 @@ LOTES: %d × %d
 CONSTRUÇÕES: %d
 
 Arraste o mapa para explorar. Use o menu inferior para construir e melhorar." % [area_name, details, W, H, city["buildings"].size()]
+    objective_label.text = "ETAPA: %s  ·  Estilo: %s\n%s" % [_city_stage(), str(city.get("visual_style", "azul")).capitalize(), _objective()]
     _refresh_mode_buttons()
+    if grid_button != null:
+        grid_button.text = "GRADE: ON" if show_grid else "GRADE"
+    if dusk_button != null:
+        dusk_button.text = "DIA" if dusk_mode else "CREPÚSCULO"
 
 func _set_status(message: String) -> void:
     status_label.text = message
@@ -438,6 +464,56 @@ func _select_type(kind: String) -> void:
         move_origin = Vector2i(-1, -1)
         _refresh_ui()
         _set_status("Toque em um lote para consultar." if kind == "inspecionar" else ("Escolha um lote." if BUILD_TYPES.has(kind) else ("Selecione um edifício para mover." if kind == "mover" else "Selecione um edifício para melhorar.")))
+
+func _city_stage() -> String:
+    var built := 0
+    for building in city["buildings"]:
+        if str(building["type"]) != "estrada":
+            built += 1
+    if built < 2:
+        return "Assentamento"
+    if built < 5:
+        return "Vila"
+    if built < 9:
+        return "Vila fortificada"
+    return "Cidade em formação"
+
+func _cycle_style() -> void:
+    var styles := ["azul", "terracota", "bosque"]
+    var current := str(city.get("visual_style", "azul"))
+    var next_style := str(styles[(styles.find(current) + 1) % styles.size()])
+    var next: Dictionary = city.duplicate(true)
+    next["visual_style"] = next_style
+    next["revision"] = int(next["revision"]) + 1
+    if _write_save(next):
+        city = next
+        _set_status("Identidade visual salva: %s." % next_style.capitalize())
+        _refresh_ui()
+        queue_redraw()
+    else:
+        _set_status("Não foi possível salvar o estilo. Preferência anterior mantida.")
+
+func _toggle_grid() -> void:
+    show_grid = not show_grid
+    _refresh_ui()
+    queue_redraw()
+
+func _toggle_dusk() -> void:
+    dusk_mode = not dusk_mode
+    _refresh_ui()
+    queue_redraw()
+
+func _roof_color() -> Color:
+    match str(city.get("visual_style", "azul")):
+        "terracota": return Color("#cc7452")
+        "bosque": return Color("#4f9266")
+        _: return Color("#326cc2")
+
+func _banner_color() -> Color:
+    match str(city.get("visual_style", "azul")):
+        "terracota": return Color("#a52e47")
+        "bosque": return Color("#2d9453")
+        _: return Color("#3264d3")
 
 func _change_zoom(diff: float) -> void:
     zoom = clampf(zoom + diff, 0.67, 1.35)
@@ -717,7 +793,8 @@ func _draw() -> void:
                 var skirt := PackedVector2Array([tile[3], tile[2], tile[1], tile[1] + Vector2(0, height_px), tile[2] + Vector2(0, height_px), tile[3] + Vector2(0, height_px)])
                 draw_colored_polygon(skirt, c.darkened(0.27))
             draw_colored_polygon(tile, c)
-            draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), c.darkened(0.17), maxf(0.7, zoom))
+            if show_grid:
+                draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), c.darkened(0.17), maxf(0.7, zoom))
             if ground == "agua":
                 var wave := sin(animation_phase + float(x * 3 + y * 2)) * 3.0 * zoom
                 draw_line(p + Vector2(-15 * zoom, wave), p + Vector2(2 * zoom, wave - 3 * zoom), Color("#b0e7ef88"), 1.8 * zoom)
@@ -749,7 +826,12 @@ func _draw() -> void:
                         if (x * 7 + y * 11) % 5 == 0:
                             _bush(p)
             else:
-                _draw_building(p, str(building["type"]), int(building.get("level", 1)))
+                _draw_building(p, str(building["type"]), int(building.get("level", 1)), Vector2i(x, y))
+    _draw_citizens()
+    if dusk_mode:
+        draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#091f4f38"))
+    # A small in-scene content revision identifier; the APK version stays unchanged.
+    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v6  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
 
 func _field(p: Vector2) -> void:
     var s := zoom
@@ -781,61 +863,156 @@ func _ruin(p: Vector2) -> void:
     draw_rect(Rect2(p + Vector2(7, -21) * s, Vector2(7, 21) * s), Color("#ad9b80"))
     draw_line(p + Vector2(-11, -23) * s, p + Vector2(13, -22) * s, Color("#efe2a7"), 4.0 * s)
 
-func _draw_building(p: Vector2, kind: String, level: int = 1) -> void:
+func _draw_prism(p: Vector2, width: float, height: float, wall: Color, roof: Color) -> void:
+    var s := zoom
+    var w := width * s
+    var h := height * s
+    draw_colored_polygon(PackedVector2Array([p+Vector2(-w,-h), p+Vector2(0,-h+11*s), p+Vector2(0,9*s), p+Vector2(-w,0)]), wall.darkened(0.18))
+    draw_colored_polygon(PackedVector2Array([p+Vector2(0,-h+11*s), p+Vector2(w,-h), p+Vector2(w,0), p+Vector2(0,9*s)]), wall)
+    draw_colored_polygon(PackedVector2Array([p+Vector2(0,-h-15*s), p+Vector2(w+5*s,-h-2*s), p+Vector2(0,-h+13*s), p+Vector2(-w-5*s,-h-2*s)]), roof)
+    draw_line(p+Vector2(0,-h-15*s), p+Vector2(w+5*s,-h-2*s), roof.lightened(0.28), 2.1*s)
+
+func _draw_road(p: Vector2, tile: Vector2i) -> void:
+    var s := zoom
+    var road := Color("#bd9c70")
+    draw_colored_polygon(PackedVector2Array([p+Vector2(0,-15)*s,p+Vector2(28,0)*s,p+Vector2(0,15)*s,p+Vector2(-28,0)*s]), road)
+    for delta in [Vector2i(-1,0), Vector2i(1,0), Vector2i(0,-1), Vector2i(0,1)]:
+        var neighbor := tile + delta
+        if _in_bounds(neighbor) and str(_at(neighbor).get("type", "")) == "estrada":
+            var toward := (_iso(float(neighbor.x), float(neighbor.y)) - p) * 0.43
+            draw_line(p, p + toward, road.lightened(0.08), 12*s)
+            draw_line(p, p + toward, Color("#debd88"), 5*s)
+    draw_circle(p, 3.0*s, Color("#e0c59a"))
+
+func _draw_banner(p: Vector2, tall: float) -> void:
+    var s := zoom
+    var top := p + Vector2(0, -tall)*s
+    draw_line(top, top + Vector2(0, -23)*s, Color("#5f5346"), 2.1*s)
+    draw_colored_polygon(PackedVector2Array([top+Vector2(0,-22)*s,top+Vector2(19,-16)*s,top+Vector2(0,-9)*s]), _banner_color())
+
+func _draw_chimney(p: Vector2, phase_shift: float) -> void:
+    var s := zoom
+    draw_rect(Rect2(p + Vector2(0,-36)*s, Vector2(7,15)*s), Color("#d3bca0"))
+    for i in range(2):
+        var float_up := fmod(animation_phase * 8.0 + float(i) * 9.0 + phase_shift, 19.0)
+        draw_circle(p + Vector2(7.0 + sin(animation_phase+phase_shift)*4.0, -38.0 - float_up)*s, 3.2*s, Color("#e2e8df88"))
+
+func _draw_farm_detail(p: Vector2) -> void:
+    var s := zoom
+    for n in range(4):
+        var v := float(n)
+        draw_line(p+Vector2(-33+v*6,3)*s, p+Vector2(-24+v*6,12)*s, Color("#ecca59"), 2.7*s)
+        draw_line(p+Vector2(-28+v*6,0)*s, p+Vector2(-28+v*6,-7)*s, Color("#cfa638"), 1.5*s)
+
+func _draw_sawmill_detail(p: Vector2) -> void:
+    var s := zoom
+    for n in range(3):
+        draw_line(p+Vector2(-28,3+n*5)*s, p+Vector2(-11,3+n*5)*s, Color("#77462b"), 4.1*s)
+    draw_circle(p+Vector2(26,-4)*s, 8*s, Color("#b9bdbb"))
+    draw_circle(p+Vector2(26,-4)*s, 4*s, Color("#805d38"))
+
+func _draw_plaza_detail(p: Vector2, kind: String, level: int) -> void:
+    var s := zoom
+    if kind == "jardim":
+        draw_colored_polygon(PackedVector2Array([p+Vector2(-27,0)*s,p+Vector2(0,-14)*s,p+Vector2(27,0)*s,p+Vector2(0,14)*s]), Color("#4d9c5e"))
+        for i in range(4+level):
+            var xx := float((i*11)%35)-17.0
+            var yy := float((i*7)%13)-5.0
+            draw_circle(p+Vector2(xx,yy)*s, 3.5*s, Color("#f8b26b") if i%2==0 else Color("#ffe7ad"))
+        _bush(p+Vector2(0,-13)*s)
+    elif kind == "praca":
+        draw_colored_polygon(PackedVector2Array([p+Vector2(-29,0)*s,p+Vector2(0,-17)*s,p+Vector2(29,0)*s,p+Vector2(0,17)*s]), Color("#c7b99b"))
+        draw_colored_polygon(PackedVector2Array([p+Vector2(-13,-3)*s,p+Vector2(0,-11)*s,p+Vector2(13,-3)*s,p+Vector2(0,5)*s]), Color("#accbe2"))
+        draw_circle(p+Vector2(0,-11)*s, 5*s, Color("#77c7df"))
+        if level>1:
+            _draw_banner(p+Vector2(25,-4)*s, 15)
+    elif kind == "poco":
+        draw_colored_polygon(PackedVector2Array([p+Vector2(-17,0)*s,p+Vector2(0,-11)*s,p+Vector2(17,0)*s,p+Vector2(0,11)*s]), Color("#c6bca1"))
+        draw_circle(p+Vector2(0,-4)*s, 12*s, Color("#a8a9a1"))
+        draw_circle(p+Vector2(0,-4)*s, 8*s, Color("#3e9bbf"))
+        draw_line(p+Vector2(-11,-5)*s,p+Vector2(-11,-24)*s,Color("#805c3a"),2.5*s)
+        draw_line(p+Vector2(11,-5)*s,p+Vector2(11,-24)*s,Color("#805c3a"),2.5*s)
+        draw_line(p+Vector2(-12,-24)*s,p+Vector2(12,-24)*s,Color("#b88b4f"),3*s)
+
+func _draw_building(p: Vector2, kind: String, level: int = 1, tile: Vector2i = Vector2i(-1, -1)) -> void:
     var s := zoom
     if kind == "estrada":
-        draw_colored_polygon(PackedVector2Array([p + Vector2(-29, 1)*s, p + Vector2(-2, -12)*s, p + Vector2(29, 1)*s, p + Vector2(2, 15)*s]), Color("#bda074"))
-        draw_line(p + Vector2(-23, 1)*s, p + Vector2(23, 1)*s, Color("#e6c38a"), 2*s)
+        _draw_road(p, tile)
         return
-    var w := (22.0 + float(level - 1) * 3.0) * s
-    var h := ((41.0 if kind == "fundacao" else (34.0 if kind == "torre" else 24.0)) + float(level - 1) * 8.0) * s
-    var wall := Color("#e5d6ac")
-    var roof := Color("#327fc4")
-    if kind == "casa":
-        roof = Color("#db8954")
-    elif kind == "fazenda":
-        roof = Color("#c89d42")
-    elif kind == "serraria":
-        roof = Color("#6b8d43")
-    elif kind == "pedreira":
-        wall = Color("#b6baba")
-        roof = Color("#8b9b9b")
-    elif kind == "torre":
-        roof = Color("#3e5d99")
-    draw_colored_polygon(PackedVector2Array([p + Vector2(-w, -h), p + Vector2(0, -h + 11*s), p + Vector2(0, 9*s), p + Vector2(-w, 0)]), wall.darkened(0.14))
-    draw_colored_polygon(PackedVector2Array([p + Vector2(0, -h + 11*s), p + Vector2(w, -h), p + Vector2(w, 0), p + Vector2(0, 9*s)]), wall)
-    draw_colored_polygon(PackedVector2Array([p + Vector2(0, -h - 18*s), p + Vector2(w+4*s, -h-1*s), p + Vector2(0, -h+13*s), p + Vector2(-w-4*s, -h-1*s)]), roof)
-    draw_line(p + Vector2(0, -h - 18*s), p + Vector2(w+4*s, -h-1*s), roof.lightened(0.2), 2.5*s)
-    if kind == "fundacao" or kind == "torre":
-        draw_rect(Rect2(p + Vector2(-4, -h-30*s), Vector2(8, 13)*s), Color("#f7e3a2"))
-        draw_line(p + Vector2(0, -h-31*s), p + Vector2(0, -h-49*s), Color("#6b6353"), 2*s)
-        draw_colored_polygon(PackedVector2Array([p + Vector2(0, -h-48*s), p + Vector2(17, -h-45*s), p + Vector2(0, -h-39*s)]), Color("#386fd0"))
-    if kind == "fazenda":
-        draw_line(p + Vector2(-w-10*s, -3*s), p + Vector2(-w-17*s, -12*s), Color("#ad842b"), 3*s)
-    if level >= 2:
-        draw_rect(Rect2(p + Vector2(-w + 4*s, -h - 7*s), Vector2(8, 8)*s), Color("#f6d57b"))
-    if level >= 3:
-        draw_rect(Rect2(p + Vector2(w - 12*s, -h - 7*s), Vector2(8, 8)*s), Color("#f6d57b"))
-    # Props estilizados identificáveis em tela pequena, sem texturas pesadas.
+    if kind in ["jardim", "praca", "poco"]:
+        _draw_plaza_detail(p, kind, level)
+        return
+    var width := 21.0 + float(level-1)*3.0
+    var height := (48.0 if kind=="fundacao" else (47.0 if kind=="torre" else 26.0)) + float(level-1)*9.0
+    var wall := Color("#e4d6b4")
+    var roof := _roof_color()
+    match kind:
+        "casa": roof = roof.lightened(0.12)
+        "fazenda": roof = Color("#d9a64e")
+        "serraria": roof = Color("#648852")
+        "pedreira":
+            roof = Color("#839a9f")
+            wall = Color("#b9beb8")
+        "torre": roof = _roof_color().darkened(0.18)
+        "quartel": roof = Color("#65788a")
+        "mercado": roof = Color("#bc7859")
+    # Common lightweight isometric footprint and roof.
+    _draw_prism(p, width, height, wall, roof)
     if kind == "fundacao":
-        for n in range(3):
-            draw_rect(Rect2(p + Vector2(-w + float(n) * 13.0 * s, -h - 6*s), Vector2(8, 10)*s), Color("#d7c59d"))
-        draw_rect(Rect2(p + Vector2(-7, -5)*s, Vector2(14, 15)*s), Color("#66472d"))
+        # Main hall and crowned battlements distinguish the capital building.
+        for i in range(3):
+            draw_rect(Rect2(p+Vector2(-width+float(i)*14.0,-height-9.0)*s,Vector2(10,12)*s),Color("#d6c6a2"))
+        draw_rect(Rect2(p+Vector2(-8,-12)*s,Vector2(17,22)*s),Color("#65472f"))
+        draw_rect(Rect2(p+Vector2(-4,-12)*s,Vector2(9,16)*s),Color("#a58155"))
+        _draw_banner(p+Vector2(0,-height-16)*s, 3)
     elif kind == "casa":
-        draw_rect(Rect2(p + Vector2(3, -h + 12*s), Vector2(7, 8)*s), Color("#4e7490"))
-        draw_rect(Rect2(p + Vector2(-13, -h + 13*s), Vector2(7, 8)*s), Color("#d9a85d"))
+        draw_rect(Rect2(p+Vector2(-12,-height+12)*s,Vector2(8,10)*s),Color("#dc9b55"))
+        draw_rect(Rect2(p+Vector2(6,-height+11)*s,Vector2(8,10)*s),Color("#507fa4"))
+        draw_rect(Rect2(p+Vector2(-3,0)*s,Vector2(8,9)*s),Color("#7c533c"))
+        if (tile.x+tile.y)%3==0:
+            _draw_chimney(p+Vector2(7,-height+5)*s,float(tile.x))
     elif kind == "fazenda":
-        for n in range(3):
-            draw_line(p + Vector2(-28+n*6, 4)*s, p + Vector2(-19+n*6, 12)*s, Color("#f1d65e"), 3*s)
+        _draw_farm_detail(p)
+        draw_colored_polygon(PackedVector2Array([p+Vector2(5,-height-20)*s,p+Vector2(21,-height-7)*s,p+Vector2(10,-height+9)*s]),Color("#f9df8d"))
     elif kind == "serraria":
-        for n in range(3):
-            draw_line(p + Vector2(-26, 7+n*4)*s, p + Vector2(-10, 7+n*4)*s, Color("#79502e"), 4*s)
+        _draw_sawmill_detail(p)
     elif kind == "pedreira":
-        _stone(p + Vector2(20, 11)*s)
+        _stone(p+Vector2(19,11)*s)
+        draw_line(p+Vector2(-29,7)*s,p+Vector2(-15,-1)*s,Color("#785943"),3*s)
     elif kind == "torre":
-        draw_rect(Rect2(p + Vector2(-5, -h+5*s), Vector2(11, 11)*s), Color("#4d5e68"))
-    if level >= 2 and kind != "estrada":
-        draw_circle(p + Vector2(0, -h-23*s), 3.1*s, Color("#fbe6a4"))
+        for n in range(3):
+            draw_rect(Rect2(p+Vector2(-21+n*14,-height-8)*s,Vector2(10,13)*s),Color("#e5d8b5"))
+        draw_rect(Rect2(p+Vector2(-6,-height+11)*s,Vector2(12,13)*s),Color("#415c6e"))
+        _draw_banner(p+Vector2(0,-height-17)*s, 2)
+    elif kind == "quartel":
+        draw_rect(Rect2(p+Vector2(-13,-height+7)*s,Vector2(8,15)*s),Color("#50637e"))
+        draw_line(p+Vector2(-29,9)*s,p+Vector2(-14,-6)*s,Color("#b0a084"),3*s)
+        draw_line(p+Vector2(29,9)*s,p+Vector2(14,-6)*s,Color("#b0a084"),3*s)
+        _draw_banner(p+Vector2(14,-height-15)*s, 6)
+    elif kind == "mercado":
+        for i in range(3):
+            draw_rect(Rect2(p+Vector2(-29+float(i)*15,5)*s,Vector2(14,6)*s),Color("#aa683d"))
+        draw_colored_polygon(PackedVector2Array([p+Vector2(-31,-1)*s,p+Vector2(-10,-13)*s,p+Vector2(8,-2)*s]),Color("#f5d78d"))
+        draw_colored_polygon(PackedVector2Array([p+Vector2(4,-3)*s,p+Vector2(23,-16)*s,p+Vector2(32,-1)*s]),_banner_color())
+    if level>=2:
+        draw_circle(p+Vector2(-width+6,-height-9)*s,3.0*s,Color("#ffe29b"))
+    if level>=3:
+        draw_circle(p+Vector2(width-7,-height-9)*s,3.0*s,Color("#ffe29b"))
+
+func _draw_citizens() -> void:
+    if not _has_foundation():
+        return
+    # Cosmetic inhabitants are deterministic and never touch the save or economy.
+    var count := mini(6, 2 + int(city["buildings"].size()) / 3)
+    for i in range(count):
+        var step := animation_phase*0.28 + float(i)*1.77
+        var tx := 4.0 + sin(step)*1.0 + float(i%2)*1.6
+        var ty := 3.5 + cos(step)*1.0 + float(i%3)*1.1
+        var p := _iso(tx,ty)
+        var s := zoom
+        draw_circle(p+Vector2(0,0)*s,4*s,Color("#314b43a0"))
+        draw_line(p+Vector2(0,-3)*s,p+Vector2(0,-11)*s,Color("#4a689c") if i%2==0 else Color("#ad6a48"),3*s)
+        draw_circle(p+Vector2(0,-14)*s,3.4*s,Color("#eac28c"))
 
 func snapshot_for_test() -> Dictionary:
     return city.duplicate(true)
