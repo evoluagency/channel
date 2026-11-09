@@ -1,5 +1,5 @@
 extends Control
-## Valdora CP010 - Cidade v8: governo local, missões, abastecimento e cidade NPC.
+## Valdora CP011 - Cidade v9: expedições, acordos regionais e primeiro estado NPC offline.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
@@ -8,7 +8,8 @@ const PRODUCE_SECONDS := 600 # ciclo 10 minutos
 const MAX_IDLE_CYCLES := 48 # máximo 8 horas offline por coleta
 const RESOURCE_LIMIT := 999999
 const TRADE_COOLDOWN := 900 # 15 minutos, mundo offline; não sincronizado com multiplayer
-const MISSION_IDS := ["fundacao", "abrigo", "primeira_safra", "industria", "servicos", "vizinhanca", "intercambio"]
+const MISSION_IDS := ["fundacao", "abrigo", "primeira_safra", "industria", "servicos", "vizinhanca", "intercambio", "fronteiras", "tratados", "primeiro_estado"]
+const REGION_IDS := ["valeverde", "pedralta", "ribeirinha", "montesol"]
 const PRODUCTIVE_TYPES := ["fazenda", "serraria", "pedreira"]
 const W := 12
 const H := 10
@@ -91,7 +92,7 @@ func _process(delta: float) -> void:
         queue_redraw()
 
 func _new_city() -> Dictionary:
-    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140, "alimentos": 0}, "buildings": [], "revision": 0, "visual_style": "azul", "last_collection_unix": _now(), "collection_count": 0, "claimed_missions": [], "npc_discovered": false, "npc_trades": 0, "npc_relation": 0, "last_trade_unix": 0, "food_shortage_cycles": 0}
+    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140, "alimentos": 0}, "buildings": [], "revision": 0, "visual_style": "azul", "last_collection_unix": _now(), "collection_count": 0, "claimed_missions": [], "npc_discovered": false, "npc_trades": 0, "npc_relation": 0, "last_trade_unix": 0, "food_shortage_cycles": 0, "regional_discoveries": [], "regional_pacts": [], "state_founded": false, "state_name": ""}
 
 func _whole_number(value: Variant) -> bool:
     if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
@@ -139,6 +140,29 @@ func _valid_city(value: Variant) -> bool:
     if data.has("npc_relation") and int(data["npc_relation"]) > 100:
         return false
     if data.has("last_trade_unix") and (not _whole_number(data["last_trade_unix"]) or int(data["last_trade_unix"]) < 0 or int(data["last_trade_unix"]) > 4102444800):
+        return false
+    # CP011: lista de cidades NPC visitadas e tratados; opcional nos saves legados.
+    var discovered = data.get("regional_discoveries", [])
+    var pacts = data.get("regional_pacts", [])
+    if typeof(discovered) != TYPE_ARRAY or typeof(pacts) != TYPE_ARRAY:
+        return false
+    if discovered.size() > REGION_IDS.size() or pacts.size() > REGION_IDS.size():
+        return false
+    var seen_discovered: Dictionary = {}
+    var seen_pacts: Dictionary = {}
+    for entry in discovered:
+        if typeof(entry) != TYPE_STRING or str(entry) not in REGION_IDS or seen_discovered.has(entry):
+            return false
+        seen_discovered[entry] = true
+    for entry in pacts:
+        if typeof(entry) != TYPE_STRING or str(entry) not in REGION_IDS or seen_pacts.has(entry) or not seen_discovered.has(entry):
+            return false
+        seen_pacts[entry] = true
+    if data.has("state_founded") and typeof(data["state_founded"]) != TYPE_BOOL:
+        return false
+    if data.has("state_name") and (typeof(data["state_name"]) != TYPE_STRING or str(data["state_name"]).length() > 60):
+        return false
+    if bool(data.get("state_founded", false)) and (pacts.size() != REGION_IDS.size() or str(data.get("state_name", "")).length() < 3):
         return false
     var all_buildings = data.get("buildings")
     if typeof(all_buildings) != TYPE_ARRAY or all_buildings.size() > W * H:
@@ -202,6 +226,21 @@ func _load_city() -> void:
                 "npc_discovered": city[key] = false
                 _: city[key] = 0
             migrated = true
+    if not city.has("regional_discoveries"):
+        city["regional_discoveries"] = ["valeverde"] if bool(city.get("npc_discovered", false)) else []
+        migrated = true
+    if not city.has("regional_pacts"):
+        city["regional_pacts"] = []
+        migrated = true
+    if not city.has("state_founded"):
+        city["state_founded"] = false
+        migrated = true
+    if not city.has("state_name"):
+        city["state_name"] = ""
+        migrated = true
+    if bool(city.get("npc_discovered", false)) and "valeverde" not in city["regional_discoveries"]:
+        city["regional_discoveries"].append("valeverde")
+        migrated = true
     if migrated:
         _write_save(city)
 
@@ -299,7 +338,7 @@ func _create_ui() -> void:
     var column := VBoxContainer.new()
     column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS · CIDADE v8", 20, Color("#ffdb83")))
+    column.add_child(_label("TERRITÓRIOS · CIDADE v9", 20, Color("#ffdb83")))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
     rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
@@ -1117,7 +1156,10 @@ func _mission_definitions() -> Array[Dictionary]:
         {"id":"industria", "title":"Ofícios e materiais", "hint":"Construa serraria e pedreira", "wood":30, "stone":20, "food":0},
         {"id":"servicos", "title":"Qualidade de vida", "hint":"Construa poço e praça", "wood":12, "stone":15, "food":20},
         {"id":"vizinhanca", "title":"Primeiro contato", "hint":"Descubra a cidade vizinha Valeverde", "wood":15, "stone":0, "food":25},
-        {"id":"intercambio", "title":"Acordo comercial", "hint":"Conclua uma troca com Valeverde", "wood":20, "stone":20, "food":0}
+        {"id":"intercambio", "title":"Acordo comercial", "hint":"Conclua uma troca com Valeverde", "wood":20, "stone":20, "food":0},
+        {"id":"fronteiras", "title":"Cartografia regional", "hint":"Descubra três cidades NPC", "wood":25, "stone":0, "food":20},
+        {"id":"tratados", "title":"Conselho dos prefeitos", "hint":"Firmar dois tratados municipais", "wood":30, "stone":25, "food":0},
+        {"id":"primeiro_estado", "title":"Primeiro estado de Valdora", "hint":"Unir sua cidade a quatro cidades NPC", "wood":30, "stone":40, "food":40}
     ]
 
 func _mission_ready(id: String) -> bool:
@@ -1129,6 +1171,9 @@ func _mission_ready(id: String) -> bool:
         "servicos": return _has_kind("poco") and _has_kind("praca")
         "vizinhanca": return bool(city.get("npc_discovered", false))
         "intercambio": return int(city.get("npc_trades", 0)) > 0
+        "fronteiras": return city.get("regional_discoveries", []).size() >= 3
+        "tratados": return city.get("regional_pacts", []).size() >= 2
+        "primeiro_estado": return bool(city.get("state_founded", false))
     return false
 
 func _claim_mission(id: String) -> bool:
@@ -1166,6 +1211,10 @@ func _discover_neighbor() -> bool:
         return false
     var next: Dictionary = city.duplicate(true)
     next["npc_discovered"] = true
+    if not next.has("regional_discoveries"):
+        next["regional_discoveries"] = []
+    if "valeverde" not in next["regional_discoveries"]:
+        next["regional_discoveries"].append("valeverde")
     next["revision"] = int(next["revision"]) + 1
     if not _write_save(next):
         _set_status("Não foi possível registrar a descoberta.")
@@ -1307,6 +1356,32 @@ func _refresh_civic() -> void:
             var button := _button(str(offer["text"]), Callable(self,"_on_trade").bind(str(offer["kind"])))
             button.disabled = not _has_kind("mercado")
             civic_scroll_content.add_child(button)
+    civic_scroll_content.add_child(HSeparator.new())
+    civic_scroll_content.add_child(_civic_text("CONSELHO REGIONAL · 5 CIDADES", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("As outras cidades são administradas por NPCs. Nenhuma é um jogador real."))
+    for town in _region_towns():
+        var id := str(town["id"])
+        var discovered: bool = id in city.get("regional_discoveries", [])
+        var joined: bool = id in city.get("regional_pacts", [])
+        var row := HBoxContainer.new()
+        civic_scroll_content.add_child(row)
+        var flag := "TRATADO" if joined else ("DESCOBERTA" if discovered else "INEXPLORADA")
+        var label := _civic_text("%s · %s · %s" % [str(town["name"]), str(town["specialty"]), flag])
+        label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+        row.add_child(label)
+        var action := _button("TRATADO" if joined else ("NEGOCIAR" if discovered else "EXPLORAR"), Callable(self, "_regional_action").bind(id))
+        action.disabled = joined
+        action.custom_minimum_size = Vector2(115, 43)
+        row.add_child(action)
+    var region_status := _regional_status()
+    civic_scroll_content.add_child(_civic_text("Cidades vinculadas: %d/5 · Expedições: %d/4 · Tratados: %d/4" % [int(region_status["members"]), int(region_status["discovered"]), int(region_status["pacts"])]))
+    civic_scroll_content.add_child(_civic_text("Fundar estado requer quatro tratados, mercado, defesa e cobertura de serviços acima de 50%."))
+    if bool(city.get("state_founded", false)):
+        civic_scroll_content.add_child(_civic_text("GOVERNO REGIONAL: %s · Governador: você (NPCs aliados)." % str(city.get("state_name", "")), Color("#ffe4a2")))
+    else:
+        var found := _button("FUNDAR ESTADO", Callable(self, "_found_state"))
+        found.disabled = not _state_requirements_met()
+        civic_scroll_content.add_child(found)
 
 func _draw_region_preview(canvas: Control) -> void:
     # Miniatura geográfica procedural, isolada do mapa construível e sem texturas.
@@ -1333,6 +1408,116 @@ func _draw_region_preview(canvas: Control) -> void:
     canvas.draw_circle(Vector2(w-162, 83),10,Color("#5b9c72" if known else "#455b6a"))
     canvas.draw_string(ThemeDB.fallback_font,Vector2(85,118),"SUA CIDADE",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("#ffffff"))
     canvas.draw_string(ThemeDB.fallback_font,Vector2(w-254,118),"VALEVERDE" if known else "REGIÃO A EXPLORAR",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("#ffffff"))
+    # Marcadores compactos dos novos distritos, sem mapa estático pesado.
+    for i in range(1, REGION_IDS.size()):
+        var id := str(REGION_IDS[i])
+        var discovered: bool = id in city.get("regional_discoveries", [])
+        var joined: bool = id in city.get("regional_pacts", [])
+        var x := 260.0 + 87.0 * float(i - 1)
+        var y := 42.0 if i % 2 == 0 else 122.0
+        canvas.draw_circle(Vector2(x, y), 7.0, Color("#efc872" if joined else ("#78b2a2" if discovered else "#708290")))
+        canvas.draw_circle(Vector2(x, y), 3.0, Color("#142f47"))
+
+func _region_towns() -> Array[Dictionary]:
+    return [
+        {"id":"valeverde", "name":"Valeverde", "specialty":"agricultura"},
+        {"id":"pedralta", "name":"Pedralta", "specialty":"pedra e fortificações"},
+        {"id":"ribeirinha", "name":"Ribeirinha", "specialty":"rios e comércio"},
+        {"id":"montesol", "name":"Montesol", "specialty":"ofícios e vigia"}
+    ]
+
+func _regional_status() -> Dictionary:
+    var discoveries: Array = city.get("regional_discoveries", [])
+    var pacts: Array = city.get("regional_pacts", [])
+    return {"discovered": discoveries.size(), "pacts": pacts.size(), "members": 1 + pacts.size(), "state_founded": bool(city.get("state_founded", false))}
+
+func _regional_action(id: String) -> void:
+    if id in city.get("regional_discoveries", []):
+        _sign_regional_pact(id)
+    else:
+        _scout_region(id)
+
+func _scout_region(id: String) -> bool:
+    if id not in REGION_IDS or id in city.get("regional_discoveries", []):
+        return false
+    if id == "valeverde":
+        return _discover_neighbor()
+    if not bool(city.get("npc_discovered", false)) or not _has_kind("mercado") or int(city.get("npc_trades", 0)) < 1:
+        _set_status("Explore Valeverde e negocie uma vez antes de avançar à região.")
+        return false
+    if int(city["resources"]["madeira"]) < 12 or int(city["resources"].get("alimentos", 0)) < 8:
+        _set_status("Expedição requer 12 madeira e 8 alimentos.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["resources"]["madeira"] = int(next["resources"]["madeira"]) - 12
+    next["resources"]["alimentos"] = int(next["resources"].get("alimentos", 0)) - 8
+    next["regional_discoveries"].append(id)
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Falha ao registrar expedição; recursos preservados.")
+        return false
+    city = next
+    _refresh_ui()
+    _refresh_civic()
+    _set_status("Uma nova cidade NPC foi descoberta na região.")
+    return true
+
+func _sign_regional_pact(id: String) -> bool:
+    if id not in REGION_IDS or id not in city.get("regional_discoveries", []) or id in city.get("regional_pacts", []):
+        return false
+    if not _has_kind("mercado") or not _has_kind("casa"):
+        _set_status("Tratados exigem mercado e moradores na cidade.")
+        return false
+    if id == "valeverde" and (int(city.get("npc_relation", 0)) < 5 or int(city.get("npc_trades", 0)) < 1):
+        _set_status("Valeverde exige ao menos uma caravana comercial.")
+        return false
+    if id != "valeverde" and int(_services_report()["service_coverage"]) < 40:
+        _set_status("Apoio regional exige 40% de cobertura de serviços.")
+        return false
+    if int(city["resources"]["madeira"]) < 18 or int(city["resources"]["pedra"]) < 12 or int(city["resources"].get("alimentos", 0)) < 10:
+        _set_status("Tratado requer 18 madeira, 12 pedra e 10 alimentos.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["resources"]["madeira"] = int(next["resources"]["madeira"]) - 18
+    next["resources"]["pedra"] = int(next["resources"]["pedra"]) - 12
+    next["resources"]["alimentos"] = int(next["resources"]["alimentos"]) - 10
+    next["regional_pacts"].append(id)
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Falha ao salvar tratado; recursos preservados.")
+        return false
+    city = next
+    _refresh_ui()
+    _refresh_civic()
+    _set_status("Tratado municipal confirmado. Cidades vinculadas: %d/5." % (1 + next["regional_pacts"].size()))
+    return true
+
+func _state_requirements_met() -> bool:
+    if bool(city.get("state_founded", false)) or city.get("regional_pacts", []).size() != REGION_IDS.size():
+        return false
+    if city.get("regional_discoveries", []).size() != REGION_IDS.size() or not _has_kind("mercado"):
+        return false
+    var health := _services_report()
+    if int(health["service_coverage"]) < 50 or int(health["defense"]) < 10:
+        return false
+    return _has_foundation() and not str(city.get("name", "")).is_empty()
+
+func _found_state() -> bool:
+    if not _state_requirements_met():
+        _set_status("Ainda faltam tratados, serviços ou defesa para fundar o estado.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    next["state_founded"] = true
+    next["state_name"] = "Estado de " + str(city["name"])
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Falha ao registrar a fundação do estado.")
+        return false
+    city = next
+    _refresh_ui()
+    _refresh_civic()
+    _set_status("Estado formado: %s. Sua cidade lidera quatro cidades NPC." % str(next["state_name"]))
+    return true
 
 func _on_trade(kind: String) -> void:
     _trade_neighbor(kind, _now())
