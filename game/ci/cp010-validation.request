@@ -1,0 +1,5 @@
+VALDORA_CP010_ONE_SHOT
+source=city-8.zip
+revision=9
+validate=city_smoke_and_signatures
+android_build=false
