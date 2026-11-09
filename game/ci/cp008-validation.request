@@ -7,3 +7,5 @@ retry=1
 reason=archived-cp007-manifest-fixture-decoupled
 retry=2
 reason=bounded-engine-smoke-with-fast-fail
+retry=3
+reason=godot-parser-neighbor-Vector2i-fixed-and-resigned
