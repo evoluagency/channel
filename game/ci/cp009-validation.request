@@ -3,3 +3,6 @@ city_version=7
 manifest_revision=8
 run_kind=Godot-only
 no_apk=true
+
+validation_retry=1
+reason=pin_cp008_historical_manifest
