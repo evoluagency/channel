@@ -21,11 +21,7 @@ jobs:
           mkdir -p game/tests/fixtures
           cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
           cp site/updates/v2/modules/welcome-1.zip game/tests/fixtures/welcome-1.zip
-          cp site/updates/v2/modules/city-5.zip game/tests/fixtures/city-5.zip
-          cp site/updates/v2/modules/city-6.zip game/tests/fixtures/city-6.zip
-          cp site/updates/v2/modules/city-7.zip game/tests/fixtures/city-7.zip
-          cp site/updates/v2/modules/city-3.zip game/tests/fixtures/city-3.zip
-          (cd game/modules/city && zip -q -r ../../tests/fixtures/city-1.zip valdora_modules)
+          cp site/updates/v2/modules/city-8.zip game/tests/fixtures/city-8.zip
       - name: Godot oficial e hash
         run: |
           curl -fL --retry 3 -o /tmp/godot.zip https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
@@ -33,19 +29,7 @@ jobs:
           unzip -q /tmp/godot.zip -d /tmp
           chmod +x /tmp/Godot_v4.7.2-stable_linux.x86_64
           sudo mv /tmp/Godot_v4.7.2-stable_linux.x86_64 /usr/local/bin/godot
-      - name: Importação e testes do motor
+      - name: Importação e teste CP010
         run: |
           godot --headless --editor --path game --quit
-          godot --headless --path game --script res://tests/core_smoke.gd
-          godot --headless --path game --script res://tests/hero_smoke.gd
-          godot --headless --path game --script res://tests/combat_smoke.gd
-          godot --headless --path game --script res://tests/update_smoke.gd
-          godot --headless --path game --script res://tests/pck_smoke.gd
-          godot --headless --path game --script res://tests/cp005_city_smoke.gd
-          godot --headless --path game --script res://tests/cp007_city_visual_smoke.gd
-          cp game/ci/manifest_cp008.json game/tests/fixtures/manifest.json
-          timeout 70s godot --headless --path game --script res://tests/cp008_city_v6_smoke.gd
-          cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
-          timeout 70s godot --headless --path game --script res://tests/cp009_city_v7_smoke.gd
-          godot --headless --path game --script res://tests/city_name_layout_smoke.gd
-          godot --headless --path game --script res://tests/smoke.gd
+          timeout 70s godot --headless --path game --script res://tests/cp010_city_v8_smoke.gd

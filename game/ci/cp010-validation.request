@@ -1,0 +1,11 @@
+VALDORA_CP010_ONE_SHOT
+source=city-8.zip
+revision=9
+validate=city_smoke_and_signatures
+android_build=false
+retry=1
+reason=typed-dictionary-in-test
+retry=2
+reason=explicit-mission-bool-in-module
+retry=3
+reason=name-modal-intentional-block-test-adjustment

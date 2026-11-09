@@ -3,7 +3,7 @@
   "game": "Valdora",
   "studio": "EVOLU Channel",
   "channel": "alpha",
-  "revision": 8,
+  "revision": 9,
   "min_client_code": 102,
   "modules": [
     {
@@ -27,14 +27,14 @@
     },
     {
       "id": "city",
-      "version": 7,
+      "version": 8,
       "kind": "zip",
-      "url": "https://channel.evolu.ink/updates/v2/modules/city-7.zip",
-      "bytes": 14497,
-      "sha256": "64ddf412fc35d305726a2bac0dc71bc3f146ff322c1f49e8108c52a4b75da421",
+      "url": "https://channel.evolu.ink/updates/v2/modules/city-8.zip",
+      "bytes": 18940,
+      "sha256": "c2098a36ccdfc5eff7588794d850eb1d94dfeaa695de7db91db40d23098c3d63",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "W//X+8k6Jg7HSNYLWVPQkkeaO2xdfY1YnrDryP4l3ocu3fxEQ7k9I2f5GftpMK6MfTUZGzg3BSSuqwFwXRVdDVdFE5cD8zKefp5A/cHTPBTkobtQgy1Kmyqw0QaFbPt2bDP/1jnYxUay6TboZnQ5RnQyXkrfd0jN8HntptGh2OSEUUHxPCarAUxzqMZbF8FLGcRKPblNRagtC4vqG8ZTaETC44WN3MCGxj5WGoUxhLa9tcbFpLXNpxeM84Xrv7Zw98IPnx2wx+yYuSuFraDO0FQJoCGwAvtzY7JOvpUfCOxlZZiaDWbeHW0r/v0VoTbhIVxZD260Z86w0/cETxQEz7lsgsVDPdfpM7Z7xcPstBIZR0WT7A+AiBuoWxSHbvMvZZeY31VNfzabvyD4y83Q2uf1T5snszauP1e163o88aBeBj4jnl23Nv7yS5KJOk2jmI6Or0wQ394slnqyrdC6ftiLXROuUzonbPaEh+4afCNxszBI4A+AKN9VuhbTmmoH",
-      "label": "Minha cidade · Produção e habitantes"
+      "signature_b64": "M3BwWugNCG2fRD1SunxV7wmxXua37AQJEmiE4mkqSoJE+8CIwx+R5ZlyXuloObMgLLDJkxPClhVWwZGJgIDa2ReiC9C2DqEE0p8Uj6FxuGj9Hz8Y6booTWOpIqWwOWc9j+S/hCNOfCi8/Q+HEq6P0QwzNzPLVK2eE+nhARWD2ELqjVMOZYGdL1SYmc0Eh08EoWyeK+fkw/22e0fsN9zIk7IWjX7RqCucqPmN3cMWpjjIutdvVn3/76gh/9J2slBybVQxGIswvD1Ou/NocGbxWJAt/NNx/mPSzK3707E+HlK9tJh3shyrx/+RP2ZaYyopxIJ+kCL4+dK1rR2E+rKaauOlUCnqqQdsi9eIw28dp/ig0wnKlImLuLMhdgqerkwC62Pz47Nshy3aqL8bh79NAic1/hAmIKr/uk/7Qp3FqUWByeC2znNA7K9FPvwy5W/0E63QYqsBkeaXNe3/NA5sf6oZFLKfiRmq2ghsERt3LGlhRzqLRX0Mz5AbnhorK0qf",
+      "label": "Minha cidade · Governo e Valeverde"
     }
   ]
 }
