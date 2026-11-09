@@ -5,3 +5,5 @@ validate=city_smoke_and_signatures
 android_build=false
 retry=1
 reason=typed-dictionary-in-test
+retry=2
+reason=explicit-mission-bool-in-module
