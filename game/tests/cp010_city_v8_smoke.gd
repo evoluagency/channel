@@ -45,7 +45,7 @@ func _run() -> void:
 
     city.city = city._new_city()
     checks["optional_fields_init"] = city._valid_city(city.city) and city.city["claimed_missions"].size() == 0 and not city.city["npc_discovered"]
-    var bad := city.city.duplicate(true)
+    var bad: Dictionary = city.city.duplicate(true)
     bad["claimed_missions"] = ["unknown"]
     checks["reject_bad_mission"] = not city._valid_city(bad)
     bad = city.city.duplicate(true)
