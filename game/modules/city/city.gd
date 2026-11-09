@@ -1,9 +1,13 @@
 extends Control
-## Valdora CP008 - Cidade v6, identidade 2.5D mobile e personalização persistente.
+## Valdora CP009 - Cidade v7: atividade urbana e produção offline com limite.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
 const SCHEMA := 1
+const PRODUCE_SECONDS := 600 # ciclo 10 minutos
+const MAX_IDLE_CYCLES := 48 # máximo 8 horas offline por coleta
+const RESOURCE_LIMIT := 999999
+const PRODUCTIVE_TYPES := ["fazenda", "serraria", "pedreira"]
 const W := 12
 const H := 10
 const HALF_W := 40.0
@@ -30,6 +34,10 @@ var city: Dictionary = {}
 var selected_type := "fundacao"
 var build_buttons: Dictionary = {}
 var objective_label: Label
+var production_label: Label
+var production_button: Button
+var production_ui_accumulator := 0.0
+var resident_clock := 0.0
 var animation_phase := 0.0
 var animation_accumulator := 0.0
 var show_grid := false
@@ -66,6 +74,11 @@ func _process(delta: float) -> void:
     # Animacao visual de baixa frequencia; zero alteracoes em economia/saves.
     if not visible:
         return
+    resident_clock += minf(delta, 0.2)
+    production_ui_accumulator += delta
+    if production_ui_accumulator >= 4.0:
+        production_ui_accumulator = 0.0
+        _refresh_production_label()
     animation_accumulator += delta
     if animation_accumulator >= 0.24:
         animation_phase = fmod(animation_phase + animation_accumulator * 1.9, TAU)
@@ -73,7 +86,7 @@ func _process(delta: float) -> void:
         queue_redraw()
 
 func _new_city() -> Dictionary:
-    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140}, "buildings": [], "revision": 0, "visual_style": "azul"}
+    return {"schema_version": SCHEMA, "name": "", "resources": {"madeira": 180, "pedra": 140, "alimentos": 0}, "buildings": [], "revision": 0, "visual_style": "azul", "last_collection_unix": _now(), "collection_count": 0}
 
 func _whole_number(value: Variant) -> bool:
     if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
@@ -95,8 +108,15 @@ func _valid_city(value: Variant) -> bool:
     if typeof(resources) != TYPE_DICTIONARY:
         return false
     for key in ["madeira", "pedra"]:
-        if not _whole_number(resources.get(key)) or int(resources[key]) < 0 or int(resources[key]) > 999999:
+        if not _whole_number(resources.get(key)) or int(resources[key]) < 0 or int(resources[key]) > RESOURCE_LIMIT:
             return false
+    # Campos opcionais: retrocompatibilidade com todos os saves CP005-CP008.
+    if resources.has("alimentos") and (not _whole_number(resources["alimentos"]) or int(resources["alimentos"]) < 0 or int(resources["alimentos"]) > RESOURCE_LIMIT):
+        return false
+    if data.has("last_collection_unix") and (not _whole_number(data["last_collection_unix"]) or int(data["last_collection_unix"]) < 0 or int(data["last_collection_unix"]) > 4102444800):
+        return false
+    if data.has("collection_count") and (not _whole_number(data["collection_count"]) or int(data["collection_count"]) < 0 or int(data["collection_count"]) > 1000000):
+        return false
     var all_buildings = data.get("buildings")
     if typeof(all_buildings) != TYPE_ARRAY or all_buildings.size() > W * H:
         return false
@@ -141,6 +161,19 @@ func _load_city() -> void:
         city = _read_save(SAVE_PATH + ".bak")
     if city.is_empty():
         city = _new_city()
+    # Uma única migração não destrutiva. Nenhuma produção retroativa sem relógio base.
+    var migrated := false
+    if not city["resources"].has("alimentos"):
+        city["resources"]["alimentos"] = 0
+        migrated = true
+    if not city.has("last_collection_unix"):
+        city["last_collection_unix"] = _now()
+        migrated = true
+    if not city.has("collection_count"):
+        city["collection_count"] = 0
+        migrated = true
+    if migrated:
+        _write_save(city)
 
 func _write_save(data: Dictionary) -> bool:
     if not _valid_city(data):
@@ -236,12 +269,17 @@ func _create_ui() -> void:
     var column := VBoxContainer.new()
     column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS · CIDADE v6", 20, Color("#ffdb83")))
+    column.add_child(_label("TERRITÓRIOS · CIDADE v7", 20, Color("#ffdb83")))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
     rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
     objective_label = _label("", 16, Color("#f8d68d"))
     column.add_child(objective_label)
+    production_label = _label("", 14, Color("#badce9"))
+    column.add_child(production_label)
+    production_button = _button("COLETAR PRODUÇÃO", Callable(self, "_collect_production"))
+    production_button.custom_minimum_size = Vector2(0, 42)
+    column.add_child(production_button)
     var divider := HSeparator.new()
     column.add_child(divider)
     selected_label = _label("Selecione a ação e toque no terreno.", 16)
@@ -370,7 +408,9 @@ func _objective() -> String:
     for kind in ["casa", "fazenda", "serraria", "pedreira", "torre"]:
         if not _has_kind(kind):
             return "PRÓXIMO OBJETIVO · %s" % LABELS[kind]
-    return "NÚCLEO URBANO · Pronto para expandir"
+    if int(city.get("collection_count", 0)) == 0:
+        return "PRÓXIMO OBJETIVO · Coletar produção"
+    return "NÚCLEO URBANO · Economia em desenvolvimento"
 
 func _has_kind(kind: String) -> bool:
     for item in city["buildings"]:
@@ -385,7 +425,8 @@ func _refresh_mode_buttons() -> void:
 
 func _refresh_ui() -> void:
     title_label.text = "VALDORA · " + (str(city["name"]) if not str(city["name"]).is_empty() else "CIDADE SEM NOME")
-    resource_label.text = "MADEIRA %d   PEDRA %d   POP. ~%d" % [int(city["resources"]["madeira"]), int(city["resources"]["pedra"]), _city_population()]
+    resource_label.text = "MADEIRA %d   PEDRA %d   ALIM. %d   POP. ~%d" % [int(city["resources"]["madeira"]), int(city["resources"]["pedra"]), int(city["resources"].get("alimentos", 0)), _city_population()]
+    _refresh_production_label()
     if objective_label != null:
         objective_label.text = _objective()
     if BUILD_TYPES.has(selected_type):
@@ -619,6 +660,9 @@ func _try_build(tile: Vector2i) -> void:
     for key in ["madeira", "pedra"]:
         next["resources"][key] = int(next["resources"][key]) - int(cost[key])
     next["buildings"].append({"type": selected_type, "x": tile.x, "y": tile.y, "level": 1})
+    if selected_type in PRODUCTIVE_TYPES:
+        # Mudança de taxa de produção não reivindica períodos anteriores.
+        next["last_collection_unix"] = _now()
     next["revision"] = int(next["revision"]) + 1
     if _write_save(next):
         city = next
@@ -690,6 +734,8 @@ func _upgrade_building(tile: Vector2i) -> void:
         if int(building["x"]) == tile.x and int(building["y"]) == tile.y:
             building["level"] = level + 1
             break
+    if str(item.get("type", "")) in PRODUCTIVE_TYPES:
+        next["last_collection_unix"] = _now()
     next["revision"] = int(next["revision"]) + 1
     if _write_save(next):
         city = next
@@ -828,10 +874,11 @@ func _draw() -> void:
             else:
                 _draw_building(p, str(building["type"]), int(building.get("level", 1)), Vector2i(x, y))
     _draw_citizens()
+    _draw_city_life_details()
     if dusk_mode:
         draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#091f4f38"))
     # A small in-scene content revision identifier; the APK version stays unchanged.
-    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v6  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
+    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v7  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
 
 func _field(p: Vector2) -> void:
     var s := zoom
@@ -999,20 +1046,146 @@ func _draw_building(p: Vector2, kind: String, level: int = 1, tile: Vector2i = V
     if level>=3:
         draw_circle(p+Vector2(width-7,-height-9)*s,3.0*s,Color("#ffe29b"))
 
+func _now() -> int:
+    return int(Time.get_unix_time_from_system())
+
+func _production_rates() -> Dictionary:
+    var rates := {"madeira": 0, "pedra": 0, "alimentos": 0}
+    if not _has_foundation():
+        return rates
+    for structure in city["buildings"]:
+        var amount := int(structure.get("level", 1))
+        match str(structure.get("type", "")):
+            "serraria": rates["madeira"] += 8 * amount
+            "pedreira": rates["pedra"] += 5 * amount
+            "fazenda": rates["alimentos"] += 10 * amount
+    return rates
+
+func _production_estimate(now: int) -> Dictionary:
+    var rates := _production_rates()
+    var since := int(city.get("last_collection_unix", now))
+    var elapsed := maxi(0, now - since)
+    var cycles := mini(MAX_IDLE_CYCLES, elapsed / PRODUCE_SECONDS)
+    var gains := {}
+    for key in ["madeira", "pedra", "alimentos"]:
+        gains[key] = int(rates[key]) * cycles
+    return {"cycles": cycles, "gains": gains, "rates": rates, "wait_seconds": maxi(0, PRODUCE_SECONDS - (elapsed % PRODUCE_SECONDS)), "capped": elapsed >= MAX_IDLE_CYCLES * PRODUCE_SECONDS}
+
+func _refresh_production_label() -> void:
+    if production_label == null:
+        return
+    var estimate := _production_estimate(_now())
+    var rate: Dictionary = estimate["rates"]
+    var gains: Dictionary = estimate["gains"]
+    if int(rate["madeira"]) + int(rate["pedra"]) + int(rate["alimentos"]) == 0:
+        production_label.text = "PRODUÇÃO · Construa fazenda, serraria ou pedreira."
+        if production_button != null:
+            production_button.disabled = true
+        return
+    production_label.text = "POR 10 MIN: +%d madeira / +%d pedra / +%d alimento\nDISPONÍVEL: +%d / +%d / +%d" % [int(rate["madeira"]), int(rate["pedra"]), int(rate["alimentos"]), int(gains["madeira"]), int(gains["pedra"]), int(gains["alimentos"])]
+    if production_button != null:
+        production_button.disabled = int(estimate["cycles"]) < 1
+
+func _collect_production() -> void:
+    _collect_production_at(_now())
+
+func _collect_production_at(now: int) -> bool:
+    # Sem recompensa dupla: timestamp + saldo no mesmo save atômico.
+    var estimate := _production_estimate(now)
+    var cycles := int(estimate["cycles"])
+    if cycles < 1:
+        _set_status("Produção ainda não disponível. Ciclos de 10 minutos.")
+        return false
+    var rates: Dictionary = estimate["rates"]
+    if int(rates["madeira"]) + int(rates["pedra"]) + int(rates["alimentos"]) == 0:
+        _set_status("Construa fazenda, serraria ou pedreira para produzir.")
+        return false
+    var next: Dictionary = city.duplicate(true)
+    var received := []
+    for key in ["madeira", "pedra", "alimentos"]:
+        var old_amount := int(next["resources"].get(key, 0))
+        var final_amount := mini(RESOURCE_LIMIT, old_amount + int(estimate["gains"][key]))
+        next["resources"][key] = final_amount
+        received.append(final_amount - old_amount)
+    # Se o jogador ficou mais de 8 h offline, descarta o excesso com limite de recuperação.
+    next["last_collection_unix"] = now if bool(estimate["capped"]) else int(city.get("last_collection_unix", now)) + cycles * PRODUCE_SECONDS
+    next["collection_count"] = mini(1000000, int(city.get("collection_count", 0)) + 1)
+    next["revision"] = int(next["revision"]) + 1
+    if not _write_save(next):
+        _set_status("Erro ao salvar coleta. Recursos anteriores preservados.")
+        return false
+    city = next
+    _refresh_ui()
+    _set_status("Coletado: +%d madeira, +%d pedra, +%d alimento." % received)
+    return true
+
+func _draw_city_life_details() -> void:
+    # Ambientação de baixo custo: luzes nas casas e atividades produtivas.
+    var s := zoom
+    for structure in city["buildings"]:
+        var kind := str(structure["type"])
+        if kind not in ["mercado", "fazenda", "serraria", "pedreira", "praca", "poco", "quartel"]:
+            continue
+        var p := _iso(float(structure["x"]), float(structure["y"]))
+        match kind:
+            "mercado":
+                for k in range(2):
+                    draw_circle(p + Vector2(-13 + k * 21, 7) * s, 3.0 * s, Color("#d18e45"))
+            "fazenda":
+                var bob := sin(resident_clock * 1.4 + float(structure["x"])) * 2.0
+                draw_line(p + Vector2(18, -3) * s, p + Vector2(18 + bob, -13) * s, Color("#8c713a"), 2 * s)
+            "serraria":
+                draw_line(p + Vector2(21, 10) * s, p + Vector2(33, 10) * s, Color("#865032"), 5.0 * s)
+            "pedreira":
+                draw_circle(p + Vector2(17, 6) * s, 4 * s, Color("#a4b4ae"))
+            "praca":
+                draw_circle(p + Vector2(0, -13) * s, (5.0 + sin(resident_clock * 2.0)) * s, Color("#9ad5ed"))
+            "poco":
+                draw_line(p + Vector2(0, -10) * s, p + Vector2(0, -20) * s, Color("#8cbccc"), 2 * s)
+            "quartel":
+                draw_line(p + Vector2(24, -11) * s, p + Vector2(24, -23) * s, Color("#675b4b"), 2 * s)
+
 func _draw_citizens() -> void:
     if not _has_foundation():
         return
-    # Cosmetic inhabitants are deterministic and never touch the save or economy.
-    var count := mini(6, 2 + int(city["buildings"].size()) / 3)
+    # Rotas cosméticas determinísticas; não são agentes de servidor nem alteram o saldo.
+    var homes := []
+    var jobs := []
+    var center := Vector2(5.0, 5.0)
+    for item in city["buildings"]:
+        var location := Vector2(float(item["x"]), float(item["y"]))
+        if str(item["type"]) == "fundacao":
+            center = location
+        if str(item["type"]) == "casa":
+            homes.append(location)
+        if str(item["type"]) in ["fazenda", "serraria", "pedreira", "mercado", "quartel", "praca"]:
+            jobs.append({"location": location, "kind": str(item["type"])})
+    if homes.is_empty():
+        homes.append(center)
+    if jobs.is_empty():
+        jobs.append({"location": center + Vector2(0.7, 0.0), "kind": "praca"})
+    var count := mini(12, maxi(2, _city_population() / 5))
     for i in range(count):
-        var step := animation_phase*0.28 + float(i)*1.77
-        var tx := 4.0 + sin(step)*1.0 + float(i%2)*1.6
-        var ty := 3.5 + cos(step)*1.0 + float(i%3)*1.1
-        var p := _iso(tx,ty)
+        var origin: Vector2 = homes[i % homes.size()]
+        var job: Dictionary = jobs[i % jobs.size()]
+        var destination: Vector2 = job["location"]
+        var progress := fmod(resident_clock * (0.10 + float(i % 3) * 0.019) + float(i) * 0.23, 2.0)
+        var t := progress if progress <= 1.0 else 2.0 - progress
+        var tile_position := origin.lerp(destination, t) + Vector2(0.13 * float(i % 2), 0.15 * float(i % 3))
+        var p := _iso(tile_position.x, tile_position.y)
         var s := zoom
-        draw_circle(p+Vector2(0,0)*s,4*s,Color("#314b43a0"))
-        draw_line(p+Vector2(0,-3)*s,p+Vector2(0,-11)*s,Color("#4a689c") if i%2==0 else Color("#ad6a48"),3*s)
-        draw_circle(p+Vector2(0,-14)*s,3.4*s,Color("#eac28c"))
+        # Pequena sombra, corpo, cabeça e cor relacionada ao trabalho.
+        var coat := Color("#577aa3")
+        match str(job["kind"]):
+            "fazenda": coat = Color("#c59b45")
+            "serraria": coat = Color("#715332")
+            "pedreira": coat = Color("#6a7980")
+            "mercado": coat = Color("#b96a60")
+            "quartel": coat = Color("#4767ac")
+        draw_circle(p + Vector2(0, 2) * s, 3.3 * s, Color("#2d594b88"))
+        draw_line(p + Vector2(0, -2) * s, p + Vector2(0, -10) * s, coat, 3.3 * s)
+        draw_circle(p + Vector2(0, -13) * s, 3.2 * s, Color("#edc18c"))
+        draw_line(p + Vector2(-3, -15) * s, p + Vector2(3, -15) * s, coat.darkened(0.15), 1.5 * s)
 
 func snapshot_for_test() -> Dictionary:
     return city.duplicate(true)
