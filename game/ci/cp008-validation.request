@@ -1,0 +1,5 @@
+VALDORA_CP008_ONE_SHOT_VALIDATION
+module=city-6.zip
+manifest_revision=7
+android_build=false
+expect_no_additional_cost=true
