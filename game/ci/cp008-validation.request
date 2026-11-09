@@ -3,3 +3,5 @@ module=city-6.zip
 manifest_revision=7
 android_build=false
 expect_no_additional_cost=true
+retry=1
+reason=archived-cp007-manifest-fixture-decoupled
