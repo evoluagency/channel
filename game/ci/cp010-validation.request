@@ -7,3 +7,5 @@ retry=1
 reason=typed-dictionary-in-test
 retry=2
 reason=explicit-mission-bool-in-module
+retry=3
+reason=name-modal-intentional-block-test-adjustment
