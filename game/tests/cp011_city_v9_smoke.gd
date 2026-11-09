@@ -53,7 +53,7 @@ func _run() -> void:
     checks["first_trade"] = game._trade_neighbor("food", 1700002000)
     checks["trade_persisted"] = game.city["npc_trades"] == 1 and game.city["npc_relation"] == 5
     checks["valeverde_pact"] = game._sign_regional_pact("valeverde")
-    var before := game.snapshot_for_test()
+    var before: Dictionary = game.snapshot_for_test()
     checks["no_duplicate_pact"] = not game._sign_regional_pact("valeverde") and game.snapshot_for_test() == before
     checks["unknown_scout_rejected"] = not game._scout_region("outroservidor")
     checks["unknown_pact_rejected"] = not game._sign_regional_pact("outroservidor")
