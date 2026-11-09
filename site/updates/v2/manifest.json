@@ -30,10 +30,10 @@
       "version": 6,
       "kind": "zip",
       "url": "https://channel.evolu.ink/updates/v2/modules/city-6.zip",
-      "bytes": 12154,
-      "sha256": "69ab686bc47fe5ccc51dff5d52781d24cd4607e7ae2dd24fd8b992a7a2bca481",
+      "bytes": 12157,
+      "sha256": "a2d955bf5dd636e018e8478f8102f77f1cc4ab27169dec1e78d47c2516b5af9f",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "nhJCA4D09IxPDLO3+676m7JC1XP56MTdoX/Czb9YV81CoeYJ88oznuZ7Y+JEd5zHvYBjU7pgdrBxdgD9bF7Bzk69bphjs5LOSA7OEae0y1+wZTfuN47flEi5lTDE5XZK/wbDgvwhxKoZV2rpW4yM8qDLnXgzD4/7oCFvBbia4GhTDsVs+z42SqMaJmMNkp2GFLVrbB4m7ahCizrs3hdHh/wahbWgd8we4tyZnFzRmY1UXVq12bo+GyVfZQN66YAMgap7iKATW3HrXyzIk3lXe4cokpinFvYJVDBQhghDR3fEdrwwW9hJY9qxHBXNZhE5GZVTVNF8un8hKxUOSSgkkv4RZ3O9Yz3En4DVZBPERfXSYDXQanpWSlyxIKf17juXNrLjudka7RNw8wC6LQzEU6Wg8+5ueaMWVhb+gRoRBfyBrzdW43S/bd64VbDofPYwG6SXFK3aQvi+SbnZicu9Fb66DCbCYGeebMrOIJYoIFhbNaml27rMGnx4KRslJFPF",
+      "signature_b64": "egM2oBPYsvjHLFQ8aQqw61hWUMyJwHqZIsl0a6YdxA/BJVBuE8uDlJXcNoaRQDImADGwrvwUqBkiNIWiGVOdaV04wKZbA1FGT4Fz9lnbGfPK16IBQhrz6/vQ9iS8hFm2lJfg3XWfVIz6Xkc9k0SBP6bAn1+UnhQi403LadZN0Jz+SzA/99X9TpBwB1rknhBaWGmwLIJJLjCqz3jr1gRif14s3eBlgvCI9xkMVBNDlTn7qWbx2tb0UlNQ6QdTzaCq2DFyY9TPnIRW4eWqFBqoiTv0na2msmkY2B6wuh6FbQW5V2bF9KTk7jlrL1UNImufuMid2lYptKB3wZ3BG3Rqs4R8j/d31SwRHmPyKa32pkWMXeNPMIl+hIbXqgZ41FHRyCF6jGD3cKMX3czvOn/Rt3lJA9qsXgVdZ3b8VXiTLa39ruaWarrk9Qm2QdMcjFk1kGCVFJaJ/dO5QXSUmKX1P0vnvv5vRqenzwDd/xNTCIknwIl4/FruShF/ekpVtx1i",
       "label": "Minha cidade · Visual v6"
     }
   ]
