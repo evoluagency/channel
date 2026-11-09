@@ -1,0 +1,6 @@
+VALDORA_CP011_VALIDATION
+mode=one-shot
+revision=10
+city=9
+no_android_build=true
+no_prod_deploy=true
