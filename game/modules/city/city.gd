@@ -1276,7 +1276,7 @@ func _refresh_civic() -> void:
     civic_scroll_content.add_child(_civic_text("MISSÕES DA CIDADE", Color("#ffe4a2")))
     for quest in _mission_definitions():
         var mission_id := str(quest["id"])
-        var claimed := mission_id in city.get("claimed_missions", [])
+        var claimed: bool = mission_id in city.get("claimed_missions", [])
         var ready := _mission_ready(mission_id)
         var line := HBoxContainer.new()
         civic_scroll_content.add_child(line)

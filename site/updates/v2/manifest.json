@@ -30,10 +30,10 @@
       "version": 8,
       "kind": "zip",
       "url": "https://channel.evolu.ink/updates/v2/modules/city-8.zip",
-      "bytes": 18938,
-      "sha256": "d4b3488f9fc0d8e31c8c03f9c2e4cedea2ee8602a6dd412179f42cf77edd37a4",
+      "bytes": 18940,
+      "sha256": "c2098a36ccdfc5eff7588794d850eb1d94dfeaa695de7db91db40d23098c3d63",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "soJ+Ea807l6QkfIxI+aJkK3h/3HCVTxCXt67GlkkEWXcERd4Rw9IjlnizYd73cNjKhBJiNlssKol+tGqaxuwJMGQT8nT3uWiPBRXyd9icGDJ0xqofXGEramO8be1+ipmca42SdhkHFqpdloxIvLQivuMV++DrFsYf6q2xm63KPMkHUfEqJsAFdXA/8P644Z3EnonvKdwcKpIu1iPyboG5okMzJWOkVhu9Z1HviE7yV+1+TLJvvlox5PmsUKoxPO47s3RjQl6sWesBsY/V+FUNe2hfBG/nbsjrmQ+jLPVIWN/lv+ZcdJsBC/54odHAwl+jUveyr/+EybMpObLpLpxqxVpYIC6TAwhLlUAx81EAMCIDZ1O0ng+ggWOdY8rYO0sV9UzxEPcfX8f0dMfeECHuUD163wPBRSvPZPNBMSOUy47woV/ykg7plZbl+njphmwvB4+KcRA9hNUNnWvg7wNsbY4kHVJw/MIKslRZJ5ZfRSjMMOVcywUYJdAvArDNM8s",
+      "signature_b64": "M3BwWugNCG2fRD1SunxV7wmxXua37AQJEmiE4mkqSoJE+8CIwx+R5ZlyXuloObMgLLDJkxPClhVWwZGJgIDa2ReiC9C2DqEE0p8Uj6FxuGj9Hz8Y6booTWOpIqWwOWc9j+S/hCNOfCi8/Q+HEq6P0QwzNzPLVK2eE+nhARWD2ELqjVMOZYGdL1SYmc0Eh08EoWyeK+fkw/22e0fsN9zIk7IWjX7RqCucqPmN3cMWpjjIutdvVn3/76gh/9J2slBybVQxGIswvD1Ou/NocGbxWJAt/NNx/mPSzK3707E+HlK9tJh3shyrx/+RP2ZaYyopxIJ+kCL4+dK1rR2E+rKaauOlUCnqqQdsi9eIw28dp/ig0wnKlImLuLMhdgqerkwC62Pz47Nshy3aqL8bh79NAic1/hAmIKr/uk/7Qp3FqUWByeC2znNA7K9FPvwy5W/0E63QYqsBkeaXNe3/NA5sf6oZFLKfiRmq2ghsERt3LGlhRzqLRX0Mz5AbnhorK0qf",
       "label": "Minha cidade · Governo e Valeverde"
     }
   ]
