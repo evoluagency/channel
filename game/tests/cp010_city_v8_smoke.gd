@@ -38,6 +38,8 @@ func _run() -> void:
     checks["schema_unchanged"] = city.SCHEMA == 1
     checks["civic_ui"] = city.civic_overlay != null and city.civic_scroll_content != null
     checks["civic_hidden"] = not city.civic_overlay.visible
+    checks["name_modal_blocks_civic"] = city.editor_overlay.visible and not city.civic_overlay.visible
+    city._cancel_name()
     city._open_civic()
     checks["civic_open"] = city.civic_overlay.visible
     city._close_civic()
