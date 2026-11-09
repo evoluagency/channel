@@ -1,9 +1,5 @@
 name: Valdora CP004 — validação OTA (manual, sem APK)
 on:
-  push:
-    branches: [feat/valdora-cp010-civic-economy-npc]
-    paths:
-      - game/ci/cp010-validation.request
   workflow_dispatch:
 permissions:
   contents: read
