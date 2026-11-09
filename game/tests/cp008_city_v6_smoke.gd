@@ -23,8 +23,16 @@ func _run() -> void:
         _report(checks)
         return
     var city = packed.instantiate()
+    checks["script_attached"] = city != null and city.has_method("_new_city") and city.has_method("_cycle_style")
+    if not checks["script_attached"]:
+        if city != null:
+            city.free()
+        _report(checks)
+        return
+    print("[VALDORA_CP008_STAGE] script attached; adding city to scene tree")
     root.add_child(city)
     await process_frame
+    print("[VALDORA_CP008_STAGE] city ready; validating save and gameplay")
     city.city = city._new_city()
     city._refresh_ui()
     checks["save_path"] = city.SAVE_PATH == "user://valdora_city_cp005_v1.json"
