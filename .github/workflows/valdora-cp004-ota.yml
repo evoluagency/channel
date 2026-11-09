@@ -46,6 +46,6 @@ jobs:
           godot --headless --path game --script res://tests/pck_smoke.gd
           godot --headless --path game --script res://tests/cp005_city_smoke.gd
           godot --headless --path game --script res://tests/cp007_city_visual_smoke.gd
-          godot --headless --path game --script res://tests/cp008_city_v6_smoke.gd
+          timeout 70s godot --headless --path game --script res://tests/cp008_city_v6_smoke.gd
           godot --headless --path game --script res://tests/city_name_layout_smoke.gd
           godot --headless --path game --script res://tests/smoke.gd
