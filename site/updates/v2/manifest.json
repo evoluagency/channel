@@ -3,7 +3,7 @@
   "game": "Valdora",
   "studio": "EVOLU Channel",
   "channel": "alpha",
-  "revision": 9,
+  "revision": 10,
   "min_client_code": 102,
   "modules": [
     {
@@ -27,14 +27,14 @@
     },
     {
       "id": "city",
-      "version": 8,
+      "version": 9,
       "kind": "zip",
-      "url": "https://channel.evolu.ink/updates/v2/modules/city-8.zip",
-      "bytes": 18940,
-      "sha256": "c2098a36ccdfc5eff7588794d850eb1d94dfeaa695de7db91db40d23098c3d63",
+      "url": "https://channel.evolu.ink/updates/v2/modules/city-9.zip",
+      "bytes": 21021,
+      "sha256": "3065d0c8419ff6a6d1169e9f89ca041cafa90f09534cb0274fd1bcc2848296d8",
       "entry": "res://valdora_modules/city/entry.tscn",
-      "signature_b64": "M3BwWugNCG2fRD1SunxV7wmxXua37AQJEmiE4mkqSoJE+8CIwx+R5ZlyXuloObMgLLDJkxPClhVWwZGJgIDa2ReiC9C2DqEE0p8Uj6FxuGj9Hz8Y6booTWOpIqWwOWc9j+S/hCNOfCi8/Q+HEq6P0QwzNzPLVK2eE+nhARWD2ELqjVMOZYGdL1SYmc0Eh08EoWyeK+fkw/22e0fsN9zIk7IWjX7RqCucqPmN3cMWpjjIutdvVn3/76gh/9J2slBybVQxGIswvD1Ou/NocGbxWJAt/NNx/mPSzK3707E+HlK9tJh3shyrx/+RP2ZaYyopxIJ+kCL4+dK1rR2E+rKaauOlUCnqqQdsi9eIw28dp/ig0wnKlImLuLMhdgqerkwC62Pz47Nshy3aqL8bh79NAic1/hAmIKr/uk/7Qp3FqUWByeC2znNA7K9FPvwy5W/0E63QYqsBkeaXNe3/NA5sf6oZFLKfiRmq2ghsERt3LGlhRzqLRX0Mz5AbnhorK0qf",
-      "label": "Minha cidade · Governo e Valeverde"
+      "signature_b64": "wajFU2181jhA+ROKRIxlRLQDyZc1xhVsm+6fN2pbS1py1D4Hyx3JcNpsfRfaOrgh2J5XmQyPHBBhdYJrqPSIoAI+XFx+Y69PNBYbaN6xM171yQICd322HLG1U8hv0k2auChNxwDFb7AeeKabniz0AQqeai2QNzWuFhnf76NAF69Tr/yeg4v9N+nwFHotxRJJi+Q+gY1fH0yiYk2DnuuM71/u347N4paYeAHNZLJmBMjnl+y1Gk+q/PKr12glAcnH4+Nz9lZL6b7HjDgARjBXL/H5diBU1HAg976iW1eml1di849vjMHl+dOxayKZmmAxEpOfF2sBAWrkzj7EsCu/RenPuIfYtQzQp1wP9jJZMzF3C6498GLY5CpJf8ymmPBsdwwv7rUE4ZT1Dvq4Nbu6I5FWJcIv8F8lHuhctzfV9n3fRW8xcd4iK3Da/N9rVCqtAIpe/NMzBQ1HzMYvR8ulsWfhDuak1dvjDmGf2VsOoR1dvGqCDAhZ5JndMGiCQ7yu",
+      "label": "Minha cidade · Estados e tratados"
     }
   ]
 }
