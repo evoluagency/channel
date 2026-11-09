@@ -877,7 +877,7 @@ func _draw_road(p: Vector2, tile: Vector2i) -> void:
     var road := Color("#bd9c70")
     draw_colored_polygon(PackedVector2Array([p+Vector2(0,-15)*s,p+Vector2(28,0)*s,p+Vector2(0,15)*s,p+Vector2(-28,0)*s]), road)
     for delta in [Vector2i(-1,0), Vector2i(1,0), Vector2i(0,-1), Vector2i(0,1)]:
-        var neighbor := tile + delta
+        var neighbor: Vector2i = tile + delta
         if _in_bounds(neighbor) and str(_at(neighbor).get("type", "")) == "estrada":
             var toward := (_iso(float(neighbor.x), float(neighbor.y)) - p) * 0.43
             draw_line(p, p + toward, road.lightened(0.08), 12*s)
