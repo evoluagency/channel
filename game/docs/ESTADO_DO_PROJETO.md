@@ -56,8 +56,10 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 ## 6. Testes
 
 - `game/tests`: 15 smokes Godot e 3 testes Python.
-- Não existe comando único para rodar tudo. A suíte completa só roda hoje no computador do dono ou em partes no workflow manual.
-- A máquina de preparação deste registro não tem Godot instalado, então nada foi executado aqui.
+- Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 7 smokes extras. Usa as mesmas chamadas dos workflows, sem custo de Actions.
+- Em 11/11/2026 a parte Python passou inteira (5 verificações).
+- A parte Godot **não foi executada**: não há Godot instalado na máquina de preparação e o acesso de rede para instalar está desligado. A lógica do script foi testada com um Godot de mentira (passa, falha e estoura timeout). Os smokes reais ainda não foram rodados com ele.
+- Godot esperado: 4.7.2 (Linux x86_64, zip com SHA-256 `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`).
 
 ## 7. Documentos que contradiziam o estado real
 
@@ -77,3 +79,4 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 2. Entregar os pacotes completos do CP012 e do CP013.
 3. Responder as decisões 1 a 4 do plano de continuidade.
 4. Homologar o APK em aparelho físico.
+5. Liberar a instalação do Godot (rede da conversa) ou rodar `tools/run_valdora_tests.sh` no computador, para a primeira execução real dos smokes.
