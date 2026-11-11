@@ -81,3 +81,23 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 3. Responder as decisões 1 a 4 do plano de continuidade.
 4. Homologar o APK em aparelho físico.
 5. Liberar a instalação do Godot (rede da conversa) ou rodar `tools/run_valdora_tests.sh` no computador, para a primeira execução real dos smokes.
+
+## 9. Decisões vigentes
+
+O dono delegou as decisões em 11/11/2026. Ele pode reverter qualquer uma.
+
+- GDD: reconstruído a partir do código e dos CP, marcado como reconstruído. A cópia do dono prevalece se aparecer.
+- `release/valdora-android` é o tronco do jogo. A `main` fica só com site e OTA até a G2.
+- Testes locais e gratuitos. Workflow manual do GitHub só em marco fechado.
+- Meta de 30 FPS estáveis em Samsung e Xiaomi, medida na Fase 4.
+- Primeiro laço da Fase 3: combate que dá moedas e experiência aos heróis.
+- Online fora até a G3.
+- A versão do app nunca cai abaixo do code 103. "Valdora 0.1" é só o nome do ciclo de trabalho iniciado em 11/11/2026.
+
+## 10. Como retomar
+
+1. Esta branch (`docs/fase0-base-de-verdade`, base: release `8a29073`) tem o registro, o script de testes e o `site/vercel.json` mínimo. A branch `publicar/ota-rev10` (base: `main` `6f397f5`) tem o `vercel.json` completo e a publicação da revisão 10. Nenhuma das duas foi integrada à release ou à `main`.
+2. Rodar `tools/run_valdora_tests.sh --all` com o Godot 4.7.2. É a primeira execução real dos smokes.
+3. A publicação da revisão 10 só acontece com "OK, subir" do dono: `git push origin publicar/ota-rev10:main`, que avança a `main` em fast-forward e gera 1 deploy. Antes, conferir que a `main` continua em `6f397f5`.
+4. Fase 2 quando chegarem os pacotes completos do CP012 e do CP013.
+5. Regras de custo: o único gasto pago é a assinatura Claude; franquias só com aviso e estimativa; a Vercel Hobby aceita 100 deploys por dia por equipe; o cliente rejeita módulo de versão menor, então correção de OTA é sempre versão nova; segredos nunca entram no repositório, em ZIP, na Vercel ou em documento.
