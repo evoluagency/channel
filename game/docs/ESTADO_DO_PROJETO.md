@@ -50,7 +50,8 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 
 - O repositório é público: runners padrão do GitHub Actions não consomem franquia. Levantamento de 11/11 (execuções de 08 e 09/11, em UTC): 38 execuções, 19 falharam, cerca de 42 min no total.
 - **Vercel Hobby: 100 deploys por dia, por equipe.** Nos 40 deploys mais recentes do projeto `channel`, feitos em 2h51 na noite de 08/11, 36 eram previews de branches e 22 foram cancelados. A equipe tem outros 5 projetos que dividem a mesma cota.
-- Correção preparada, ainda não enviada: `git.deploymentEnabled` em `site/vercel.json`, limitando o deploy automático à `main` (branch local `chore/vercel-economia-deploy`, commit `8cf17d7`).
+- Correção preparada, ainda não enviada: `git.deploymentEnabled` em `site/vercel.json`, limitando o deploy automático à `main`. A `release` não tinha `site/vercel.json`, então cada push nela gerava preview; ela recebe um arquivo mínimo com a mesma regra.
+- Publicação preparada, ainda não enviada: OTA revisão 10 (city-9) na `main`, copiando só o manifesto e o `city-9.zip` da release, junto com o `vercel.json`, num único push (1 deploy). O código do CP011 é idêntico ao do commit `03e7784`, que passou na validação Godot do CI. O cliente não aceita voltar a uma versão de módulo menor: correção é sempre uma versão nova.
 - Segredos: `VALDORA_ANDROID_KEYSTORE_B64` e `VALDORA_ANDROID_KEYSTORE_PASSWORD` no GitHub Secrets; chave privada OTA em pasta restrita do Drive. Nenhum deles entra no repositório, nos ZIPs ou na Vercel.
 
 ## 6. Testes
