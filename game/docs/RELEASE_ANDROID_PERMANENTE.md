@@ -1,4 +1,6 @@
 # Valdora — Release 0.4.0-alpha (CP004)
+
+> **Nota de 11/11/2026.** Este documento descreve a 0.4.0-alpha (code 102). A versão no código é a 0.4.1-alpha (code 103). O gatilho de push em `game/release-control/build.request` citado abaixo não existe mais: o workflow de release só roda por `workflow_dispatch`. Veja `ESTADO_DO_PROJETO.md`.
 O protocolo CP004 foi validado em Godot headless: contrato, assinatura de ZIP, carregamento de cena, economia/heróis/combate e smoke de UI. O novo APK ainda requer confirmação em Android físico.
 
 - Identidade permanente: `ink.evolu.valdora`; code `102` / name `0.4.0-alpha`.

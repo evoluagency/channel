@@ -1,5 +1,7 @@
 # Valdora — Alpha 0.2.1
 
+> **Nota de 11/11/2026.** Este README descreve a Alpha 0.2.1. A versão atual no código é a 0.4.1-alpha (code 103), com pacote `ink.evolu.valdora`. Veja `docs/ESTADO_DO_PROJETO.md`.
+
 **Valdora** é um RPG 3D independente para Android, desenvolvido por **EVOLU Channel**. O nome interno do projeto Godot permanece legado exclusivamente para preservar a pasta de salvamento; o APK e o HUD exibem Valdora.
 
 Esta Alpha mantém Valdora, praça, NPCs, economia local, controles móveis, nascimento na praça e autodiagnóstico. A atualização 0.2 acrescenta **checagem automática de conteúdo declarativo** (textos), via Vercel, com conferência SHA-256 e persistência local. Não requer Supabase nem conexão permanente para jogar.

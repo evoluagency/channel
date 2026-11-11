@@ -1,5 +1,7 @@
 # Valdora — CP004 | OTA modular (fase de construção)
 
+> **Registro histórico (nota de 11/11/2026).** Este documento descreve a fase de construção do CP004. O OTA v2 descrito aqui já está em uso: o manifesto v2 está publicado e existe APK 0.4.0 assinado. A versão-base no código é a 0.4.1-alpha (code 103). A cautela abaixo vale só para aquela branch. Para o estado real, veja `ESTADO_DO_PROJETO.md`.
+
 Branch de implementação: \`feat/valdora-cp004-ota-foundation\`. **Não publicar APK, deploy ou workflow sem homologação.**
 
 ## O que muda

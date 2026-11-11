@@ -2,6 +2,8 @@
 
 **Estado:** projeto-fonte Godot. Não é APK compilado nem execução verificada em Android.
 
+> **Nota de 11/11/2026.** Este documento descreve a Alpha 0.1. Desde então o jogo ganhou heróis, combate, cidade e OTA v2 com assinatura RSA-3072. O pacote Android atual é `ink.evolu.valdora`, e não `ink.evolu.channel`. Os limites listados abaixo sobre combate e validação de atualizações estão superados. Veja `ESTADO_DO_PROJETO.md`.
+
 ## Decisão técnica
 - Godot 4.7.x + GDScript + renderizador Compatibility (OpenGL ES 3), sem plugins proprietários.
 - Um setor cenográfico de Valdora feito com meshes primitivos 3D, iluminação, ambiente, praça, fonte, castelo, vias, guilda, mercados e rio.
@@ -10,7 +12,7 @@
 - Sem Minecraft, contas online, servidores, telemetria, pagamentos, login ou dependências cloud.
 - **Vercel:** site `channel.evolu.ink`, arquivos de atualização e manifesto versionado quando pertinente; não opera a lógica do jogo.
 - **Supabase:** reservado para autenticação, conta e sincronização de progresso em futura fase online; não criar projeto ou SQL agora.
-- **GitHub:** histórico e desenvolvimento; publicação manual, sem Actions/jobs.
+- **GitHub:** histórico e desenvolvimento. Os workflows do Valdora rodam só de forma manual (`workflow_dispatch`); os de checkpoints antigos só disparam nas suas branches históricas. Veja `ESTADO_DO_PROJETO.md`.
 
 ## Limites da alpha
 - Cenário usa geometria básica de protótipo, não os modelos 3D detalhados da arte de capa.

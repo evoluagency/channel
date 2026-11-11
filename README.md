@@ -41,7 +41,7 @@ O Android decide quais aplicativos aparecem em **Abrir com**. Embora Samsung já
 
 ## Engenharia e direitos
 
-Sem GitHub Actions, workflows, cron jobs, banco externo ou deploy automático. A Vercel e o DNS são geridos separadamente pelo proprietário.
+O addon Minecraft não usa GitHub Actions, workflows, cron jobs, banco externo nem deploy automático. O jogo Valdora (`game/`) tem workflows de validação e release, todos de disparo manual ou restritos a branches históricas; veja `game/docs/ESTADO_DO_PROJETO.md`. A Vercel e o DNS são geridos separadamente pelo proprietário.
 
 UUIDs e IDs internos `erpg:*` são preservados para compatibilidade; faça backup dos mundos antes de atualizar.
 
