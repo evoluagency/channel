@@ -1,0 +1,49 @@
+# Valdora — primeira execução real dos smokes Godot (12/11/2026)
+# Godot 4.7.2 oficial, SHA-256 do zip conferido; base: docs/fase0-base-de-verdade (3666ee4), jogo = release 8a29073
+
+## Rodada 1: tools/run_valdora_tests.sh --all (sem fixtures)
+  FALHOU  remote_update_smoke (código 1)
+  FALHOU  city_name_layout_smoke (código 1)
+  FALHOU  cp005_city_smoke (código 1)
+  FALHOU  cp007_city_visual_smoke (código 1)
+  FALHOU  cp008_city_v6_smoke (código 124, timeout)
+  FALHOU  cp009_city_v7_smoke (código 124, timeout)
+  FALHOU  cp010_city_v8_smoke (código 1)
+== Resumo: 11 passaram, 10 falharam (logs em /tmp/tmp.s2bZnip9zY)
+
+## Rodada 2: com fixtures copiadas como no workflow cp004-ota (manifest.json + *.zip em game/tests/fixtures)
+[VALDORA_CP001_CORE] {"checks":{"acao_desconhecida":true,"compra":true,"compra_insuficiente":true,"deposito":true,"entrada_teclado":true,"leitura_legado":true,"negativa_nao_sobrescreve":true,"saldo_negativo_bloqueado":true,"salvamento":true,"salvamento_negativo_bloqueado":true,"saque":true,"schema_v1":true},"ok":true,"passed":12,"total":12}
+[VALDORA_CP002_HEROES] {"checks":{"atributos_giulia":true,"atributos_pietro":true,"catalogo":true,"estado_preservado":true,"formacao_padrao":true,"gravar_invalido_bloqueado":true,"normalizar_posicoes":true,"persistencia_escrita":true,"persistencia_leitura":true,"posicao_invalida":true,"quatro_nomes":true,"remocao":true,"sem_duplicacao":true},"ok":true,"passed":13,"total":13}
+[VALDORA_CP003_COMBAT] {"failed":[],"ok":true,"passed":42,"total":42}
+[VALDORA_OTA] Conteúdo local disponível; catálogo remoto indisponível.
+[CHANNEL_DIAGNOSTIC] {"checks":{"armazenamento_local":true,"banqueiro":true,"camera":true,"cp001_banco":true,"cp001_compra":true,"cp001_protecao":true,"cp002_atributos":true,"cp002_catalogo":true,"cp002_formacao":true,"cp002_painel":true,"cp002_selecao":true,"cp003_arena":true,"cp003_inicio":true,"cp003_motor":true,"cp003_repetibilidade":true,"cp003_rodada":true,"economia_valida":true,"interface":true,"jogador":true,"mercador":true,"quatro_npcs":true,"spawn_no_reino":true},"success":true,"summary":"VALDORA: 22/22 testes OK"}
+[CHANNEL_ENGINE_SMOKE] {"checks":{"arena_animates_events":true,"arena_battle_active":true,"arena_blocks_multiple_taps":true,"arena_built":true,"arena_closes":true,"arena_has_subviewport":true,"arena_manual_turn":true,"arena_opens":true,"arena_pauses_world":true,"bank_dialogue":true,"camera_created":true,"character_created":true,"economy_intact_after_combat":true,"four_npcs":true,"hero_panel_built":true,"hero_panel_close":true,"hero_panel_open":true,"merchant_dialogue":true,"money_nonnegative":true,"ota_module_panel_closes":true,"ota_module_panel_created":true,"ota_module_panel_opens":true,"scene_ready":true,"spawn_in_valdora":true,"world_unpaused_after_arena":true},"ok":true,"passed":25,"total":25}
+[VALDORA_CP004_OTA] {"checks":{"comandos_validos":true,"data_manifest_valido":true,"estado_vazio_invalido":true,"id_valido":true,"manifest_v2":true,"pack_zip_assinado_contrato":true,"rejeita_cliente_antigo":true,"rejeita_codigo_remoto":true,"rejeita_duplicacao":true,"rejeita_outro_jogo":true,"rejeita_traversal":true,"rejeita_url_externa":true,"rejeita_zip_fora_namespace":true,"sha_invalido":true,"sha_valido":true},"ok":true,"passed":15,"total":15}
+[VALDORA_CP004_PACK] {"checks":{"manifest_v2":true,"pack_mounted":true,"reject_missing_file":true,"scene_loaded":true,"signature_and_hash":true,"signed_pack_present":true},"ok":true,"passed":6,"total":6}
+[VALDORA_CP006_LIVE] {"checks":{"entry_available":true,"mounted_live":true,"namespace":true,"reject_forged_signature":true,"reject_wrong_namespace":true,"resource_visible_live":true,"signed_file":true,"valid_control_root":true},"passed":8,"total":8}
+[VALDORA_CP011_CITY9] {"checks":{"cannot_scout_before_vale":true,"cant_pact_without_trade":true,"cant_scout_before_trade":true,"discover_vale":true,"final_save_valid":true,"first_trade":true,"found_state":true,"four_npcs":true,"governor_name":true,"initial_state_valid":true,"legacy_save_valid":true,"manifest_v10":true,"map_first_mission":true,"missions_claimed_once":true,"module_v9":true,"mounted":true,"no_duplicate_pact":true,"no_duplicate_scout":true,"no_second_foundation":true,"no_state_early":true,"pact_montesol":true,"pact_pedralta":true,"pact_ribeirinha":true,"regional_five_cities":true,"regional_unique":true,"reject_duplicate_pact":true,"reject_forged_state":true,"reject_invalid_region":true,"reject_unnamed_state":true,"same_save_path":true,"same_schema":true,"scene_loaded":true,"scout_montesol":true,"scout_pedralta":true,"scout_ribeirinha":true,"second_pact_quest":true,"signed":true,"state_quest":true,"state_requirements":true,"state_saved":true,"trade_persisted":true,"unknown_pact_rejected":true,"unknown_scout_rejected":true,"valeverde_pact":true},"passed":44,"success":true,"total":44}
+[VALDORA_CP005] {"checks":{"foundation":true,"house":true,"name_saved":true,"no_duplicate_debit":true,"no_legacy_save":true,"persistence":true,"reject_corruption":true,"root_control":true,"scene_loaded":true,"state_created":true,"zip_mounted":true},"passed":11,"success":true,"total":11}
+[VALDORA_CP007_VISUAL] {"checks":{"foundation_built":true,"foundation_objective":true,"foundation_status":true,"house_built":true,"house_status":true,"inspection_no_debit":true,"inspection_territory":true,"mission_progress":true,"model_unchanged":true,"mounted":true,"name_form":true,"objective_label":true,"population_derived":true,"resources_paid":true,"revision6":true,"save_disk":true,"save_path":true,"save_schema":true,"scene":true,"signed_v5":true,"start_objective":true,"toolbar_scroll":true},"passed":22,"success":true,"total":22}
+[VALDORA_CITY_NAME_CP006] {"checks":{"button_visible":true,"cancel_closes":true,"current_revision":true,"inline_error":true,"inline_overlay":true,"input_present":true,"invalid_rejected":true,"name_saved":true,"overlay_closed":true,"save_path_unchanged":true,"save_persisted":true,"scene_loaded":true,"signed_city_latest":true,"zip_mounted":true},"passed":14,"total":14}
+
+## Rodada 3: tools/run_valdora_tests.sh --all já corrigido (copia fixtures sozinho)
+  PASSOU  tools_validate
+  PASSOU  test_static_contract
+  PASSOU  test_combat_static
+  PASSOU  test_ota_contract
+  PASSOU  ota_manifest --verify
+  PASSOU  godot import
+  PASSOU  core_smoke
+  PASSOU  hero_smoke
+  PASSOU  combat_smoke
+  PASSOU  smoke
+  PASSOU  update_smoke
+  PASSOU  pck_smoke
+  PASSOU  cp006_live_smoke
+  PASSOU  cp011_city_v9_smoke
+  FALHOU  remote_update_smoke (código 1)
+  PASSOU  city_name_layout_smoke
+  PASSOU  cp005_city_smoke
+  PASSOU  cp007_city_visual_smoke
+== Resumo: 17 passaram, 1 falharam (logs em /tmp/tmp.fqUABNWTDD)
+# remote_update_smoke: falha esperada nesta máquina, sem rede até channel.evolu.ink

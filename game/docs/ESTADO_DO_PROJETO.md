@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **11/11/2026**. Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **12/11/2026**. Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -57,10 +57,19 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 ## 6. Testes
 
 - `game/tests`: 15 smokes Godot e 3 testes Python.
-- Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 7 smokes extras. Usa as mesmas chamadas dos workflows, sem custo de Actions.
-- Em 11/11/2026 a parte Python passou inteira (5 verificações).
-- A parte Godot **não foi executada**: não há Godot instalado na máquina de preparação e o acesso de rede para instalar está desligado. A lógica do script foi testada com um Godot de mentira (passa, falha e estoura timeout). Os smokes reais ainda não foram rodados com ele.
+- Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 4 smokes extras que devem passar hoje. Com `--historico`, inclui também CP008, CP009 e CP010, que estão presos às revisões 7, 8 e 9 do manifesto e falham por desenho contra o manifesto atual. O script copia o manifesto e os ZIPs de `site/updates/v2/` para `game/tests/fixtures/` antes dos smokes, como o workflow `cp004-ota`; sem essa cópia 10 smokes falhavam (defeito corrigido em 12/11).
 - Godot esperado: 4.7.2 (Linux x86_64, zip com SHA-256 `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`).
+- **Primeira execução real dos smokes: 12/11/2026**, Godot 4.7.2 oficial com o hash conferido, código do jogo igual ao da release `8a29073`. Log em `game/docs/logs/smokes_2026-11-12.log`.
+
+| Grupo | Resultado em 12/11 |
+|---|---|
+| Python (5 verificações) | passou |
+| 8 smokes do CI: core 12/12, heróis 13/13, combate 42/42, cena 22/22 e 25/25, OTA 15/15, PCK 6/6, CP006 8/8, CP011 44/44 | passou |
+| Extras: CP005 11/11, CP007 22/22, layout de nome 14/14 | passou |
+| `remote_update_smoke` | não conclusivo: exige rede até channel.evolu.ink, bloqueada na máquina de teste |
+| Históricos CP008, CP009, CP010 | falham só nas checagens de revisão do manifesto (CP010: 45 de 48, as 3 que faltam são `manifest_9`, `module_8`, `signed`) |
+
+- Portão G1 da Fase 1: aberto. Falta só rodar `remote_update_smoke` numa máquina com acesso ao domínio e registrar aqui.
 
 ## 7. Documentos que contradiziam o estado real
 
@@ -80,7 +89,7 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 2. Entregar os pacotes completos do CP012 e do CP013.
 3. Responder as decisões 1 a 4 do plano de continuidade.
 4. Homologar o APK em aparelho físico.
-5. Liberar a instalação do Godot (rede da conversa) ou rodar `tools/run_valdora_tests.sh` no computador, para a primeira execução real dos smokes.
+5. ~~Primeira execução real dos smokes~~ feita em 12/11/2026 (seção 6). Resta rodar `remote_update_smoke` numa máquina com acesso a channel.evolu.ink.
 
 ## 9. Decisões vigentes
 
@@ -96,8 +105,8 @@ O dono delegou as decisões em 11/11/2026. Ele pode reverter qualquer uma.
 
 ## 10. Como retomar
 
-1. Esta branch (`docs/fase0-base-de-verdade`, base: release `8a29073`) tem o registro, o script de testes e o `site/vercel.json` mínimo. A branch `publicar/ota-rev10` (base: `main` `6f397f5`) tem o `vercel.json` completo e a publicação da revisão 10. Nenhuma das duas foi integrada à release ou à `main`.
-2. Rodar `tools/run_valdora_tests.sh --all` com o Godot 4.7.2. É a primeira execução real dos smokes.
+1. Esta branch (`docs/fase0-base-de-verdade`, base: release `8a29073`) tem o registro, o script de testes e o `site/vercel.json` mínimo; a branch `claude/zealous-tesla-kfhwld` a continua com a correção do script e o log de 12/11. A branch `publicar/ota-rev10` (base: `main` `6f397f5`) tem o `vercel.json` completo e a publicação da revisão 10. Nenhuma das duas foi integrada à release ou à `main`.
+2. `tools/run_valdora_tests.sh --all` já rodou com o Godot 4.7.2 em 12/11 (seção 6). Repetir a cada marco; no computador do dono, rodar também o `remote_update_smoke`.
 3. A publicação da revisão 10 só acontece com "OK, subir" do dono: `git push origin publicar/ota-rev10:main`, que avança a `main` em fast-forward e gera 1 deploy. Antes, conferir que a `main` continua em `6f397f5`.
 4. Fase 2 quando chegarem os pacotes completos do CP012 e do CP013.
 5. Regras de custo: o único gasto pago é a assinatura Claude; franquias só com aviso e estimativa; a Vercel Hobby aceita 100 deploys por dia por equipe; o cliente rejeita módulo de versão menor, então correção de OTA é sempre versão nova; segredos nunca entram no repositório, em ZIP, na Vercel ou em documento.

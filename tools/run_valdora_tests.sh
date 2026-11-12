@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 # Valdora — todos os testes locais em um comando, sem GitHub Actions e sem custo.
 #
-# Uso: tools/run_valdora_tests.sh [--py | --all]
-#   (sem opção)  testes Python + os testes Godot que os workflows rodam hoje
+# Uso: tools/run_valdora_tests.sh [--py | --all | --historico]
+#   (sem opção)  testes Python + os 8 testes Godot que os workflows rodam hoje
 #   --py         só os testes Python (não precisa de Godot)
-#   --all        também os smokes extras/históricos (cada um com timeout)
+#   --all        também os smokes extras que devem passar hoje (CP005, CP007,
+#                layout de nome e OTA remoto; este último precisa de rede até
+#                channel.evolu.ink)
+#   --historico  --all + os smokes CP008, CP009 e CP010, presos às revisões 7, 8
+#                e 9 do manifesto: contra o manifesto atual falham por desenho.
+#
+# Fixtures: antes dos smokes o script copia site/updates/v2/manifest.json e os
+# módulos *.zip para game/tests/fixtures/, como faz o workflow valdora-cp004-ota.
+# Essas cópias são ignoradas pelo git (game/.gitignore).
 #
 # Godot: usa a variável GODOT ou "godot" no PATH. Versão esperada: 4.7.2
 # (Linux x86_64, zip SHA-256 cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4,
@@ -16,7 +24,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT" || exit 2
 
 MODE="${1:-default}"
-case "$MODE" in default|--py|--all) ;; *) echo "Opção desconhecida: $MODE"; sed -n 3,8p "$0"; exit 2 ;; esac
+case "$MODE" in default|--py|--all|--historico) ;; *) echo "Opção desconhecida: $MODE"; sed -n 3,15p "$0"; exit 2 ;; esac
 
 GODOT_BIN="${GODOT:-godot}"
 TIMEOUT_S="${VALDORA_SMOKE_TIMEOUT:-120}"
@@ -53,11 +61,18 @@ if [ "$MODE" != "--py" ]; then
     VER="$("$GODOT_BIN" --version 2>/dev/null | head -n1)"
     echo "  versão: ${VER:-desconhecida}"
     case "$VER" in 4.7.2*) ;; *) echo "  AVISO: a versão esperada é 4.7.2." ;; esac
+    # Fixtures que os smokes leem de res://tests/fixtures/ (mesma cópia do workflow cp004-ota).
+    mkdir -p game/tests/fixtures
+    cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
+    cp site/updates/v2/modules/*.zip game/tests/fixtures/
     run "godot import" 300 "$GODOT_BIN" --headless --editor --path game --quit
     SMOKES=(core_smoke hero_smoke combat_smoke smoke update_smoke pck_smoke cp006_live_smoke cp011_city_v9_smoke)
-    if [ "$MODE" = "--all" ]; then
-      SMOKES+=(remote_update_smoke city_name_layout_smoke cp005_city_smoke cp007_city_visual_smoke \
-               cp008_city_v6_smoke cp009_city_v7_smoke cp010_city_v8_smoke)
+    if [ "$MODE" = "--all" ] || [ "$MODE" = "--historico" ]; then
+      SMOKES+=(remote_update_smoke city_name_layout_smoke cp005_city_smoke cp007_city_visual_smoke)
+    fi
+    if [ "$MODE" = "--historico" ]; then
+      echo "  AVISO: CP008, CP009 e CP010 exigem manifesto nas revisões 7, 8 e 9; contra o atual falham por desenho."
+      SMOKES+=(cp008_city_v6_smoke cp009_city_v7_smoke cp010_city_v8_smoke)
     fi
     for s in "${SMOKES[@]}"; do
       run "$s" "$TIMEOUT_S" "$GODOT_BIN" --headless --path game --script "res://tests/$s.gd"

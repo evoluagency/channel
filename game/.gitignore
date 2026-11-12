@@ -13,3 +13,7 @@ dist/*.aab
 **/*-release-android.jks
 **/VALDORA_GITHUB_KEYSTORE_BASE64_PRIVADO.txt
 **/VALDORA_CREDENCIAL_ASSINATURA_PRIVADA.txt
+
+# Fixtures copiadas por tools/run_valdora_tests.sh e pelo workflow cp004-ota.
+tests/fixtures/manifest.json
+tests/fixtures/*.zip
