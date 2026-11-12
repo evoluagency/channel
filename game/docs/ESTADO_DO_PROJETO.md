@@ -18,10 +18,10 @@ Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8af
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |
 |---|---|---|---|
-| Manifesto OTA | revisão 9 (city-8) | revisão 10 (city-9, CP011) | **revisão 8 (city-7)** |
+| Manifesto OTA | revisão 10 (city-9) | revisão 10 (city-9, CP011) | **revisão 10 (city-9)**, deploy de 12/11 |
 
-- Produção conferida pelo manifesto aberto no navegador e pelo último deploy de produção da Vercel (`main`, commit `66f8003`).
-- A revisão 9 está na `main` (`6f397f5`), mas não tem deploy: não chegou à produção.
+- Em 12/11/2026, com "OK, subir" do dono, a `main` avançou em fast-forward de `6f397f5` para `18317b3` (branch `publicar/ota-rev10`): manifesto revisão 10, `city-9.zip` e `vercel.json` que limita o deploy automático à `main`. Gerou 1 deploy de produção na Vercel. A revisão 9 nunca chegou à produção; saltou da 8 para a 10.
+- Falta confirmar no celular que a Cidade v9 chega pelo OTA (homologação do dono).
 - **CP012** (Cidade v10) e **CP013** (HUD 3D) existem só no computador do dono. O CP013 muda o núcleo e exige APK novo.
 
 ## 3. Branches
@@ -50,8 +50,8 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 
 - O repositório é público: runners padrão do GitHub Actions não consomem franquia. Levantamento de 11/11 (execuções de 08 e 09/11, em UTC): 38 execuções, 19 falharam, cerca de 42 min no total.
 - **Vercel Hobby: 100 deploys por dia, por equipe.** Nos 40 deploys mais recentes do projeto `channel`, feitos em 2h51 na noite de 08/11, 36 eram previews de branches e 22 foram cancelados. A equipe tem outros 5 projetos que dividem a mesma cota.
-- Correção preparada, ainda não enviada: `git.deploymentEnabled` em `site/vercel.json`, limitando o deploy automático à `main`. A `release` não tinha `site/vercel.json`, então cada push nela gerava preview; ela recebe um arquivo mínimo com a mesma regra.
-- Publicação preparada, ainda não enviada: OTA revisão 10 (city-9) na `main`, copiando só o manifesto e o `city-9.zip` da release, junto com o `vercel.json`, num único push (1 deploy). O código do CP011 é idêntico ao do commit `03e7784`, que passou na validação Godot do CI. O cliente não aceita voltar a uma versão de módulo menor: correção é sempre uma versão nova.
+- `git.deploymentEnabled` em `site/vercel.json` está na `main` desde 12/11: só a `main` gera deploy. A `release` ainda não tem esse arquivo; a branch `docs/fase0-base-de-verdade` traz a versão mínima para ela.
+- OTA revisão 10 publicada em 12/11 (ver seção 2). O cliente não aceita voltar a uma versão de módulo menor: correção é sempre uma versão nova.
 - Segredos: `VALDORA_ANDROID_KEYSTORE_B64` e `VALDORA_ANDROID_KEYSTORE_PASSWORD` no GitHub Secrets; chave privada OTA em pasta restrita do Drive. Nenhum deles entra no repositório, nos ZIPs ou na Vercel.
 
 ## 6. Testes
@@ -107,6 +107,6 @@ O dono delegou as decisões em 11/11/2026. Ele pode reverter qualquer uma.
 
 1. Esta branch (`docs/fase0-base-de-verdade`, base: release `8a29073`) tem o registro, o script de testes e o `site/vercel.json` mínimo; a branch `claude/zealous-tesla-kfhwld` a continua com a correção do script e o log de 12/11. A branch `publicar/ota-rev10` (base: `main` `6f397f5`) tem o `vercel.json` completo e a publicação da revisão 10. Nenhuma das duas foi integrada à release ou à `main`.
 2. `tools/run_valdora_tests.sh --all` já rodou com o Godot 4.7.2 em 12/11 (seção 6). Repetir a cada marco; no computador do dono, rodar também o `remote_update_smoke`.
-3. A publicação da revisão 10 só acontece com "OK, subir" do dono: `git push origin publicar/ota-rev10:main`, que avança a `main` em fast-forward e gera 1 deploy. Antes, conferir que a `main` continua em `6f397f5`.
+3. Revisão 10 publicada em 12/11 (`main` = `18317b3`). Próxima publicação segue o mesmo rito: branch `publicar/...` a partir da `main`, conferir fast-forward e assinatura, "OK, subir" do dono, 1 deploy.
 4. Fase 2 quando chegarem os pacotes completos do CP012 e do CP013.
 5. Regras de custo: o único gasto pago é a assinatura Claude; franquias só com aviso e estimativa; a Vercel Hobby aceita 100 deploys por dia por equipe; o cliente rejeita módulo de versão menor, então correção de OTA é sempre versão nova; segredos nunca entram no repositório, em ZIP, na Vercel ou em documento.
