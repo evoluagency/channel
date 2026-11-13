@@ -65,7 +65,7 @@ Com isso o Distrito Federal tem 40 lotes e o Amazonas 120, em vez de 260 vezes d
 
 ## 5. Piloto Brasil: os 27 estados
 
-Lotes pela fórmula acima, com as áreas oficiais aproximadas (IBGE). Bioma e vocação são **proposta** para revisão; vocações são fictícias e só inspiradas no perfil econômico geral.
+Lotes pela fórmula acima, com as áreas oficiais aproximadas (IBGE). Conferido na sessão 1.3 (`MUNDO_BRASIL_DADOS_v0.1.md`): BA e PE corrigidos pela fórmula (105 → 106 e 80 → 81) e MT com a Amazônia como bioma dominante (proposta). Dados finais em `game/data/mundo/BR_perfis.json`. Bioma e vocação são **proposta** para revisão; vocações são fictícias e só inspiradas no perfil econômico geral.
 
 | UF | Estado | Lotes | Bioma | Vocação (proposta) |
 |---|---|---|---|---|
@@ -73,19 +73,19 @@ Lotes pela fórmula acima, com as áreas oficiais aproximadas (IBGE). Bioma e vo
 | AL | Alagoas | 63 | Mata Atlântica | Bioenergia |
 | AP | Amapá | 86 | Amazônia | Energia hídrica e porto |
 | AM | Amazonas | 120 | Amazônia | Eletrônica (polo industrial) |
-| BA | Bahia | 105 | Caatinga, Cerrado, Mata Atlântica | Petroquímica e renováveis |
+| BA | Bahia | 106 | Caatinga, Cerrado, Mata Atlântica | Petroquímica e renováveis |
 | CE | Ceará | 86 | Caatinga | Energia eólica e porto |
 | DF | Distrito Federal | 40 | Cerrado | Administração e dados |
 | ES | Espírito Santo | 70 | Mata Atlântica | Portos e minério |
 | GO | Goiás | 98 | Cerrado | Agroindústria |
 | MA | Maranhão | 98 | Cerrado, Amazônia | Logística portuária |
-| MT | Mato Grosso | 112 | Cerrado, Amazônia, Pantanal | Grãos em escala |
+| MT | Mato Grosso | 112 | Amazônia, Cerrado, Pantanal | Grãos em escala |
 | MS | Mato Grosso do Sul | 99 | Cerrado, Pantanal | Pecuária e celulose |
 | MG | Minas Gerais | 106 | Cerrado, Mata Atlântica | Mineração e metalurgia |
 | PA | Pará | 117 | Amazônia | Mineração |
 | PB | Paraíba | 73 | Caatinga | Tecnologia e solar |
 | PR | Paraná | 91 | Mata Atlântica | Agroindústria e automotivo |
-| PE | Pernambuco | 80 | Caatinga, Mata Atlântica | Saúde e software |
+| PE | Pernambuco | 81 | Caatinga, Mata Atlântica | Saúde e software |
 | PI | Piauí | 94 | Caatinga, Cerrado | Eólica e solar |
 | RJ | Rio de Janeiro | 69 | Mata Atlântica | Petróleo offshore e pesquisa |
 | RN | Rio Grande do Norte | 72 | Caatinga | Eólica e sal |
@@ -137,7 +137,7 @@ Servidor decide os resultados; jogadores reais no lugar dos NPC; temporadas (nov
 | Marco | Entrega | Como se verifica |
 |---|---|---|
 | M0 | Este documento aprovado; direção visual e nome escolhidos | OK do dono |
-| M1 | Script que gera o Brasil a partir do dado aberto, arquivo em `game/data/mundo/` | Teste Python: 27 unidades, área e vizinhos corretos; tamanho do arquivo |
+| M1 | ✅ (1.3) Script que gera o Brasil a partir do dado aberto, arquivo em `game/data/mundo/` | Teste Python: 27 unidades, área e vizinhos corretos; tamanho do arquivo |
 | M2 | Perfis dos 27 estados e fórmula de lotes | Teste: faixa 40 a 120, ordem por área, nenhum estado com campo faltando |
 | M3 | Tela do mapa do Brasil em Godot (desenho dos contornos, toque para selecionar) | Smoke Godot + captura de tela |
 | M4 | Escolha do estado e Cidade nos lotes com o formato do estado | Smoke; save compatível e versionado |
