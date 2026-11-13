@@ -432,3 +432,75 @@ func arco(pai: Node3D, centro: Vector3, raio: float, rot_y: float, espessura: fl
 		var h := grupo(g, (p0 + p1) * 0.5)
 		h.rotation.z = (a0 + a1) * 0.5 - PI * 0.5
 		_no(malha_caixa(Vector3(p0.distance_to(p1) + 0.02, espessura, espessura), 0.0), material, Vector3.ZERO, h)
+
+func helicoptero(pai: Node3D, pos: Vector3, rot_y: float, cor: Color) -> void:
+	var g := grupo(pai, pos, rot_y)
+	caixa(g, Vector3(0, 0.12, 0), Vector3(1.1, 0.5, 0.55), mat(cor, 0.45), 0.2)
+	caixa(g, Vector3(0.35, 0.25, 0), Vector3(0.36, 0.3, 0.5), vidro(Color("8fdcff"), 0.5), 0.12)
+	caixa(g, Vector3(-0.95, 0.32, 0), Vector3(0.9, 0.12, 0.12), mat(cor, 0.45), 0.04)
+	caixa(g, Vector3(-1.35, 0.32, 0), Vector3(0.12, 0.4, 0.04), mat(cor.darkened(0.2), 0.45), 0.02)
+	for z in [-0.3, 0.3]:
+		caixa(g, Vector3(0, 0, z), Vector3(1.0, 0.04, 0.05), p("aco_escuro"), 0.01)
+	cilindro(g, Vector3(0, 0.62, 0), 0.05, 0.12, p("aco_escuro"), 8)
+	for a in [0, 90]:
+		var h := grupo(g, Vector3(0, 0.75, 0), a + 20)
+		caixa(h, Vector3.ZERO, Vector3(2.0, 0.025, 0.1), p("aco_escuro", 0.5), 0.0)
+
+func guindaste(pai: Node3D, pos: Vector3, rot_y: float, altura: float, braco: float, cor: Color) -> void:
+	var g := grupo(pai, pos, rot_y)
+	caixa(g, Vector3.ZERO, Vector3(0.6, 0.15, 0.6), p("concreto_escuro"), 0.03)
+	for sx in [-1, 1]:
+		for sz in [-1, 1]:
+			caixa(g, Vector3(sx * 0.12, 0.15, sz * 0.12), Vector3(0.05, altura, 0.05), mat(cor, 0.5), 0.0)
+	for i in int(altura / 0.4):
+		caixa(g, Vector3(0, 0.3 + i * 0.4, 0), Vector3(0.3, 0.03, 0.3), mat(cor, 0.5), 0.0)
+	caixa(g, Vector3(0, altura + 0.15, 0), Vector3(0.4, 0.3, 0.4), mat(cor, 0.5), 0.04)
+	caixa(g, Vector3(braco * 0.5 - 0.5, altura + 0.45, 0), Vector3(braco, 0.12, 0.14), mat(cor, 0.5), 0.02)
+	caixa(g, Vector3(-0.7, altura + 0.3, 0), Vector3(0.4, 0.3, 0.3), p("concreto_escuro"), 0.03)
+	caixa(g, Vector3(braco - 0.8, altura - 0.6, 0), Vector3(0.015, 1.05, 0.015), p("aco_escuro"), 0.0)
+	caixa(g, Vector3(braco - 0.8, altura - 0.75, 0), Vector3(0.1, 0.12, 0.1), p("amarelo", 0.5), 0.02)
+
+func poste(pai: Node3D, pos: Vector3, altura := 1.3, cor_luz := Color("fff1b0"), inteligente := false) -> void:
+	cilindro(pai, pos, 0.035, altura, p("aco_escuro", 0.5), 8)
+	caixa(pai, pos + Vector3(0.12, altura, 0), Vector3(0.32, 0.06, 0.1), p("aco_escuro", 0.5), 0.02)
+	caixa(pai, pos + Vector3(0.2, altura - 0.03, 0), Vector3(0.14, 0.03, 0.08), luz(cor_luz, 1.5), 0.0)
+	if inteligente:
+		caixa(pai, pos + Vector3(0, altura * 0.55, 0), Vector3(0.1, 0.25, 0.1), mat(Color("20242c"), 0.4), 0.02)
+		caixa(pai, pos + Vector3(0, altura * 0.55 + 0.04, 0.051), Vector3(0.07, 0.15, 0.01), luz(PALETA["neon"], 1.2), 0.0)
+
+func banco(pai: Node3D, pos: Vector3, rot_y := 0.0) -> void:
+	var g := grupo(pai, pos, rot_y)
+	caixa(g, Vector3(0, 0.15, 0), Vector3(0.6, 0.05, 0.2), p("madeira"), 0.01)
+	caixa(g, Vector3(0, 0.2, -0.09), Vector3(0.6, 0.18, 0.04), p("madeira"), 0.01)
+	for x in [-0.25, 0.25]:
+		caixa(g, Vector3(x, 0, 0), Vector3(0.04, 0.15, 0.18), p("aco_escuro"), 0.0)
+
+func turbina(pai: Node3D, pos: Vector3, altura: float, rot_y := 30.0, cor := Color("f4f6fa")) -> void:
+	cilindro(pai, pos, 0.09, altura, mat(cor, 0.4), 10, 0.05)
+	var g := grupo(pai, pos + Vector3(0, altura, 0), rot_y)
+	caixa(g, Vector3(0, -0.07, -0.08), Vector3(0.16, 0.16, 0.36), mat(cor, 0.4), 0.05)
+	var r := grupo(g, Vector3(0, 0, 0.13))
+	esfera(r, Vector3.ZERO, 0.08, mat(cor, 0.4))
+	for i in 3:
+		var pa := Node3D.new()
+		pa.rotation.z = i * TAU / 3 + 0.4
+		r.add_child(pa)
+		caixa(pa, Vector3(0, 0.05, 0), Vector3(0.09, altura * 0.42, 0.03), mat(cor, 0.4), 0.02)
+
+func tenda(pai: Node3D, pos: Vector3, rot_y: float, cor: Color, comp := 1.4, larg := 1.1) -> void:
+	var g := grupo(pai, pos, rot_y)
+	var h := larg * 0.55
+	for s in [-1, 1]:
+		var lado := grupo(g, Vector3(0, h * 0.5, s * larg * 0.25))
+		lado.rotation.x = -s * atan2(larg * 0.5, h)
+		caixa(lado, Vector3(0, -sqrt(h * h + larg * larg * 0.25) * 0.5, 0), Vector3(comp, sqrt(h * h + larg * larg * 0.25), 0.03), mat(cor, 0.9), 0.0)
+	caixa(g, Vector3(comp * 0.5, 0, 0), Vector3(0.02, h * 0.8, larg * 0.4), mat(cor.darkened(0.35), 0.9), 0.0)
+
+func blindado(pai: Node3D, pos: Vector3, rot_y: float, cor: Color, canhao := true) -> void:
+	var g := grupo(pai, pos, rot_y)
+	for z in [-0.32, 0.32]:
+		caixa(g, Vector3(0, 0, z), Vector3(1.3, 0.25, 0.22), p("aco_escuro", 0.8), 0.08)
+	caixa(g, Vector3(0, 0.2, 0), Vector3(1.2, 0.25, 0.8), mat(cor, 0.6), 0.06)
+	if canhao:
+		caixa(g, Vector3(-0.1, 0.45, 0), Vector3(0.6, 0.22, 0.55), mat(cor.darkened(0.1), 0.6), 0.08)
+		cilindro(g, Vector3(0.5, 0.17, 0), 0.04, 0.75, p("aco_escuro"), 8).rotation_degrees.z = -90

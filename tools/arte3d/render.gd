@@ -14,7 +14,12 @@ func _ready() -> void:
 		args[par[0]] = par[1] if par.size() > 1 else ""
 	var construcao: String = args.get("construcao", "quartel_general")
 	var saida: String = args.get("saida", "user://")
-	var receita = load("res://construcoes/%s.gd" % construcao).new()
+	var script = load("res://construcoes/%s.gd" % construcao)
+	if script == null or not script.can_instantiate():
+		push_error("receita inválida: " + construcao)
+		get_tree().quit(1)
+		return
+	var receita = script.new()
 	DirAccess.make_dir_recursive_absolute(saida)
 	for t in String(args.get("trabalhos", "1:azul:folha")).split(","):
 		var p := t.split(":")
