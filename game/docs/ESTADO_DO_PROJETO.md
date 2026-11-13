@@ -63,11 +63,12 @@ Defeitos encontrados:
 
 - Método: 3D de baixo polígono **modelado por código no Godot 4.7.2** (GL Compatibility, o renderizador do celular), sem modelos externos. Gerador separado do jogo em `tools/arte3d/` (kit de peças, uma receita por construção, `gerar.sh`, `folha.py`, `catalogo.py`). O jogo instalado e o OTA não foram tocados.
 - As 13 construções nas seis faixas estão prontas, cada uma com uma folha das faixas e o detalhe da faixa 6 em cinco cores de aliança, em `game/docs/imagens/componentes/`. Há também o catálogo `catalogo_13_construcoes.png`.
-- **Aprovados pelo dono:** Quartel-general, Alojamento e Estufa. As outras 10 (Usina, Mineradora, Central de energia, Radar, Base militar, Entreposto, Via, Parque, Estação de água, Heliponto) foram feitas em sequência, a pedido dele, e **aguardam a avaliação conjunta**.
+- **Aprovado pelo dono em 13/11/2026:** as 13 construções nas seis faixas (Quartel-general, Alojamento e Estufa uma a uma; as outras 10 em avaliação conjunta) e o guia de arte.
 - Guia consolidado: `game/docs/GUIA_DE_ARTE_v0.1.md` (paleta, formas, luz, selo, aliança, animações propostas, desempenho, lista para artista).
 - Desempenho medido: de 24 a 210 peças e de 2 mil a 38 mil triângulos por construção. É preciso fundir as malhas antes da cidade 3D (sessão 1.5).
 - Motor: o dono perguntou sobre Unity e Three.js. A recomendação registrada é **seguir no Godot** (pipeline, OTA e testes prontos; a diferença para o nível comercial é de arte, não de motor). A decisão final é do dono.
 - Números e fórmulas de `mundo_componentes_v0.1.json` sem mudança; `test_componentes_mundo.py` 12/12.
+- Marcos M8 a M13 registrados em `DESENHO_MUNDO_v0.1.md`: desempenho da cidade 3D, OTA só de conteúdo (regra do Google), servidor no Supabase gratuito, preparação e publicação na Play Store (taxa única de US$ 25 só com OK do dono).
 
 ## 2. O que está onde
 

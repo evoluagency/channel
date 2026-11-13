@@ -145,6 +145,19 @@ Servidor decide os resultados; jogadores reais no lugar dos NPC; temporadas (nov
 | M6 | Guerra por região contra NPC | Smoke determinístico |
 | M7 | Homologação em aparelho | Dono |
 
+### Depois da Fase A: online e loja (registrado em 13/11/2026)
+
+| Marco | Entrega | Como se verifica |
+|---|---|---|
+| M8 | Desempenho da cidade 3D: malhas fundidas por material, nível de detalhe, 30 FPS em Samsung e Xiaomi | Medição em aparelho; contagem de chamadas de desenho |
+| M9 | OTA só de conteúdo (imagens, textos, balanceamento, eventos); lógica do jogo dentro do app, para cumprir a regra do Google contra baixar código executável | Smoke: módulo OTA sem script; app atualiza conteúdo |
+| M10 | Servidor online no Supabase (plano gratuito, protótipo): login, saves, alianças, chat em tempo real e funções que validam ataques e compras no servidor | Testes de API; nenhum resultado decidido pelo celular |
+| M11 | Preparação da loja: nome e pacote definitivos do app (permanentes na Play Store), política de privacidade no site, formulário de segurança de dados, classificação etária, exportação em AAB, Play App Signing com a chave atual | Lista conferida; AAB assinado gerado localmente |
+| M12 | Conta no Google Play Console (taxa única de US$ 25; só com OK do dono). Conta pessoal: teste fechado com 12 testadores por 14 dias seguidos; conta de organização: número D-U-N-S | OK do dono; conta verificada |
+| M13 | Faixas de teste da loja: interna, fechada e produção, com revisão do Google em cada envio. Compras dentro do app só pelo sistema de pagamento do Google (15% até US$ 1 milhão por ano), se houver loja no jogo | App aprovado em produção |
+
+Arquitetura alvo: a Play Store só distribui o app; o app conversa por HTTPS com a Vercel (atualizações de conteúdo) e com o Supabase (dados e regras online). AWS ou servidor próprio só se a escala exigir e houver receita.
+
 CP012 (governança regional) e CP013 (HUD) deixam de ser pacotes do computador do dono: seu conteúdo é reescrito nos marcos M4 a M6 e na lista `MUDANCAS_NUCLEO_CP013.md`.
 
 ## 9. O que reaproveitar do Valdora

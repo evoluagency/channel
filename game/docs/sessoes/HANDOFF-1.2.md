@@ -19,7 +19,8 @@ Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PRO
 ## Aprovações
 
 - Quartel-general, Alojamento e Estufa: aprovados pelo dono, um por vez.
-- Usina, Mineradora, Central de energia, Radar e antena, Base militar, Entreposto, Via, Parque, Estação de água e Heliponto: feitos em sequência a pedido do dono; **aguardam a avaliação final dele**. Ajustes pedidos devem entrar na receita da construção e ser gerados de novo com `gerar.sh`.
+- Usina, Mineradora, Central de energia, Radar e antena, Base militar, Entreposto, Via, Parque, Estação de água e Heliponto: feitos em sequência a pedido do dono e **aprovados na avaliação final** (13/11/2026), junto com o guia de arte.
+- Marcos M8 a M13 (desempenho, OTA só de conteúdo, Supabase, loja) registrados em `DESENHO_MUNDO_v0.1.md` a pedido do dono.
 
 ## Verificação
 
