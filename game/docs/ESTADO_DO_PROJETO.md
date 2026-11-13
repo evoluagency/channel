@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **12/11/2026**. Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **13/11/2026**. Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -12,7 +12,15 @@ Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8af
 | Pacote Android | `ink.evolu.valdora` | `export_presets.cfg` |
 | Motor | Godot 4.7.2, GL Compatibility | `project.godot`, workflow `cp004-ota` |
 | APKs recebidos do dono | 0.3.3 e 0.4.0-alpha (code 102) | os dois com o mesmo certificado do arquivo de credencial |
-| APK 0.4.1 (code 103) | não verificado | `build.request` pede o build; nenhum APK 0.4.1 foi recebido |
+| APK 0.4.1 (code 103) | gerado em 13/11/2026, falta instalar e homologar no aparelho | workflow `valdora-android-release`, execução 43429562665 a partir da release `8a29073`; artefato 14039765549 expira em 20/11/2026 |
+
+### Build do APK 0.4.1 (13/11/2026)
+
+- Disparado manualmente na branch `release/valdora-android`. A cópia do workflow na `main` ainda exige versionCode 100 e não deve ser usada.
+- Passaram: segredos, certificado permanente (SHA-256 `C5:95:06…`), testes estáticos, import, 8 smokes Godot (inclusive o OTA remoto contra a produção na revisão 10), exportação, `aapt` (`ink.evolu.valdora`, code 103, 0.4.1-alpha) e `apksigner` com o mesmo certificado. APK com 52.677.239 bytes; o SHA-256 está no `SHA256.txt` do artefato.
+- Aviso na exportação: a cópia `game/modules/city/valdora_modules/city/entry.tscn` aponta para um script que só existe dentro do ZIP OTA. O APK sai assinado e o jogo usa o módulo do ZIP, mas é a lacuna P1 das duas cópias do módulo Cidade.
+- Continuam dentro do APK: botão AUTO TESTE e a pasta de testes (lacuna P1 de release).
+- Instalação: por cima da 0.4.0, sem desinstalar. `retain_data_on_uninstall=false`, então desinstalar apaga os saves.
 
 ## 2. O que está onde
 
@@ -88,7 +96,7 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 1. Entregar o GDD Mestre v0.4.1, se existir; senão, redesenhar.
 2. Entregar os pacotes completos do CP012 e do CP013.
 3. Responder as decisões 1 a 4 do plano de continuidade.
-4. Homologar o APK em aparelho físico.
+4. Instalar o APK 0.4.1 de 13/11 por cima da 0.4.0 e homologar em aparelho físico (o artefato expira em 20/11/2026).
 5. ~~Primeira execução real dos smokes~~ feita em 12/11/2026 (seção 6). Resta rodar `remote_update_smoke` numa máquina com acesso a channel.evolu.ink.
 
 ## 9. Decisões vigentes
