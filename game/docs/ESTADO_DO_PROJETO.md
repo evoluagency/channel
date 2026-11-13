@@ -56,6 +56,7 @@ Defeitos encontrados:
 - Decisão do dono: o jogo passa a um cenário moderno (sem zumbis), com mapa-múndi real, divisões de estado reais, país/estado por jogador, alianças e guerra por território. Reskin do mesmo jogo, nome novo (provisório "MUNDO"). Piloto: Brasil, 27 estados.
 - Desenho completo em `game/docs/DESENHO_MUNDO_v0.1.md` (decisões, perfis dos 27 estados, alianças, marcos M0 a M7, o que reaproveitar do Valdora). Prévia visual privada: https://claude.ai/artifact/7ZdEi4EiADxRTxHEQLhfGe
 - Pendentes do dono: direção visual (A, B ou C), nome, atribuição do estado, territórios disputados, pacote do app novo, nomes dos heróis.
+- Componentes, níveis 1 a 30 e aparência por faixa: `game/docs/COMPONENTES_NIVEIS_v0.1.md` (13 construções, heróis, tropas, estado, alianças, chat, animações). Números são proposta de balanceamento.
 - O CP012 (`city-12`) deixa de ser pacote externo; o conteúdo é reescrito nos marcos M4 a M6. Nada do Valdora em produção muda; o site novo segue sem publicar.
 
 ## 2. O que está onde
