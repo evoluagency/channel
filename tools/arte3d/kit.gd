@@ -377,3 +377,58 @@ func toldo(pai: Node3D, pos: Vector3, normal: Vector3, largura: float, fundo := 
 	for i in listras:
 		var x := (i + 0.5) / listras * largura - largura * 0.5
 		caixa(inc, Vector3(x, 0, fundo * 0.5), Vector3(largura / listras, 0.04, fundo), alianca(0.7) if i % 2 == 0 else p("branco", 0.7), 0.0)
+
+## Fileira de plantas a partir de pos, na direção dir. tipo: alface, tomate, broto, luminosa.
+func fileira(pai: Node3D, pos: Vector3, dir: Vector3, n: int, passo: float, tipo := "alface", escala := 1.0) -> void:
+	for i in n:
+		var q := pos + dir * (i * passo)
+		match tipo:
+			"tomate":
+				cilindro(pai, q, 0.015 * escala, 0.45 * escala, p("madeira"), 4)
+				esfera(pai, q + Vector3(0, 0.3, 0) * escala, 0.16 * escala, p("folha", 0.85))
+				esfera(pai, q + Vector3(0.08, 0.28, 0.08) * escala, 0.05 * escala, p("vermelho", 0.5))
+				esfera(pai, q + Vector3(-0.07, 0.36, 0.04) * escala, 0.045 * escala, p("vermelho", 0.5))
+			"broto":
+				esfera(pai, q + Vector3(0, 0.05, 0) * escala, 0.07 * escala, p("folha_clara", 0.8), 0.7)
+			"luminosa":
+				esfera(pai, q + Vector3(0, 0.12, 0) * escala, 0.13 * escala, luz(Color("6dff9e"), 0.9), 0.8)
+				esfera(pai, q + Vector3(0.06, 0.2, 0) * escala, 0.07 * escala, luz(Color("c6ff6a"), 1.1))
+			_:
+				esfera(pai, q + Vector3(0, 0.07, 0) * escala, 0.12 * escala, p("folha_clara", 0.85), 0.75)
+				esfera(pai, q + Vector3(0, 0.1, 0) * escala, 0.07 * escala, p("folha", 0.85))
+
+## Túnel de meio cilindro ao longo de X (estufa de plástico): segmentos planos e arcos.
+func tunel(pai: Node3D, pos: Vector3, raio: float, comp: float, pele: Material, arco_m: Material, segmentos := 7, arcos := 5) -> void:
+	for s in segmentos:
+		var a0 := PI * s / segmentos
+		var a1 := PI * (s + 1) / segmentos
+		var p0 := Vector3(0, sin(a0), cos(a0)) * raio
+		var p1 := Vector3(0, sin(a1), cos(a1)) * raio
+		var g := grupo(pai, pos + (p0 + p1) * 0.5)
+		g.rotation.x = -(a0 + a1) * 0.5 + PI * 0.5
+		_no(malha_caixa(Vector3(comp, 0.02, p0.distance_to(p1) + 0.01), 0.0), pele, Vector3.ZERO, g, false)
+	for i in arcos:
+		var x := -comp * 0.5 + comp * i / (arcos - 1)
+		arco(pai, pos + Vector3(x, 0, 0), raio + 0.02, 90.0, 0.05, arco_m)
+
+## Cúpula (meia esfera) de vidro com nervuras.
+func cupula(pai: Node3D, pos: Vector3, raio: float, pele: Material, nervura: Material, nervuras := 8) -> void:
+	var m := SphereMesh.new()
+	m.radius = raio; m.height = raio; m.is_hemisphere = true; m.radial_segments = 32; m.rings = 12
+	_no(m, pele, pos, pai, false)
+	for i in nervuras:
+		arco(pai, pos, raio + 0.02, 180.0 * i / nervuras, 0.06, nervura, 12)
+	for h in [0.35, 0.7]:
+		toro(pai, pos + Vector3(0, raio * h, 0), raio * sqrt(1.0 - h * h), 0.03, nervura)
+
+## Meio arco vertical (semicírculo acima do chão), girado rot_y graus em torno de Y.
+func arco(pai: Node3D, centro: Vector3, raio: float, rot_y: float, espessura: float, material: Material, segmentos := 9) -> void:
+	var g := grupo(pai, centro, rot_y)
+	for s in segmentos:
+		var a0 := PI * s / segmentos
+		var a1 := PI * (s + 1) / segmentos
+		var p0 := Vector3(cos(a0), sin(a0), 0) * raio
+		var p1 := Vector3(cos(a1), sin(a1), 0) * raio
+		var h := grupo(g, (p0 + p1) * 0.5)
+		h.rotation.z = (a0 + a1) * 0.5 - PI * 0.5
+		_no(malha_caixa(Vector3(p0.distance_to(p1) + 0.02, espessura, espessura), 0.0), material, Vector3.ZERO, h)
