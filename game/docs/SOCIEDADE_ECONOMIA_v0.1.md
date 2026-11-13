@@ -129,3 +129,23 @@ Termo "movimento"; taxas (banco 2% + 2%, mercado 5%, estadual 0 a 3%); 20% do co
 5. **Precificação com margem de lucro** para quem vende. **O imposto incide só na venda** e é abatido de quem vende.
 
 Medida rápida na simulação atual, com o imposto só na venda (sem a taxa de 5% do sistema): imposto de 10% atrasa o nível 30 do jogador de 15 min em 0,4 dia; imposto de 40%, em 1,6 dia (6% da produção). Hoje as vendas são só cerca de 15% da produção, então o imposto sobre venda quase não pesa no ritmo. Ver a crítica registrada no `HANDOFF-1.4.md` e a decisão pendente sobre especialização das regiões.
+
+## 12. Decisões do dono (13/11/2026, fim da sessão 1.4) e recomendações
+
+**Decisões:**
+1. **Banco é prédio próprio** (o 14º).
+2. **O servidor não reinicia no fim da temporada.** Começa a **disputa entre servidores (países)**: tecnologias podem ser trocadas entre países e cidades podem migrar de um país para outro, **pagando por isso**. As regras da disputa entre servidores ainda não estão definidas.
+3. **Siglas e números livres:** não bloquear partidos reais; fica a critério dos jogadores. A moderação do M10 continua valendo para ofensa e fraude.
+4. Especialização das regiões: o dono pediu sugestão (abaixo).
+
+**Recomendações (a confirmar na sessão 1.5):**
+
+| Tema | Recomendação | Por quê |
+|---|---|---|
+| Banco pago? | **Não.** O banco é construído com recursos, como os outros prédios, e todos têm acesso a ele | Proteger a moeda e tomar empréstimo é o centro da economia; cobrar por isso torna o jogo de pagar para ganhar e liga dinheiro real à moeda, que não pode ser comprada |
+| O que cobrar (modelo do gênero) | **Fila extra de obra** e **fila extra de pesquisa**, dentro do passe da temporada | É conveniência e velocidade: o pagante vai mais rápido, mas nenhuma regra fica fechada para quem não paga |
+| Centro tecnológico | **Sim, como 15º prédio:** árvore de pesquisa (produção, obras, defesa, economia e comércio) com 1 fila grátis e a 2ª no passe | Dá destino de longo prazo depois do nível 30 e é a base das **tecnologias trocadas entre países** da disputa entre servidores |
+| Especialização das regiões | **+30% em 2 recursos e −20% nos outros 2**, mais **limite de 2 prédios por recurso fraco** | Teste rápido: só os ±% não criam comércio, porque a cidade constrói mais prédios do recurso que falta (compras ficam abaixo de 1% da produção). O limite de prédios obriga a comprar de outro estado, e aí o imposto sobre a venda passa a pesar |
+| Atribuição | Norte: metal e energia fortes; Nordeste: energia e alimentos; Centro-Oeste: alimentos e metal; Sudeste: materiais e metal; Sul: alimentos e materiais. Fracos: os outros dois | Com +30%/−20%, a produção das regiões ficou entre 0,98 e 1,02 da média e o nível 30 entre os dias 62,9 e 63,2 |
+| Servidor que não reinicia | Bônus de recém-chegado: obras mais rápidas para quem está abaixo da cidade mediana do servidor | Quem chega na temporada 2 alcança os outros |
+| Migração entre países | Item de transferência pago, com requisitos (sem cargo, sem dívida e sem guerra); a moeda e os recursos levados têm teto | Impede levar uma economia inteira de um país para outro |

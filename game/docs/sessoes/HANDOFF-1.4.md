@@ -1,7 +1,7 @@
 # Valdora 1.4 — Passagem de bastão
 
 Sessão: "Valdora 1.4 (Jogabilidade, ciclo diário e chat)", 13/11/2026.
-Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PROJETO.md`. Próxima sessão prevista: **1.5 (Cidade 3D, M8)**.
+Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PROJETO.md`. Próxima sessão prevista: **1.5 (Economia v0.3)**, depois **1.6 (Cidade 3D, M8)**.
 
 ## Feito
 
@@ -69,3 +69,7 @@ Decisões do dono sobre impostos e comércio: `SOCIEDADE_ECONOMIA_v0.1.md`, seç
 5. **Política real:** números de 10 a 99 e siglas de 4 letras coincidem com partidos reais (13, 22, 45, PT, PL).
 6. **Escopo da Fase A:** a parte social (movimentos, eleição, Conselho, chat) feita com NPC é grande e parcialmente descartável; validar antes uma fatia jogável (cidade, produção, mercado com o sistema e um estado).
 7. **Tesouro:** destino do imposto arrecadado (obras com bônus, que funcionam como dreno, e teto de saldo do tesouro).
+
+## Fechamento (13/11/2026)
+
+O dono decidiu: Banco como prédio próprio; servidor sem reinício, com disputa entre países, troca de tecnologias e migração paga; siglas e números livres (o ponto 5 acima deixa de valer). Recomendações registradas em `SOCIEDADE_ECONOMIA_v0.1.md`, seção 12. Próxima sessão: `PROMPT-1.5.md` (economia v0.3, Opus); a Cidade 3D passou para `PROMPT-1.6.md`.

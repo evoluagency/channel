@@ -89,6 +89,7 @@ Defeitos encontrados:
 - Simulação `tools/mundo/simular_economia.py` (5 regiões × 4 perfis, determinística): fontes e drenos de moeda andam juntos (20 a 28% da produção por semana), moeda guardada abaixo de 0,6 dia de produção, preço preso na faixa de ±15% pela âncora do sistema; regiões a ±1% em poder e produção.
 - Dados: `game/data/mundo_componentes_v0.2.json` (14 prédios, gerado por `tools/mundo/gerar_componentes_v02.py`). A v0.1 continua no repositório para a arte e o teste antigo.
 - Regras em `game/docs/JOGABILIDADE_ECONOMIA_v0.1.md`: progressão, desbloqueio, economia, banco, empréstimo, ajuda, passe, poder (eleição, guerra civil, governador, Conselho dos governadores, presidência), ciclo diário, NPC e chat. As seções 4 a 12 são proposta sobre as decisões do dono.
+- Decisões finais da sessão: impostos estadual e federal só na venda, com aviso de capacidade de pagamento; comércio entre estados com margem de lucro; Banco como prédio próprio; servidor sem reinício, com disputa entre países e migração paga; siglas livres (`SOCIEDADE_ECONOMIA_v0.1.md`, seções 11 e 12). Próxima sessão: 1.5, economia v0.3; Cidade 3D na 1.6.
 - Testes: `game/tests/test_economia_mundo.py` 22/22, no `tools/run_valdora_tests.sh` (o `--py` passa 8/8). Nada do jogo instalado mudou.
 
 ## 2. O que está onde
