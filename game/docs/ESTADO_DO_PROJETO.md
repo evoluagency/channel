@@ -30,8 +30,8 @@ Defeitos encontrados:
 
 | Defeito | Onde | Correção sai por |
 |---|---|---|
-| Barra superior da Cidade: o rótulo de recursos fica numa coluna de letras, a barra estica até o meio da tela e escurece o mapa; o nome da cidade aparece no meio da tela | `city.gd`, `_create_ui`: `resource_label` com quebra de linha dentro de um `HBoxContainer` sem largura mínima | OTA (`city-10`) |
-| Texto "CIDADE · v8" desenhado no mapa da v9 | `city.gd`, `draw_string` | OTA (`city-10`) |
+| Barra superior da Cidade: o rótulo de recursos fica numa coluna de letras, a barra estica até o meio da tela e escurece o mapa; o nome da cidade aparece no meio da tela | `city.gd`, `_create_ui`: `resource_label` com quebra de linha dentro de um `HBoxContainer` sem largura mínima | OTA (módulo da Cidade visual, sem assinatura ainda) |
+| Texto "CIDADE · v8" desenhado no mapa da v9 | `city.gd`, `draw_string` | OTA (módulo da Cidade visual) |
 | Botões do topo (MÓDULOS e outros) desenhados por cima dos painéis de Heróis e Arena | `main.gd`: botões adicionados à mesma camada depois dos painéis | APK |
 | Mensagem de status do topo passa por baixo dos botões | `main.gd` | APK |
 
@@ -39,7 +39,16 @@ Defeitos encontrados:
 
 - Guia em `docs/DIRECAO_VISUAL.md` (texto) e `docs/direcao-visual/guia-visual.html` (ilustrado).
 - Site refeito com cinco páginas na branch `claude/zealous-tesla-kfhwld`, sobre o `site/` da `main`. **Não publicado**: publicar exige "OK, subir" e gera 1 deploy.
-- Telas do jogo: Cidade pelo OTA (`city-10`, precisa da chave OTA); demais telas no APK junto com o CP013.
+- Telas do jogo: Cidade pelo OTA; demais telas no APK junto com o CP013.
+
+### Cidade na direção visual (sessão 1.1, 13/11/2026)
+
+- Decisão do dono: o CP012 será `city-12`; nada é publicado agora e a Cidade visual evolui em versões intermediárias até lá. `city-10` e `city-11` ficam livres para o visual.
+- `game/modules/city/city.gd` reescrito visualmente (barra de 60 px fixos, pílulas de recurso, sem "CIDADE · v8", Cinzel e Montserrat dentro do módulo, cores e raios do guia), regras e save da v9 intactos. Fontes e licenças OFL em `game/modules/city/fontes/`.
+- Tema do núcleo em `game/scripts/ui/valdora_tema.gd` (não usado ainda); lista de mudanças de camadas e HUD em `game/docs/MUDANCAS_NUCLEO_CP013.md`. `main.gd` intocado.
+- `tools/build_city_zip.py` monta o ZIP sem assinatura (determinístico, `dist/ota-trabalho/`). Assinatura: só no computador do dono, passo a passo em `game/docs/sessoes/HANDOFF-1.1.md`.
+- **Não verificado em Godot**: o ambiente bloqueou a execução do binário. O `city.gd` novo e o `city_visual_smoke.gd` não foram compilados nem executados; só os testes Python passaram. Rodar `tools/run_valdora_tests.sh --all` antes de assinar.
+- Os defeitos 1 e 2 da tabela acima (barra e texto da v8) têm correção pronta e não homologada; os 3 e 4 seguem para o APK com o CP013.
 
 ## 2. O que está onde
 
@@ -49,7 +58,7 @@ Defeitos encontrados:
 
 - Em 12/11/2026, com "OK, subir" do dono, a `main` avançou em fast-forward de `6f397f5` para `18317b3` (branch `publicar/ota-rev10`): manifesto revisão 10, `city-9.zip` e `vercel.json` que limita o deploy automático à `main`. Gerou 1 deploy de produção na Vercel. A revisão 9 nunca chegou à produção; saltou da 8 para a 10.
 - Falta confirmar no celular que a Cidade v9 chega pelo OTA (homologação do dono).
-- **CP012** (Cidade v10) e **CP013** (HUD 3D) existem só no computador do dono. O CP013 muda o núcleo e exige APK novo.
+- **CP012** (governança regional, será `city-12`) e **CP013** (HUD 3D) existem só no computador do dono. O CP013 muda o núcleo e exige APK novo.
 
 ## 3. Branches
 
@@ -83,7 +92,7 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 
 ## 6. Testes
 
-- `game/tests`: 15 smokes Godot e 3 testes Python.
+- `game/tests`: 16 smokes Godot (o `city_visual_smoke` entra no `--all`; ainda não executado) e 3 testes Python.
 - Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 4 smokes extras que devem passar hoje. Com `--historico`, inclui também CP008, CP009 e CP010, que estão presos às revisões 7, 8 e 9 do manifesto e falham por desenho contra o manifesto atual. O script copia o manifesto e os ZIPs de `site/updates/v2/` para `game/tests/fixtures/` antes dos smokes, como o workflow `cp004-ota`; sem essa cópia 10 smokes falhavam (defeito corrigido em 12/11).
 - Godot esperado: 4.7.2 (Linux x86_64, zip com SHA-256 `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`).
 - **Primeira execução real dos smokes: 12/11/2026**, Godot 4.7.2 oficial com o hash conferido, código do jogo igual ao da release `8a29073`. Log em `game/docs/logs/smokes_2026-11-12.log`.

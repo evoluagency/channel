@@ -19,7 +19,7 @@ checks={
  'offline compatible':'Supabase' not in script and 'MultiplayerPeer' not in script,
  'remote updates isolated':(root/'scripts/content_updater.gd').exists(),
  'no Minecraft SDK':'@minecraft' not in script,
- 'font file absent':not any(root.rglob('*.ttf')) and not any(root.rglob('*.otf')),
+ 'fonts only with OFL license beside them':all(any(f.parent.glob('OFL*.txt')) for f in list(root.rglob('*.ttf'))+list(root.rglob('*.otf'))),
  'no APK artifact misrepresented':not any(root.rglob('*.apk')),
 }
 for key, value in checks.items():

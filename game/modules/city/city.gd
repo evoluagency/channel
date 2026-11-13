@@ -1,5 +1,6 @@
 extends Control
-## Valdora CP011 - Cidade v9: expedições, acordos regionais e primeiro estado NPC offline.
+## Valdora - Cidade na direção visual v1, sobre as regras da v9 (expedições, acordos regionais e primeiro estado NPC offline).
+## Sem mudança de regra, de caminho de save ou de esquema. Independe do núcleo do aplicativo.
 ## Cena carregada por ZIP OTA assinado; somente user://valdora_city_cp005_v1.json é gravado.
 
 const SAVE_PATH := "user://valdora_city_cp005_v1.json"
@@ -31,6 +32,24 @@ const COSTS := {
     "quartel": {"madeira": 45, "pedra": 55},
     "mercado": {"madeira": 35, "pedra": 20}
 }
+# Direção visual v1 (docs/DIRECAO_VISUAL.md). Cópia local: o módulo não depende do núcleo.
+const NOITE := Color("#0a0f22")
+const NOITE_2 := Color("#10183a")
+const NOITE_3 := Color("#19234d")
+const VIOLETA := Color("#6a3fd4")
+const VIOLETA_LUZ := Color("#b892ff")
+const OURO := Color("#e2b865")
+const PEDRA_TXT := Color("#ece6da")
+const TEXTO := Color("#e4e1ee")
+const TEXTO_2 := Color("#a9a7c2")
+const CAMPO := Color("#2f9e4f")
+const ALERTA := Color("#f0a33c")
+const BARRA_ALTURA := 60
+const RAIO_PAINEL := 18
+const RAIO_BOTAO := 10
+const ALVO_MIN := 48
+const TAG_WGHT := 2003265652 # tag OpenType "wght" (eixo de peso das fontes variáveis)
+const FONT_DIR := "res://valdora_modules/city/fonts/"
 const TERRITORIES := ["Centro urbano", "Campos férteis", "Bosque de madeira", "Pedreira", "Rio e doca", "Ruínas antigas", "Mina de ferro", "Torre de vigia"]
 
 var city: Dictionary = {}
@@ -60,7 +79,9 @@ var press_position := Vector2.ZERO
 var last_position := Vector2.ZERO
 var pan_distance := 0.0
 var title_label: Label
-var resource_label: Label
+var resource_pills: Dictionary = {}
+var font_titulo: Font
+var font_corpo: Font
 var status_label: Label
 var selected_label: Label
 var territory_label: Label
@@ -69,6 +90,7 @@ var editor_input: LineEdit
 var editor_error: Label
 
 func _ready() -> void:
+    _setup_fonts()
     mouse_filter = Control.MOUSE_FILTER_PASS
     _load_city()
     _create_ui()
@@ -268,64 +290,121 @@ func _write_save(data: Dictionary) -> bool:
             return false
     return DirAccess.rename_absolute(ProjectSettings.globalize_path(temp), ProjectSettings.globalize_path(SAVE_PATH)) == OK
 
-func _style(hex: String) -> StyleBoxFlat:
+func _load_font(file_name: String, weight: int) -> Font:
+    var path := FONT_DIR + file_name
+    if not FileAccess.file_exists(path):
+        return ThemeDB.fallback_font
+    var base := FontFile.new()
+    base.data = FileAccess.get_file_as_bytes(path)
+    base.antialiasing = TextServer.FONT_ANTIALIASING_GRAY
+    var variation := FontVariation.new()
+    variation.base_font = base
+    variation.variation_opentype = {TAG_WGHT: weight}
+    return variation
+
+func _setup_fonts() -> void:
+    font_titulo = _load_font("Cinzel.ttf", 700)
+    font_corpo = _load_font("Montserrat.ttf", 500)
+    var tema := Theme.new()
+    tema.default_font = font_corpo
+    tema.default_font_size = 16
+    theme = tema
+
+func _style(hex: String, radius: int = RAIO_PAINEL, border := Color(VIOLETA_LUZ, 0.24), border_width: int = 1) -> StyleBoxFlat:
     var s := StyleBoxFlat.new()
     s.bg_color = Color(hex)
-    s.corner_radius_top_left = 12
-    s.corner_radius_top_right = 12
-    s.corner_radius_bottom_left = 12
-    s.corner_radius_bottom_right = 12
-    s.border_color = Color("#7b9eae")
-    s.border_width_left = 1
-    s.border_width_top = 1
-    s.border_width_right = 1
-    s.border_width_bottom = 1
-    s.content_margin_left = 13
-    s.content_margin_right = 13
+    s.set_corner_radius_all(radius)
+    s.border_color = border
+    s.set_border_width_all(border_width)
+    s.content_margin_left = 14
+    s.content_margin_right = 14
     s.content_margin_top = 8
     s.content_margin_bottom = 8
     return s
 
-func _label(text_value: String, font_size: int = 18, color := Color("#f4f5e4")) -> Label:
+func _style_foco(hex: String = "#10183a") -> StyleBoxFlat:
+    return _style(hex, RAIO_PAINEL, OURO, 2)
+
+func _label(text_value: String, font_size: int = 16, color := TEXTO, titulo: bool = false) -> Label:
     var l := Label.new()
     l.text = text_value
     l.add_theme_font_size_override("font_size", font_size)
     l.add_theme_color_override("font_color", color)
+    if titulo and font_titulo != null:
+        l.add_theme_font_override("font", font_titulo)
     l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
     return l
+
+# Rótulo de uma linha só: nunca quebra e corta com reticências se faltar espaço.
+func _label_linha(text_value: String, font_size: int = 16, color := TEXTO, titulo: bool = false) -> Label:
+    var l := _label(text_value, font_size, color, titulo)
+    l.autowrap_mode = TextServer.AUTOWRAP_OFF
+    l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+    l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+    return l
+
+# Pílula de recurso: devolve o rótulo de valor; o contêiner é o pai dele.
+func _pilula(key: String) -> Label:
+    var pill := PanelContainer.new()
+    pill.name = "Pilula_" + key
+    var box := _style("#19234d", 999, Color(OURO, 0.45), 1)
+    box.content_margin_top = 4
+    box.content_margin_bottom = 4
+    box.content_margin_left = 12
+    box.content_margin_right = 12
+    pill.add_theme_stylebox_override("panel", box)
+    var value := _label_linha("", 15, PEDRA_TXT)
+    value.custom_minimum_size.x = 76
+    pill.add_child(value)
+    return value
 
 func _button(text_value: String, action: Callable) -> Button:
     var b := Button.new()
     b.text = text_value
-    b.custom_minimum_size = Vector2(79, 48)
+    b.custom_minimum_size = Vector2(79, ALVO_MIN)
     b.add_theme_font_size_override("font_size", 15)
-    b.add_theme_color_override("font_color", Color("#ffe7ae"))
-    b.add_theme_stylebox_override("normal", _style("#143751"))
-    b.add_theme_stylebox_override("hover", _style("#285a76"))
-    b.add_theme_stylebox_override("pressed", _style("#385e79"))
+    b.add_theme_color_override("font_color", PEDRA_TXT)
+    b.add_theme_color_override("font_hover_color", Color.WHITE)
+    b.add_theme_stylebox_override("normal", _style("#10183a", RAIO_BOTAO, Color(OURO, 0.35), 1))
+    b.add_theme_stylebox_override("hover", _style("#19234d", RAIO_BOTAO, Color(OURO, 0.6), 1))
+    b.add_theme_stylebox_override("pressed", _style("#6a3fd4", RAIO_BOTAO, OURO, 2))
+    b.add_theme_stylebox_override("focus", _style("#19234d", RAIO_BOTAO, VIOLETA_LUZ, 2))
     b.pressed.connect(action)
+    return b
+
+func _button_principal(text_value: String, action: Callable) -> Button:
+    var b := _button(text_value, action)
+    b.custom_minimum_size = Vector2(79, 56)
+    b.add_theme_stylebox_override("normal", _style("#6a3fd4", RAIO_BOTAO, OURO, 2))
+    b.add_theme_stylebox_override("hover", _style("#8b5cf0", RAIO_BOTAO, OURO, 2))
+    b.add_theme_stylebox_override("pressed", _style("#3a1f87", RAIO_BOTAO, OURO, 2))
     return b
 
 func _create_ui() -> void:
     var top := PanelContainer.new()
-    top.add_theme_stylebox_override("panel", _style("#071e36f2"))
+    top.add_theme_stylebox_override("panel", _style("#10183af2"))
     top.set_anchors_preset(Control.PRESET_TOP_WIDE)
     top.offset_left = 10
     top.offset_right = -224 # reservado para o FECHAR MÓDULO do aplicativo-base
     top.offset_top = 8
-    top.offset_bottom = 68
+    top.offset_bottom = 8 + BARRA_ALTURA # altura fixa: nada dentro dela empurra a barra
+    top.custom_minimum_size = Vector2(0, BARRA_ALTURA)
+    top.clip_contents = true
     add_child(top)
     var head := HBoxContainer.new()
-    head.add_theme_constant_override("separation", 18)
+    head.add_theme_constant_override("separation", 10)
     top.add_child(head)
-    title_label = _label("VALDORA · MINHA CIDADE", 23, Color("#ffe0a0"))
+    title_label = _label_linha("MINHA CIDADE", 24, PEDRA_TXT, true)
     title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    title_label.custom_minimum_size.x = 120
     head.add_child(title_label)
-    resource_label = _label("", 18)
-    head.add_child(resource_label)
+    for key in ["madeira", "pedra", "alimentos", "pop"]:
+        var value := _pilula(key)
+        resource_pills[key] = value
+        head.add_child(value.get_parent())
 
     var side := PanelContainer.new()
-    side.add_theme_stylebox_override("panel", _style("#0a253eef"))
+    side.add_theme_stylebox_override("panel", _style("#10183aef"))
     side.anchor_left = 1.0
     side.anchor_right = 1.0
     side.anchor_top = 0.0
@@ -338,19 +417,19 @@ func _create_ui() -> void:
     var column := VBoxContainer.new()
     column.add_theme_constant_override("separation", 7)
     side.add_child(column)
-    column.add_child(_label("TERRITÓRIOS · CIDADE v9", 20, Color("#ffdb83")))
+    column.add_child(_label("TERRITÓRIOS", 22, OURO, true))
     var rename := _button("EDITAR NOME", Callable(self, "_ask_name"))
     rename.custom_minimum_size = Vector2(0, 40)
     column.add_child(rename)
     var government := _button("GOVERNO · MISSÕES · REGIÃO", Callable(self, "_open_civic"))
     government.custom_minimum_size = Vector2(0, 42)
     column.add_child(government)
-    objective_label = _label("", 16, Color("#f8d68d"))
+    objective_label = _label("", 16, OURO)
     column.add_child(objective_label)
-    production_label = _label("", 14, Color("#badce9"))
+    production_label = _label("", 14, TEXTO_2)
     column.add_child(production_label)
-    production_button = _button("COLETAR PRODUÇÃO", Callable(self, "_collect_production"))
-    production_button.custom_minimum_size = Vector2(0, 42)
+    production_button = _button_principal("COLETAR PRODUÇÃO", Callable(self, "_collect_production"))
+    production_button.custom_minimum_size = Vector2(0, 56)
     column.add_child(production_button)
     var divider := HSeparator.new()
     column.add_child(divider)
@@ -363,12 +442,12 @@ func _create_ui() -> void:
     territory_label = _label("", 15)
     territory_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     scroll.add_child(territory_label)
-    status_label = _label("", 15, Color("#f2dfb7"))
+    status_label = _label("", 15, PEDRA_TXT)
     status_label.custom_minimum_size.y = 45
     column.add_child(status_label)
 
     var bottom := PanelContainer.new()
-    bottom.add_theme_stylebox_override("panel", _style("#142c42f2"))
+    bottom.add_theme_stylebox_override("panel", _style("#10183af2"))
     bottom.anchor_left = 0.0
     bottom.anchor_right = 1.0
     bottom.anchor_top = 1.0
@@ -418,7 +497,7 @@ func _create_ui() -> void:
     # CP006-UI: overlay no próprio jogo; não abre uma janela nativa maior que a tela.
     editor_overlay = ColorRect.new()
     editor_overlay.name = "Nomear cidade · Valdora"
-    editor_overlay.color = Color("#06172bdc")
+    editor_overlay.color = Color(NOITE, 0.72)
     editor_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     editor_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
     add_child(editor_overlay)
@@ -433,13 +512,13 @@ func _create_ui() -> void:
 
     var editor_card := PanelContainer.new()
     editor_card.custom_minimum_size = Vector2(480, 0)
-    editor_card.add_theme_stylebox_override("panel", _style("#112c42"))
+    editor_card.add_theme_stylebox_override("panel", _style_foco())
     editor_position.add_child(editor_card)
 
     var form := VBoxContainer.new()
     form.add_theme_constant_override("separation", 12)
     editor_card.add_child(form)
-    form.add_child(_label("NOME DA CIDADE", 24, Color("#ffe5a6")))
+    form.add_child(_label("NOME DA CIDADE", 28, PEDRA_TXT, true))
     form.add_child(_label("Escolha entre 3 e 24 caracteres.", 16))
 
     var line := HBoxContainer.new()
@@ -453,11 +532,11 @@ func _create_ui() -> void:
     editor_input.text_submitted.connect(_on_name_submitted)
     line.add_child(editor_input)
 
-    var save := _button("SALVAR", Callable(self, "_save_name"))
-    save.custom_minimum_size = Vector2(116, 50)
+    var save := _button_principal("SALVAR", Callable(self, "_save_name"))
+    save.custom_minimum_size = Vector2(116, 56)
     line.add_child(save)
 
-    editor_error = _label("Confirme com SALVAR ou Enter no teclado.", 15, Color("#b4d8d6"))
+    editor_error = _label("Confirme com SALVAR ou Enter no teclado.", 15, TEXTO_2)
     form.add_child(editor_error)
     var cancel := _button("CANCELAR", Callable(self, "_cancel_name"))
     cancel.custom_minimum_size = Vector2(110, 43)
@@ -497,11 +576,16 @@ func _has_kind(kind: String) -> bool:
 func _refresh_mode_buttons() -> void:
     for key in build_buttons:
         var b: Button = build_buttons[key]
-        b.modulate = Color("#ffd777") if str(key) == selected_type else Color.WHITE
+        var ativo := str(key) == selected_type
+        b.add_theme_stylebox_override("normal", _style("#19234d", RAIO_BOTAO, OURO, 2) if ativo else _style("#10183a", RAIO_BOTAO, Color(OURO, 0.35), 1))
+        b.add_theme_color_override("font_color", OURO if ativo else PEDRA_TXT)
 
 func _refresh_ui() -> void:
-    title_label.text = "VALDORA · " + (str(city["name"]) if not str(city["name"]).is_empty() else "CIDADE SEM NOME")
-    resource_label.text = "MADEIRA %d   PEDRA %d   ALIM. %d   POP. ~%d" % [int(city["resources"]["madeira"]), int(city["resources"]["pedra"]), int(city["resources"].get("alimentos", 0)), _city_population()]
+    title_label.text = str(city["name"]) if not str(city["name"]).is_empty() else "CIDADE SEM NOME"
+    resource_pills["madeira"].text = "MADEIRA %d" % int(city["resources"]["madeira"])
+    resource_pills["pedra"].text = "PEDRA %d" % int(city["resources"]["pedra"])
+    resource_pills["alimentos"].text = "ALIM. %d" % int(city["resources"].get("alimentos", 0))
+    resource_pills["pop"].text = "POP. ~%d" % _city_population()
     _refresh_production_label()
     if objective_label != null:
         objective_label.text = _objective()
@@ -884,15 +968,15 @@ func _unhandled_input(event: InputEvent) -> void:
 func _draw() -> void:
     var map_right := maxf(150.0, size.x - 326.0)
     var map_height := maxf(150.0, size.y - 175.0)
-    draw_rect(Rect2(Vector2.ZERO, size), Color("#9bd5e5"))
-    draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#86b6ab"))
+    draw_rect(Rect2(Vector2.ZERO, size), NOITE)
+    draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#1c2a5c"))
     # Fundo atmosférico leve e não interativo; as áreas de construção seguem independentes.
     for i in range(7):
         var mx := 40.0 + float(i) * 160.0
         var peak := 98.0 + float((i * 31) % 57)
-        draw_colored_polygon(PackedVector2Array([Vector2(mx - 110, 310), Vector2(mx, peak), Vector2(mx + 145, 310)]), Color("#577a83"))
-        draw_colored_polygon(PackedVector2Array([Vector2(mx - 22, peak + 32), Vector2(mx, peak), Vector2(mx + 28, peak + 43), Vector2(mx + 14, peak + 36)]), Color("#d9e7dc"))
-    draw_rect(Rect2(Vector2(8, 340), Vector2(map_right, maxf(4, map_height - 264))), Color("#8aaf7e"))
+        draw_colored_polygon(PackedVector2Array([Vector2(mx - 110, 310), Vector2(mx, peak), Vector2(mx + 145, 310)]), Color("#2a2f6b"))
+        draw_colored_polygon(PackedVector2Array([Vector2(mx - 22, peak + 32), Vector2(mx, peak), Vector2(mx + 28, peak + 43), Vector2(mx + 14, peak + 36)]), Color("#8d86c4"))
+    draw_rect(Rect2(Vector2(8, 340), Vector2(map_right, maxf(4, map_height - 264))), Color("#3c5a52"))
     # Primeiro o solo com profundidade. O lado rebaixado reforça leitura 2.5D.
     for y in range(H):
         for x in range(W):
@@ -922,7 +1006,7 @@ func _draw() -> void:
                 draw_line(p + Vector2(-15 * zoom, wave), p + Vector2(2 * zoom, wave - 3 * zoom), Color("#b0e7ef88"), 1.8 * zoom)
                 draw_line(p + Vector2(4 * zoom, 7 * zoom - wave), p + Vector2(20 * zoom, 7 * zoom - wave), Color("#d1f0e999"), 1.4 * zoom)
             if selected_tile == Vector2i(x, y):
-                draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), Color("#f9d373"), 4.0)
+                draw_polyline(PackedVector2Array([tile[0], tile[1], tile[2], tile[3], tile[0]]), OURO, 3.0)
     # Pintura isométrica por profundidade. Cada construção é redesenhada independentemente.
     for depth in range(W + H - 1):
         for x in range(W):
@@ -952,9 +1036,7 @@ func _draw() -> void:
     _draw_citizens()
     _draw_city_life_details()
     if dusk_mode:
-        draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#091f4f38"))
-    # A small in-scene content revision identifier; the APK version stays unchanged.
-    draw_string(ThemeDB.fallback_font, Vector2(17, 109), "CIDADE · v8  |  " + _city_stage(), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color("#102a45"))
+        draw_rect(Rect2(Vector2(8, 76), Vector2(map_right, map_height)), Color("#3a1f8760"))
 
 func _field(p: Vector2) -> void:
     var s := zoom
@@ -1269,14 +1351,14 @@ func _open_civic() -> void:
 func _close_civic() -> void:
     civic_overlay.hide()
 
-func _civic_text(text_value: String, color: Color = Color("#d4e6e7")) -> Label:
+func _civic_text(text_value: String, color: Color = TEXTO) -> Label:
     var label := _label(text_value, 16, color)
     label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     return label
 
 func _create_civic_overlay() -> void:
     civic_overlay = ColorRect.new()
-    civic_overlay.color = Color("#06182bdf")
+    civic_overlay.color = Color(NOITE, 0.72)
     civic_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     civic_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
     add_child(civic_overlay)
@@ -1286,7 +1368,7 @@ func _create_civic_overlay() -> void:
     civic_overlay.add_child(frame)
     var panel := PanelContainer.new()
     panel.custom_minimum_size = Vector2(770, 0)
-    panel.add_theme_stylebox_override("panel", _style("#102b40"))
+    panel.add_theme_stylebox_override("panel", _style_foco())
     frame.add_child(panel)
     var column := VBoxContainer.new()
     column.custom_minimum_size = Vector2(710, 0)
@@ -1294,7 +1376,7 @@ func _create_civic_overlay() -> void:
     panel.add_child(column)
     var header := HBoxContainer.new()
     column.add_child(header)
-    var title := _label("CONSELHO DA CIDADE · VALDORA", 22, Color("#f3d58c"))
+    var title := _label("CONSELHO DA CIDADE", 28, PEDRA_TXT, true)
     title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     header.add_child(title)
     header.add_child(_button("FECHAR", Callable(self, "_close_civic")))
@@ -1316,13 +1398,13 @@ func _refresh_civic() -> void:
         civic_scroll_content.remove_child(previous)
         previous.queue_free()
     var health := _services_report()
-    civic_scroll_content.add_child(_civic_text("SERVIÇOS PÚBLICOS", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("SERVIÇOS PÚBLICOS", OURO))
     civic_scroll_content.add_child(_civic_text("Moradores: %d   Cobertura: %d%%   Defesa: %d" % [health["population"],health["service_coverage"],health["defense"]]))
     civic_scroll_content.add_child(_civic_text("Alimentos: +%d / -%d por ciclo · %s" % [health["food_production"],health["food_upkeep"],health["food_status"]]))
     if int(health["shortage_cycles"]) > 0:
-        civic_scroll_content.add_child(_civic_text("Histórico de falta de alimentos: %d ciclo(s)." % int(health["shortage_cycles"]), Color("#ffd59c")))
+        civic_scroll_content.add_child(_civic_text("Histórico de falta de alimentos: %d ciclo(s)." % int(health["shortage_cycles"]), ALERTA))
     civic_scroll_content.add_child(HSeparator.new())
-    civic_scroll_content.add_child(_civic_text("MISSÕES DA CIDADE", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("MISSÕES DA CIDADE", OURO))
     for quest in _mission_definitions():
         var mission_id := str(quest["id"])
         var claimed: bool = mission_id in city.get("claimed_missions", [])
@@ -1336,7 +1418,7 @@ func _refresh_civic() -> void:
         reward.disabled = claimed or not ready
         line.add_child(reward)
     civic_scroll_content.add_child(HSeparator.new())
-    civic_scroll_content.add_child(_civic_text("REGIÃO · VALEVERDE", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("REGIÃO · VALEVERDE", OURO))
     var region := Control.new()
     region.custom_minimum_size = Vector2(680, 147)
     region.draw.connect(Callable(self,"_draw_region_preview").bind(region))
@@ -1357,7 +1439,7 @@ func _refresh_civic() -> void:
             button.disabled = not _has_kind("mercado")
             civic_scroll_content.add_child(button)
     civic_scroll_content.add_child(HSeparator.new())
-    civic_scroll_content.add_child(_civic_text("CONSELHO REGIONAL · 5 CIDADES", Color("#ffe4a2")))
+    civic_scroll_content.add_child(_civic_text("CONSELHO REGIONAL · 5 CIDADES", OURO))
     civic_scroll_content.add_child(_civic_text("As outras cidades são administradas por NPCs. Nenhuma é um jogador real."))
     for town in _region_towns():
         var id := str(town["id"])
@@ -1377,7 +1459,7 @@ func _refresh_civic() -> void:
     civic_scroll_content.add_child(_civic_text("Cidades vinculadas: %d/5 · Expedições: %d/4 · Tratados: %d/4" % [int(region_status["members"]), int(region_status["discovered"]), int(region_status["pacts"])]))
     civic_scroll_content.add_child(_civic_text("Fundar estado requer quatro tratados, mercado, defesa e cobertura de serviços acima de 50%."))
     if bool(city.get("state_founded", false)):
-        civic_scroll_content.add_child(_civic_text("GOVERNO REGIONAL: %s · Governador: você (NPCs aliados)." % str(city.get("state_name", "")), Color("#ffe4a2")))
+        civic_scroll_content.add_child(_civic_text("GOVERNO REGIONAL: %s · Governador: você (NPCs aliados)." % str(city.get("state_name", "")), OURO))
     else:
         var found := _button("FUNDAR ESTADO", Callable(self, "_found_state"))
         found.disabled = not _state_requirements_met()
