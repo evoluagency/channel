@@ -354,6 +354,7 @@ func _pilula(key: String) -> Label:
     box.content_margin_right = 12
     pill.add_theme_stylebox_override("panel", box)
     var value := _label_linha("", 15, PEDRA_TXT)
+    value.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING # a pílula tem a largura do valor; quem cede é o título
     value.custom_minimum_size.x = 76
     pill.add_child(value)
     return value
@@ -976,7 +977,7 @@ func _draw() -> void:
         var peak := 98.0 + float((i * 31) % 57)
         draw_colored_polygon(PackedVector2Array([Vector2(mx - 110, 310), Vector2(mx, peak), Vector2(mx + 145, 310)]), Color("#2a2f6b"))
         draw_colored_polygon(PackedVector2Array([Vector2(mx - 22, peak + 32), Vector2(mx, peak), Vector2(mx + 28, peak + 43), Vector2(mx + 14, peak + 36)]), Color("#8d86c4"))
-    draw_rect(Rect2(Vector2(8, 340), Vector2(map_right, maxf(4, map_height - 264))), Color("#3c5a52"))
+    draw_rect(Rect2(Vector2(8, 340), Vector2(map_right, maxf(4, map_height - 264))), Color("#141d45"))
     # Primeiro o solo com profundidade. O lado rebaixado reforça leitura 2.5D.
     for y in range(H):
         for x in range(W):

@@ -65,8 +65,8 @@ if [ "$MODE" != "--py" ]; then
     mkdir -p game/tests/fixtures
     cp site/updates/v2/manifest.json game/tests/fixtures/manifest.json
     cp site/updates/v2/modules/*.zip game/tests/fixtures/
-    python3 -I tools/build_city_zip.py --version 0 --out "$LOGDIR/city-visual" >/dev/null 2>&1 \
-      && cp "$LOGDIR/city-visual/city-0.zip" game/tests/fixtures/city_visual_trabalho.zip
+    python3 -I tools/build_city_zip.py --version 1 --out "$LOGDIR/city-visual" >/dev/null 2>&1 \
+      && cp "$LOGDIR/city-visual/city-1.zip" game/tests/fixtures/city_visual_trabalho.zip
     run "godot import" 300 "$GODOT_BIN" --headless --editor --path game --quit
     SMOKES=(core_smoke hero_smoke combat_smoke smoke update_smoke pck_smoke cp006_live_smoke cp011_city_v9_smoke)
     if [ "$MODE" = "--all" ] || [ "$MODE" = "--historico" ]; then

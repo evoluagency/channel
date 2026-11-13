@@ -20,11 +20,11 @@ O CP012 (governança regional) será **`city-12`**. Nada é publicado agora: a C
 4. **Smoke novo** `game/tests/city_visual_smoke.gd` (monta o ZIP sem assinatura em `tests/fixtures/city_visual_trabalho.zip`, entra no `--all`): barra de 60 px em 1280×720, 960×540 e 1600×720, rótulos em linha única, ausência de texto de versão, fontes e licenças no módulo, sem dependência do núcleo, alvos de 48 px, letra mínima 14, regras e custos iguais à v9, save válido.
 5. `game/tools_validate.py`: a regra "nenhuma fonte no projeto" virou "fonte só com licença OFL na mesma pasta".
 
-## NÃO verificado
+## Verificação (Godot 4.7.2 oficial, liberado pelo dono em 13/11/2026)
 
-- **Godot não rodou nesta sessão.** O zip oficial foi baixado e o SHA-256 conferiu com o do PROMPT, mas o ambiente bloqueou a execução do binário ("código vindo de fora"). Por isso o `city.gd` novo e o `city_visual_smoke.gd` **nunca foram executados nem compilados**. Passaram só os testes Python (contratos estáticos, OTA contract, `--verify-existing`, `tools_validate`).
-- **Primeiro passo da próxima sessão (ou do dono, no computador dele):** `tools/run_valdora_tests.sh --all` com Godot 4.7.2. Se o smoke novo ou o `city_name_layout_smoke` falharem, a causa mais provável é GDScript novo (`_style` com parâmetros, `FontVariation` com a tag `wght`, pílulas) ou medida de layout. Corrigir antes de assinar qualquer coisa.
-- Conferência visual em tela (print do mapa e da barra) também pendente: depende do Godot.
+- `tools/run_valdora_tests.sh --all`: **18 passaram, 1 falhou**. A falha é o `remote_update_smoke` (sem rede até channel.evolu.ink, como já registrado). `city_visual_smoke`, `cp011_city_v9_smoke`, `cp005`, `cp007` e `city_name_layout` passaram.
+- Captura real em 1280×720 (Xvfb + OpenGL): `game/docs/logs/cidade_visual_1280x720.png`. Barra de 60 px com título e quatro pílulas legíveis; sem texto de versão no mapa. Um defeito achado na captura (pílula cortando o valor, faixa verde-escura sob o mapa) foi corrigido antes do commit.
+- Não conferido: aparelho físico (só o dono) e a janela de nomear cidade e o painel do Conselho em captura.
 
 ## Assinar no computador do dono (só quando a versão estiver validada)
 
@@ -48,7 +48,7 @@ Observações:
 
 ## Pendências
 
-- Rodar os smokes com Godot e corrigir o que falhar (ver "NÃO verificado").
-- Pacotes completos do CP012 (entra como `city-12`) e do CP013 (aplica `MUDANCAS_NUCLEO_CP013.md`).
+- Capturas do Conselho e da janela de nome; homologar no aparelho depois da assinatura.
+- O dono não tem os pacotes do CP012 e do CP013: o desenvolvimento cabe a nós. Próximas sessões: construir o CP012 (`city-12`, governança regional) sobre a Cidade visual e o CP013 (HUD, aplicando `MUDANCAS_NUCLEO_CP013.md`).
 - Decidir se o APK passa a levar as fontes em `res://fonts/` (item 8 da lista do CP013).
-- "OK, subir site" do site novo continua pendente (sessão 1.0).
+- "OK, subir site" do site novo continua pendente (sessão 1.0); o dono aprova se ficar como a imagem de referência.

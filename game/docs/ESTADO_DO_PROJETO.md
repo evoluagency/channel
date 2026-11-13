@@ -47,7 +47,8 @@ Defeitos encontrados:
 - `game/modules/city/city.gd` reescrito visualmente (barra de 60 px fixos, pílulas de recurso, sem "CIDADE · v8", Cinzel e Montserrat dentro do módulo, cores e raios do guia), regras e save da v9 intactos. Fontes e licenças OFL em `game/modules/city/fontes/`.
 - Tema do núcleo em `game/scripts/ui/valdora_tema.gd` (não usado ainda); lista de mudanças de camadas e HUD em `game/docs/MUDANCAS_NUCLEO_CP013.md`. `main.gd` intocado.
 - `tools/build_city_zip.py` monta o ZIP sem assinatura (determinístico, `dist/ota-trabalho/`). Assinatura: só no computador do dono, passo a passo em `game/docs/sessoes/HANDOFF-1.1.md`.
-- **Não verificado em Godot**: o ambiente bloqueou a execução do binário. O `city.gd` novo e o `city_visual_smoke.gd` não foram compilados nem executados; só os testes Python passaram. Rodar `tools/run_valdora_tests.sh --all` antes de assinar.
+- Verificado com Godot 4.7.2 oficial: `--all` com 18 passando e só o `remote_update_smoke` falhando (sem rede). Captura em `game/docs/logs/cidade_visual_1280x720.png`. Falta homologar no aparelho depois da assinatura.
+- O dono não tem os pacotes do CP012 nem do CP013; o desenvolvimento deles é nosso, em sessões próprias.
 - Os defeitos 1 e 2 da tabela acima (barra e texto da v8) têm correção pronta e não homologada; os 3 e 4 seguem para o APK com o CP013.
 
 ## 2. O que está onde
