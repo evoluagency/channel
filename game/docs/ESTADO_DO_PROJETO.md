@@ -51,6 +51,13 @@ Defeitos encontrados:
 - O dono não tem os pacotes do CP012 nem do CP013; o desenvolvimento deles é nosso, em sessões próprias.
 - Os defeitos 1 e 2 da tabela acima (barra e texto da v8) têm correção pronta e não homologada; os 3 e 4 seguem para o APK com o CP013.
 
+### Mudança de rumo: jogo moderno (13/11/2026)
+
+- Decisão do dono: o jogo passa a um cenário moderno (sem zumbis), com mapa-múndi real, divisões de estado reais, país/estado por jogador, alianças e guerra por território. Reskin do mesmo jogo, nome novo (provisório "MUNDO"). Piloto: Brasil, 27 estados.
+- Desenho completo em `game/docs/DESENHO_MUNDO_v0.1.md` (decisões, perfis dos 27 estados, alianças, marcos M0 a M7, o que reaproveitar do Valdora). Prévia visual privada: https://claude.ai/artifact/7ZdEi4EiADxRTxHEQLhfGe
+- Pendentes do dono: direção visual (A, B ou C), nome, atribuição do estado, territórios disputados, pacote do app novo, nomes dos heróis.
+- O CP012 (`city-12`) deixa de ser pacote externo; o conteúdo é reescrito nos marcos M4 a M6. Nada do Valdora em produção muda; o site novo segue sem publicar.
+
 ## 2. O que está onde
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |
