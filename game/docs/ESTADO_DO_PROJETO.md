@@ -12,7 +12,7 @@ Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8af
 | Pacote Android | `ink.evolu.valdora` | `export_presets.cfg` |
 | Motor | Godot 4.7.2, GL Compatibility | `project.godot`, workflow `cp004-ota` |
 | APKs recebidos do dono | 0.3.3 e 0.4.0-alpha (code 102) | os dois com o mesmo certificado do arquivo de credencial |
-| APK 0.4.1 (code 103) | gerado em 13/11/2026, falta instalar e homologar no aparelho | workflow `valdora-android-release`, execução 43429562665 a partir da release `8a29073`; artefato 14039765549 expira em 20/11/2026 |
+| APK 0.4.1 (code 103) | gerado e instalado por cima da 0.4.0 em 13/11/2026; homologado com defeitos visuais (ver abaixo) | workflow `valdora-android-release`, execução 43429562665 a partir da release `8a29073`; artefato 14039765549 expira em 20/11/2026 |
 
 ### Build do APK 0.4.1 (13/11/2026)
 
@@ -21,6 +21,19 @@ Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8af
 - Aviso na exportação: a cópia `game/modules/city/valdora_modules/city/entry.tscn` aponta para um script que só existe dentro do ZIP OTA. O APK sai assinado e o jogo usa o módulo do ZIP, mas é a lacuna P1 das duas cópias do módulo Cidade.
 - Continuam dentro do APK: botão AUTO TESTE e a pasta de testes (lacuna P1 de release).
 - Instalação: por cima da 0.4.0, sem desinstalar. `retain_data_on_uninstall=false`, então desinstalar apaga os saves.
+
+### Homologação em aparelho da 0.4.1 com OTA revisão 10 (13/11/2026)
+
+Prints do dono. Funciona: instalação por cima sem perder dados (moedas, poções, formação e nome da cidade preservados), tela de marca nova, "conteúdo v10" recebido, Cidade v9 abre em MINHA CIDADE com o painel Territórios, Heróis e Arena abrem.
+
+Defeitos encontrados:
+
+| Defeito | Onde | Correção sai por |
+|---|---|---|
+| Barra superior da Cidade: o rótulo de recursos fica numa coluna de letras, a barra estica até o meio da tela e escurece o mapa; o nome da cidade aparece no meio da tela | `city.gd`, `_create_ui`: `resource_label` com quebra de linha dentro de um `HBoxContainer` sem largura mínima | OTA (`city-10`) |
+| Texto "CIDADE · v8" desenhado no mapa da v9 | `city.gd`, `draw_string` | OTA (`city-10`) |
+| Botões do topo (MÓDULOS e outros) desenhados por cima dos painéis de Heróis e Arena | `main.gd`: botões adicionados à mesma camada depois dos painéis | APK |
+| Mensagem de status do topo passa por baixo dos botões | `main.gd` | APK |
 
 ## 2. O que está onde
 
@@ -96,7 +109,7 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 1. Entregar o GDD Mestre v0.4.1, se existir; senão, redesenhar.
 2. Entregar os pacotes completos do CP012 e do CP013.
 3. Responder as decisões 1 a 4 do plano de continuidade.
-4. Instalar o APK 0.4.1 de 13/11 por cima da 0.4.0 e homologar em aparelho físico (o artefato expira em 20/11/2026).
+4. ~~Instalar e homologar o APK 0.4.1~~ feito em 13/11/2026, com os defeitos listados na seção 1.
 5. ~~Primeira execução real dos smokes~~ feita em 12/11/2026 (seção 6). Resta rodar `remote_update_smoke` numa máquina com acesso a channel.evolu.ink.
 
 ## 9. Decisões vigentes
