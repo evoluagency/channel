@@ -52,3 +52,13 @@ Observações:
 - O dono não tem os pacotes do CP012 e do CP013: o desenvolvimento cabe a nós. Próximas sessões: construir o CP012 (`city-12`, governança regional) sobre a Cidade visual e o CP013 (HUD, aplicando `MUDANCAS_NUCLEO_CP013.md`).
 - Decidir se o APK passa a levar as fontes em `res://fonts/` (item 8 da lista do CP013).
 - "OK, subir site" do site novo continua pendente (sessão 1.0); o dono aprova se ficar como a imagem de referência.
+
+## Continuação (13/11/2026): mudança de rumo
+
+Depois do trabalho acima, o dono mudou o rumo do jogo para um cenário moderno com mapa-múndi real e piloto Brasil. Registro em `ESTADO_DO_PROJETO.md`. Entregas desta continuação, todas no repositório:
+
+- `game/docs/DESENHO_MUNDO_v0.1.md`: desenho do mundo, 27 estados, alianças, marcos M0 a M7, reaproveitamento do Valdora.
+- `game/docs/COMPONENTES_NIVEIS_v0.1.md` e `game/data/mundo_componentes_v0.1.json`: 13 construções, níveis 1 a 30, seis faixas visuais, heróis, tropas, estado, alianças, chat, animações. Aprovado pelo dono, com a Central de energia e o ritmo de semanas.
+- `game/tests/test_componentes_mundo.py` (12 verificações, no `run_valdora_tests.sh`).
+- `game/docs/imagens/`: mapa do Brasil, formatos de estado, seis ambientes, telas ilustradas, mapa de alianças e protótipo 3D animado (modelos CC0 da Kenney, renderizados no Godot).
+- O dono avaliou que o desenho 2D por código não chega ao nível comercial; o caminho é 3D de baixo polígono de cores vivas. Próxima sessão: `PROMPT-1.2.md`.

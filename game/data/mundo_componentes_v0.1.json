@@ -1,0 +1,3213 @@
+{
+ "schema": "mundo.componentes.v0.1",
+ "status": "proposta_balanceamento_nao_homologada",
+ "niveis": 30,
+ "formulas": {
+  "poder": "40*n^1.55",
+  "custo": "c1*1.25^(n-1)",
+  "tempo_s": "30*fator*1.28^(n-1)",
+  "producao": "base*1.12^(n-1)",
+  "metal": "60% do custo a partir do nivel 5"
+ },
+ "faixas": [
+  {
+   "faixa": 1,
+   "niveis": [
+    1,
+    5
+   ],
+   "nome": "Acampamento"
+  },
+  {
+   "faixa": 2,
+   "niveis": [
+    6,
+    10
+   ],
+   "nome": "Pré-fabricado"
+  },
+  {
+   "faixa": 3,
+   "niveis": [
+    11,
+    15
+   ],
+   "nome": "Concreto"
+  },
+  {
+   "faixa": 4,
+   "niveis": [
+    16,
+    20
+   ],
+   "nome": "Vidro e aço"
+  },
+  {
+   "faixa": 5,
+   "niveis": [
+    21,
+    25
+   ],
+   "nome": "Tecnológico"
+  },
+  {
+   "faixa": 6,
+   "niveis": [
+    26,
+    30
+   ],
+   "nome": "Elite"
+  }
+ ],
+ "construcoes": [
+  {
+   "id": "hq",
+   "nome": "Quartel-general",
+   "origem_valdora": "Fundação",
+   "custo_nivel1": 200,
+   "fator_tempo": 2.0,
+   "desbloqueio_qg": 1,
+   "tipo": "cap",
+   "base": 0,
+   "unidade": "",
+   "funcao": "Centro de comando. Define o nível máximo de todos os outros prédios.",
+   "beneficio": "Capacidade de armazém e de população-base; libera novos prédios e o limite de cada tipo.",
+   "visual_faixas": [
+    "Contêineres empilhados com bandeira e antena simples",
+    "Prédio pré-fabricado de 2 andares, faixa colorida da aliança",
+    "Torre de concreto com heliponto no teto e letreiro luminoso",
+    "Torre de vidro e aço, fachada espelhada, reflexo do céu",
+    "Complexo com anel de painéis solares e antena parabólica giratória",
+    "Arranha-céu de elite com feixe de luz no topo e brilho dourado"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 200,
+     "tempo_s": 60,
+     "valor": 2000.0,
+     "valor2": 9
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 250,
+     "tempo_s": 77,
+     "valor": 2360.0,
+     "valor2": 10
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 312,
+     "tempo_s": 98,
+     "valor": 2784.8,
+     "valor2": 11
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 391,
+     "tempo_s": 126,
+     "valor": 3286.06,
+     "valor2": 12
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 488,
+     "tempo_s": 161,
+     "valor": 3877.56,
+     "valor2": 13
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 610,
+     "tempo_s": 206,
+     "valor": 4575.52,
+     "valor2": 14
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 763,
+     "tempo_s": 264,
+     "valor": 5399.11,
+     "valor2": 15
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 954,
+     "tempo_s": 338,
+     "valor": 6370.95,
+     "valor2": 16
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 1192,
+     "tempo_s": 432,
+     "valor": 7517.72,
+     "valor2": 17
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 1490,
+     "tempo_s": 553,
+     "valor": 8870.91,
+     "valor2": 18
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 1863,
+     "tempo_s": 708,
+     "valor": 10467.67,
+     "valor2": 19
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 2328,
+     "tempo_s": 907,
+     "valor": 12351.85,
+     "valor2": 20
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 2910,
+     "tempo_s": 1161,
+     "valor": 14575.19,
+     "valor2": 21
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 3638,
+     "tempo_s": 1486,
+     "valor": 17198.72,
+     "valor2": 22
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 4547,
+     "tempo_s": 1901,
+     "valor": 20294.49,
+     "valor2": 23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 5684,
+     "tempo_s": 2434,
+     "valor": 23947.5,
+     "valor2": 24
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 7105,
+     "tempo_s": 3115,
+     "valor": 28258.05,
+     "valor2": 25
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 8882,
+     "tempo_s": 3988,
+     "valor": 33344.49,
+     "valor2": 26
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 11102,
+     "tempo_s": 5104,
+     "valor": 39346.5,
+     "valor2": 27
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 13878,
+     "tempo_s": 6533,
+     "valor": 46428.87,
+     "valor2": 28
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 17347,
+     "tempo_s": 8363,
+     "valor": 54786.07,
+     "valor2": 29
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 21684,
+     "tempo_s": 10704,
+     "valor": 64647.56,
+     "valor2": 30
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 27105,
+     "tempo_s": 13702,
+     "valor": 76284.12,
+     "valor2": 31
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 33881,
+     "tempo_s": 17538,
+     "valor": 90015.26,
+     "valor2": 32
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 42352,
+     "tempo_s": 22449,
+     "valor": 106218.01,
+     "valor2": 33
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 52940,
+     "tempo_s": 28734,
+     "valor": 125337.25,
+     "valor2": 34
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 66174,
+     "tempo_s": 36780,
+     "valor": 147897.96,
+     "valor2": 35
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 82718,
+     "tempo_s": 47078,
+     "valor": 174519.59,
+     "valor2": 36
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 103398,
+     "tempo_s": 60260,
+     "valor": 205933.12,
+     "valor2": 37
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 129247,
+     "tempo_s": 77133,
+     "valor": 243001.08,
+     "valor2": 38
+    }
+   ]
+  },
+  {
+   "id": "alo",
+   "nome": "Alojamento",
+   "origem_valdora": "Casa",
+   "custo_nivel1": 40,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 1,
+   "tipo": "pop",
+   "base": 8,
+   "unidade": "moradores",
+   "funcao": "Moradia das tropas e dos trabalhadores.",
+   "beneficio": "Aumenta a população, que gera mão de obra e limite de tropas.",
+   "visual_faixas": [
+    "Módulos de contêiner com janelas e toldo",
+    "Bloco pré-fabricado de 3 andares, varandas coloridas",
+    "Prédio de concreto com garagem e antena de TV",
+    "Residencial de vidro com jardim no terraço",
+    "Torre residencial com painéis solares e elevador visível",
+    "Torre de luxo com iluminação neon por andar"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 40,
+     "tempo_s": 30,
+     "valor": 8.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 50,
+     "tempo_s": 38,
+     "valor": 8.8
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 62,
+     "tempo_s": 49,
+     "valor": 9.68
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 78,
+     "tempo_s": 63,
+     "valor": 10.65
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 98,
+     "tempo_s": 81,
+     "valor": 11.71
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 122,
+     "tempo_s": 103,
+     "valor": 12.88
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 153,
+     "tempo_s": 132,
+     "valor": 14.17
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 191,
+     "tempo_s": 169,
+     "valor": 15.59
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 238,
+     "tempo_s": 216,
+     "valor": 17.15
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 298,
+     "tempo_s": 277,
+     "valor": 18.86
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 373,
+     "tempo_s": 354,
+     "valor": 20.75
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 466,
+     "tempo_s": 453,
+     "valor": 22.82
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 582,
+     "tempo_s": 580,
+     "valor": 25.11
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 728,
+     "tempo_s": 743,
+     "valor": 27.62
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 909,
+     "tempo_s": 951,
+     "valor": 30.38
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1137,
+     "tempo_s": 1217,
+     "valor": 33.42
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 1421,
+     "tempo_s": 1558,
+     "valor": 36.76
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 1776,
+     "tempo_s": 1994,
+     "valor": 40.44
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 2220,
+     "tempo_s": 2552,
+     "valor": 44.48
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 2776,
+     "tempo_s": 3267,
+     "valor": 48.93
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 3469,
+     "tempo_s": 4181,
+     "valor": 53.82
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 4337,
+     "tempo_s": 5352,
+     "valor": 59.2
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 5421,
+     "tempo_s": 6851,
+     "valor": 65.12
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 6776,
+     "tempo_s": 8769,
+     "valor": 71.63
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 8470,
+     "tempo_s": 11224,
+     "valor": 78.8
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 10588,
+     "tempo_s": 14367,
+     "valor": 86.68
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 13235,
+     "tempo_s": 18390,
+     "valor": 95.35
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 16544,
+     "tempo_s": 23539,
+     "valor": 104.88
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 20680,
+     "tempo_s": 30130,
+     "valor": 115.37
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 25849,
+     "tempo_s": 38567,
+     "valor": 126.9
+    }
+   ]
+  },
+  {
+   "id": "est",
+   "nome": "Estufa hidropônica",
+   "origem_valdora": "Fazenda",
+   "custo_nivel1": 30,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 1,
+   "tipo": "prod",
+   "base": 60,
+   "unidade": "alimentos/h",
+   "funcao": "Produz alimentos, necessários para manter a população e treinar tropas.",
+   "beneficio": "Produção contínua de alimentos, também acumulada offline (até 8 h).",
+   "visual_faixas": [
+    "Estufa de plástico com fileiras de verduras",
+    "Estufa de vidro com irrigação aparente",
+    "Galpão com bandejas empilhadas e luz roxa",
+    "Estufa vertical de 3 andares, folhagem brilhante",
+    "Fazenda vertical com drones colhendo",
+    "Biodomo de vidro curvo, folhas luminosas e vapor"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 30,
+     "tempo_s": 30,
+     "valor": 60.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 38,
+     "tempo_s": 38,
+     "valor": 67.2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 47,
+     "tempo_s": 49,
+     "valor": 75.26
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 59,
+     "tempo_s": 63,
+     "valor": 84.3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 73,
+     "tempo_s": 81,
+     "valor": 94.41
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 92,
+     "tempo_s": 103,
+     "valor": 105.74
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 114,
+     "tempo_s": 132,
+     "valor": 118.43
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 143,
+     "tempo_s": 169,
+     "valor": 132.64
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 179,
+     "tempo_s": 216,
+     "valor": 148.56
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 224,
+     "tempo_s": 277,
+     "valor": 166.38
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 279,
+     "tempo_s": 354,
+     "valor": 186.35
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 349,
+     "tempo_s": 453,
+     "valor": 208.71
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 437,
+     "tempo_s": 580,
+     "valor": 233.76
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 546,
+     "tempo_s": 743,
+     "valor": 261.81
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 682,
+     "tempo_s": 951,
+     "valor": 293.23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 853,
+     "tempo_s": 1217,
+     "valor": 328.41
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 1066,
+     "tempo_s": 1558,
+     "valor": 367.82
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 1332,
+     "tempo_s": 1994,
+     "valor": 411.96
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 1665,
+     "tempo_s": 2552,
+     "valor": 461.4
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 2082,
+     "tempo_s": 3267,
+     "valor": 516.77
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 2602,
+     "tempo_s": 4181,
+     "valor": 578.78
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 3253,
+     "tempo_s": 5352,
+     "valor": 648.23
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 4066,
+     "tempo_s": 6851,
+     "valor": 726.02
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 5082,
+     "tempo_s": 8769,
+     "valor": 813.14
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 6353,
+     "tempo_s": 11224,
+     "valor": 910.72
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 7941,
+     "tempo_s": 14367,
+     "valor": 1020.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 9926,
+     "tempo_s": 18390,
+     "valor": 1142.4
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 12408,
+     "tempo_s": 23539,
+     "valor": 1279.49
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 15510,
+     "tempo_s": 30130,
+     "valor": 1433.03
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 19387,
+     "tempo_s": 38567,
+     "valor": 1605.0
+    }
+   ]
+  },
+  {
+   "id": "usi",
+   "nome": "Usina de materiais",
+   "origem_valdora": "Serraria",
+   "custo_nivel1": 40,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 1,
+   "tipo": "prod",
+   "base": 60,
+   "unidade": "materiais/h",
+   "funcao": "Produz materiais de construção.",
+   "beneficio": "Fornece o material de toda obra e melhoria.",
+   "visual_faixas": [
+    "Galpão com serra e pilhas de madeira",
+    "Fábrica com chaminé e esteira",
+    "Linha de montagem coberta, guindaste móvel",
+    "Fábrica automatizada com braços robóticos",
+    "Complexo com tubulações brilhantes e fumaça branca",
+    "Mega-fábrica com faíscas e esteiras flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 40,
+     "tempo_s": 30,
+     "valor": 60.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 50,
+     "tempo_s": 38,
+     "valor": 67.2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 62,
+     "tempo_s": 49,
+     "valor": 75.26
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 78,
+     "tempo_s": 63,
+     "valor": 84.3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 98,
+     "tempo_s": 81,
+     "valor": 94.41
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 122,
+     "tempo_s": 103,
+     "valor": 105.74
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 153,
+     "tempo_s": 132,
+     "valor": 118.43
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 191,
+     "tempo_s": 169,
+     "valor": 132.64
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 238,
+     "tempo_s": 216,
+     "valor": 148.56
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 298,
+     "tempo_s": 277,
+     "valor": 166.38
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 373,
+     "tempo_s": 354,
+     "valor": 186.35
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 466,
+     "tempo_s": 453,
+     "valor": 208.71
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 582,
+     "tempo_s": 580,
+     "valor": 233.76
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 728,
+     "tempo_s": 743,
+     "valor": 261.81
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 909,
+     "tempo_s": 951,
+     "valor": 293.23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1137,
+     "tempo_s": 1217,
+     "valor": 328.41
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 1421,
+     "tempo_s": 1558,
+     "valor": 367.82
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 1776,
+     "tempo_s": 1994,
+     "valor": 411.96
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 2220,
+     "tempo_s": 2552,
+     "valor": 461.4
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 2776,
+     "tempo_s": 3267,
+     "valor": 516.77
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 3469,
+     "tempo_s": 4181,
+     "valor": 578.78
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 4337,
+     "tempo_s": 5352,
+     "valor": 648.23
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 5421,
+     "tempo_s": 6851,
+     "valor": 726.02
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 6776,
+     "tempo_s": 8769,
+     "valor": 813.14
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 8470,
+     "tempo_s": 11224,
+     "valor": 910.72
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 10588,
+     "tempo_s": 14367,
+     "valor": 1020.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 13235,
+     "tempo_s": 18390,
+     "valor": 1142.4
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 16544,
+     "tempo_s": 23539,
+     "valor": 1279.49
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 20680,
+     "tempo_s": 30130,
+     "valor": 1433.03
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 25849,
+     "tempo_s": 38567,
+     "valor": 1605.0
+    }
+   ]
+  },
+  {
+   "id": "min",
+   "nome": "Mineradora",
+   "origem_valdora": "Pedreira",
+   "custo_nivel1": 50,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 2,
+   "tipo": "prod",
+   "base": 40,
+   "unidade": "metal/h",
+   "funcao": "Extrai metal para construção avançada e equipamentos.",
+   "beneficio": "Metal é exigido em obras acima do nível 5 e na evolução das tropas.",
+   "visual_faixas": [
+    "Poço aberto com carrinho e pá",
+    "Escavadeira e pilha de minério",
+    "Cavas em degraus com caminhões",
+    "Torre de perfuração com guindaste duplo",
+    "Escavadeira gigante e esteira de minério brilhante",
+    "Mina de cristal com lasers e vagonetes flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 50,
+     "tempo_s": 30,
+     "valor": 40.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 62,
+     "tempo_s": 38,
+     "valor": 44.8
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 78,
+     "tempo_s": 49,
+     "valor": 50.18
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 98,
+     "tempo_s": 63,
+     "valor": 56.2
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 122,
+     "tempo_s": 81,
+     "valor": 62.94
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 153,
+     "tempo_s": 103,
+     "valor": 70.49
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 191,
+     "tempo_s": 132,
+     "valor": 78.95
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 238,
+     "tempo_s": 169,
+     "valor": 88.43
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 298,
+     "tempo_s": 216,
+     "valor": 99.04
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 373,
+     "tempo_s": 277,
+     "valor": 110.92
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 466,
+     "tempo_s": 354,
+     "valor": 124.23
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 582,
+     "tempo_s": 453,
+     "valor": 139.14
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 728,
+     "tempo_s": 580,
+     "valor": 155.84
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 909,
+     "tempo_s": 743,
+     "valor": 174.54
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 1137,
+     "tempo_s": 951,
+     "valor": 195.48
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1421,
+     "tempo_s": 1217,
+     "valor": 218.94
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 1776,
+     "tempo_s": 1558,
+     "valor": 245.22
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 2220,
+     "tempo_s": 1994,
+     "valor": 274.64
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 2776,
+     "tempo_s": 2552,
+     "valor": 307.6
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 3469,
+     "tempo_s": 3267,
+     "valor": 344.51
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 4337,
+     "tempo_s": 4181,
+     "valor": 385.85
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 5421,
+     "tempo_s": 5352,
+     "valor": 432.15
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 6776,
+     "tempo_s": 6851,
+     "valor": 484.01
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 8470,
+     "tempo_s": 8769,
+     "valor": 542.09
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 10588,
+     "tempo_s": 11224,
+     "valor": 607.15
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 13235,
+     "tempo_s": 14367,
+     "valor": 680.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 16544,
+     "tempo_s": 18390,
+     "valor": 761.6
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 20680,
+     "tempo_s": 23539,
+     "valor": 853.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 25849,
+     "tempo_s": 30130,
+     "valor": 955.35
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 32312,
+     "tempo_s": 38567,
+     "valor": 1070.0
+    }
+   ]
+  },
+  {
+   "id": "ene",
+   "nome": "Central de energia",
+   "origem_valdora": "(novo)",
+   "custo_nivel1": 60,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 3,
+   "tipo": "prod",
+   "base": 30,
+   "unidade": "energia/h",
+   "funcao": "Gera energia. A fonte muda por país: solar, eólica, hídrica ou térmica.",
+   "beneficio": "Sem energia suficiente, as fábricas ficam 50% mais lentas. Prédios acima do nível 10 consomem energia.",
+   "visual_faixas": [
+    "Poucos painéis solares e um gerador a diesel",
+    "Fileira de painéis e uma turbina pequena",
+    "Parque com turbina grande e subestação",
+    "Usina com torre de transmissão e linhas",
+    "Complexo com baterias gigantes e raios azuis",
+    "Reator de energia com anel luminoso girando"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 60,
+     "tempo_s": 30,
+     "valor": 30.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 75,
+     "tempo_s": 38,
+     "valor": 33.6
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 94,
+     "tempo_s": 49,
+     "valor": 37.63
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 117,
+     "tempo_s": 63,
+     "valor": 42.15
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 146,
+     "tempo_s": 81,
+     "valor": 47.21
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 183,
+     "tempo_s": 103,
+     "valor": 52.87
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 229,
+     "tempo_s": 132,
+     "valor": 59.21
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 286,
+     "tempo_s": 169,
+     "valor": 66.32
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 358,
+     "tempo_s": 216,
+     "valor": 74.28
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 447,
+     "tempo_s": 277,
+     "valor": 83.19
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 559,
+     "tempo_s": 354,
+     "valor": 93.18
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 698,
+     "tempo_s": 453,
+     "valor": 104.36
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 873,
+     "tempo_s": 580,
+     "valor": 116.88
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 1091,
+     "tempo_s": 743,
+     "valor": 130.9
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 1364,
+     "tempo_s": 951,
+     "valor": 146.61
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1705,
+     "tempo_s": 1217,
+     "valor": 164.21
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 2132,
+     "tempo_s": 1558,
+     "valor": 183.91
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 2665,
+     "tempo_s": 1994,
+     "valor": 205.98
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 3331,
+     "tempo_s": 2552,
+     "valor": 230.7
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 4163,
+     "tempo_s": 3267,
+     "valor": 258.38
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 5204,
+     "tempo_s": 4181,
+     "valor": 289.39
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 6505,
+     "tempo_s": 5352,
+     "valor": 324.12
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 8132,
+     "tempo_s": 6851,
+     "valor": 363.01
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 10164,
+     "tempo_s": 8769,
+     "valor": 406.57
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 12705,
+     "tempo_s": 11224,
+     "valor": 455.36
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 15882,
+     "tempo_s": 14367,
+     "valor": 510.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 19852,
+     "tempo_s": 18390,
+     "valor": 571.2
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 24815,
+     "tempo_s": 23539,
+     "valor": 639.75
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 31019,
+     "tempo_s": 30130,
+     "valor": 716.52
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 38774,
+     "tempo_s": 38567,
+     "valor": 802.5
+    }
+   ]
+  },
+  {
+   "id": "rad",
+   "nome": "Radar e antena",
+   "origem_valdora": "Torre",
+   "custo_nivel1": 80,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 8,
+   "tipo": "def",
+   "base": 20,
+   "unidade": "defesa",
+   "funcao": "Dá visão do mapa, avisa de ataques e reforça a defesa passiva.",
+   "beneficio": "Aumenta o alcance de visão (casas do mapa) e a defesa do estado.",
+   "visual_faixas": [
+    "Mastro com antena e refletor",
+    "Torre de aço com antena parabólica",
+    "Radar giratório com cúpula",
+    "Torre com três antenas e luz de varredura",
+    "Rede de antenas com feixe visível",
+    "Torre de elite com holograma de varredura"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 80,
+     "tempo_s": 30,
+     "valor": 20.0,
+     "valor2": 3
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 100,
+     "tempo_s": 38,
+     "valor": 22.8,
+     "valor2": 3
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 125,
+     "tempo_s": 49,
+     "valor": 25.99,
+     "valor2": 3
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 156,
+     "tempo_s": 63,
+     "valor": 29.63,
+     "valor2": 3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 195,
+     "tempo_s": 81,
+     "valor": 33.78,
+     "valor2": 4
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 244,
+     "tempo_s": 103,
+     "valor": 38.51,
+     "valor2": 4
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 305,
+     "tempo_s": 132,
+     "valor": 43.9,
+     "valor2": 4
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 381,
+     "tempo_s": 169,
+     "valor": 50.05,
+     "valor2": 4
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 477,
+     "tempo_s": 216,
+     "valor": 57.05,
+     "valor2": 4
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 596,
+     "tempo_s": 277,
+     "valor": 65.04,
+     "valor2": 5
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 745,
+     "tempo_s": 354,
+     "valor": 74.14,
+     "valor2": 5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 931,
+     "tempo_s": 453,
+     "valor": 84.52,
+     "valor2": 5
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 1164,
+     "tempo_s": 580,
+     "valor": 96.36,
+     "valor2": 5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 1455,
+     "tempo_s": 743,
+     "valor": 109.85,
+     "valor2": 5
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 1819,
+     "tempo_s": 951,
+     "valor": 125.23,
+     "valor2": 6
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 2274,
+     "tempo_s": 1217,
+     "valor": 142.76,
+     "valor2": 6
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 2842,
+     "tempo_s": 1558,
+     "valor": 162.74,
+     "valor2": 6
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 3553,
+     "tempo_s": 1994,
+     "valor": 185.53,
+     "valor2": 6
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 4441,
+     "tempo_s": 2552,
+     "valor": 211.5,
+     "valor2": 6
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 5551,
+     "tempo_s": 3267,
+     "valor": 241.11,
+     "valor2": 7
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 6939,
+     "tempo_s": 4181,
+     "valor": 274.87,
+     "valor2": 7
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 8674,
+     "tempo_s": 5352,
+     "valor": 313.35,
+     "valor2": 7
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 10842,
+     "tempo_s": 6851,
+     "valor": 357.22,
+     "valor2": 7
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 13553,
+     "tempo_s": 8769,
+     "valor": 407.23,
+     "valor2": 7
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 16941,
+     "tempo_s": 11224,
+     "valor": 464.24,
+     "valor2": 8
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 21176,
+     "tempo_s": 14367,
+     "valor": 529.24,
+     "valor2": 8
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 26470,
+     "tempo_s": 18390,
+     "valor": 603.33,
+     "valor2": 8
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 33087,
+     "tempo_s": 23539,
+     "valor": 687.8,
+     "valor2": 8
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 41359,
+     "tempo_s": 30130,
+     "valor": 784.09,
+     "valor2": 8
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 51699,
+     "tempo_s": 38567,
+     "valor": 893.86,
+     "valor2": 9
+    }
+   ]
+  },
+  {
+   "id": "bas",
+   "nome": "Base militar",
+   "origem_valdora": "Quartel",
+   "custo_nivel1": 120,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 10,
+   "tipo": "tro",
+   "base": 10,
+   "unidade": "tropas",
+   "funcao": "Treina e abriga tropas e heróis.",
+   "beneficio": "Aumenta a capacidade de tropas e acelera o treinamento.",
+   "visual_faixas": [
+    "Tendas militares e jipe",
+    "Galpão de treino com sacos de areia",
+    "Quartel de concreto com garagem de veículos",
+    "Base com torre de controle e hangar",
+    "Complexo com tanques e hangar duplo",
+    "Fortaleza tecnológica com campo de energia e bandeira da aliança"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 120,
+     "tempo_s": 30,
+     "valor": 10.0,
+     "valor2": 1.5
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 150,
+     "tempo_s": 38,
+     "valor": 11.3,
+     "valor2": 3.0
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 188,
+     "tempo_s": 49,
+     "valor": 12.77,
+     "valor2": 4.5
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 234,
+     "tempo_s": 63,
+     "valor": 14.43,
+     "valor2": 6.0
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 293,
+     "tempo_s": 81,
+     "valor": 16.3,
+     "valor2": 7.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 366,
+     "tempo_s": 103,
+     "valor": 18.42,
+     "valor2": 9.0
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 458,
+     "tempo_s": 132,
+     "valor": 20.82,
+     "valor2": 10.5
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 572,
+     "tempo_s": 169,
+     "valor": 23.53,
+     "valor2": 12.0
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 715,
+     "tempo_s": 216,
+     "valor": 26.58,
+     "valor2": 13.5
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 894,
+     "tempo_s": 277,
+     "valor": 30.04,
+     "valor2": 15.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 1118,
+     "tempo_s": 354,
+     "valor": 33.95,
+     "valor2": 16.5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 1397,
+     "tempo_s": 453,
+     "valor": 38.36,
+     "valor2": 18.0
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 1746,
+     "tempo_s": 580,
+     "valor": 43.35,
+     "valor2": 19.5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 2183,
+     "tempo_s": 743,
+     "valor": 48.98,
+     "valor2": 21.0
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 2728,
+     "tempo_s": 951,
+     "valor": 55.35,
+     "valor2": 22.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 3411,
+     "tempo_s": 1217,
+     "valor": 62.54,
+     "valor2": 24.0
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 4263,
+     "tempo_s": 1558,
+     "valor": 70.67,
+     "valor2": 25.5
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 5329,
+     "tempo_s": 1994,
+     "valor": 79.86,
+     "valor2": 27.0
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 6661,
+     "tempo_s": 2552,
+     "valor": 90.24,
+     "valor2": 28.5
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 8327,
+     "tempo_s": 3267,
+     "valor": 101.97,
+     "valor2": 30.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 10408,
+     "tempo_s": 4181,
+     "valor": 115.23,
+     "valor2": 31.5
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 13010,
+     "tempo_s": 5352,
+     "valor": 130.21,
+     "valor2": 33.0
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 16263,
+     "tempo_s": 6851,
+     "valor": 147.14,
+     "valor2": 34.5
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 20329,
+     "tempo_s": 8769,
+     "valor": 166.27,
+     "valor2": 36.0
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 25411,
+     "tempo_s": 11224,
+     "valor": 187.88,
+     "valor2": 37.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 31764,
+     "tempo_s": 14367,
+     "valor": 212.31,
+     "valor2": 39.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 39705,
+     "tempo_s": 18390,
+     "valor": 239.91,
+     "valor2": 40.5
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 49631,
+     "tempo_s": 23539,
+     "valor": 271.09,
+     "valor2": 42.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 62039,
+     "tempo_s": 30130,
+     "valor": 306.33,
+     "valor2": 43.5
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 77548,
+     "tempo_s": 38567,
+     "valor": 346.16,
+     "valor2": 45.0
+    }
+   ]
+  },
+  {
+   "id": "ent",
+   "nome": "Entreposto logístico",
+   "origem_valdora": "Mercado",
+   "custo_nivel1": 70,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 6,
+   "tipo": "com",
+   "base": 100,
+   "unidade": "carga",
+   "funcao": "Comércio e transporte entre estados e países.",
+   "beneficio": "Reduz a taxa de comércio e aumenta a carga das rotas.",
+   "visual_faixas": [
+    "Barraca com caixas e carrinho",
+    "Armazém com duas docas",
+    "Galpão com empilhadeiras e caminhão",
+    "Terminal com contêineres coloridos",
+    "Porto seco com guindaste móvel e drones",
+    "Hub global com esteiras luminosas e contêineres flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 70,
+     "tempo_s": 30,
+     "valor": 100.0,
+     "valor2": 15.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 88,
+     "tempo_s": 38,
+     "valor": 112.0,
+     "valor2": 14.67
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 109,
+     "tempo_s": 49,
+     "valor": 125.44,
+     "valor2": 14.34
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 137,
+     "tempo_s": 63,
+     "valor": 140.49,
+     "valor2": 14.01
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 171,
+     "tempo_s": 81,
+     "valor": 157.35,
+     "valor2": 13.68
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 214,
+     "tempo_s": 103,
+     "valor": 176.23,
+     "valor2": 13.35
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 267,
+     "tempo_s": 132,
+     "valor": 197.38,
+     "valor2": 13.02
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 334,
+     "tempo_s": 169,
+     "valor": 221.07,
+     "valor2": 12.69
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 417,
+     "tempo_s": 216,
+     "valor": 247.6,
+     "valor2": 12.36
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 522,
+     "tempo_s": 277,
+     "valor": 277.31,
+     "valor2": 12.03
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 652,
+     "tempo_s": 354,
+     "valor": 310.58,
+     "valor2": 11.7
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 815,
+     "tempo_s": 453,
+     "valor": 347.85,
+     "valor2": 11.37
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 1019,
+     "tempo_s": 580,
+     "valor": 389.6,
+     "valor2": 11.04
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 1273,
+     "tempo_s": 743,
+     "valor": 436.35,
+     "valor2": 10.71
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 1592,
+     "tempo_s": 951,
+     "valor": 488.71,
+     "valor2": 10.38
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1990,
+     "tempo_s": 1217,
+     "valor": 547.36,
+     "valor2": 10.05
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 2487,
+     "tempo_s": 1558,
+     "valor": 613.04,
+     "valor2": 9.72
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 3109,
+     "tempo_s": 1994,
+     "valor": 686.6,
+     "valor2": 9.39
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 3886,
+     "tempo_s": 2552,
+     "valor": 769.0,
+     "valor2": 9.06
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 4857,
+     "tempo_s": 3267,
+     "valor": 861.28,
+     "valor2": 8.73
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 6072,
+     "tempo_s": 4181,
+     "valor": 964.63,
+     "valor2": 8.4
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 7589,
+     "tempo_s": 5352,
+     "valor": 1080.38,
+     "valor2": 8.07
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 9487,
+     "tempo_s": 6851,
+     "valor": 1210.03,
+     "valor2": 7.74
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 11858,
+     "tempo_s": 8769,
+     "valor": 1355.23,
+     "valor2": 7.41
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 14823,
+     "tempo_s": 11224,
+     "valor": 1517.86,
+     "valor2": 7.08
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 18529,
+     "tempo_s": 14367,
+     "valor": 1700.01,
+     "valor2": 6.75
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 23161,
+     "tempo_s": 18390,
+     "valor": 1904.01,
+     "valor2": 6.42
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 28951,
+     "tempo_s": 23539,
+     "valor": 2132.49,
+     "valor2": 6.09
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 36189,
+     "tempo_s": 30130,
+     "valor": 2388.39,
+     "valor2": 5.76
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 45236,
+     "tempo_s": 38567,
+     "valor": 2674.99,
+     "valor2": 5.43
+    }
+   ]
+  },
+  {
+   "id": "via",
+   "nome": "Via",
+   "origem_valdora": "Estrada",
+   "custo_nivel1": 10,
+   "fator_tempo": 0.3,
+   "desbloqueio_qg": 1,
+   "tipo": "via",
+   "base": 0,
+   "unidade": "",
+   "funcao": "Liga os prédios e agiliza o transporte interno.",
+   "beneficio": "Cada nível aumenta a velocidade de transporte entre prédios.",
+   "visual_faixas": [
+    "Terra batida",
+    "Asfalto simples",
+    "Asfalto com faixas e postes",
+    "Via larga com ciclovia",
+    "Via com postes inteligentes",
+    "Via com faixas luminosas"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 10,
+     "tempo_s": 9,
+     "valor": 1
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 12,
+     "tempo_s": 12,
+     "valor": 2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 16,
+     "tempo_s": 15,
+     "valor": 3
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 20,
+     "tempo_s": 19,
+     "valor": 4
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 24,
+     "tempo_s": 24,
+     "valor": 5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 31,
+     "tempo_s": 31,
+     "valor": 6
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 38,
+     "tempo_s": 40,
+     "valor": 7
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 48,
+     "tempo_s": 51,
+     "valor": 8
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 60,
+     "tempo_s": 65,
+     "valor": 9
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 75,
+     "tempo_s": 83,
+     "valor": 10
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 93,
+     "tempo_s": 106,
+     "valor": 11
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 116,
+     "tempo_s": 136,
+     "valor": 12
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 146,
+     "tempo_s": 174,
+     "valor": 13
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 182,
+     "tempo_s": 223,
+     "valor": 14
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 227,
+     "tempo_s": 285,
+     "valor": 15
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 284,
+     "tempo_s": 365,
+     "valor": 16
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 355,
+     "tempo_s": 467,
+     "valor": 17
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 444,
+     "tempo_s": 598,
+     "valor": 18
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 555,
+     "tempo_s": 766,
+     "valor": 19
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 694,
+     "tempo_s": 980,
+     "valor": 20
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 867,
+     "tempo_s": 1254,
+     "valor": 21
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 1084,
+     "tempo_s": 1606,
+     "valor": 22
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 1355,
+     "tempo_s": 2055,
+     "valor": 23
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 1694,
+     "tempo_s": 2631,
+     "valor": 24
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 2118,
+     "tempo_s": 3367,
+     "valor": 25
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 2647,
+     "tempo_s": 4310,
+     "valor": 26
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 3309,
+     "tempo_s": 5517,
+     "valor": 27
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 4136,
+     "tempo_s": 7062,
+     "valor": 28
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 5170,
+     "tempo_s": 9039,
+     "valor": 29
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 6462,
+     "tempo_s": 11570,
+     "valor": 30
+    }
+   ]
+  },
+  {
+   "id": "par",
+   "nome": "Parque",
+   "origem_valdora": "Jardim",
+   "custo_nivel1": 25,
+   "fator_tempo": 0.5,
+   "desbloqueio_qg": 4,
+   "tipo": "srv",
+   "base": 0.8,
+   "unidade": "% cobertura",
+   "funcao": "Serviço social: melhora o bem-estar.",
+   "beneficio": "Aumenta a cobertura de serviços, que reduz o custo de manutenção.",
+   "visual_faixas": [
+    "Canteiro com bancos",
+    "Praça com árvores",
+    "Parque com lago",
+    "Parque com quiosque e playground",
+    "Jardim com chafariz",
+    "Parque com luz e fontes animadas"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 25,
+     "tempo_s": 15,
+     "valor": 0.8
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 31,
+     "tempo_s": 19,
+     "valor": 1.6
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 39,
+     "tempo_s": 25,
+     "valor": 2.4
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 49,
+     "tempo_s": 31,
+     "valor": 3.2
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 61,
+     "tempo_s": 40,
+     "valor": 4.0
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 76,
+     "tempo_s": 52,
+     "valor": 4.8
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 95,
+     "tempo_s": 66,
+     "valor": 5.6
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 119,
+     "tempo_s": 84,
+     "valor": 6.4
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 149,
+     "tempo_s": 108,
+     "valor": 7.2
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 186,
+     "tempo_s": 138,
+     "valor": 8.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 233,
+     "tempo_s": 177,
+     "valor": 8.8
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 291,
+     "tempo_s": 227,
+     "valor": 9.6
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 364,
+     "tempo_s": 290,
+     "valor": 10.4
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 455,
+     "tempo_s": 371,
+     "valor": 11.2
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 568,
+     "tempo_s": 475,
+     "valor": 12.0
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 711,
+     "tempo_s": 608,
+     "valor": 12.8
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 888,
+     "tempo_s": 779,
+     "valor": 13.6
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 1110,
+     "tempo_s": 997,
+     "valor": 14.4
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 1388,
+     "tempo_s": 1276,
+     "valor": 15.2
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 1735,
+     "tempo_s": 1633,
+     "valor": 16.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 2168,
+     "tempo_s": 2091,
+     "valor": 16.8
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 2711,
+     "tempo_s": 2676,
+     "valor": 17.6
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 3388,
+     "tempo_s": 3425,
+     "valor": 18.4
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 4235,
+     "tempo_s": 4385,
+     "valor": 19.2
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 5294,
+     "tempo_s": 5612,
+     "valor": 20.0
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 6617,
+     "tempo_s": 7184,
+     "valor": 20.8
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 8272,
+     "tempo_s": 9195,
+     "valor": 21.6
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 10340,
+     "tempo_s": 11770,
+     "valor": 22.4
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 12925,
+     "tempo_s": 15065,
+     "valor": 23.2
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 16156,
+     "tempo_s": 19283,
+     "valor": 24.0
+    }
+   ]
+  },
+  {
+   "id": "agu",
+   "nome": "Estação de água",
+   "origem_valdora": "Poço",
+   "custo_nivel1": 45,
+   "fator_tempo": 0.8,
+   "desbloqueio_qg": 5,
+   "tipo": "srv",
+   "base": 0.7,
+   "unidade": "% cobertura",
+   "funcao": "Serviço de saúde: fornece água e saneamento.",
+   "beneficio": "Aumenta a cobertura de serviços e a proteção contra falta de alimentos.",
+   "visual_faixas": [
+    "Poço com bomba",
+    "Caixa-d’água pequena",
+    "Reservatório elevado",
+    "Estação com filtros e torre",
+    "Estação com tubulações azuis",
+    "Estação de dessalinização com cúpula brilhante"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 45,
+     "tempo_s": 24,
+     "valor": 0.7
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 56,
+     "tempo_s": 31,
+     "valor": 1.4
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 70,
+     "tempo_s": 39,
+     "valor": 2.1
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 88,
+     "tempo_s": 50,
+     "valor": 2.8
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 110,
+     "tempo_s": 64,
+     "valor": 3.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 137,
+     "tempo_s": 82,
+     "valor": 4.2
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 172,
+     "tempo_s": 106,
+     "valor": 4.9
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 215,
+     "tempo_s": 135,
+     "valor": 5.6
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 268,
+     "tempo_s": 173,
+     "valor": 6.3
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 335,
+     "tempo_s": 221,
+     "valor": 7.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 419,
+     "tempo_s": 283,
+     "valor": 7.7
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 524,
+     "tempo_s": 363,
+     "valor": 8.4
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 655,
+     "tempo_s": 464,
+     "valor": 9.1
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 819,
+     "tempo_s": 594,
+     "valor": 9.8
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 1023,
+     "tempo_s": 761,
+     "valor": 10.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 1279,
+     "tempo_s": 974,
+     "valor": 11.2
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 1599,
+     "tempo_s": 1246,
+     "valor": 11.9
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 1998,
+     "tempo_s": 1595,
+     "valor": 12.6
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 2498,
+     "tempo_s": 2042,
+     "valor": 13.3
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 3123,
+     "tempo_s": 2613,
+     "valor": 14.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 3903,
+     "tempo_s": 3345,
+     "valor": 14.7
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 4879,
+     "tempo_s": 4282,
+     "valor": 15.4
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 6099,
+     "tempo_s": 5481,
+     "valor": 16.1
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 7623,
+     "tempo_s": 7015,
+     "valor": 16.8
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 9529,
+     "tempo_s": 8979,
+     "valor": 17.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 11911,
+     "tempo_s": 11494,
+     "valor": 18.2
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 14889,
+     "tempo_s": 14712,
+     "valor": 18.9
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 18612,
+     "tempo_s": 18831,
+     "valor": 19.6
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 23264,
+     "tempo_s": 24104,
+     "valor": 20.3
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 29081,
+     "tempo_s": 30853,
+     "valor": 21.0
+    }
+   ]
+  },
+  {
+   "id": "hel",
+   "nome": "Heliponto",
+   "origem_valdora": "Praça",
+   "custo_nivel1": 90,
+   "fator_tempo": 1.0,
+   "desbloqueio_qg": 12,
+   "tipo": "mar",
+   "base": 1.5,
+   "unidade": "% marcha",
+   "funcao": "Ponto de chegada e saída de reforços e de heróis.",
+   "beneficio": "Aumenta a velocidade de marcha e o limite de reforços enviados.",
+   "visual_faixas": [
+    "Círculo pintado no chão",
+    "Plataforma com biruta",
+    "Heliponto com luzes de pista",
+    "Plataforma elevada com helicóptero",
+    "Heliponto duplo com torre",
+    "Plataforma tecnológica com holograma e jato estacionado"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo_materiais": 90,
+     "tempo_s": 30,
+     "valor": 1.5
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo_materiais": 112,
+     "tempo_s": 38,
+     "valor": 3.0
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo_materiais": 141,
+     "tempo_s": 49,
+     "valor": 4.5
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo_materiais": 176,
+     "tempo_s": 63,
+     "valor": 6.0
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo_materiais": 220,
+     "tempo_s": 81,
+     "valor": 7.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo_materiais": 275,
+     "tempo_s": 103,
+     "valor": 9.0
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo_materiais": 343,
+     "tempo_s": 132,
+     "valor": 10.5
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo_materiais": 429,
+     "tempo_s": 169,
+     "valor": 12.0
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo_materiais": 536,
+     "tempo_s": 216,
+     "valor": 13.5
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo_materiais": 671,
+     "tempo_s": 277,
+     "valor": 15.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo_materiais": 838,
+     "tempo_s": 354,
+     "valor": 16.5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo_materiais": 1048,
+     "tempo_s": 453,
+     "valor": 18.0
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo_materiais": 1310,
+     "tempo_s": 580,
+     "valor": 19.5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo_materiais": 1637,
+     "tempo_s": 743,
+     "valor": 21.0
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo_materiais": 2046,
+     "tempo_s": 951,
+     "valor": 22.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo_materiais": 2558,
+     "tempo_s": 1217,
+     "valor": 24.0
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo_materiais": 3197,
+     "tempo_s": 1558,
+     "valor": 25.5
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo_materiais": 3997,
+     "tempo_s": 1994,
+     "valor": 27.0
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo_materiais": 4996,
+     "tempo_s": 2552,
+     "valor": 28.5
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo_materiais": 6245,
+     "tempo_s": 3267,
+     "valor": 30.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo_materiais": 7806,
+     "tempo_s": 4181,
+     "valor": 31.5
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo_materiais": 9758,
+     "tempo_s": 5352,
+     "valor": 33.0
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo_materiais": 12197,
+     "tempo_s": 6851,
+     "valor": 34.5
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo_materiais": 15247,
+     "tempo_s": 8769,
+     "valor": 36.0
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo_materiais": 19058,
+     "tempo_s": 11224,
+     "valor": 37.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo_materiais": 23823,
+     "tempo_s": 14367,
+     "valor": 39.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo_materiais": 29779,
+     "tempo_s": 18390,
+     "valor": 40.5
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo_materiais": 37223,
+     "tempo_s": 23539,
+     "valor": 42.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo_materiais": 46529,
+     "tempo_s": 30130,
+     "valor": 43.5
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo_materiais": 58161,
+     "tempo_s": 38567,
+     "valor": 45.0
+    }
+   ]
+  }
+ ]
+}
