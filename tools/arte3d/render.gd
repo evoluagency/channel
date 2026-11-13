@@ -38,6 +38,10 @@ func _renderizar(receita, faixa: int, cor: String, enq: String, arquivo: String)
 	var k = KIT.new(cor)
 	var cam: Camera3D = raiz.get_node("Camera")
 	var topo: float = receita.construir(k, raiz, faixa)
+	if args.has("contar"):
+		var n := [0, 0]
+		_contar(raiz, n)
+		print("CONTAGEM %s f%d malhas=%d triangulos=%d" % [args.get("construcao"), faixa, n[0], n[1]])
 	var nivel := 1 + (faixa - 1) * 5
 	if enq != "alianca":
 		k.selo(raiz, Vector3(0, topo + 0.7, 0), nivel, 1, faixa == 6, cam.global_transform.basis)
@@ -109,3 +113,13 @@ func _cena(raiz: Node3D, enq: String) -> void:
 	cam.far = 200.0
 	raiz.add_child(cam)
 	cam.make_current()
+
+func _contar(no: Node, n: Array) -> void:
+	if no is MeshInstance3D and no.mesh:
+		n[0] += 1
+		for s in no.mesh.get_surface_count():
+			var a = no.mesh.surface_get_arrays(s)
+			var idx = a[Mesh.ARRAY_INDEX]
+			n[1] += (idx.size() if idx else a[Mesh.ARRAY_VERTEX].size()) / 3
+	for c in no.get_children():
+		_contar(c, n)
