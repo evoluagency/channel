@@ -1,0 +1,5866 @@
+{
+ "schema": "mundo.componentes.v0.2",
+ "status": "curvas aprovadas pelo dono em 13/11/2026 (sessão 1.4); nomes e arte do Banco pendentes",
+ "niveis": 30,
+ "formulas": {
+  "tempo_prefeitura_h": "níveis 2 a 8 por âncoras (1 min a 2 h); do 9 em diante min(2 x 2^(n-8), 92 x (1 - e^(-(n-8)/2.0)))",
+  "tempo_outros": "fração do tempo da Prefeitura no mesmo nível (campo fracao_tempo)",
+  "custo_prefeitura_moedas": "0.30 x produção de referência/h no nível x tempo-base (h)",
+  "custo_outros": "fração do custo da Prefeitura no mesmo nível (campo fracao_custo)",
+  "receita": "1-4: materiais 70%% alimentos 30%%; 5-9: materiais 45%% metal 30%% alimentos 25%%; 10+: materiais 35%% metal 25%% energia 20%% alimentos 20%%",
+  "producao": "base x 1,12^(n-1) por hora; offline até 8 h",
+  "preco_referencia": {
+   "alimentos": 1.0,
+   "materiais": 1.0,
+   "metal": 1.5,
+   "energia": 2.0
+  },
+  "producao_por_tipo": "2 + nível da Prefeitura // 10",
+  "poder": "40*n^1.55"
+ },
+ "producao_referencia_h": [
+  240.0,
+  240.0,
+  240.0,
+  240.0,
+  240.0,
+  240.0,
+  1050.3,
+  1149.0,
+  1257.0,
+  1375.2,
+  1504.5,
+  1645.9,
+  1800.6,
+  1969.8,
+  2155.0,
+  2357.6,
+  2579.2,
+  2821.6,
+  3086.9,
+  3377.0,
+  3694.5,
+  4041.7,
+  4421.7,
+  4837.3,
+  5292.0,
+  5789.5,
+  6333.7,
+  6929.0,
+  7580.4,
+  8292.9
+ ],
+ "faixas": [
+  {
+   "faixa": 1,
+   "niveis": [
+    1,
+    5
+   ],
+   "nome": "Acampamento"
+  },
+  {
+   "faixa": 2,
+   "niveis": [
+    6,
+    10
+   ],
+   "nome": "Pré-fabricado"
+  },
+  {
+   "faixa": 3,
+   "niveis": [
+    11,
+    15
+   ],
+   "nome": "Concreto"
+  },
+  {
+   "faixa": 4,
+   "niveis": [
+    16,
+    20
+   ],
+   "nome": "Vidro e aço"
+  },
+  {
+   "faixa": 5,
+   "niveis": [
+    21,
+    25
+   ],
+   "nome": "Tecnológico"
+  },
+  {
+   "faixa": 6,
+   "niveis": [
+    26,
+    30
+   ],
+   "nome": "Elite"
+  }
+ ],
+ "construcoes": [
+  {
+   "id": "pref",
+   "nome": "Prefeitura",
+   "origem_valdora": "Fundação",
+   "tipo": "cap",
+   "base": 0,
+   "unidade": "",
+   "funcao": "Centro da cidade. O nível da Prefeitura é o nível da cidade e limita todos os outros prédios.",
+   "beneficio": "Capacidade de armazém e de população-base; libera novos prédios e o limite de cada tipo.",
+   "visual_faixas": [
+    "Contêineres empilhados com bandeira e antena simples",
+    "Prédio pré-fabricado de 2 andares, faixa colorida da aliança",
+    "Torre de concreto com heliponto no teto e letreiro luminoso",
+    "Torre de vidro e aço, fachada espelhada, reflexo do céu",
+    "Complexo com anel de painéis solares e antena parabólica giratória",
+    "Arranha-céu de elite com feixe de luz no topo e brilho dourado"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 21.0,
+      "alimentos": 9.0
+     },
+     "custo_valor": 30.0,
+     "tempo_s": 0,
+     "valor": 2000.0,
+     "valor2": 9
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 21.0,
+      "alimentos": 9.0
+     },
+     "custo_valor": 30.0,
+     "tempo_s": 60,
+     "valor": 2360.0,
+     "valor2": 10
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 21.0,
+      "alimentos": 9.0
+     },
+     "custo_valor": 30.0,
+     "tempo_s": 147,
+     "valor": 2784.8,
+     "valor2": 11
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 21.0,
+      "alimentos": 9.0
+     },
+     "custo_valor": 30.0,
+     "tempo_s": 360,
+     "valor": 3286.06,
+     "valor2": 12
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 21.0,
+      "alimentos": 9.0
+     },
+     "custo_valor": 30.0,
+     "tempo_s": 805,
+     "valor": 3877.56,
+     "valor2": 13
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 16.2,
+      "metal": 7.2,
+      "alimentos": 9.0
+     },
+     "custo_valor": 36.0,
+     "tempo_s": 1800,
+     "valor": 4575.52,
+     "valor2": 14
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 142.0,
+      "metal": 63.0,
+      "alimentos": 78.8
+     },
+     "custo_valor": 315.0,
+     "tempo_s": 3600,
+     "valor": 5399.11,
+     "valor2": 15
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 310.0,
+      "metal": 138.0,
+      "alimentos": 172.0
+     },
+     "custo_valor": 689.0,
+     "tempo_s": 7200,
+     "valor": 6370.95,
+     "valor2": 16
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 679.0,
+      "metal": 302.0,
+      "alimentos": 377.0
+     },
+     "custo_valor": 1509.0,
+     "tempo_s": 14400,
+     "valor": 7517.72,
+     "valor2": 17
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 1155.0,
+      "metal": 550.0,
+      "energia": 330.0,
+      "alimentos": 660.0
+     },
+     "custo_valor": 3300.0,
+     "tempo_s": 28800,
+     "valor": 8870.91,
+     "valor2": 18
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 2527.0,
+      "metal": 1204.0,
+      "energia": 722.0,
+      "alimentos": 1444.0
+     },
+     "custo_valor": 7221.0,
+     "tempo_s": 57600,
+     "valor": 10467.67,
+     "valor2": 19
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 5530.0,
+      "metal": 2633.0,
+      "energia": 1580.0,
+      "alimentos": 3160.0
+     },
+     "custo_valor": 15800.0,
+     "tempo_s": 115200,
+     "valor": 12351.85,
+     "valor2": 20
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 12100.0,
+      "metal": 5762.0,
+      "energia": 3457.0,
+      "alimentos": 6914.0
+     },
+     "custo_valor": 34571.0,
+     "tempo_s": 230400,
+     "valor": 14575.19,
+     "valor2": 21
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 18081.0,
+      "metal": 8610.0,
+      "energia": 5166.0,
+      "alimentos": 10332.0
+     },
+     "custo_valor": 51660.0,
+     "tempo_s": 314711,
+     "valor": 17198.72,
+     "valor2": 22
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 20189.0,
+      "metal": 9614.0,
+      "energia": 5768.0,
+      "alimentos": 11536.0
+     },
+     "custo_valor": 57682.0,
+     "tempo_s": 321199,
+     "valor": 20294.49,
+     "valor2": 23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 22357.0,
+      "metal": 10646.0,
+      "energia": 6388.0,
+      "alimentos": 12775.0
+     },
+     "custo_valor": 63877.0,
+     "tempo_s": 325134,
+     "valor": 23947.5,
+     "valor2": 24
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 24638.0,
+      "metal": 11732.0,
+      "energia": 7039.0,
+      "alimentos": 14079.0
+     },
+     "custo_valor": 70393.0,
+     "tempo_s": 327521,
+     "valor": 28258.05,
+     "valor2": 25
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 27073.0,
+      "metal": 12892.0,
+      "energia": 7735.0,
+      "alimentos": 15470.0
+     },
+     "custo_valor": 77351.0,
+     "tempo_s": 328968,
+     "valor": 33344.49,
+     "valor2": 26
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 29697.0,
+      "metal": 14142.0,
+      "energia": 8485.0,
+      "alimentos": 16970.0
+     },
+     "custo_valor": 84850.0,
+     "tempo_s": 329846,
+     "valor": 39346.5,
+     "valor2": 27
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 32541.0,
+      "metal": 15496.0,
+      "energia": 9297.0,
+      "alimentos": 18595.0
+     },
+     "custo_valor": 92974.0,
+     "tempo_s": 330379,
+     "valor": 46428.87,
+     "valor2": 28
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 35635.0,
+      "metal": 16969.0,
+      "energia": 10181.0,
+      "alimentos": 20363.0
+     },
+     "custo_valor": 101814.0,
+     "tempo_s": 330702,
+     "valor": 54786.07,
+     "valor2": 29
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 39008.0,
+      "metal": 18575.0,
+      "energia": 11145.0,
+      "alimentos": 22290.0
+     },
+     "custo_valor": 111450.0,
+     "tempo_s": 330898,
+     "valor": 64647.56,
+     "valor2": 30
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 42690.0,
+      "metal": 20328.0,
+      "energia": 12197.0,
+      "alimentos": 24394.0
+     },
+     "custo_valor": 121970.0,
+     "tempo_s": 331017,
+     "valor": 76284.12,
+     "valor2": 31
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 46713.0,
+      "metal": 22244.0,
+      "energia": 13346.0,
+      "alimentos": 26693.0
+     },
+     "custo_valor": 133464.0,
+     "tempo_s": 331089,
+     "valor": 90015.26,
+     "valor2": 32
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 51110.0,
+      "metal": 24338.0,
+      "energia": 14603.0,
+      "alimentos": 29206.0
+     },
+     "custo_valor": 146029.0,
+     "tempo_s": 331133,
+     "valor": 106218.01,
+     "valor2": 33
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 55919.0,
+      "metal": 26628.0,
+      "energia": 15977.0,
+      "alimentos": 31954.0
+     },
+     "custo_valor": 159769.0,
+     "tempo_s": 331159,
+     "valor": 125337.25,
+     "valor2": 34
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 61179.0,
+      "metal": 29133.0,
+      "energia": 17480.0,
+      "alimentos": 34959.0
+     },
+     "custo_valor": 174798.0,
+     "tempo_s": 331175,
+     "valor": 147897.96,
+     "valor2": 35
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 66931.0,
+      "metal": 31872.0,
+      "energia": 19123.0,
+      "alimentos": 38247.0
+     },
+     "custo_valor": 191232.0,
+     "tempo_s": 331185,
+     "valor": 174519.59,
+     "valor2": 36
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 73224.0,
+      "metal": 34869.0,
+      "energia": 20921.0,
+      "alimentos": 41842.0
+     },
+     "custo_valor": 209212.0,
+     "tempo_s": 331191,
+     "valor": 205933.12,
+     "valor2": 37
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 80108.0,
+      "metal": 38147.0,
+      "energia": 22888.0,
+      "alimentos": 45776.0
+     },
+     "custo_valor": 228880.0,
+     "tempo_s": 331194,
+     "valor": 243001.08,
+     "valor2": 38
+    }
+   ],
+   "id_antigo": "hq",
+   "fracao_tempo": 1.0,
+   "fracao_custo": 1.0,
+   "desbloqueio_prefeitura": 1,
+   "requisito": null,
+   "pre_requisitos_por_nivel": "nível n exige Usina de materiais (a principal) no n-1 e, do 11 em diante, Base militar no n-1"
+  },
+  {
+   "id": "alo",
+   "nome": "Alojamento",
+   "origem_valdora": "Casa",
+   "tipo": "pop",
+   "base": 8,
+   "unidade": "moradores",
+   "funcao": "Moradia das tropas e dos trabalhadores.",
+   "beneficio": "Aumenta a população, que gera mão de obra e limite de tropas.",
+   "visual_faixas": [
+    "Módulos de contêiner com janelas e toldo",
+    "Bloco pré-fabricado de 3 andares, varandas coloridas",
+    "Prédio de concreto com garagem e antena de TV",
+    "Residencial de vidro com jardim no terraço",
+    "Torre residencial com painéis solares e elevador visível",
+    "Torre de luxo com iluminação neon por andar"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 8.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 6,
+     "valor": 8.8
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 15,
+     "valor": 9.68
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 36,
+     "valor": 10.65
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 80,
+     "valor": 11.71
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 180,
+     "valor": 12.88
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 14.2,
+      "metal": 6.3,
+      "alimentos": 7.9
+     },
+     "custo_valor": 31.5,
+     "tempo_s": 360,
+     "valor": 14.17
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 31.0,
+      "metal": 13.8,
+      "alimentos": 17.2
+     },
+     "custo_valor": 68.9,
+     "tempo_s": 720,
+     "valor": 15.59
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 67.9,
+      "metal": 30.2,
+      "alimentos": 37.7
+     },
+     "custo_valor": 151.0,
+     "tempo_s": 1440,
+     "valor": 17.15
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 116.0,
+      "metal": 55.0,
+      "energia": 33.0,
+      "alimentos": 66.0
+     },
+     "custo_valor": 330.0,
+     "tempo_s": 2880,
+     "valor": 18.86
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 253.0,
+      "metal": 120.0,
+      "energia": 72.2,
+      "alimentos": 144.0
+     },
+     "custo_valor": 721.0,
+     "tempo_s": 5760,
+     "valor": 20.75
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 553.0,
+      "metal": 263.0,
+      "energia": 158.0,
+      "alimentos": 316.0
+     },
+     "custo_valor": 1580.0,
+     "tempo_s": 11520,
+     "valor": 22.82
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 1210.0,
+      "metal": 576.0,
+      "energia": 346.0,
+      "alimentos": 691.0
+     },
+     "custo_valor": 3457.0,
+     "tempo_s": 23040,
+     "valor": 25.11
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 1808.0,
+      "metal": 861.0,
+      "energia": 517.0,
+      "alimentos": 1033.0
+     },
+     "custo_valor": 5166.0,
+     "tempo_s": 31471,
+     "valor": 27.62
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 2019.0,
+      "metal": 961.0,
+      "energia": 577.0,
+      "alimentos": 1154.0
+     },
+     "custo_valor": 5768.0,
+     "tempo_s": 32120,
+     "valor": 30.38
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 2236.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 32513,
+     "valor": 33.42
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 2464.0,
+      "metal": 1173.0,
+      "energia": 704.0,
+      "alimentos": 1408.0
+     },
+     "custo_valor": 7040.0,
+     "tempo_s": 32752,
+     "valor": 36.76
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 2707.0,
+      "metal": 1289.0,
+      "energia": 774.0,
+      "alimentos": 1547.0
+     },
+     "custo_valor": 7736.0,
+     "tempo_s": 32897,
+     "valor": 40.44
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 2970.0,
+      "metal": 1414.0,
+      "energia": 848.0,
+      "alimentos": 1697.0
+     },
+     "custo_valor": 8484.0,
+     "tempo_s": 32985,
+     "valor": 44.48
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 3254.0,
+      "metal": 1550.0,
+      "energia": 930.0,
+      "alimentos": 1859.0
+     },
+     "custo_valor": 9298.0,
+     "tempo_s": 33038,
+     "valor": 48.93
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 3563.0,
+      "metal": 1697.0,
+      "energia": 1018.0,
+      "alimentos": 2036.0
+     },
+     "custo_valor": 10180.0,
+     "tempo_s": 33070,
+     "valor": 53.82
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 3901.0,
+      "metal": 1858.0,
+      "energia": 1115.0,
+      "alimentos": 2229.0
+     },
+     "custo_valor": 11147.0,
+     "tempo_s": 33090,
+     "valor": 59.2
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 4269.0,
+      "metal": 2033.0,
+      "energia": 1220.0,
+      "alimentos": 2439.0
+     },
+     "custo_valor": 12198.0,
+     "tempo_s": 33102,
+     "valor": 65.12
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 4671.0,
+      "metal": 2224.0,
+      "energia": 1335.0,
+      "alimentos": 2669.0
+     },
+     "custo_valor": 13346.0,
+     "tempo_s": 33109,
+     "valor": 71.63
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 5111.0,
+      "metal": 2434.0,
+      "energia": 1460.0,
+      "alimentos": 2921.0
+     },
+     "custo_valor": 14603.0,
+     "tempo_s": 33113,
+     "valor": 78.8
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 5592.0,
+      "metal": 2663.0,
+      "energia": 1598.0,
+      "alimentos": 3195.0
+     },
+     "custo_valor": 15978.0,
+     "tempo_s": 33116,
+     "valor": 86.68
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 6118.0,
+      "metal": 2913.0,
+      "energia": 1748.0,
+      "alimentos": 3496.0
+     },
+     "custo_valor": 17480.0,
+     "tempo_s": 33118,
+     "valor": 95.35
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 6693.0,
+      "metal": 3187.0,
+      "energia": 1912.0,
+      "alimentos": 3825.0
+     },
+     "custo_valor": 19122.0,
+     "tempo_s": 33118,
+     "valor": 104.88
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 7322.0,
+      "metal": 3487.0,
+      "energia": 2092.0,
+      "alimentos": 4184.0
+     },
+     "custo_valor": 20920.0,
+     "tempo_s": 33119,
+     "valor": 115.37
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 8011.0,
+      "metal": 3815.0,
+      "energia": 2289.0,
+      "alimentos": 4578.0
+     },
+     "custo_valor": 22890.0,
+     "tempo_s": 33119,
+     "valor": 126.9
+    }
+   ],
+   "fracao_tempo": 0.1,
+   "fracao_custo": 0.1,
+   "desbloqueio_prefeitura": 1,
+   "requisito": null
+  },
+  {
+   "id": "est",
+   "nome": "Estufa hidropônica",
+   "origem_valdora": "Fazenda",
+   "tipo": "prod",
+   "base": 60,
+   "unidade": "alimentos/h",
+   "funcao": "Produz alimentos, necessários para manter a população e treinar tropas.",
+   "beneficio": "Produção contínua de alimentos, também acumulada offline (até 8 h).",
+   "visual_faixas": [
+    "Estufa de plástico com fileiras de verduras",
+    "Estufa de vidro com irrigação aparente",
+    "Galpão com bandejas empilhadas e luz roxa",
+    "Estufa vertical de 3 andares, folhagem brilhante",
+    "Fazenda vertical com drones colhendo",
+    "Biodomo de vidro curvo, folhas luminosas e vapor"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 60.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 2,
+     "valor": 67.2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 4,
+     "valor": 75.26
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 11,
+     "valor": 84.3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 24,
+     "valor": 94.41
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 54,
+     "valor": 105.74
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 5.7,
+      "metal": 2.5,
+      "alimentos": 3.2
+     },
+     "custo_valor": 12.7,
+     "tempo_s": 108,
+     "valor": 118.43
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 12.4,
+      "metal": 5.5,
+      "alimentos": 6.9
+     },
+     "custo_valor": 27.6,
+     "tempo_s": 216,
+     "valor": 132.64
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 27.2,
+      "metal": 12.1,
+      "alimentos": 15.1
+     },
+     "custo_valor": 60.4,
+     "tempo_s": 432,
+     "valor": 148.56
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 46.2,
+      "metal": 22.0,
+      "energia": 13.2,
+      "alimentos": 26.4
+     },
+     "custo_valor": 132.0,
+     "tempo_s": 864,
+     "valor": 166.38
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 101.0,
+      "metal": 48.1,
+      "energia": 28.9,
+      "alimentos": 57.8
+     },
+     "custo_valor": 289.0,
+     "tempo_s": 1728,
+     "valor": 186.35
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 221.0,
+      "metal": 105.0,
+      "energia": 63.2,
+      "alimentos": 126.0
+     },
+     "custo_valor": 631.0,
+     "tempo_s": 3456,
+     "valor": 208.71
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 484.0,
+      "metal": 230.0,
+      "energia": 138.0,
+      "alimentos": 277.0
+     },
+     "custo_valor": 1382.0,
+     "tempo_s": 6912,
+     "valor": 233.76
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 723.0,
+      "metal": 344.0,
+      "energia": 207.0,
+      "alimentos": 413.0
+     },
+     "custo_valor": 2066.0,
+     "tempo_s": 9441,
+     "valor": 261.81
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 808.0,
+      "metal": 385.0,
+      "energia": 231.0,
+      "alimentos": 461.0
+     },
+     "custo_valor": 2308.0,
+     "tempo_s": 9636,
+     "valor": 293.23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 894.0,
+      "metal": 426.0,
+      "energia": 256.0,
+      "alimentos": 511.0
+     },
+     "custo_valor": 2556.0,
+     "tempo_s": 9754,
+     "valor": 328.41
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 986.0,
+      "metal": 469.0,
+      "energia": 282.0,
+      "alimentos": 563.0
+     },
+     "custo_valor": 2816.0,
+     "tempo_s": 9826,
+     "valor": 367.82
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1083.0,
+      "metal": 516.0,
+      "energia": 309.0,
+      "alimentos": 619.0
+     },
+     "custo_valor": 3094.0,
+     "tempo_s": 9869,
+     "valor": 411.96
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1188.0,
+      "metal": 566.0,
+      "energia": 339.0,
+      "alimentos": 679.0
+     },
+     "custo_valor": 3394.0,
+     "tempo_s": 9895,
+     "valor": 461.4
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1302.0,
+      "metal": 620.0,
+      "energia": 372.0,
+      "alimentos": 744.0
+     },
+     "custo_valor": 3720.0,
+     "tempo_s": 9911,
+     "valor": 516.77
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1425.0,
+      "metal": 679.0,
+      "energia": 407.0,
+      "alimentos": 815.0
+     },
+     "custo_valor": 4072.0,
+     "tempo_s": 9921,
+     "valor": 578.78
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1560.0,
+      "metal": 743.0,
+      "energia": 446.0,
+      "alimentos": 892.0
+     },
+     "custo_valor": 4458.0,
+     "tempo_s": 9927,
+     "valor": 648.23
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 1708.0,
+      "metal": 813.0,
+      "energia": 488.0,
+      "alimentos": 976.0
+     },
+     "custo_valor": 4880.0,
+     "tempo_s": 9931,
+     "valor": 726.02
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 1869.0,
+      "metal": 890.0,
+      "energia": 534.0,
+      "alimentos": 1068.0
+     },
+     "custo_valor": 5340.0,
+     "tempo_s": 9933,
+     "valor": 813.14
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2044.0,
+      "metal": 974.0,
+      "energia": 584.0,
+      "alimentos": 1168.0
+     },
+     "custo_valor": 5841.0,
+     "tempo_s": 9934,
+     "valor": 910.72
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2237.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 9935,
+     "valor": 1020.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 2447.0,
+      "metal": 1165.0,
+      "energia": 699.0,
+      "alimentos": 1398.0
+     },
+     "custo_valor": 6990.0,
+     "tempo_s": 9935,
+     "valor": 1142.4
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 2677.0,
+      "metal": 1275.0,
+      "energia": 765.0,
+      "alimentos": 1530.0
+     },
+     "custo_valor": 7650.0,
+     "tempo_s": 9936,
+     "valor": 1279.49
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 2929.0,
+      "metal": 1395.0,
+      "energia": 837.0,
+      "alimentos": 1674.0
+     },
+     "custo_valor": 8370.0,
+     "tempo_s": 9936,
+     "valor": 1433.03
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 3204.0,
+      "metal": 1526.0,
+      "energia": 916.0,
+      "alimentos": 1831.0
+     },
+     "custo_valor": 9156.0,
+     "tempo_s": 9936,
+     "valor": 1605.0
+    }
+   ],
+   "fracao_tempo": 0.03,
+   "fracao_custo": 0.04,
+   "desbloqueio_prefeitura": 1,
+   "requisito": null
+  },
+  {
+   "id": "usi",
+   "nome": "Usina de materiais",
+   "origem_valdora": "Serraria",
+   "tipo": "prod",
+   "base": 60,
+   "unidade": "materiais/h",
+   "funcao": "Produz materiais de construção.",
+   "beneficio": "Fornece o material de toda obra e melhoria.",
+   "visual_faixas": [
+    "Galpão com serra e pilhas de madeira",
+    "Fábrica com chaminé e esteira",
+    "Linha de montagem coberta, guindaste móvel",
+    "Fábrica automatizada com braços robóticos",
+    "Complexo com tubulações brilhantes e fumaça branca",
+    "Mega-fábrica com faíscas e esteiras flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 60.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 2,
+     "valor": 67.2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 4,
+     "valor": 75.26
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 11,
+     "valor": 84.3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 24,
+     "valor": 94.41
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 54,
+     "valor": 105.74
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 5.7,
+      "metal": 2.5,
+      "alimentos": 3.2
+     },
+     "custo_valor": 12.7,
+     "tempo_s": 108,
+     "valor": 118.43
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 12.4,
+      "metal": 5.5,
+      "alimentos": 6.9
+     },
+     "custo_valor": 27.6,
+     "tempo_s": 216,
+     "valor": 132.64
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 27.2,
+      "metal": 12.1,
+      "alimentos": 15.1
+     },
+     "custo_valor": 60.4,
+     "tempo_s": 432,
+     "valor": 148.56
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 46.2,
+      "metal": 22.0,
+      "energia": 13.2,
+      "alimentos": 26.4
+     },
+     "custo_valor": 132.0,
+     "tempo_s": 864,
+     "valor": 166.38
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 101.0,
+      "metal": 48.1,
+      "energia": 28.9,
+      "alimentos": 57.8
+     },
+     "custo_valor": 289.0,
+     "tempo_s": 1728,
+     "valor": 186.35
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 221.0,
+      "metal": 105.0,
+      "energia": 63.2,
+      "alimentos": 126.0
+     },
+     "custo_valor": 631.0,
+     "tempo_s": 3456,
+     "valor": 208.71
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 484.0,
+      "metal": 230.0,
+      "energia": 138.0,
+      "alimentos": 277.0
+     },
+     "custo_valor": 1382.0,
+     "tempo_s": 6912,
+     "valor": 233.76
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 723.0,
+      "metal": 344.0,
+      "energia": 207.0,
+      "alimentos": 413.0
+     },
+     "custo_valor": 2066.0,
+     "tempo_s": 9441,
+     "valor": 261.81
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 808.0,
+      "metal": 385.0,
+      "energia": 231.0,
+      "alimentos": 461.0
+     },
+     "custo_valor": 2308.0,
+     "tempo_s": 9636,
+     "valor": 293.23
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 894.0,
+      "metal": 426.0,
+      "energia": 256.0,
+      "alimentos": 511.0
+     },
+     "custo_valor": 2556.0,
+     "tempo_s": 9754,
+     "valor": 328.41
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 986.0,
+      "metal": 469.0,
+      "energia": 282.0,
+      "alimentos": 563.0
+     },
+     "custo_valor": 2816.0,
+     "tempo_s": 9826,
+     "valor": 367.82
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1083.0,
+      "metal": 516.0,
+      "energia": 309.0,
+      "alimentos": 619.0
+     },
+     "custo_valor": 3094.0,
+     "tempo_s": 9869,
+     "valor": 411.96
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1188.0,
+      "metal": 566.0,
+      "energia": 339.0,
+      "alimentos": 679.0
+     },
+     "custo_valor": 3394.0,
+     "tempo_s": 9895,
+     "valor": 461.4
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1302.0,
+      "metal": 620.0,
+      "energia": 372.0,
+      "alimentos": 744.0
+     },
+     "custo_valor": 3720.0,
+     "tempo_s": 9911,
+     "valor": 516.77
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1425.0,
+      "metal": 679.0,
+      "energia": 407.0,
+      "alimentos": 815.0
+     },
+     "custo_valor": 4072.0,
+     "tempo_s": 9921,
+     "valor": 578.78
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1560.0,
+      "metal": 743.0,
+      "energia": 446.0,
+      "alimentos": 892.0
+     },
+     "custo_valor": 4458.0,
+     "tempo_s": 9927,
+     "valor": 648.23
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 1708.0,
+      "metal": 813.0,
+      "energia": 488.0,
+      "alimentos": 976.0
+     },
+     "custo_valor": 4880.0,
+     "tempo_s": 9931,
+     "valor": 726.02
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 1869.0,
+      "metal": 890.0,
+      "energia": 534.0,
+      "alimentos": 1068.0
+     },
+     "custo_valor": 5340.0,
+     "tempo_s": 9933,
+     "valor": 813.14
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2044.0,
+      "metal": 974.0,
+      "energia": 584.0,
+      "alimentos": 1168.0
+     },
+     "custo_valor": 5841.0,
+     "tempo_s": 9934,
+     "valor": 910.72
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2237.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 9935,
+     "valor": 1020.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 2447.0,
+      "metal": 1165.0,
+      "energia": 699.0,
+      "alimentos": 1398.0
+     },
+     "custo_valor": 6990.0,
+     "tempo_s": 9935,
+     "valor": 1142.4
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 2677.0,
+      "metal": 1275.0,
+      "energia": 765.0,
+      "alimentos": 1530.0
+     },
+     "custo_valor": 7650.0,
+     "tempo_s": 9936,
+     "valor": 1279.49
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 2929.0,
+      "metal": 1395.0,
+      "energia": 837.0,
+      "alimentos": 1674.0
+     },
+     "custo_valor": 8370.0,
+     "tempo_s": 9936,
+     "valor": 1433.03
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 3204.0,
+      "metal": 1526.0,
+      "energia": 916.0,
+      "alimentos": 1831.0
+     },
+     "custo_valor": 9156.0,
+     "tempo_s": 9936,
+     "valor": 1605.0
+    }
+   ],
+   "fracao_tempo": 0.03,
+   "fracao_custo": 0.04,
+   "desbloqueio_prefeitura": 1,
+   "requisito": null
+  },
+  {
+   "id": "min",
+   "nome": "Mineradora",
+   "origem_valdora": "Pedreira",
+   "tipo": "prod",
+   "base": 40,
+   "unidade": "metal/h",
+   "funcao": "Extrai metal para construção avançada e equipamentos.",
+   "beneficio": "Metal é exigido em obras acima do nível 5 e na evolução das tropas.",
+   "visual_faixas": [
+    "Poço aberto com carrinho e pá",
+    "Escavadeira e pilha de minério",
+    "Cavas em degraus com caminhões",
+    "Torre de perfuração com guindaste duplo",
+    "Escavadeira gigante e esteira de minério brilhante",
+    "Mina de cristal com lasers e vagonetes flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 40.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 2,
+     "valor": 44.8
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 4,
+     "valor": 50.18
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 11,
+     "valor": 56.2
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 24,
+     "valor": 62.94
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 54,
+     "valor": 70.49
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 5.7,
+      "metal": 2.5,
+      "alimentos": 3.2
+     },
+     "custo_valor": 12.7,
+     "tempo_s": 108,
+     "valor": 78.95
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 12.4,
+      "metal": 5.5,
+      "alimentos": 6.9
+     },
+     "custo_valor": 27.6,
+     "tempo_s": 216,
+     "valor": 88.43
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 27.2,
+      "metal": 12.1,
+      "alimentos": 15.1
+     },
+     "custo_valor": 60.4,
+     "tempo_s": 432,
+     "valor": 99.04
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 46.2,
+      "metal": 22.0,
+      "energia": 13.2,
+      "alimentos": 26.4
+     },
+     "custo_valor": 132.0,
+     "tempo_s": 864,
+     "valor": 110.92
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 101.0,
+      "metal": 48.1,
+      "energia": 28.9,
+      "alimentos": 57.8
+     },
+     "custo_valor": 289.0,
+     "tempo_s": 1728,
+     "valor": 124.23
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 221.0,
+      "metal": 105.0,
+      "energia": 63.2,
+      "alimentos": 126.0
+     },
+     "custo_valor": 631.0,
+     "tempo_s": 3456,
+     "valor": 139.14
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 484.0,
+      "metal": 230.0,
+      "energia": 138.0,
+      "alimentos": 277.0
+     },
+     "custo_valor": 1382.0,
+     "tempo_s": 6912,
+     "valor": 155.84
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 723.0,
+      "metal": 344.0,
+      "energia": 207.0,
+      "alimentos": 413.0
+     },
+     "custo_valor": 2066.0,
+     "tempo_s": 9441,
+     "valor": 174.54
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 808.0,
+      "metal": 385.0,
+      "energia": 231.0,
+      "alimentos": 461.0
+     },
+     "custo_valor": 2308.0,
+     "tempo_s": 9636,
+     "valor": 195.48
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 894.0,
+      "metal": 426.0,
+      "energia": 256.0,
+      "alimentos": 511.0
+     },
+     "custo_valor": 2556.0,
+     "tempo_s": 9754,
+     "valor": 218.94
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 986.0,
+      "metal": 469.0,
+      "energia": 282.0,
+      "alimentos": 563.0
+     },
+     "custo_valor": 2816.0,
+     "tempo_s": 9826,
+     "valor": 245.22
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1083.0,
+      "metal": 516.0,
+      "energia": 309.0,
+      "alimentos": 619.0
+     },
+     "custo_valor": 3094.0,
+     "tempo_s": 9869,
+     "valor": 274.64
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1188.0,
+      "metal": 566.0,
+      "energia": 339.0,
+      "alimentos": 679.0
+     },
+     "custo_valor": 3394.0,
+     "tempo_s": 9895,
+     "valor": 307.6
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1302.0,
+      "metal": 620.0,
+      "energia": 372.0,
+      "alimentos": 744.0
+     },
+     "custo_valor": 3720.0,
+     "tempo_s": 9911,
+     "valor": 344.51
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1425.0,
+      "metal": 679.0,
+      "energia": 407.0,
+      "alimentos": 815.0
+     },
+     "custo_valor": 4072.0,
+     "tempo_s": 9921,
+     "valor": 385.85
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1560.0,
+      "metal": 743.0,
+      "energia": 446.0,
+      "alimentos": 892.0
+     },
+     "custo_valor": 4458.0,
+     "tempo_s": 9927,
+     "valor": 432.15
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 1708.0,
+      "metal": 813.0,
+      "energia": 488.0,
+      "alimentos": 976.0
+     },
+     "custo_valor": 4880.0,
+     "tempo_s": 9931,
+     "valor": 484.01
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 1869.0,
+      "metal": 890.0,
+      "energia": 534.0,
+      "alimentos": 1068.0
+     },
+     "custo_valor": 5340.0,
+     "tempo_s": 9933,
+     "valor": 542.09
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2044.0,
+      "metal": 974.0,
+      "energia": 584.0,
+      "alimentos": 1168.0
+     },
+     "custo_valor": 5841.0,
+     "tempo_s": 9934,
+     "valor": 607.15
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2237.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 9935,
+     "valor": 680.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 2447.0,
+      "metal": 1165.0,
+      "energia": 699.0,
+      "alimentos": 1398.0
+     },
+     "custo_valor": 6990.0,
+     "tempo_s": 9935,
+     "valor": 761.6
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 2677.0,
+      "metal": 1275.0,
+      "energia": 765.0,
+      "alimentos": 1530.0
+     },
+     "custo_valor": 7650.0,
+     "tempo_s": 9936,
+     "valor": 853.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 2929.0,
+      "metal": 1395.0,
+      "energia": 837.0,
+      "alimentos": 1674.0
+     },
+     "custo_valor": 8370.0,
+     "tempo_s": 9936,
+     "valor": 955.35
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 3204.0,
+      "metal": 1526.0,
+      "energia": 916.0,
+      "alimentos": 1831.0
+     },
+     "custo_valor": 9156.0,
+     "tempo_s": 9936,
+     "valor": 1070.0
+    }
+   ],
+   "fracao_tempo": 0.03,
+   "fracao_custo": 0.04,
+   "desbloqueio_prefeitura": 2,
+   "requisito": {
+    "id": "usi",
+    "nivel": 2
+   }
+  },
+  {
+   "id": "ene",
+   "nome": "Central de energia",
+   "origem_valdora": "(novo)",
+   "tipo": "prod",
+   "base": 30,
+   "unidade": "energia/h",
+   "funcao": "Gera energia. A fonte muda por país: solar, eólica, hídrica ou térmica.",
+   "beneficio": "Sem energia suficiente, as fábricas ficam 50% mais lentas. Prédios acima do nível 10 consomem energia.",
+   "visual_faixas": [
+    "Poucos painéis solares e um gerador a diesel",
+    "Fileira de painéis e uma turbina pequena",
+    "Parque com turbina grande e subestação",
+    "Usina com torre de transmissão e linhas",
+    "Complexo com baterias gigantes e raios azuis",
+    "Reator de energia com anel luminoso girando"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 30.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 2,
+     "valor": 33.6
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 4,
+     "valor": 37.63
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 11,
+     "valor": 42.15
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 24,
+     "valor": 47.21
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 54,
+     "valor": 52.87
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 5.7,
+      "metal": 2.5,
+      "alimentos": 3.2
+     },
+     "custo_valor": 12.7,
+     "tempo_s": 108,
+     "valor": 59.21
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 12.4,
+      "metal": 5.5,
+      "alimentos": 6.9
+     },
+     "custo_valor": 27.6,
+     "tempo_s": 216,
+     "valor": 66.32
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 27.2,
+      "metal": 12.1,
+      "alimentos": 15.1
+     },
+     "custo_valor": 60.4,
+     "tempo_s": 432,
+     "valor": 74.28
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 46.2,
+      "metal": 22.0,
+      "energia": 13.2,
+      "alimentos": 26.4
+     },
+     "custo_valor": 132.0,
+     "tempo_s": 864,
+     "valor": 83.19
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 101.0,
+      "metal": 48.1,
+      "energia": 28.9,
+      "alimentos": 57.8
+     },
+     "custo_valor": 289.0,
+     "tempo_s": 1728,
+     "valor": 93.18
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 221.0,
+      "metal": 105.0,
+      "energia": 63.2,
+      "alimentos": 126.0
+     },
+     "custo_valor": 631.0,
+     "tempo_s": 3456,
+     "valor": 104.36
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 484.0,
+      "metal": 230.0,
+      "energia": 138.0,
+      "alimentos": 277.0
+     },
+     "custo_valor": 1382.0,
+     "tempo_s": 6912,
+     "valor": 116.88
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 723.0,
+      "metal": 344.0,
+      "energia": 207.0,
+      "alimentos": 413.0
+     },
+     "custo_valor": 2066.0,
+     "tempo_s": 9441,
+     "valor": 130.9
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 808.0,
+      "metal": 385.0,
+      "energia": 231.0,
+      "alimentos": 461.0
+     },
+     "custo_valor": 2308.0,
+     "tempo_s": 9636,
+     "valor": 146.61
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 894.0,
+      "metal": 426.0,
+      "energia": 256.0,
+      "alimentos": 511.0
+     },
+     "custo_valor": 2556.0,
+     "tempo_s": 9754,
+     "valor": 164.21
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 986.0,
+      "metal": 469.0,
+      "energia": 282.0,
+      "alimentos": 563.0
+     },
+     "custo_valor": 2816.0,
+     "tempo_s": 9826,
+     "valor": 183.91
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1083.0,
+      "metal": 516.0,
+      "energia": 309.0,
+      "alimentos": 619.0
+     },
+     "custo_valor": 3094.0,
+     "tempo_s": 9869,
+     "valor": 205.98
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1188.0,
+      "metal": 566.0,
+      "energia": 339.0,
+      "alimentos": 679.0
+     },
+     "custo_valor": 3394.0,
+     "tempo_s": 9895,
+     "valor": 230.7
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1302.0,
+      "metal": 620.0,
+      "energia": 372.0,
+      "alimentos": 744.0
+     },
+     "custo_valor": 3720.0,
+     "tempo_s": 9911,
+     "valor": 258.38
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1425.0,
+      "metal": 679.0,
+      "energia": 407.0,
+      "alimentos": 815.0
+     },
+     "custo_valor": 4072.0,
+     "tempo_s": 9921,
+     "valor": 289.39
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1560.0,
+      "metal": 743.0,
+      "energia": 446.0,
+      "alimentos": 892.0
+     },
+     "custo_valor": 4458.0,
+     "tempo_s": 9927,
+     "valor": 324.12
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 1708.0,
+      "metal": 813.0,
+      "energia": 488.0,
+      "alimentos": 976.0
+     },
+     "custo_valor": 4880.0,
+     "tempo_s": 9931,
+     "valor": 363.01
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 1869.0,
+      "metal": 890.0,
+      "energia": 534.0,
+      "alimentos": 1068.0
+     },
+     "custo_valor": 5340.0,
+     "tempo_s": 9933,
+     "valor": 406.57
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2044.0,
+      "metal": 974.0,
+      "energia": 584.0,
+      "alimentos": 1168.0
+     },
+     "custo_valor": 5841.0,
+     "tempo_s": 9934,
+     "valor": 455.36
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2237.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 9935,
+     "valor": 510.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 2447.0,
+      "metal": 1165.0,
+      "energia": 699.0,
+      "alimentos": 1398.0
+     },
+     "custo_valor": 6990.0,
+     "tempo_s": 9935,
+     "valor": 571.2
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 2677.0,
+      "metal": 1275.0,
+      "energia": 765.0,
+      "alimentos": 1530.0
+     },
+     "custo_valor": 7650.0,
+     "tempo_s": 9936,
+     "valor": 639.75
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 2929.0,
+      "metal": 1395.0,
+      "energia": 837.0,
+      "alimentos": 1674.0
+     },
+     "custo_valor": 8370.0,
+     "tempo_s": 9936,
+     "valor": 716.52
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 3204.0,
+      "metal": 1526.0,
+      "energia": 916.0,
+      "alimentos": 1831.0
+     },
+     "custo_valor": 9156.0,
+     "tempo_s": 9936,
+     "valor": 802.5
+    }
+   ],
+   "fracao_tempo": 0.03,
+   "fracao_custo": 0.04,
+   "desbloqueio_prefeitura": 3,
+   "requisito": {
+    "id": "min",
+    "nivel": 2
+   }
+  },
+  {
+   "id": "ban",
+   "nome": "Banco da cidade",
+   "origem_valdora": "—",
+   "tipo": "ban",
+   "base": 0,
+   "unidade": "moedas protegidas",
+   "funcao": "Guarda a moeda da cidade. A moeda é do sistema; cada cidade tem o seu banco.",
+   "beneficio": "Protege a moeda até a capacidade do nível (12 h de produção de referência); o que passa fica no cofre, exposto a ataque. Rendimento de 1%/semana com teto, empréstimo pela nota fiscal.",
+   "visual_faixas": [
+    "Contêiner com cofre e placa",
+    "Agência pré-fabricada com caixa eletrônico",
+    "Agência de concreto com colunas",
+    "Torre de vidro com letreiro",
+    "Centro financeiro com painéis e drones",
+    "Banco de elite com cúpula dourada e cofre iluminado"
+   ],
+   "fracao_tempo": 0.1,
+   "fracao_custo": 0.1,
+   "desbloqueio_prefeitura": 3,
+   "requisito": {
+    "id": "usi",
+    "nivel": 3
+   },
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 6,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 15,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 36,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 80,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 180,
+     "valor": 2880.0
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 14.2,
+      "metal": 6.3,
+      "alimentos": 7.9
+     },
+     "custo_valor": 31.5,
+     "tempo_s": 360,
+     "valor": 12603.0
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 31.0,
+      "metal": 13.8,
+      "alimentos": 17.2
+     },
+     "custo_valor": 68.9,
+     "tempo_s": 720,
+     "valor": 13788.0
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 67.9,
+      "metal": 30.2,
+      "alimentos": 37.7
+     },
+     "custo_valor": 151.0,
+     "tempo_s": 1440,
+     "valor": 15084.0
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 116.0,
+      "metal": 55.0,
+      "energia": 33.0,
+      "alimentos": 66.0
+     },
+     "custo_valor": 330.0,
+     "tempo_s": 2880,
+     "valor": 16502.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 253.0,
+      "metal": 120.0,
+      "energia": 72.2,
+      "alimentos": 144.0
+     },
+     "custo_valor": 721.0,
+     "tempo_s": 5760,
+     "valor": 18053.0
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 553.0,
+      "metal": 263.0,
+      "energia": 158.0,
+      "alimentos": 316.0
+     },
+     "custo_valor": 1580.0,
+     "tempo_s": 11520,
+     "valor": 19750.0
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 1210.0,
+      "metal": 576.0,
+      "energia": 346.0,
+      "alimentos": 691.0
+     },
+     "custo_valor": 3457.0,
+     "tempo_s": 23040,
+     "valor": 21607.0
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 1808.0,
+      "metal": 861.0,
+      "energia": 517.0,
+      "alimentos": 1033.0
+     },
+     "custo_valor": 5166.0,
+     "tempo_s": 31471,
+     "valor": 23638.0
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 2019.0,
+      "metal": 961.0,
+      "energia": 577.0,
+      "alimentos": 1154.0
+     },
+     "custo_valor": 5768.0,
+     "tempo_s": 32120,
+     "valor": 25860.0
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 2236.0,
+      "metal": 1065.0,
+      "energia": 639.0,
+      "alimentos": 1278.0
+     },
+     "custo_valor": 6390.0,
+     "tempo_s": 32513,
+     "valor": 28291.0
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 2464.0,
+      "metal": 1173.0,
+      "energia": 704.0,
+      "alimentos": 1408.0
+     },
+     "custo_valor": 7040.0,
+     "tempo_s": 32752,
+     "valor": 30950.0
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 2707.0,
+      "metal": 1289.0,
+      "energia": 774.0,
+      "alimentos": 1547.0
+     },
+     "custo_valor": 7736.0,
+     "tempo_s": 32897,
+     "valor": 33860.0
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 2970.0,
+      "metal": 1414.0,
+      "energia": 848.0,
+      "alimentos": 1697.0
+     },
+     "custo_valor": 8484.0,
+     "tempo_s": 32985,
+     "valor": 37042.0
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 3254.0,
+      "metal": 1550.0,
+      "energia": 930.0,
+      "alimentos": 1859.0
+     },
+     "custo_valor": 9298.0,
+     "tempo_s": 33038,
+     "valor": 40524.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 3563.0,
+      "metal": 1697.0,
+      "energia": 1018.0,
+      "alimentos": 2036.0
+     },
+     "custo_valor": 10180.0,
+     "tempo_s": 33070,
+     "valor": 44334.0
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 3901.0,
+      "metal": 1858.0,
+      "energia": 1115.0,
+      "alimentos": 2229.0
+     },
+     "custo_valor": 11147.0,
+     "tempo_s": 33090,
+     "valor": 48501.0
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 4269.0,
+      "metal": 2033.0,
+      "energia": 1220.0,
+      "alimentos": 2439.0
+     },
+     "custo_valor": 12198.0,
+     "tempo_s": 33102,
+     "valor": 53060.0
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 4671.0,
+      "metal": 2224.0,
+      "energia": 1335.0,
+      "alimentos": 2669.0
+     },
+     "custo_valor": 13346.0,
+     "tempo_s": 33109,
+     "valor": 58048.0
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 5111.0,
+      "metal": 2434.0,
+      "energia": 1460.0,
+      "alimentos": 2921.0
+     },
+     "custo_valor": 14603.0,
+     "tempo_s": 33113,
+     "valor": 63504.0
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 5592.0,
+      "metal": 2663.0,
+      "energia": 1598.0,
+      "alimentos": 3195.0
+     },
+     "custo_valor": 15978.0,
+     "tempo_s": 33116,
+     "valor": 69474.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 6118.0,
+      "metal": 2913.0,
+      "energia": 1748.0,
+      "alimentos": 3496.0
+     },
+     "custo_valor": 17480.0,
+     "tempo_s": 33118,
+     "valor": 76004.0
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 6693.0,
+      "metal": 3187.0,
+      "energia": 1912.0,
+      "alimentos": 3825.0
+     },
+     "custo_valor": 19122.0,
+     "tempo_s": 33118,
+     "valor": 83148.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 7322.0,
+      "metal": 3487.0,
+      "energia": 2092.0,
+      "alimentos": 4184.0
+     },
+     "custo_valor": 20920.0,
+     "tempo_s": 33119,
+     "valor": 90964.0
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 8011.0,
+      "metal": 3815.0,
+      "energia": 2289.0,
+      "alimentos": 4578.0
+     },
+     "custo_valor": 22890.0,
+     "tempo_s": 33119,
+     "valor": 99515.0
+    }
+   ]
+  },
+  {
+   "id": "rad",
+   "nome": "Radar e antena",
+   "origem_valdora": "Torre",
+   "tipo": "def",
+   "base": 20,
+   "unidade": "defesa",
+   "funcao": "Dá visão do mapa, avisa de ataques e reforça a defesa passiva.",
+   "beneficio": "Aumenta o alcance de visão (casas do mapa) e a defesa do estado.",
+   "visual_faixas": [
+    "Mastro com antena e refletor",
+    "Torre de aço com antena parabólica",
+    "Radar giratório com cúpula",
+    "Torre com três antenas e luz de varredura",
+    "Rede de antenas com feixe visível",
+    "Torre de elite com holograma de varredura"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 20.0,
+     "valor2": 3
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 3,
+     "valor": 22.8,
+     "valor2": 3
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 7,
+     "valor": 25.99,
+     "valor2": 3
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 29.63,
+     "valor2": 3
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 40,
+     "valor": 33.78,
+     "valor2": 4
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 90,
+     "valor": 38.51,
+     "valor2": 4
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 7.1,
+      "metal": 3.2,
+      "alimentos": 3.9
+     },
+     "custo_valor": 15.8,
+     "tempo_s": 180,
+     "valor": 43.9,
+     "valor2": 4
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 15.5,
+      "metal": 6.9,
+      "alimentos": 8.6
+     },
+     "custo_valor": 34.5,
+     "tempo_s": 360,
+     "valor": 50.05,
+     "valor2": 4
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 33.9,
+      "metal": 15.1,
+      "alimentos": 18.9
+     },
+     "custo_valor": 75.4,
+     "tempo_s": 720,
+     "valor": 57.05,
+     "valor2": 4
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 57.8,
+      "metal": 27.5,
+      "energia": 16.5,
+      "alimentos": 33.0
+     },
+     "custo_valor": 165.0,
+     "tempo_s": 1440,
+     "valor": 65.04,
+     "valor2": 5
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 126.0,
+      "metal": 60.2,
+      "energia": 36.1,
+      "alimentos": 72.2
+     },
+     "custo_valor": 361.0,
+     "tempo_s": 2880,
+     "valor": 74.14,
+     "valor2": 5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 277.0,
+      "metal": 132.0,
+      "energia": 79.0,
+      "alimentos": 158.0
+     },
+     "custo_valor": 791.0,
+     "tempo_s": 5760,
+     "valor": 84.52,
+     "valor2": 5
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 605.0,
+      "metal": 288.0,
+      "energia": 173.0,
+      "alimentos": 346.0
+     },
+     "custo_valor": 1729.0,
+     "tempo_s": 11520,
+     "valor": 96.36,
+     "valor2": 5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 904.0,
+      "metal": 431.0,
+      "energia": 258.0,
+      "alimentos": 517.0
+     },
+     "custo_valor": 2584.0,
+     "tempo_s": 15736,
+     "valor": 109.85,
+     "valor2": 5
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 1009.0,
+      "metal": 481.0,
+      "energia": 288.0,
+      "alimentos": 577.0
+     },
+     "custo_valor": 2884.0,
+     "tempo_s": 16060,
+     "valor": 125.23,
+     "valor2": 6
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 1118.0,
+      "metal": 532.0,
+      "energia": 319.0,
+      "alimentos": 639.0
+     },
+     "custo_valor": 3193.0,
+     "tempo_s": 16257,
+     "valor": 142.76,
+     "valor2": 6
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 1232.0,
+      "metal": 587.0,
+      "energia": 352.0,
+      "alimentos": 704.0
+     },
+     "custo_valor": 3520.0,
+     "tempo_s": 16376,
+     "valor": 162.74,
+     "valor2": 6
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1354.0,
+      "metal": 645.0,
+      "energia": 387.0,
+      "alimentos": 774.0
+     },
+     "custo_valor": 3870.0,
+     "tempo_s": 16448,
+     "valor": 185.53,
+     "valor2": 6
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1485.0,
+      "metal": 707.0,
+      "energia": 424.0,
+      "alimentos": 848.0
+     },
+     "custo_valor": 4242.0,
+     "tempo_s": 16492,
+     "valor": 211.5,
+     "valor2": 6
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1627.0,
+      "metal": 775.0,
+      "energia": 465.0,
+      "alimentos": 930.0
+     },
+     "custo_valor": 4650.0,
+     "tempo_s": 16519,
+     "valor": 241.11,
+     "valor2": 7
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1782.0,
+      "metal": 848.0,
+      "energia": 509.0,
+      "alimentos": 1018.0
+     },
+     "custo_valor": 5090.0,
+     "tempo_s": 16535,
+     "valor": 274.87,
+     "valor2": 7
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1950.0,
+      "metal": 929.0,
+      "energia": 557.0,
+      "alimentos": 1115.0
+     },
+     "custo_valor": 5572.0,
+     "tempo_s": 16545,
+     "valor": 313.35,
+     "valor2": 7
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 2134.0,
+      "metal": 1016.0,
+      "energia": 610.0,
+      "alimentos": 1220.0
+     },
+     "custo_valor": 6098.0,
+     "tempo_s": 16551,
+     "valor": 357.22,
+     "valor2": 7
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 2336.0,
+      "metal": 1112.0,
+      "energia": 667.0,
+      "alimentos": 1335.0
+     },
+     "custo_valor": 6673.0,
+     "tempo_s": 16554,
+     "valor": 407.23,
+     "valor2": 7
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2556.0,
+      "metal": 1217.0,
+      "energia": 730.0,
+      "alimentos": 1460.0
+     },
+     "custo_valor": 7302.0,
+     "tempo_s": 16557,
+     "valor": 464.24,
+     "valor2": 8
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2796.0,
+      "metal": 1331.0,
+      "energia": 799.0,
+      "alimentos": 1598.0
+     },
+     "custo_valor": 7988.0,
+     "tempo_s": 16558,
+     "valor": 529.24,
+     "valor2": 8
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 3059.0,
+      "metal": 1457.0,
+      "energia": 874.0,
+      "alimentos": 1748.0
+     },
+     "custo_valor": 8740.0,
+     "tempo_s": 16559,
+     "valor": 603.33,
+     "valor2": 8
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 3347.0,
+      "metal": 1594.0,
+      "energia": 956.0,
+      "alimentos": 1912.0
+     },
+     "custo_valor": 9562.0,
+     "tempo_s": 16559,
+     "valor": 687.8,
+     "valor2": 8
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 3661.0,
+      "metal": 1743.0,
+      "energia": 1046.0,
+      "alimentos": 2092.0
+     },
+     "custo_valor": 10460.0,
+     "tempo_s": 16560,
+     "valor": 784.09,
+     "valor2": 8
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 4005.0,
+      "metal": 1907.0,
+      "energia": 1144.0,
+      "alimentos": 2289.0
+     },
+     "custo_valor": 11442.0,
+     "tempo_s": 16560,
+     "valor": 893.86,
+     "valor2": 9
+    }
+   ],
+   "fracao_tempo": 0.05,
+   "fracao_custo": 0.05,
+   "desbloqueio_prefeitura": 8,
+   "requisito": {
+    "id": "ene",
+    "nivel": 6
+   }
+  },
+  {
+   "id": "bas",
+   "nome": "Base militar",
+   "origem_valdora": "Quartel",
+   "tipo": "tro",
+   "base": 10,
+   "unidade": "tropas",
+   "funcao": "Treina e abriga tropas e heróis.",
+   "beneficio": "Aumenta a capacidade de tropas e acelera o treinamento.",
+   "visual_faixas": [
+    "Tendas militares e jipe",
+    "Galpão de treino com sacos de areia",
+    "Quartel de concreto com garagem de veículos",
+    "Base com torre de controle e hangar",
+    "Complexo com tanques e hangar duplo",
+    "Fortaleza tecnológica com campo de energia e bandeira da aliança"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 8.4,
+      "alimentos": 3.6
+     },
+     "custo_valor": 12.0,
+     "tempo_s": 0,
+     "valor": 10.0,
+     "valor2": 1.5
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 8.4,
+      "alimentos": 3.6
+     },
+     "custo_valor": 12.0,
+     "tempo_s": 18,
+     "valor": 11.3,
+     "valor2": 3.0
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 8.4,
+      "alimentos": 3.6
+     },
+     "custo_valor": 12.0,
+     "tempo_s": 44,
+     "valor": 12.77,
+     "valor2": 4.5
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 8.4,
+      "alimentos": 3.6
+     },
+     "custo_valor": 12.0,
+     "tempo_s": 108,
+     "valor": 14.43,
+     "valor2": 6.0
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 8.4,
+      "alimentos": 3.6
+     },
+     "custo_valor": 12.0,
+     "tempo_s": 241,
+     "valor": 16.3,
+     "valor2": 7.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 6.5,
+      "metal": 2.9,
+      "alimentos": 3.6
+     },
+     "custo_valor": 14.4,
+     "tempo_s": 540,
+     "valor": 18.42,
+     "valor2": 9.0
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 56.7,
+      "metal": 25.2,
+      "alimentos": 31.5
+     },
+     "custo_valor": 126.0,
+     "tempo_s": 1080,
+     "valor": 20.82,
+     "valor2": 10.5
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 124.0,
+      "metal": 55.2,
+      "alimentos": 68.9
+     },
+     "custo_valor": 276.0,
+     "tempo_s": 2160,
+     "valor": 23.53,
+     "valor2": 12.0
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 272.0,
+      "metal": 121.0,
+      "alimentos": 151.0
+     },
+     "custo_valor": 604.0,
+     "tempo_s": 4320,
+     "valor": 26.58,
+     "valor2": 13.5
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 462.0,
+      "metal": 220.0,
+      "energia": 132.0,
+      "alimentos": 264.0
+     },
+     "custo_valor": 1320.0,
+     "tempo_s": 8640,
+     "valor": 30.04,
+     "valor2": 15.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 1011.0,
+      "metal": 481.0,
+      "energia": 289.0,
+      "alimentos": 578.0
+     },
+     "custo_valor": 2888.0,
+     "tempo_s": 17280,
+     "valor": 33.95,
+     "valor2": 16.5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 2212.0,
+      "metal": 1053.0,
+      "energia": 632.0,
+      "alimentos": 1264.0
+     },
+     "custo_valor": 6320.0,
+     "tempo_s": 34560,
+     "valor": 38.36,
+     "valor2": 18.0
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 4840.0,
+      "metal": 2305.0,
+      "energia": 1383.0,
+      "alimentos": 2766.0
+     },
+     "custo_valor": 13830.0,
+     "tempo_s": 69120,
+     "valor": 43.35,
+     "valor2": 19.5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 7233.0,
+      "metal": 3444.0,
+      "energia": 2066.0,
+      "alimentos": 4133.0
+     },
+     "custo_valor": 20664.0,
+     "tempo_s": 94413,
+     "valor": 48.98,
+     "valor2": 21.0
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 8075.0,
+      "metal": 3845.0,
+      "energia": 2307.0,
+      "alimentos": 4615.0
+     },
+     "custo_valor": 23072.0,
+     "tempo_s": 96360,
+     "valor": 55.35,
+     "valor2": 22.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 8943.0,
+      "metal": 4258.0,
+      "energia": 2555.0,
+      "alimentos": 5110.0
+     },
+     "custo_valor": 25550.0,
+     "tempo_s": 97540,
+     "valor": 62.54,
+     "valor2": 24.0
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 9855.0,
+      "metal": 4693.0,
+      "energia": 2816.0,
+      "alimentos": 5632.0
+     },
+     "custo_valor": 28158.0,
+     "tempo_s": 98256,
+     "valor": 70.67,
+     "valor2": 25.5
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 10829.0,
+      "metal": 5157.0,
+      "energia": 3094.0,
+      "alimentos": 6188.0
+     },
+     "custo_valor": 30940.0,
+     "tempo_s": 98691,
+     "valor": 79.86,
+     "valor2": 27.0
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 11879.0,
+      "metal": 5657.0,
+      "energia": 3394.0,
+      "alimentos": 6788.0
+     },
+     "custo_valor": 33940.0,
+     "tempo_s": 98954,
+     "valor": 90.24,
+     "valor2": 28.5
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 13016.0,
+      "metal": 6198.0,
+      "energia": 3719.0,
+      "alimentos": 7438.0
+     },
+     "custo_valor": 37189.0,
+     "tempo_s": 99114,
+     "valor": 101.97,
+     "valor2": 30.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 14254.0,
+      "metal": 6788.0,
+      "energia": 4073.0,
+      "alimentos": 8145.0
+     },
+     "custo_valor": 40727.0,
+     "tempo_s": 99211,
+     "valor": 115.23,
+     "valor2": 31.5
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 15603.0,
+      "metal": 7430.0,
+      "energia": 4458.0,
+      "alimentos": 8916.0
+     },
+     "custo_valor": 44580.0,
+     "tempo_s": 99269,
+     "valor": 130.21,
+     "valor2": 33.0
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 17076.0,
+      "metal": 8131.0,
+      "energia": 4879.0,
+      "alimentos": 9758.0
+     },
+     "custo_valor": 48788.0,
+     "tempo_s": 99305,
+     "valor": 147.14,
+     "valor2": 34.5
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 18685.0,
+      "metal": 8898.0,
+      "energia": 5339.0,
+      "alimentos": 10677.0
+     },
+     "custo_valor": 53387.0,
+     "tempo_s": 99327,
+     "valor": 166.27,
+     "valor2": 36.0
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 20444.0,
+      "metal": 9735.0,
+      "energia": 5841.0,
+      "alimentos": 11682.0
+     },
+     "custo_valor": 58410.0,
+     "tempo_s": 99340,
+     "valor": 187.88,
+     "valor2": 37.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 22368.0,
+      "metal": 10651.0,
+      "energia": 6391.0,
+      "alimentos": 12782.0
+     },
+     "custo_valor": 63908.0,
+     "tempo_s": 99348,
+     "valor": 212.31,
+     "valor2": 39.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 24471.0,
+      "metal": 11653.0,
+      "energia": 6992.0,
+      "alimentos": 13984.0
+     },
+     "custo_valor": 69918.0,
+     "tempo_s": 99353,
+     "valor": 239.91,
+     "valor2": 40.5
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 26773.0,
+      "metal": 12749.0,
+      "energia": 7649.0,
+      "alimentos": 15299.0
+     },
+     "custo_valor": 76494.0,
+     "tempo_s": 99355,
+     "valor": 271.09,
+     "valor2": 42.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 29290.0,
+      "metal": 13947.0,
+      "energia": 8368.0,
+      "alimentos": 16737.0
+     },
+     "custo_valor": 83684.0,
+     "tempo_s": 99357,
+     "valor": 306.33,
+     "valor2": 43.5
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 32043.0,
+      "metal": 15259.0,
+      "energia": 9155.0,
+      "alimentos": 18310.0
+     },
+     "custo_valor": 91552.0,
+     "tempo_s": 99358,
+     "valor": 346.16,
+     "valor2": 45.0
+    }
+   ],
+   "fracao_tempo": 0.3,
+   "fracao_custo": 0.4,
+   "desbloqueio_prefeitura": 10,
+   "requisito": {
+    "id": "rad",
+    "nivel": 2
+   }
+  },
+  {
+   "id": "ent",
+   "nome": "Entreposto logístico",
+   "origem_valdora": "Mercado",
+   "tipo": "com",
+   "base": 100,
+   "unidade": "carga",
+   "funcao": "Comércio e transporte entre estados e países.",
+   "beneficio": "Reduz a taxa de comércio e aumenta a carga das rotas.",
+   "visual_faixas": [
+    "Barraca com caixas e carrinho",
+    "Armazém com duas docas",
+    "Galpão com empilhadeiras e caminhão",
+    "Terminal com contêineres coloridos",
+    "Porto seco com guindaste móvel e drones",
+    "Hub global com esteiras luminosas e contêineres flutuantes"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 100.0,
+     "valor2": 15.0
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 3,
+     "valor": 112.0,
+     "valor2": 14.67
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 7,
+     "valor": 125.44,
+     "valor2": 14.34
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 140.49,
+     "valor2": 14.01
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 40,
+     "valor": 157.35,
+     "valor2": 13.68
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 90,
+     "valor": 176.23,
+     "valor2": 13.35
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 7.1,
+      "metal": 3.2,
+      "alimentos": 3.9
+     },
+     "custo_valor": 15.8,
+     "tempo_s": 180,
+     "valor": 197.38,
+     "valor2": 13.02
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 15.5,
+      "metal": 6.9,
+      "alimentos": 8.6
+     },
+     "custo_valor": 34.5,
+     "tempo_s": 360,
+     "valor": 221.07,
+     "valor2": 12.69
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 33.9,
+      "metal": 15.1,
+      "alimentos": 18.9
+     },
+     "custo_valor": 75.4,
+     "tempo_s": 720,
+     "valor": 247.6,
+     "valor2": 12.36
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 57.8,
+      "metal": 27.5,
+      "energia": 16.5,
+      "alimentos": 33.0
+     },
+     "custo_valor": 165.0,
+     "tempo_s": 1440,
+     "valor": 277.31,
+     "valor2": 12.03
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 126.0,
+      "metal": 60.2,
+      "energia": 36.1,
+      "alimentos": 72.2
+     },
+     "custo_valor": 361.0,
+     "tempo_s": 2880,
+     "valor": 310.58,
+     "valor2": 11.7
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 277.0,
+      "metal": 132.0,
+      "energia": 79.0,
+      "alimentos": 158.0
+     },
+     "custo_valor": 791.0,
+     "tempo_s": 5760,
+     "valor": 347.85,
+     "valor2": 11.37
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 605.0,
+      "metal": 288.0,
+      "energia": 173.0,
+      "alimentos": 346.0
+     },
+     "custo_valor": 1729.0,
+     "tempo_s": 11520,
+     "valor": 389.6,
+     "valor2": 11.04
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 904.0,
+      "metal": 431.0,
+      "energia": 258.0,
+      "alimentos": 517.0
+     },
+     "custo_valor": 2584.0,
+     "tempo_s": 15736,
+     "valor": 436.35,
+     "valor2": 10.71
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 1009.0,
+      "metal": 481.0,
+      "energia": 288.0,
+      "alimentos": 577.0
+     },
+     "custo_valor": 2884.0,
+     "tempo_s": 16060,
+     "valor": 488.71,
+     "valor2": 10.38
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 1118.0,
+      "metal": 532.0,
+      "energia": 319.0,
+      "alimentos": 639.0
+     },
+     "custo_valor": 3193.0,
+     "tempo_s": 16257,
+     "valor": 547.36,
+     "valor2": 10.05
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 1232.0,
+      "metal": 587.0,
+      "energia": 352.0,
+      "alimentos": 704.0
+     },
+     "custo_valor": 3520.0,
+     "tempo_s": 16376,
+     "valor": 613.04,
+     "valor2": 9.72
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1354.0,
+      "metal": 645.0,
+      "energia": 387.0,
+      "alimentos": 774.0
+     },
+     "custo_valor": 3870.0,
+     "tempo_s": 16448,
+     "valor": 686.6,
+     "valor2": 9.39
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1485.0,
+      "metal": 707.0,
+      "energia": 424.0,
+      "alimentos": 848.0
+     },
+     "custo_valor": 4242.0,
+     "tempo_s": 16492,
+     "valor": 769.0,
+     "valor2": 9.06
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1627.0,
+      "metal": 775.0,
+      "energia": 465.0,
+      "alimentos": 930.0
+     },
+     "custo_valor": 4650.0,
+     "tempo_s": 16519,
+     "valor": 861.28,
+     "valor2": 8.73
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1782.0,
+      "metal": 848.0,
+      "energia": 509.0,
+      "alimentos": 1018.0
+     },
+     "custo_valor": 5090.0,
+     "tempo_s": 16535,
+     "valor": 964.63,
+     "valor2": 8.4
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1950.0,
+      "metal": 929.0,
+      "energia": 557.0,
+      "alimentos": 1115.0
+     },
+     "custo_valor": 5572.0,
+     "tempo_s": 16545,
+     "valor": 1080.38,
+     "valor2": 8.07
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 2134.0,
+      "metal": 1016.0,
+      "energia": 610.0,
+      "alimentos": 1220.0
+     },
+     "custo_valor": 6098.0,
+     "tempo_s": 16551,
+     "valor": 1210.03,
+     "valor2": 7.74
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 2336.0,
+      "metal": 1112.0,
+      "energia": 667.0,
+      "alimentos": 1335.0
+     },
+     "custo_valor": 6673.0,
+     "tempo_s": 16554,
+     "valor": 1355.23,
+     "valor2": 7.41
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2556.0,
+      "metal": 1217.0,
+      "energia": 730.0,
+      "alimentos": 1460.0
+     },
+     "custo_valor": 7302.0,
+     "tempo_s": 16557,
+     "valor": 1517.86,
+     "valor2": 7.08
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2796.0,
+      "metal": 1331.0,
+      "energia": 799.0,
+      "alimentos": 1598.0
+     },
+     "custo_valor": 7988.0,
+     "tempo_s": 16558,
+     "valor": 1700.01,
+     "valor2": 6.75
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 3059.0,
+      "metal": 1457.0,
+      "energia": 874.0,
+      "alimentos": 1748.0
+     },
+     "custo_valor": 8740.0,
+     "tempo_s": 16559,
+     "valor": 1904.01,
+     "valor2": 6.42
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 3347.0,
+      "metal": 1594.0,
+      "energia": 956.0,
+      "alimentos": 1912.0
+     },
+     "custo_valor": 9562.0,
+     "tempo_s": 16559,
+     "valor": 2132.49,
+     "valor2": 6.09
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 3661.0,
+      "metal": 1743.0,
+      "energia": 1046.0,
+      "alimentos": 2092.0
+     },
+     "custo_valor": 10460.0,
+     "tempo_s": 16560,
+     "valor": 2388.39,
+     "valor2": 5.76
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 4005.0,
+      "metal": 1907.0,
+      "energia": 1144.0,
+      "alimentos": 2289.0
+     },
+     "custo_valor": 11442.0,
+     "tempo_s": 16560,
+     "valor": 2674.99,
+     "valor2": 5.43
+    }
+   ],
+   "fracao_tempo": 0.05,
+   "fracao_custo": 0.05,
+   "desbloqueio_prefeitura": 6,
+   "requisito": {
+    "id": "ban",
+    "nivel": 3
+   }
+  },
+  {
+   "id": "via",
+   "nome": "Via",
+   "origem_valdora": "Estrada",
+   "tipo": "via",
+   "base": 0,
+   "unidade": "",
+   "funcao": "Liga os prédios e agiliza o transporte interno.",
+   "beneficio": "Cada nível aumenta a velocidade de transporte entre prédios.",
+   "visual_faixas": [
+    "Terra batida",
+    "Asfalto simples",
+    "Asfalto com faixas e postes",
+    "Via larga com ciclovia",
+    "Via com postes inteligentes",
+    "Via com faixas luminosas"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 1
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 1,
+     "valor": 2
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 1,
+     "valor": 3
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 4,
+     "valor": 4
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 8,
+     "valor": 5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 6
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 36,
+     "valor": 7
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 72,
+     "valor": 8
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 6.8,
+      "metal": 3.0,
+      "alimentos": 3.8
+     },
+     "custo_valor": 15.1,
+     "tempo_s": 144,
+     "valor": 9
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 11.6,
+      "metal": 5.5,
+      "energia": 3.3,
+      "alimentos": 6.6
+     },
+     "custo_valor": 33.0,
+     "tempo_s": 288,
+     "valor": 10
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 25.3,
+      "metal": 12.0,
+      "energia": 7.2,
+      "alimentos": 14.4
+     },
+     "custo_valor": 72.1,
+     "tempo_s": 576,
+     "valor": 11
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 55.3,
+      "metal": 26.3,
+      "energia": 15.8,
+      "alimentos": 31.6
+     },
+     "custo_valor": 158.0,
+     "tempo_s": 1152,
+     "valor": 12
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 121.0,
+      "metal": 57.6,
+      "energia": 34.6,
+      "alimentos": 69.1
+     },
+     "custo_valor": 346.0,
+     "tempo_s": 2304,
+     "valor": 13
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 181.0,
+      "metal": 86.1,
+      "energia": 51.7,
+      "alimentos": 103.0
+     },
+     "custo_valor": 517.0,
+     "tempo_s": 3147,
+     "valor": 14
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 202.0,
+      "metal": 96.1,
+      "energia": 57.7,
+      "alimentos": 115.0
+     },
+     "custo_valor": 577.0,
+     "tempo_s": 3212,
+     "valor": 15
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 224.0,
+      "metal": 106.0,
+      "energia": 63.9,
+      "alimentos": 128.0
+     },
+     "custo_valor": 639.0,
+     "tempo_s": 3251,
+     "valor": 16
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 246.0,
+      "metal": 117.0,
+      "energia": 70.4,
+      "alimentos": 141.0
+     },
+     "custo_valor": 703.0,
+     "tempo_s": 3275,
+     "valor": 17
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 271.0,
+      "metal": 129.0,
+      "energia": 77.4,
+      "alimentos": 155.0
+     },
+     "custo_valor": 774.0,
+     "tempo_s": 3290,
+     "valor": 18
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 297.0,
+      "metal": 141.0,
+      "energia": 84.8,
+      "alimentos": 170.0
+     },
+     "custo_valor": 848.0,
+     "tempo_s": 3298,
+     "valor": 19
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 325.0,
+      "metal": 155.0,
+      "energia": 93.0,
+      "alimentos": 186.0
+     },
+     "custo_valor": 930.0,
+     "tempo_s": 3304,
+     "valor": 20
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 356.0,
+      "metal": 170.0,
+      "energia": 102.0,
+      "alimentos": 204.0
+     },
+     "custo_valor": 1019.0,
+     "tempo_s": 3307,
+     "valor": 21
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 390.0,
+      "metal": 186.0,
+      "energia": 111.0,
+      "alimentos": 223.0
+     },
+     "custo_valor": 1114.0,
+     "tempo_s": 3309,
+     "valor": 22
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 427.0,
+      "metal": 203.0,
+      "energia": 122.0,
+      "alimentos": 244.0
+     },
+     "custo_valor": 1220.0,
+     "tempo_s": 3310,
+     "valor": 23
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 467.0,
+      "metal": 222.0,
+      "energia": 133.0,
+      "alimentos": 267.0
+     },
+     "custo_valor": 1333.0,
+     "tempo_s": 3311,
+     "valor": 24
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 511.0,
+      "metal": 243.0,
+      "energia": 146.0,
+      "alimentos": 292.0
+     },
+     "custo_valor": 1460.0,
+     "tempo_s": 3311,
+     "valor": 25
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 559.0,
+      "metal": 266.0,
+      "energia": 160.0,
+      "alimentos": 320.0
+     },
+     "custo_valor": 1598.0,
+     "tempo_s": 3312,
+     "valor": 26
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 612.0,
+      "metal": 291.0,
+      "energia": 175.0,
+      "alimentos": 350.0
+     },
+     "custo_valor": 1748.0,
+     "tempo_s": 3312,
+     "valor": 27
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 669.0,
+      "metal": 319.0,
+      "energia": 191.0,
+      "alimentos": 382.0
+     },
+     "custo_valor": 1912.0,
+     "tempo_s": 3312,
+     "valor": 28
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 732.0,
+      "metal": 349.0,
+      "energia": 209.0,
+      "alimentos": 418.0
+     },
+     "custo_valor": 2092.0,
+     "tempo_s": 3312,
+     "valor": 29
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 801.0,
+      "metal": 381.0,
+      "energia": 229.0,
+      "alimentos": 458.0
+     },
+     "custo_valor": 2288.0,
+     "tempo_s": 3312,
+     "valor": 30
+    }
+   ],
+   "fracao_tempo": 0.01,
+   "fracao_custo": 0.01,
+   "desbloqueio_prefeitura": 1,
+   "requisito": null
+  },
+  {
+   "id": "par",
+   "nome": "Parque",
+   "origem_valdora": "Jardim",
+   "tipo": "srv",
+   "base": 0.8,
+   "unidade": "% cobertura",
+   "funcao": "Serviço social: melhora o bem-estar.",
+   "beneficio": "Aumenta a cobertura de serviços, que reduz o custo de manutenção.",
+   "visual_faixas": [
+    "Canteiro com bancos",
+    "Praça com árvores",
+    "Parque com lago",
+    "Parque com quiosque e playground",
+    "Jardim com chafariz",
+    "Parque com luz e fontes animadas"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 0.8
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 3,
+     "valor": 1.6
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 7,
+     "valor": 2.4
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 3.2
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 40,
+     "valor": 4.0
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 90,
+     "valor": 4.8
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 7.1,
+      "metal": 3.2,
+      "alimentos": 3.9
+     },
+     "custo_valor": 15.8,
+     "tempo_s": 180,
+     "valor": 5.6
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 15.5,
+      "metal": 6.9,
+      "alimentos": 8.6
+     },
+     "custo_valor": 34.5,
+     "tempo_s": 360,
+     "valor": 6.4
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 33.9,
+      "metal": 15.1,
+      "alimentos": 18.9
+     },
+     "custo_valor": 75.4,
+     "tempo_s": 720,
+     "valor": 7.2
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 57.8,
+      "metal": 27.5,
+      "energia": 16.5,
+      "alimentos": 33.0
+     },
+     "custo_valor": 165.0,
+     "tempo_s": 1440,
+     "valor": 8.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 126.0,
+      "metal": 60.2,
+      "energia": 36.1,
+      "alimentos": 72.2
+     },
+     "custo_valor": 361.0,
+     "tempo_s": 2880,
+     "valor": 8.8
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 277.0,
+      "metal": 132.0,
+      "energia": 79.0,
+      "alimentos": 158.0
+     },
+     "custo_valor": 791.0,
+     "tempo_s": 5760,
+     "valor": 9.6
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 605.0,
+      "metal": 288.0,
+      "energia": 173.0,
+      "alimentos": 346.0
+     },
+     "custo_valor": 1729.0,
+     "tempo_s": 11520,
+     "valor": 10.4
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 904.0,
+      "metal": 431.0,
+      "energia": 258.0,
+      "alimentos": 517.0
+     },
+     "custo_valor": 2584.0,
+     "tempo_s": 15736,
+     "valor": 11.2
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 1009.0,
+      "metal": 481.0,
+      "energia": 288.0,
+      "alimentos": 577.0
+     },
+     "custo_valor": 2884.0,
+     "tempo_s": 16060,
+     "valor": 12.0
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 1118.0,
+      "metal": 532.0,
+      "energia": 319.0,
+      "alimentos": 639.0
+     },
+     "custo_valor": 3193.0,
+     "tempo_s": 16257,
+     "valor": 12.8
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 1232.0,
+      "metal": 587.0,
+      "energia": 352.0,
+      "alimentos": 704.0
+     },
+     "custo_valor": 3520.0,
+     "tempo_s": 16376,
+     "valor": 13.6
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1354.0,
+      "metal": 645.0,
+      "energia": 387.0,
+      "alimentos": 774.0
+     },
+     "custo_valor": 3870.0,
+     "tempo_s": 16448,
+     "valor": 14.4
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1485.0,
+      "metal": 707.0,
+      "energia": 424.0,
+      "alimentos": 848.0
+     },
+     "custo_valor": 4242.0,
+     "tempo_s": 16492,
+     "valor": 15.2
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1627.0,
+      "metal": 775.0,
+      "energia": 465.0,
+      "alimentos": 930.0
+     },
+     "custo_valor": 4650.0,
+     "tempo_s": 16519,
+     "valor": 16.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1782.0,
+      "metal": 848.0,
+      "energia": 509.0,
+      "alimentos": 1018.0
+     },
+     "custo_valor": 5090.0,
+     "tempo_s": 16535,
+     "valor": 16.8
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1950.0,
+      "metal": 929.0,
+      "energia": 557.0,
+      "alimentos": 1115.0
+     },
+     "custo_valor": 5572.0,
+     "tempo_s": 16545,
+     "valor": 17.6
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 2134.0,
+      "metal": 1016.0,
+      "energia": 610.0,
+      "alimentos": 1220.0
+     },
+     "custo_valor": 6098.0,
+     "tempo_s": 16551,
+     "valor": 18.4
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 2336.0,
+      "metal": 1112.0,
+      "energia": 667.0,
+      "alimentos": 1335.0
+     },
+     "custo_valor": 6673.0,
+     "tempo_s": 16554,
+     "valor": 19.2
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2556.0,
+      "metal": 1217.0,
+      "energia": 730.0,
+      "alimentos": 1460.0
+     },
+     "custo_valor": 7302.0,
+     "tempo_s": 16557,
+     "valor": 20.0
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2796.0,
+      "metal": 1331.0,
+      "energia": 799.0,
+      "alimentos": 1598.0
+     },
+     "custo_valor": 7988.0,
+     "tempo_s": 16558,
+     "valor": 20.8
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 3059.0,
+      "metal": 1457.0,
+      "energia": 874.0,
+      "alimentos": 1748.0
+     },
+     "custo_valor": 8740.0,
+     "tempo_s": 16559,
+     "valor": 21.6
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 3347.0,
+      "metal": 1594.0,
+      "energia": 956.0,
+      "alimentos": 1912.0
+     },
+     "custo_valor": 9562.0,
+     "tempo_s": 16559,
+     "valor": 22.4
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 3661.0,
+      "metal": 1743.0,
+      "energia": 1046.0,
+      "alimentos": 2092.0
+     },
+     "custo_valor": 10460.0,
+     "tempo_s": 16560,
+     "valor": 23.2
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 4005.0,
+      "metal": 1907.0,
+      "energia": 1144.0,
+      "alimentos": 2289.0
+     },
+     "custo_valor": 11442.0,
+     "tempo_s": 16560,
+     "valor": 24.0
+    }
+   ],
+   "fracao_tempo": 0.05,
+   "fracao_custo": 0.05,
+   "desbloqueio_prefeitura": 4,
+   "requisito": {
+    "id": "alo",
+    "nivel": 3
+   }
+  },
+  {
+   "id": "agu",
+   "nome": "Estação de água",
+   "origem_valdora": "Poço",
+   "tipo": "srv",
+   "base": 0.7,
+   "unidade": "% cobertura",
+   "funcao": "Serviço de saúde: fornece água e saneamento.",
+   "beneficio": "Aumenta a cobertura de serviços e a proteção contra falta de alimentos.",
+   "visual_faixas": [
+    "Poço com bomba",
+    "Caixa-d’água pequena",
+    "Reservatório elevado",
+    "Estação com filtros e torre",
+    "Estação com tubulações azuis",
+    "Estação de dessalinização com cúpula brilhante"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 0.7
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 3,
+     "valor": 1.4
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 7,
+     "valor": 2.1
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 2.8
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 40,
+     "valor": 3.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 90,
+     "valor": 4.2
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 7.1,
+      "metal": 3.2,
+      "alimentos": 3.9
+     },
+     "custo_valor": 15.8,
+     "tempo_s": 180,
+     "valor": 4.9
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 15.5,
+      "metal": 6.9,
+      "alimentos": 8.6
+     },
+     "custo_valor": 34.5,
+     "tempo_s": 360,
+     "valor": 5.6
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 33.9,
+      "metal": 15.1,
+      "alimentos": 18.9
+     },
+     "custo_valor": 75.4,
+     "tempo_s": 720,
+     "valor": 6.3
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 57.8,
+      "metal": 27.5,
+      "energia": 16.5,
+      "alimentos": 33.0
+     },
+     "custo_valor": 165.0,
+     "tempo_s": 1440,
+     "valor": 7.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 126.0,
+      "metal": 60.2,
+      "energia": 36.1,
+      "alimentos": 72.2
+     },
+     "custo_valor": 361.0,
+     "tempo_s": 2880,
+     "valor": 7.7
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 277.0,
+      "metal": 132.0,
+      "energia": 79.0,
+      "alimentos": 158.0
+     },
+     "custo_valor": 791.0,
+     "tempo_s": 5760,
+     "valor": 8.4
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 605.0,
+      "metal": 288.0,
+      "energia": 173.0,
+      "alimentos": 346.0
+     },
+     "custo_valor": 1729.0,
+     "tempo_s": 11520,
+     "valor": 9.1
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 904.0,
+      "metal": 431.0,
+      "energia": 258.0,
+      "alimentos": 517.0
+     },
+     "custo_valor": 2584.0,
+     "tempo_s": 15736,
+     "valor": 9.8
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 1009.0,
+      "metal": 481.0,
+      "energia": 288.0,
+      "alimentos": 577.0
+     },
+     "custo_valor": 2884.0,
+     "tempo_s": 16060,
+     "valor": 10.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 1118.0,
+      "metal": 532.0,
+      "energia": 319.0,
+      "alimentos": 639.0
+     },
+     "custo_valor": 3193.0,
+     "tempo_s": 16257,
+     "valor": 11.2
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 1232.0,
+      "metal": 587.0,
+      "energia": 352.0,
+      "alimentos": 704.0
+     },
+     "custo_valor": 3520.0,
+     "tempo_s": 16376,
+     "valor": 11.9
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1354.0,
+      "metal": 645.0,
+      "energia": 387.0,
+      "alimentos": 774.0
+     },
+     "custo_valor": 3870.0,
+     "tempo_s": 16448,
+     "valor": 12.6
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1485.0,
+      "metal": 707.0,
+      "energia": 424.0,
+      "alimentos": 848.0
+     },
+     "custo_valor": 4242.0,
+     "tempo_s": 16492,
+     "valor": 13.3
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1627.0,
+      "metal": 775.0,
+      "energia": 465.0,
+      "alimentos": 930.0
+     },
+     "custo_valor": 4650.0,
+     "tempo_s": 16519,
+     "valor": 14.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1782.0,
+      "metal": 848.0,
+      "energia": 509.0,
+      "alimentos": 1018.0
+     },
+     "custo_valor": 5090.0,
+     "tempo_s": 16535,
+     "valor": 14.7
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1950.0,
+      "metal": 929.0,
+      "energia": 557.0,
+      "alimentos": 1115.0
+     },
+     "custo_valor": 5572.0,
+     "tempo_s": 16545,
+     "valor": 15.4
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 2134.0,
+      "metal": 1016.0,
+      "energia": 610.0,
+      "alimentos": 1220.0
+     },
+     "custo_valor": 6098.0,
+     "tempo_s": 16551,
+     "valor": 16.1
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 2336.0,
+      "metal": 1112.0,
+      "energia": 667.0,
+      "alimentos": 1335.0
+     },
+     "custo_valor": 6673.0,
+     "tempo_s": 16554,
+     "valor": 16.8
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2556.0,
+      "metal": 1217.0,
+      "energia": 730.0,
+      "alimentos": 1460.0
+     },
+     "custo_valor": 7302.0,
+     "tempo_s": 16557,
+     "valor": 17.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2796.0,
+      "metal": 1331.0,
+      "energia": 799.0,
+      "alimentos": 1598.0
+     },
+     "custo_valor": 7988.0,
+     "tempo_s": 16558,
+     "valor": 18.2
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 3059.0,
+      "metal": 1457.0,
+      "energia": 874.0,
+      "alimentos": 1748.0
+     },
+     "custo_valor": 8740.0,
+     "tempo_s": 16559,
+     "valor": 18.9
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 3347.0,
+      "metal": 1594.0,
+      "energia": 956.0,
+      "alimentos": 1912.0
+     },
+     "custo_valor": 9562.0,
+     "tempo_s": 16559,
+     "valor": 19.6
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 3661.0,
+      "metal": 1743.0,
+      "energia": 1046.0,
+      "alimentos": 2092.0
+     },
+     "custo_valor": 10460.0,
+     "tempo_s": 16560,
+     "valor": 20.3
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 4005.0,
+      "metal": 1907.0,
+      "energia": 1144.0,
+      "alimentos": 2289.0
+     },
+     "custo_valor": 11442.0,
+     "tempo_s": 16560,
+     "valor": 21.0
+    }
+   ],
+   "fracao_tempo": 0.05,
+   "fracao_custo": 0.05,
+   "desbloqueio_prefeitura": 5,
+   "requisito": {
+    "id": "est",
+    "nivel": 4
+   }
+  },
+  {
+   "id": "hel",
+   "nome": "Heliponto",
+   "origem_valdora": "Praça",
+   "tipo": "mar",
+   "base": 1.5,
+   "unidade": "% marcha",
+   "funcao": "Ponto de chegada e saída de reforços e de heróis.",
+   "beneficio": "Aumenta a velocidade de marcha e o limite de reforços enviados.",
+   "visual_faixas": [
+    "Círculo pintado no chão",
+    "Plataforma com biruta",
+    "Heliponto com luzes de pista",
+    "Plataforma elevada com helicóptero",
+    "Heliponto duplo com torre",
+    "Plataforma tecnológica com holograma e jato estacionado"
+   ],
+   "niveis": [
+    {
+     "nivel": 1,
+     "poder": 40.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 0,
+     "valor": 1.5
+    },
+    {
+     "nivel": 2,
+     "poder": 117.1,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 3,
+     "valor": 3.0
+    },
+    {
+     "nivel": 3,
+     "poder": 219.6,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 7,
+     "valor": 4.5
+    },
+    {
+     "nivel": 4,
+     "poder": 343.0,
+     "custo": {
+      "materiais": 7.0,
+      "alimentos": 3.0
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 18,
+     "valor": 6.0
+    },
+    {
+     "nivel": 5,
+     "poder": 484.7,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 40,
+     "valor": 7.5
+    },
+    {
+     "nivel": 6,
+     "poder": 643.0,
+     "custo": {
+      "materiais": 4.5,
+      "metal": 2.0,
+      "alimentos": 2.5
+     },
+     "custo_valor": 10.0,
+     "tempo_s": 90,
+     "valor": 9.0
+    },
+    {
+     "nivel": 7,
+     "poder": 816.5,
+     "custo": {
+      "materiais": 7.1,
+      "metal": 3.2,
+      "alimentos": 3.9
+     },
+     "custo_valor": 15.8,
+     "tempo_s": 180,
+     "valor": 10.5
+    },
+    {
+     "nivel": 8,
+     "poder": 1004.3,
+     "custo": {
+      "materiais": 15.5,
+      "metal": 6.9,
+      "alimentos": 8.6
+     },
+     "custo_valor": 34.5,
+     "tempo_s": 360,
+     "valor": 12.0
+    },
+    {
+     "nivel": 9,
+     "poder": 1205.4,
+     "custo": {
+      "materiais": 33.9,
+      "metal": 15.1,
+      "alimentos": 18.9
+     },
+     "custo_valor": 75.4,
+     "tempo_s": 720,
+     "valor": 13.5
+    },
+    {
+     "nivel": 10,
+     "poder": 1419.3,
+     "custo": {
+      "materiais": 57.8,
+      "metal": 27.5,
+      "energia": 16.5,
+      "alimentos": 33.0
+     },
+     "custo_valor": 165.0,
+     "tempo_s": 1440,
+     "valor": 15.0
+    },
+    {
+     "nivel": 11,
+     "poder": 1645.2,
+     "custo": {
+      "materiais": 126.0,
+      "metal": 60.2,
+      "energia": 36.1,
+      "alimentos": 72.2
+     },
+     "custo_valor": 361.0,
+     "tempo_s": 2880,
+     "valor": 16.5
+    },
+    {
+     "nivel": 12,
+     "poder": 1882.7,
+     "custo": {
+      "materiais": 277.0,
+      "metal": 132.0,
+      "energia": 79.0,
+      "alimentos": 158.0
+     },
+     "custo_valor": 791.0,
+     "tempo_s": 5760,
+     "valor": 18.0
+    },
+    {
+     "nivel": 13,
+     "poder": 2131.4,
+     "custo": {
+      "materiais": 605.0,
+      "metal": 288.0,
+      "energia": 173.0,
+      "alimentos": 346.0
+     },
+     "custo_valor": 1729.0,
+     "tempo_s": 11520,
+     "valor": 19.5
+    },
+    {
+     "nivel": 14,
+     "poder": 2390.9,
+     "custo": {
+      "materiais": 904.0,
+      "metal": 431.0,
+      "energia": 258.0,
+      "alimentos": 517.0
+     },
+     "custo_valor": 2584.0,
+     "tempo_s": 15736,
+     "valor": 21.0
+    },
+    {
+     "nivel": 15,
+     "poder": 2660.7,
+     "custo": {
+      "materiais": 1009.0,
+      "metal": 481.0,
+      "energia": 288.0,
+      "alimentos": 577.0
+     },
+     "custo_valor": 2884.0,
+     "tempo_s": 16060,
+     "valor": 22.5
+    },
+    {
+     "nivel": 16,
+     "poder": 2940.7,
+     "custo": {
+      "materiais": 1118.0,
+      "metal": 532.0,
+      "energia": 319.0,
+      "alimentos": 639.0
+     },
+     "custo_valor": 3193.0,
+     "tempo_s": 16257,
+     "valor": 24.0
+    },
+    {
+     "nivel": 17,
+     "poder": 3230.4,
+     "custo": {
+      "materiais": 1232.0,
+      "metal": 587.0,
+      "energia": 352.0,
+      "alimentos": 704.0
+     },
+     "custo_valor": 3520.0,
+     "tempo_s": 16376,
+     "valor": 25.5
+    },
+    {
+     "nivel": 18,
+     "poder": 3529.7,
+     "custo": {
+      "materiais": 1354.0,
+      "metal": 645.0,
+      "energia": 387.0,
+      "alimentos": 774.0
+     },
+     "custo_valor": 3870.0,
+     "tempo_s": 16448,
+     "valor": 27.0
+    },
+    {
+     "nivel": 19,
+     "poder": 3838.2,
+     "custo": {
+      "materiais": 1485.0,
+      "metal": 707.0,
+      "energia": 424.0,
+      "alimentos": 848.0
+     },
+     "custo_valor": 4242.0,
+     "tempo_s": 16492,
+     "valor": 28.5
+    },
+    {
+     "nivel": 20,
+     "poder": 4155.8,
+     "custo": {
+      "materiais": 1627.0,
+      "metal": 775.0,
+      "energia": 465.0,
+      "alimentos": 930.0
+     },
+     "custo_valor": 4650.0,
+     "tempo_s": 16519,
+     "valor": 30.0
+    },
+    {
+     "nivel": 21,
+     "poder": 4482.3,
+     "custo": {
+      "materiais": 1782.0,
+      "metal": 848.0,
+      "energia": 509.0,
+      "alimentos": 1018.0
+     },
+     "custo_valor": 5090.0,
+     "tempo_s": 16535,
+     "valor": 31.5
+    },
+    {
+     "nivel": 22,
+     "poder": 4817.4,
+     "custo": {
+      "materiais": 1950.0,
+      "metal": 929.0,
+      "energia": 557.0,
+      "alimentos": 1115.0
+     },
+     "custo_valor": 5572.0,
+     "tempo_s": 16545,
+     "valor": 33.0
+    },
+    {
+     "nivel": 23,
+     "poder": 5161.1,
+     "custo": {
+      "materiais": 2134.0,
+      "metal": 1016.0,
+      "energia": 610.0,
+      "alimentos": 1220.0
+     },
+     "custo_valor": 6098.0,
+     "tempo_s": 16551,
+     "valor": 34.5
+    },
+    {
+     "nivel": 24,
+     "poder": 5513.0,
+     "custo": {
+      "materiais": 2336.0,
+      "metal": 1112.0,
+      "energia": 667.0,
+      "alimentos": 1335.0
+     },
+     "custo_valor": 6673.0,
+     "tempo_s": 16554,
+     "valor": 36.0
+    },
+    {
+     "nivel": 25,
+     "poder": 5873.1,
+     "custo": {
+      "materiais": 2556.0,
+      "metal": 1217.0,
+      "energia": 730.0,
+      "alimentos": 1460.0
+     },
+     "custo_valor": 7302.0,
+     "tempo_s": 16557,
+     "valor": 37.5
+    },
+    {
+     "nivel": 26,
+     "poder": 6241.2,
+     "custo": {
+      "materiais": 2796.0,
+      "metal": 1331.0,
+      "energia": 799.0,
+      "alimentos": 1598.0
+     },
+     "custo_valor": 7988.0,
+     "tempo_s": 16558,
+     "valor": 39.0
+    },
+    {
+     "nivel": 27,
+     "poder": 6617.2,
+     "custo": {
+      "materiais": 3059.0,
+      "metal": 1457.0,
+      "energia": 874.0,
+      "alimentos": 1748.0
+     },
+     "custo_valor": 8740.0,
+     "tempo_s": 16559,
+     "valor": 40.5
+    },
+    {
+     "nivel": 28,
+     "poder": 7000.9,
+     "custo": {
+      "materiais": 3347.0,
+      "metal": 1594.0,
+      "energia": 956.0,
+      "alimentos": 1912.0
+     },
+     "custo_valor": 9562.0,
+     "tempo_s": 16559,
+     "valor": 42.0
+    },
+    {
+     "nivel": 29,
+     "poder": 7392.3,
+     "custo": {
+      "materiais": 3661.0,
+      "metal": 1743.0,
+      "energia": 1046.0,
+      "alimentos": 2092.0
+     },
+     "custo_valor": 10460.0,
+     "tempo_s": 16560,
+     "valor": 43.5
+    },
+    {
+     "nivel": 30,
+     "poder": 7791.1,
+     "custo": {
+      "materiais": 4005.0,
+      "metal": 1907.0,
+      "energia": 1144.0,
+      "alimentos": 2289.0
+     },
+     "custo_valor": 11442.0,
+     "tempo_s": 16560,
+     "valor": 45.0
+    }
+   ],
+   "fracao_tempo": 0.05,
+   "fracao_custo": 0.05,
+   "desbloqueio_prefeitura": 12,
+   "requisito": {
+    "id": "bas",
+    "nivel": 2
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **13/11/2026**. Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **13/11/2026** (sessão 1.4). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -82,6 +82,15 @@ Defeitos encontrados:
 - **Ritmo da temporada (decisão do dono):** 30 dias; governo por volta do dia 15 e presidência por volta do dia 30; sem pagar, nível 20 em 30 dias; pagando, nível 30 na metade do tempo. A 1.4 reajusta as curvas.
 - Testes: `game/tests/test_mundo_brasil.py` 25/25 (entra no `tools/run_valdora_tests.sh`, também no `--py`). Nada do jogo instalado mudou.
 
+### Jogabilidade e economia da Fase A (sessão 1.4, 13/11/2026)
+
+- **Aprovado pelo dono:** curvas v0.2. Quem joga 15 min por dia chega ao nível 20 no dia 29 e ao 30 no dia 62; 30 min, 26 e 56; o **pagante médio** (passe da temporada: obras 60% mais rápidas, produção +75%, uma fila a mais) chega ao 30 no dia 30. Salto do início rápido suavizado: a obra dobra a cada nível do 9 ao 13 (4 h a 2,7 dias) e fica em cerca de 3,8 dias do 15 ao 30.
+- **Decisões do dono:** Prefeitura no lugar do Quartel-general (o nível dela é o nível da cidade); moeda do próprio sistema com banco em cada cidade (proposto como 14º prédio); árvore de desbloqueio em que um prédio depende do outro; a economia gira em torno da produção; sigla do movimento de até 4 letras e número de 10 a 99; ajuda entre cidades do movimento com métrica; o presidente só nomeia governadores para os cargos do país e tem 4 secretários; governadores podem ser oposição.
+- Simulação `tools/mundo/simular_economia.py` (5 regiões × 4 perfis, determinística): fontes e drenos de moeda andam juntos (20 a 28% da produção por semana), moeda guardada abaixo de 0,6 dia de produção, preço preso na faixa de ±15% pela âncora do sistema; regiões a ±1% em poder e produção.
+- Dados: `game/data/mundo_componentes_v0.2.json` (14 prédios, gerado por `tools/mundo/gerar_componentes_v02.py`). A v0.1 continua no repositório para a arte e o teste antigo.
+- Regras em `game/docs/JOGABILIDADE_ECONOMIA_v0.1.md`: progressão, desbloqueio, economia, banco, empréstimo, ajuda, passe, poder (eleição, guerra civil, governador, Conselho dos governadores, presidência), ciclo diário, NPC e chat. As seções 4 a 12 são proposta sobre as decisões do dono.
+- Testes: `game/tests/test_economia_mundo.py` 22/22, no `tools/run_valdora_tests.sh` (o `--py` passa 8/8). Nada do jogo instalado mudou.
+
 ## 2. O que está onde
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |
@@ -124,7 +133,7 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 
 ## 6. Testes
 
-- `game/tests`: 16 smokes Godot (o `city_visual_smoke` entra no `--all`; ainda não executado) e 3 testes Python.
+- `game/tests`: 16 smokes Godot (o `city_visual_smoke` entra no `--all`; ainda não executado) e 6 testes Python (`componentes`, `mundo_brasil` e `economia_mundo` são do jogo novo).
 - Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 4 smokes extras que devem passar hoje. Com `--historico`, inclui também CP008, CP009 e CP010, que estão presos às revisões 7, 8 e 9 do manifesto e falham por desenho contra o manifesto atual. O script copia o manifesto e os ZIPs de `site/updates/v2/` para `game/tests/fixtures/` antes dos smokes, como o workflow `cp004-ota`; sem essa cópia 10 smokes falhavam (defeito corrigido em 12/11).
 - Godot esperado: 4.7.2 (Linux x86_64, zip com SHA-256 `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`).
 - **Primeira execução real dos smokes: 12/11/2026**, Godot 4.7.2 oficial com o hash conferido, código do jogo igual ao da release `8a29073`. Log em `game/docs/logs/smokes_2026-11-12.log`.

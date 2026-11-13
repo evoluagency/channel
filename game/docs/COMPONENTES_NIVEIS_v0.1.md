@@ -1,5 +1,8 @@
 # Jogo moderno — Componentes, níveis 1 a 30 e representação visual (v0.1)
 Escrito em 13/11/2026, a pedido do dono: explicar cada componente, seus benefícios, a força do nível 1 ao 30 e a aparência em cada nível. Complementa `DESENHO_MUNDO_v0.1.md`. **É proposta de balanceamento; todos os números são ponto de partida para teste, nada está homologado nem implementado.** Nome do jogo ainda provisório.
+
+> **Nota de 13/11/2026 (sessão 1.4):** as fórmulas de tempo, custo, produção por tipo e desbloqueio da seção 1 e as tabelas de custo e tempo da seção 4 foram substituídas pela v0.2 aprovada pelo dono: `JOGABILIDADE_ECONOMIA_v0.1.md` e `game/data/mundo_componentes_v0.2.json`. O Quartel-general passa a se chamar **Prefeitura** (nível da cidade) e entra o **Banco da cidade** (14º prédio). Poder, faixas visuais e aparência continuam valendo.
+
 ## 1. Regras gerais de progressão
 - **Nível:** de 1 a 30 em todos os prédios. Nenhum prédio passa do nível do Quartel-general.
 - **Poder (força):** cada prédio soma `Poder(n) = 40 × n^1,55`. O poder da base é a soma dos prédios, mais heróis e tropas. É o número exibido no perfil e usado para comparar estados.

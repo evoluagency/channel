@@ -21,6 +21,8 @@ Este documento é proposta. Valores numéricos são ponto de partida de balancea
 11. **Sociedade e economia** (13/11/2026, sessão 1.3): servidores com nome de país; **movimentos** de até 100 membros disputam o governo do estado por via pacífica ou guerra civil; regiões fortes em 2 ou 3 recursos; migração livre; comércio entre jogadores; o jogo é o banco (colchão ou banco, taxas, empréstimo por saúde fiscal); obra acelera com investimento. Detalhes e propostas em `SOCIEDADE_ECONOMIA_v0.1.md`; os movimentos substituem as alianças da seção 6 no nível do estado.
 12. **Ritmo da temporada** (13/11/2026, sessão 1.3): temporada de **30 dias**. Cerca do dia 15, um movimento toma o governo do estado; cerca do dia 30, a presidência. Quem não paga chega ao **nível 20 em 30 dias** (e ao 30 em cerca de 60); **quem paga chega ao nível 30 na metade do tempo**, ou seja, em cerca de 30 dias. Se for preciso, aumentar o número de níveis. Compras com dinheiro real só pelo sistema do Google (M13); o que se compra acelera o próprio jogador e nunca é transferível para outro (`SOCIEDADE_ECONOMIA_v0.1.md`, seção 6).
 
+13. **Jogabilidade e economia** (13/11/2026, sessão 1.4): curvas v0.2 aprovadas (sem pagar, nível 20 por volta do dia 30 e 30 por volta do 60; pagante médio com passe, 30 por volta do dia 30); Prefeitura no lugar do Quartel-general; moeda do sistema com banco em cada cidade; árvore de desbloqueio; ajuda entre cidades do movimento; presidente nomeia só governadores. Registro em `JOGABILIDADE_ECONOMIA_v0.1.md`.
+
 **Pendentes (nenhum bloqueia o documento, mas bloqueiam a arte e o nome)**
 
 - Direção visual: A (Concreto e Sinalização), B (Neon Tático) ou C (Horizonte Aberto). Prévia: https://claude.ai/artifact/7ZdEi4EiADxRTxHEQLhfGe

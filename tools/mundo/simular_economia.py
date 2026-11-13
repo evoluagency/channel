@@ -45,8 +45,8 @@ FILAS = 2
 GRATIS_S = 300  # obra de até 5 min termina na hora
 
 # Tempo-base da obra do QG para chegar ao nível n (horas), âncoras interpoladas em log.
-T_QG_ANCORAS = [(2, 1 / 60), (4, 6 / 60), (6, 0.5), (8, 2.0), (10, 6.0)]
-T_MAX, T_K = 82.0, 2.0  # horas; achados por calibrar_tempo() (--calibrar-tempo refaz a busca)
+T_QG_ANCORAS = [(2, 1 / 60), (4, 6 / 60), (6, 0.5), (8, 2.0)]
+T_MAX, T_K = 92.0, 2.0  # horas; achados por calibrar_tempo() (--calibrar-tempo refaz a busca)
 FATOR_TEMPO = {"hq": 1.0, "bas": 0.3, "alo": 0.1, "prod": 0.03}
 FATOR_CUSTO = {"hq": 1.0, "bas": 0.4, "alo": 0.1, "prod": 0.04}
 SECUNDARIOS = 0.20  # fração da fila B
@@ -60,7 +60,12 @@ BAU_LOGIN = 0.01   # por login, até 3 por dia
 KAPPA = 1.0        # moedas por hora poupada = KAPPA x produção de referência/h (até 25% do tempo)
 KAPPA_FUNDO = 2.0  # multiplicador de 25% a 50%
 INVEST_MAX = 0.5
-PAGO_CORTE = 0.67  # itens de aceleração pagos (pagante)
+PASSE_CORTE = 0.60  # passe da temporada (pagante médio): obras mais rápidas
+PASSE_PROD = 0.75   # passe: produção a mais
+PASSE_FILA = 1      # passe: uma fila de obra a mais
+AJUDAS_POR_OBRA = 10  # ajudas médias recebidas do movimento por obra
+AJUDA_CORTE = 0.01    # cada ajuda corta 1% do tempo-base (mínimo 1 min)
+AJUDA_MAX = 20
 TAXA_MERCADO = 0.05
 TAXA_ESTADUAL = 0.015  # governador NPC (faixa 0 a 3%)
 BANCO_ENTRADA = BANCO_SAIDA = 0.02
@@ -83,7 +88,7 @@ PERFIS = {  # (hora, minutos) das sessões; fatia dos jogadores
     "p30": {"sessoes": [(8, 6), (11, 6), (14, 6), (18, 6), (22, 6)], "fatia": 0.20},
     "pag": {"sessoes": [(8, 5), (13, 5), (21, 5)], "fatia": 0.05},
 }
-NOME_PERFIL = {"p5": "5 min/dia", "p15": "15 min/dia", "p30": "30 min/dia", "pag": "pagante (15 min)"}
+NOME_PERFIL = {"p5": "5 min/dia", "p15": "15 min/dia", "p30": "30 min/dia", "pag": "pagante médio (passe, 15 min)"}
 REGIOES = {
     "Norte": {"metal": 10, "energia": 10},
     "Nordeste": {"energia": 10, "alimentos": 10},
@@ -94,15 +99,17 @@ REGIOES = {
 
 
 def t_qg_h(n: int) -> float:
-    """Até o nível 10: âncoras fixas (início rápido). Depois: curva crescente que satura em T_MAX."""
+    """Tempo-base da obra da Prefeitura (horas). Até o nível 8: âncoras (início rápido).
+    Do 9 em diante: o menor entre dobrar a cada nível (2 h no 8) e a curva que satura em T_MAX,
+    o que suaviza o fim do início rápido (decisão do dono, sessão 1.4)."""
     if n <= 1:
         return 0.0
-    if n <= 10:
+    if n <= 8:
         for (a, ta), (b, tb) in zip(T_QG_ANCORAS, T_QG_ANCORAS[1:]):
             if a <= n <= b:
                 return math.exp(math.log(ta) + (math.log(tb) - math.log(ta)) * (n - a) / (b - a))
-    t10 = T_QG_ANCORAS[-1][1]
-    return t10 + (T_MAX - t10) * (1 - math.exp(-(n - 10) / T_K))
+    t8 = T_QG_ANCORAS[-1][1]
+    return min(t8 * 2 ** (n - 8), T_MAX * (1 - math.exp(-(n - 8) / T_K)))
 
 
 def max_prod(q: int) -> int:
@@ -118,11 +125,12 @@ def receita(n: int) -> dict:
         return {"materiais": 0.7, "alimentos": 0.3}
     if n < 10:
         return {"materiais": 0.45, "metal": 0.30, "alimentos": 0.25}
-    return {"materiais": 0.30, "metal": 0.25, "energia": 0.25, "alimentos": 0.20}
+    return {"materiais": 0.35, "metal": 0.25, "energia": 0.20, "alimentos": 0.20}
 
 
-# Produção de referência por hora no QG n (valor em moedas). Calibrada por ponto fixo (calibrar()).
-YREF = [240.0 * CRESC_PROD ** (n - 1) for n in range(32)]
+# Produção de referência por hora no nível n da Prefeitura (valor em moedas): 240 até o 6; 560 x 1,094^n depois.
+# calibrar() mede de novo, só para diagnóstico.
+YREF = [240.0 if n < 7 else 560.0 * 1.094 ** n for n in range(32)]  # ajuste da calibração da sessão 1.4
 
 
 def custo(tipo: str, n: int) -> dict:
@@ -162,6 +170,9 @@ class Agente:
         self.pago_h = 0.0
         self.pago_rec = 0.0
         self.apoio = 0.0
+        self.ajuda_h = 0.0
+        self.filas = FILAS + (PASSE_FILA if perfil == "pag" else 0)
+        self.prod_extra = PASSE_PROD if perfil == "pag" else 0.0
         self.corte_soma = self.corte_base = 0.0
 
     # ---- utilidades
@@ -169,7 +180,7 @@ class Agente:
         self.fluxo[chave] = self.fluxo.get(chave, 0.0) + v
 
     def taxa_prod(self) -> dict:
-        t = {r: sum(PROD_BASE[r] * CRESC_PROD ** (n - 1) for n in self.prod[r]) * (1 + self.bonus[r]) for r in RES}
+        t = {r: sum(PROD_BASE[r] * CRESC_PROD ** (n - 1) for n in self.prod[r]) * (1 + self.bonus[r] + self.prod_extra) for r in RES}
         return t
 
     def manut(self) -> float:
@@ -245,10 +256,12 @@ class Agente:
         if len(self.alo) < max_alo(q) and not self.em_obra("alo", len(self.alo)):
             out.append(("alo", len(self.alo), 1))
         melh = []
+        prox = custo("hq", min(q + 1, 30))
+        falta = {r: 3.0 if self.estoque[r] < 1.5 * prox.get(r, 0) else 1.0 for r in RES}
         for r in RES:
             for i, n in enumerate(self.prod[r]):
                 if n < q and not self.em_obra("prod", (r, i)):
-                    ganho = PROD_BASE[r] * preco[r] * CRESC_PROD ** (n - 1) * 0.12 * (1 + self.bonus[r])
+                    ganho = PROD_BASE[r] * preco[r] * CRESC_PROD ** (n - 1) * 0.12 * (1 + self.bonus[r]) * falta[r]
                     c = self.valor(custo("prod", n + 1), PRECO_REF)
                     melh.append((-ganho / c, r, i, n))
         melh.sort()
@@ -262,11 +275,6 @@ class Agente:
         falta = {r: max(0.0, c.get(r, 0) - self.estoque[r]) for r in RES}
         v = self.valor(falta, preco)
         if v <= 0:
-            return True
-        if self.perfil == "pag":
-            for r in RES:
-                self.estoque[r] += falta[r]
-            self.pago_rec += v
             return True
         if v * (1 + TAXA_MERCADO) <= self.colchao * 0.6:
             for r in RES:
@@ -287,25 +295,29 @@ class Agente:
         base = tempo_h(tipo, n)
         if tipo != "hq":
             base /= (1 - SECUNDARIOS)
+        aj = min(AJUDAS_POR_OBRA, AJUDA_MAX)
+        corte_aj = min(base * 0.95, max(aj * AJUDA_CORTE * base, aj / 60))
+        self.ajuda_h += corte_aj
+        base -= corte_aj
         if self.perfil == "pag":
-            self.pago_h += base * PAGO_CORTE
-            base *= 1 - PAGO_CORTE
+            self.pago_h += base * PASSE_CORTE
+            base *= 1 - PASSE_CORTE
         fim = agora + (0 if base * 3600 <= GRATIS_S else base)
         self.ocupado.append([fim, tipo, chave, base, 0.0])
         return True
 
     def iniciar_obras(self, agora, preco, mercado):
         # fila A: QG ou o pré-requisito dele; espera o recurso em vez de fazer outra coisa
-        if len(self.ocupado) < FILAS and not any(o[1] == "hq" for o in self.ocupado):
+        if len(self.ocupado) < self.filas and not any(o[1] == "hq" for o in self.ocupado):
             ca = self.candidatos(True, preco)
             if ca:
                 if not self._iniciar(*ca[0], agora, preco, mercado):
                     self.espera_recurso += 1
-        while len(self.ocupado) < FILAS:
+        while len(self.ocupado) < self.filas:
             cb = self.candidatos(False, preco)
             if not any(self._iniciar(*c, agora, preco, mercado) for c in cb[:4]):
                 break
-            if len(self.ocupado) >= FILAS:
+            if len(self.ocupado) >= self.filas:
                 break
 
     def investir(self, agora):
@@ -498,10 +510,9 @@ def calibrar_tempo():
     """Busca T_MAX e T_K para o jogador de 15 min chegar ao QG 20 no dia 30 e ao 30 no dia 60."""
     global T_MAX, T_K
     melhor = None
-    for tk in (2.0, 3.0, 4.0, 5.0, 6.0):
-        for tmax in range(64, 125, 6):
+    for tk in (1.5, 2.0, 3.0, 4.0):
+        for tmax in range(76, 133, 4):
             T_MAX, T_K = float(tmax), tk
-            calibrar(2)
             ags, _ = simular(dias=80, regioes=["Sudeste"])
             a = next(x for x in ags if x.perfil == "p15")
             d20, d30 = a.dia_qg.get(20, 99), a.dia_qg.get(30, 99)
@@ -509,7 +520,20 @@ def calibrar_tempo():
             if melhor is None or erro < melhor[0]:
                 melhor = (erro, tmax, tk, d20, d30)
     _, T_MAX, T_K = melhor[0], float(melhor[1]), melhor[2]
-    calibrar(3)
+    return melhor
+
+
+def calibrar_passe():
+    """Busca o corte de tempo do passe para o pagante médio chegar à Prefeitura 30 no dia 30."""
+    global PASSE_CORTE
+    melhor = None
+    for c in (0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60):
+        PASSE_CORTE = c
+        ags, _ = simular(dias=50, regioes=["Sudeste"])
+        d30 = next(x for x in ags if x.perfil == "pag").dia_qg.get(30, 99)
+        if melhor is None or abs(d30 - 30) < melhor[0]:
+            melhor = (abs(d30 - 30), c, d30)
+    PASSE_CORTE = melhor[1]
     return melhor
 
 
@@ -543,8 +567,8 @@ def relatorio(ags, hist, dias, md=True):
     p = out.append
     vag = carregar_regioes()
     # 1. ritmo
-    p("## 1. Dia em que cada perfil chega ao nível do QG (média das regiões)\n")
-    p("| Perfil | QG 10 | QG 15 | QG 20 | QG 25 | QG 30 | QG no dia 15 | QG no dia 30 | QG no dia 60 | Corte médio por investimento |")
+    p("## 1. Dia em que cada perfil chega ao nível da Prefeitura (média das regiões)\n")
+    p("| Perfil | nível 10 | nível 15 | nível 20 | nível 25 | nível 30 | nível no dia 15 | nível no dia 30 | nível no dia 60 | Corte médio por investimento |")
     p("|---|---|---|---|---|---|---|---|---|---|")
     for pf in PERFIS:
         grupo = [a for a in ags if a.perfil == pf]
@@ -558,8 +582,8 @@ def relatorio(ags, hist, dias, md=True):
         cel.append(br(100 * sum(a.corte_soma for a in grupo) / max(1e-9, sum(a.corte_base for a in grupo)), 0) + "%")
         p(f"| {NOME_PERFIL[pf]} | " + " | ".join(cel) + " |")
     # 2. curvas
-    p("\n## 2. Curvas propostas (QG; os outros prédios usam fatores)\n")
-    p("| Nível | Tempo-base do QG | Custo do QG (valor em moedas) | Produção de referência/h | Preço de 1 h de aceleração |")
+    p("\n## 2. Curvas da Prefeitura (os outros prédios usam frações)\n")
+    p("| Nível | Tempo-base da obra | Custo (valor em moedas) | Produção de referência/h | Preço de 1 h de aceleração |")
     p("|---|---|---|---|---|")
     for n in (2, 5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30):
         t = t_qg_h(n)
@@ -612,14 +636,16 @@ def relatorio(ags, hist, dias, md=True):
         vend = sum(h["venda"][r] * h["preco"][r] for r in RES) or 1
         p(f"| {d} | {br(m / y, 2)} | {br(idx, 3)} | {br(100 * h['ancora'] / vend, 1)} |")
     # 5. regiões
-    p("\n## 5. Regiões: jogador de 15 min (relativo à média das regiões)\n")
-    p("| Região | QG dia 15 | QG dia 30 | Poder dia 30 | Produção/h dia 30 | Moeda acumulada no dia 30 (líquida) |")
+    p("\n## 5. Regiões: jogador de 15 min (média dos dias 1 a 60, relativa à média das regiões)\n")
+    p("| Região | Prefeitura 20 (dia) | Prefeitura 30 (dia) | Poder | Produção/h | Moeda guardada |")
     p("|---|---|---|---|---|---|")
     g = [a for a in ags if a.perfil == "p15"]
-    med = {k: sum(a.hist[29][k] for a in g) / len(g) for k in ("poder", "prod_h")}
+    jan = range(0, min(60, dias))
+    med = {k: sum(a.hist[d][k] for a in g for d in jan) / len(g) for k in ("poder", "prod_h", "moeda")}
     for a in g:
-        p(f"| {a.regiao} | {a.hist[14]['qg']} | {a.hist[29]['qg']} | {br(a.hist[29]['poder'] / med['poder'], 3)} | "
-          f"{br(a.hist[29]['prod_h'] / med['prod_h'], 3)} | {br(a.hist[29]['moeda'])} |")
+        rel = {k: sum(a.hist[d][k] for d in jan) / med[k] for k in med}
+        p(f"| {a.regiao} | {br(a.dia_qg.get(20, 99), 1)} | {br(a.dia_qg.get(30, 99), 1)} | {br(rel['poder'], 3)} | "
+          f"{br(rel['prod_h'], 3)} | {br(rel['moeda'], 2)} |")
     # 5b. pior caso de preços (online): recursos de construção no teto, os outros no piso
     p("\n**Pior caso de preço** (bônus da região em % da produção total, com produção igual nos 4 recursos):\n")
     cen = {"preços de referência": {r: 1.0 for r in RES},
@@ -634,8 +660,10 @@ def relatorio(ags, hist, dias, md=True):
     # 6. pagante
     pg = [a for a in ags if a.perfil == "pag"]
     p("\n## 6. Pagante (média): o que compra em 30 dias\n")
-    p(f"- Horas de aceleração paga: {br(sum(a.pago_h for a in pg) / len(pg))} h; recursos comprados: "
-      f"{br(sum(a.pago_rec for a in pg) / len(pg))} moedas de valor.")
+    p(f"- Passe da temporada: obras {br(100 * PASSE_CORTE)}% mais rápidas, produção +{br(100 * PASSE_PROD)}%, "
+      f"+{PASSE_FILA} fila. Equivale a {br(sum(a.pago_h for a in pg) / len(pg))} h de aceleração no período.")
+    p(f"- Ajuda do movimento ({AJUDAS_POR_OBRA} ajudas por obra, {br(100 * AJUDA_CORTE)}% cada): "
+      + ", ".join(f"{NOME_PERFIL[pf]} {br(sum(a.ajuda_h for a in ags if a.perfil == pf) / 5)} h" for pf in PERFIS) + " poupadas.")
     esp = {pf: sum(a.espera_recurso for a in ags if a.perfil == pf) / 5 for pf in PERFIS}
     p(f"- Sessões em que faltou recurso para iniciar obra: " + ", ".join(f"{k} {br(v)}" for k, v in esp.items()))
     return "\n".join(out)
@@ -649,7 +677,7 @@ def main() -> int:
     a = ap.parse_args()
     if a.calibrar_tempo:
         print("calibrar_tempo:", calibrar_tempo())
-    calibrar(3)
+        print("calibrar_passe:", calibrar_passe())
     ags, hist = simular(a.dias)
     print(relatorio(ags, hist, a.dias))
     if a.json:
