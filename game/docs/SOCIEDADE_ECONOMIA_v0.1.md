@@ -95,3 +95,25 @@ Tudo isso existe primeiro contra o jogo: movimentos NPC, eleições e guerras ci
 ## 9. Aprovado
 
 Termo "movimento"; taxas (banco 2% + 2%, mercado 5%, estadual 0 a 3%); 20% do colchão em ataque; tabela das regiões (já em `BR_perfis.json`); migração com espera de 7 dias; redução máxima de 50% por investimento; ciclo semanal. Aprovados como ponto de partida em 13/11/2026.
+
+## 10. Decisões do dono (13/11/2026, sessão 1.4) e propostas sobre elas
+
+**Decisões:**
+1. **A moeda é do próprio sistema.** Não existe um "banco do jogo" como personagem: a moeda está embutida no sistema, e **cada cidade tem o seu próprio banco**. Substitui o "o jogo é o banco" da seção 1, item 7.
+2. **Não usar "QG".** O jogador é o **comandante e líder da própria cidade**; ele constrói uma cidade e vai subindo de cargo.
+3. **Carreira por cargos:** líder da cidade → cargos no movimento → governador → presidente.
+4. **O governador governa com companheiros** escolhidos dentro do próprio movimento.
+5. **Movimentos têm representantes** que ajudam a comandar, e têm **nome, sigla e número**, como um partido.
+
+**Propostas (aguardando OK):**
+
+| Tema | Proposta |
+|---|---|
+| Prédio principal | **Prefeitura** no lugar do Quartel-general; o nível da Prefeitura é o **nível da cidade**. Mesma arte aprovada |
+| Banco da cidade | Prédio próprio (o 14º), níveis 1 a 30. Moeda guardada nele fica protegida até a capacidade do nível; o que passa disso fica no cofre exposto (20% num ataque vencido). Taxas de 2% na entrada e na saída, rendimento de 1%/semana com teto e empréstimo pela nota fiscal: tudo regra do sistema, sem saldo central |
+| Mercado | O sistema compra e vende nas pontas da faixa de ±15% (âncora da simulação). Números da simulação não mudam |
+| Movimento: identidade | Nome (3 a 30 letras), sigla (2 a 6 letras) e número de 2 dígitos (10 a 99), único no servidor, escolhido na fundação |
+| Movimento: cargos | Líder; **representantes**: 1 a cada 10 membros, até 10 (com 100 membros). Aceitam e expulsam membros, convocam defesa e votam as decisões do movimento com o líder |
+| Governo do estado | O governador nomeia até 4 **secretários** entre os representantes (Economia, Defesa, Obras, Comunicação), cada um com um bônus pequeno para o estado |
+| Presidência | O presidente nomeia ministros entre os governadores e representantes do próprio movimento |
+| Política real | Bloquear nomes e siglas de partidos reais. Os números de 2 dígitos coincidem com os de partidos reais (por exemplo 13, 22, 45): decisão do dono se ficam liberados ou se ficam fora |
