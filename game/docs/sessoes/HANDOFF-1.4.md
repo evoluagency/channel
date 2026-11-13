@@ -57,3 +57,15 @@ tools/run_valdora_tests.sh --py
 ```
 
 Modelo: as regras de poder e economia estão fechadas na forma. Regerar tabelas e ajustar textos pode ficar com o Sonnet; mudar metas, curvas ou regras de poder pede o Opus.
+
+## Adendo: impostos, comércio e crítica do projeto (13/11/2026)
+
+Decisões do dono sobre impostos e comércio: `SOCIEDADE_ECONOMIA_v0.1.md`, seção 11. Pontos abertos levantados na revisão crítica (para a próxima sessão de regras):
+
+1. **O que acontece no fim da temporada?** A cidade continua, e só a política reinicia? Hoje o nível 30 sem pagar vem no dia 62, ou seja, na segunda temporada.
+2. **Regiões fortes e comércio:** com bônus de +10%, toda cidade produz os 4 recursos e o comércio fica pequeno. Imposto sobre venda só pesa se o comércio for grande; para isso a especialização precisa ser mais forte.
+3. **Passe e moeda:** produção extra do passe vendida no mercado vira moeda transferível, o que contradiz "nada transferível".
+4. **Política e pagamento:** pagantes chegam ao nível 15 no dia 7 e dominam governo e guerra civil.
+5. **Política real:** números de 10 a 99 e siglas de 4 letras coincidem com partidos reais (13, 22, 45, PT, PL).
+6. **Escopo da Fase A:** a parte social (movimentos, eleição, Conselho, chat) feita com NPC é grande e parcialmente descartável; validar antes uma fatia jogável (cidade, produção, mercado com o sistema e um estado).
+7. **Tesouro:** destino do imposto arrecadado (obras com bônus, que funcionam como dreno, e teto de saldo do tesouro).

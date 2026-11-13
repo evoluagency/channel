@@ -119,3 +119,13 @@ Termo "movimento"; taxas (banco 2% + 2%, mercado 5%, estadual 0 a 3%); 20% do co
 | Política real | Bloquear nomes e siglas de partidos reais. Os números de 2 dígitos coincidem com os de partidos reais (por exemplo 13, 22, 45): decisão do dono se ficam liberados ou se ficam fora |
 
 **Respostas do dono (13/11/2026, mesma sessão):** aprovou o ritmo e as curvas; a meta do pagante vale para o **pagante médio**; suavizar o salto do tempo de obra; **Prefeitura** e nível da cidade; níveis da Prefeitura liberam recursos aos poucos, um dependendo do outro; a economia gira em torno da produção; **sigla de até 4 letras** e número de 10 a 99; cidades do mesmo movimento se ajudam, com métrica; **o presidente só nomeia governadores** para os cargos do país e tem **4 secretários** próprios; governadores podem ser oposição e o presidente precisa de aliados. Regras numéricas em `JOGABILIDADE_ECONOMIA_v0.1.md` (seções 4 a 9), que valem sobre a tabela acima onde diferirem (por exemplo, secretários do governador e ministros do presidente).
+
+## 11. Decisões do dono sobre impostos e comércio (13/11/2026, sessão 1.4)
+
+1. **Imposto estadual** (definido pelo governador) e **imposto federal** (definido pelo presidente).
+2. **O sistema mede a capacidade de pagamento das cidades** e define um limite de referência. Passar do limite **não é impedido**: gera **aviso** ao governante e às cidades, com os impactos (ritmo menor).
+3. Diante do risco de caos, os governadores podem **derrubar o presidente**, com nova eleição ou guerra civil.
+4. Cada região tem mais de alguns recursos. As sobras são **vendidas entre estados e entre cidades** (trocas diretas também).
+5. **Precificação com margem de lucro** para quem vende. **O imposto incide só na venda** e é abatido de quem vende.
+
+Medida rápida na simulação atual, com o imposto só na venda (sem a taxa de 5% do sistema): imposto de 10% atrasa o nível 30 do jogador de 15 min em 0,4 dia; imposto de 40%, em 1,6 dia (6% da produção). Hoje as vendas são só cerca de 15% da produção, então o imposto sobre venda quase não pesa no ritmo. Ver a crítica registrada no `HANDOFF-1.4.md` e a decisão pendente sobre especialização das regiões.
