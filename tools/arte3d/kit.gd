@@ -17,6 +17,8 @@ const PALETA := {
 	"ouro": Color("f0a81c"), "neon": Color("3ef2ff"), "neon_rosa": Color("ff4fd8"),
 	"solar": Color("1f3f8f"), "folha": Color("3fc75a"), "folha_clara": Color("8be36b"),
 	"pele": Color("f1c27d"),
+	"creme": Color("f5e6c8"), "coral": Color("ff7a59"), "terracota": Color("d9643a"),
+	"tijolo": Color("c25a43"), "menta": Color("7fd6b5"), "agua": Color("37d3f0"),
 }
 
 const ALIANCAS := {
@@ -342,3 +344,36 @@ func luzes_fachada(pai: Node3D, centro: Vector3, normal: Vector3, largura: float
 					t = Vector3(0.02, passo.y * 0.4, passo.x * 0.55)
 				caixa(pai, pos, t, luz(cor, 1.6), 0.0)
 		y += passo.y
+
+# ---------------------------------------------------------------- conjuntos
+
+func conteiner(pai: Node3D, pos: Vector3, rot: float, cor: Color, porta := false) -> void:
+	var g := grupo(pai, pos, rot)
+	var m := mat(cor, 0.85)
+	var friso := mat(cor.darkened(0.18), 0.85)
+	caixa(g, Vector3.ZERO, Vector3(2.4, 1.0, 1.0), m, 0.05)
+	for i in 11:
+		var x := -1.0 + i * 0.2
+		for z in [-0.51, 0.51]:
+			caixa(g, Vector3(x, 0.08, z), Vector3(0.07, 0.84, 0.03), friso, 0.01)
+	for z in [-0.25, 0.25]:
+		caixa(g, Vector3(1.21, 0.08, z), Vector3(0.03, 0.84, 0.42), friso, 0.01)
+	if porta:
+		caixa(g, Vector3(0.3, 0.02, 0.53), Vector3(0.5, 0.8, 0.04), mat(Color("3b3f48"), 0.7), 0.02)
+		caixa(g, Vector3(-0.5, 0.45, 0.53), Vector3(0.55, 0.3, 0.04), vidro(Color("9fe0ff"), 0.3), 0.02)
+
+## Base comum da faixa 6 (Elite): piso na cor da aliança, friso dourado e campo de energia.
+func base_elite(pai: Node3D, tamanho: float) -> void:
+	lote(pai, tamanho, mat(cor_alianca.darkened(0.55), 0.35, 0.2))
+	toro(pai, Vector3(0, 0.16, 0), 2.45, 0.05, ouro())
+	toro(pai, Vector3(0, 0.12, 0), 2.75, 0.06, luz(PALETA["neon"], 3.5))
+	cilindro(pai, Vector3(0, 0.1, 0), 2.75, 0.45, feixe(PALETA["neon"], 0.12, 1.0), 48)
+
+## Toldo listrado (aliança e branco). pos = meio da borda presa à parede; normal = para onde avança.
+func toldo(pai: Node3D, pos: Vector3, normal: Vector3, largura: float, fundo := 0.6, listras := 6) -> void:
+	var g := grupo(pai, pos, rad_to_deg(atan2(normal.x, normal.z)))
+	var inc := grupo(g, Vector3.ZERO)
+	inc.rotation_degrees.x = 22
+	for i in listras:
+		var x := (i + 0.5) / listras * largura - largura * 0.5
+		caixa(inc, Vector3(x, 0, fundo * 0.5), Vector3(largura / listras, 0.04, fundo), alianca(0.7) if i % 2 == 0 else p("branco", 0.7), 0.0)

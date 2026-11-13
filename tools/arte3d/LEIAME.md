@@ -14,6 +14,8 @@ da cidade 3D na sessão 1.5.
 
 ## Gerar
 
+Atalho: `GODOT=/caminho/do/godot tools/arte3d/gerar.sh alojamento "Alojamento"`.
+
 ```bash
 G=/caminho/Godot_v4.7.2-stable_linux.x86_64
 cd tools/arte3d && $G --headless --editor --path . --quit   # 1ª vez: importa a fonte

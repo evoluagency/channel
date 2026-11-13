@@ -14,26 +14,11 @@ func construir(k, pai: Node3D, faixa: int) -> float:
 		_: return _f6(k, pai)
 
 # ---- faixa 1: Acampamento (contêineres, lona, bandeira e antena simples)
-func _conteiner(k, pai: Node3D, pos: Vector3, rot: float, cor: Color, porta := false) -> void:
-	var g = k.grupo(pai, pos, rot)
-	var m = k.mat(cor, 0.85)
-	var friso = k.mat(cor.darkened(0.18), 0.85)
-	k.caixa(g, Vector3.ZERO, Vector3(2.4, 1.0, 1.0), m, 0.05)
-	for i in 11:
-		var x := -1.0 + i * 0.2
-		for z in [-0.51, 0.51]:
-			k.caixa(g, Vector3(x, 0.08, z), Vector3(0.07, 0.84, 0.03), friso, 0.01)
-	for z in [-0.25, 0.25]:
-		k.caixa(g, Vector3(1.21, 0.08, z), Vector3(0.03, 0.84, 0.42), friso, 0.01)
-	if porta:
-		k.caixa(g, Vector3(0.3, 0.02, 0.53), Vector3(0.5, 0.8, 0.04), k.mat(Color("3b3f48"), 0.7), 0.02)
-		k.caixa(g, Vector3(-0.5, 0.45, 0.53), Vector3(0.55, 0.3, 0.04), k.vidro(Color("9fe0ff"), 0.3), 0.02)
-
 func _f1(k, pai: Node3D) -> float:
 	k.lote(pai, LOTE, k.p("terra", 0.95))
-	_conteiner(k, pai, Vector3(-0.3, 0.05, -0.6), 0, k.PALETA["conteiner_a"])
-	_conteiner(k, pai, Vector3(-0.3, 0.05, 0.55), 0, k.PALETA["conteiner_b"], true)
-	_conteiner(k, pai, Vector3(-0.3, 1.05, 0.0), 90, k.PALETA["conteiner_c"])
+	k.conteiner(pai, Vector3(-0.3, 0.05, -0.6), 0, k.PALETA["conteiner_a"])
+	k.conteiner(pai, Vector3(-0.3, 0.05, 0.55), 0, k.PALETA["conteiner_b"], true)
+	k.conteiner(pai, Vector3(-0.3, 1.05, 0.0), 90, k.PALETA["conteiner_c"])
 	# lona sobre estacas
 	for z in [-0.9, 0.9]:
 		k.cilindro(pai, Vector3(1.75, 0.05, z), 0.05, 1.25, k.p("madeira"), 6)
@@ -236,11 +221,7 @@ func _f5(k, pai: Node3D) -> float:
 
 # ---- faixa 6: Arranha-céu de elite, feixe de luz no topo e brilho dourado
 func _f6(k, pai: Node3D) -> float:
-	k.lote(pai, LOTE, k.mat(k.cor_alianca.darkened(0.55), 0.35, 0.2))
-	k.toro(pai, Vector3(0, 0.16, 0), 2.45, 0.05, k.ouro())
-	# campo de energia na base
-	k.toro(pai, Vector3(0, 0.12, 0), 2.75, 0.06, k.luz(k.PALETA["neon"], 3.5))
-	k.cilindro(pai, Vector3(0, 0.1, 0), 2.75, 0.45, k.feixe(k.PALETA["neon"], 0.12, 1.0), 48)
+	k.base_elite(pai, LOTE)
 	k.caixa(pai, Vector3(0, 0.05, 0), Vector3(4.0, 0.4, 4.0), k.mat(Color("f3f0ea"), 0.3), 0.08)
 	k.caixa(pai, Vector3(0, 0.45, 0), Vector3(4.06, 0.06, 4.06), k.ouro(), 0.02)
 	var y := 0.51
