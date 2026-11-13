@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Folha de conferência: contornos simplificados dos 27 estados, sigla e lotes.
+"""Folha de conferência: contornos simplificados dos 27 estados, sigla, vagas de base e capitais.
 
 Lê game/data/mundo/BR.json e BR_perfis.json e grava um PNG (Pillow). Projeção de
 desenho: equirretangular com a longitude escalada por cos(-15°), só para olhar.
@@ -74,6 +74,10 @@ def main() -> int:
             pts = [P(anel[i] / 1e4, anel[i + 1] / 1e4) for i in range(0, len(anel), 2)]
             d.line(pts + [pts[0]], fill=DIVISA, width=2)
 
+    for p in perfis.values():  # capitais estaduais
+        cx_, cy_ = P(p["capital"]["lon"], p["capital"]["lat"])
+        r = 7 if p["capital_federal"] else 5
+        d.ellipse([cx_ - r, cy_ - r, cx_ + r, cy_ + r], fill=(200, 40, 40), outline=(255, 255, 255), width=2)
     f_uf, f_lt = fonte(30, 800), fonte(22, 600)
     f_uf_p, f_lt_p = fonte(20, 800), fonte(16, 600)
     pequenos = {"DF", "SE", "AL", "RJ", "ES", "RN", "PB"}
@@ -81,7 +85,7 @@ def main() -> int:
     for e in pais["estados"]:
         uf = e["uf"]
         x, y = P(*e["rotulo"])
-        t1, t2 = uf, str(perfis[uf]["lotes"])
+        t1, t2 = uf, ("capital" if perfis[uf]["capital_federal"] else str(perfis[uf]["vagas_base"]))
         fu, fl = (f_uf_p, f_lt_p) if uf in pequenos else (f_uf, f_lt)
         if uf in deslocar:
             dx, dy = deslocar[uf]
@@ -91,7 +95,7 @@ def main() -> int:
         d.text((x, y), t1, font=fu, fill=TEXTO, anchor="ms")
         d.text((x, y + 4), t2, font=fl, fill=TEXTO, anchor="mt")
 
-    d.text((marg, 30), "Brasil: 27 estados, sigla e lotes", font=fonte(40, 800), fill=TEXTO)
+    d.text((marg, 30), "Brasil: 27 estados, sigla e vagas de base (servidor de 2.000)", font=fonte(40, 800), fill=TEXTO)
     d.text((marg, 78), "Contornos simplificados de game/data/mundo/BR.json (Natural Earth 1:10m, domínio público)",
            font=fonte(20, 500), fill=TEXTO)
     yl = alt - rodape + 30
@@ -102,7 +106,7 @@ def main() -> int:
         xl += 230
     tam = os.path.getsize(a.pais)
     nv = sum(len(an) // 2 for e in pais["estados"] for an in e["poligonos"])
-    d.text((marg, yl + 45), "Lotes = round(clamp(40 + 32,9 × log10(área IBGE / 5760), 40, 120)). "
+    d.text((marg, yl + 45), "Vagas repartidas pelo peso = round(clamp(40 + 32,9 × log10(área IBGE / 5760), 40, 120)); DF é a capital federal. "
            f"Arquivo: {tam // 1000} KB, {nv} vértices.", font=fonte(20, 500), fill=TEXTO)
     d.text((marg, yl + 75), pais["geracao"]["tolerancia"], font=fonte(18, 500), fill=TEXTO)
     os.makedirs(os.path.dirname(os.path.abspath(a.saida)), exist_ok=True)

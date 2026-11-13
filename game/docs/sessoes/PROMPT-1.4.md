@@ -7,7 +7,8 @@ Responda em português do Brasil, de forma direta. Branch de partida: `claude/ze
 - Jogo moderno de base e estratégia com mapa real; nome provisório "MUNDO". Piloto Brasil, Fase A offline.
 - **Modo retrato** (decisão do dono): arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Todo ciclo e toda tela pensados para uma mão, em retrato.
 - **Servidor = país, estado com muitos jogadores, DF como capital** e presidência por guerra (`DESENHO_MUNDO_v0.1.md`, decisão 10 e seção 4.1). Na Fase A, as outras bases e alianças são NPC.
-- Aprovados: desenho do mundo v0.1, 13 construções com níveis 1 a 30, visual e guia de arte, marcos M8 a M13. M1 pronto na 1.3; M2 gerado e dependente das decisões da seção 7 do `MUNDO_BRASIL_DADOS_v0.1.md` (conferir no registro o que o dono decidiu).
+- Aprovados: desenho do mundo v0.1, 13 construções com níveis 1 a 30, visual e guia de arte, marcos M8 a M13. M1 e M2 fechados na 1.3 (`BR_perfis.json` com 2.000 vagas, DF capital federal, capitais estaduais, bônus por região). Aprovados também os números de `SOCIEDADE_ECONOMIA_v0.1.md`.
+- **Ritmo (decisão do dono):** temporada de 30 dias; governo por volta do dia 15 e presidência por volta do dia 30; sem pagar, nível 20 em 30 dias (30 em cerca de 60); pagando, nível 30 na metade do tempo. As curvas atuais levam o QG ao 30 em cerca de 4 dias de obra: reajustar tempo, custo e produção (ou o número de níveis) para bater essas metas, com simulação de um jogador pagante e um não pagante.
 
 ## Objetivo
 

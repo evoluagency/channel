@@ -116,7 +116,7 @@ def main() -> int:
     est = sorted(json.load(open(a.perfis, encoding="utf-8"))["estados"], key=lambda e: e["area_oficial_km2"])
     res = {}
     for e in est:
-        res[e["uf"]] = {lig: simular(e["lotes"], lig) for lig in (False, True)}
+        res[e["uf"]] = {lig: simular(e["peso"], lig) for lig in (False, True)}
     for lig, rot in ((False, "SEM compensação"), (True, f"COM compensação (gama {GAMA}, tau {TAU}, beta {BETA})")):
         print(f"\n### {rot}: valor relativo à mediana dos 27 (1,00 = mediana)\n")
         for chave, nome in (("prod", "produção/h"), ("poder", "poder"), ("poder_c", "poder compensado")):
@@ -128,7 +128,7 @@ def main() -> int:
             print("|---|---|" + "---|" * len(DIAS))
             for e in est:
                 u = e["uf"]
-                print(f"| {u} | {e['lotes']} | " + " | ".join(f"{res[u][lig][x][chave] / med[x]:.2f}".replace(".", ",") for x in DIAS) + " |")
+                print(f"| {u} | {e['peso']} | " + " | ".join(f"{res[u][lig][x][chave] / med[x]:.2f}".replace(".", ",") for x in DIAS) + " |")
             amp = {x: max(res[u][lig][x][chave] for u in res) / min(res[u][lig][x][chave] for u in res) for x in DIAS}
             print("| maior/menor | | " + " | ".join(f"{amp[x]:.2f}".replace(".", ",") for x in DIAS) + " |\n")
     print("QG no dia (DF / AM, com compensação):", [(x, res['DF'][True][x]['qg'], res['AM'][True][x]['qg']) for x in DIAS])

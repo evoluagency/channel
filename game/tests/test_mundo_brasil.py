@@ -35,8 +35,8 @@ TOL_AREA = {"AC": 7.0}
 CAMPOS_G = {"uf", "nome", "area_km2", "centroide", "rotulo", "caixa", "litoral", "litoral_km",
             "fronteira_exterior_km", "vizinhos", "divisas_km", "poligonos"}
 CAMPOS_P = {"uf", "nome", "regiao", "area_oficial_km2", "area_calculada_km2", "diferenca_area_pct",
-            "lotes", "bioma_dominante", "biomas", "litoral", "litoral_km", "vizinhos", "vocacao",
-            "recursos_fortes"}
+            "peso", "vagas_base", "capital_federal", "capital", "bioma_dominante", "biomas", "litoral",
+            "litoral_km", "vizinhos", "vocacao", "bonus_regiao_pct"}
 RECURSOS = {"alimentos", "materiais", "metal", "energia"}
 BIOMAS = {"Amazônia", "Cerrado", "Caatinga", "Mata Atlântica", "Pantanal", "Pampa"}
 
@@ -47,6 +47,24 @@ def lotes_formula(a):
 
 def aneis(e):
     return [list(zip(p[0::2], p[1::2])) for p in e["poligonos"]]
+
+
+def dist_borda_km(uf, lon, lat):
+    """0 se o ponto está dentro do estado; senão a distância aproximada até a borda, em km."""
+    x, y = lon * 1e4, lat * 1e4
+    dentro = False
+    melhor = float("inf")
+    k = math.cos(math.radians(lat))
+    for r in aneis(G[uf]):
+        for i in range(len(r)):
+            (x1, y1), (x2, y2) = r[i], r[(i + 1) % len(r)]
+            if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+                dentro = not dentro
+            dx, dy = (x2 - x1) * k, y2 - y1
+            L = dx * dx + dy * dy
+            t = 0 if L == 0 else max(0, min(1, ((x - x1) * k * dx + (y - y1) * dy) / L))
+            melhor = min(melhor, math.hypot((x - x1) * k - t * dx, y - y1 - t * dy))
+    return 0.0 if dentro else melhor / 1e4 * 111.2
 
 
 def orient(p, q, r):
@@ -95,7 +113,7 @@ checks["formato"] = pais["formato"] == "mundo-pais/1" and perf["formato"] == "mu
 checks["fonte_registrada"] = len(pais["fonte"]["sha256"]) == 64 and len(pais["fonte"]["commit"]) == 40 \
     and "domínio público" in pais["fonte"]["licenca"] and (FERR / "FONTE.md").exists()
 checks["campos_geometria"] = all(set(e) == CAMPOS_G for e in pais["estados"])
-checks["campos_perfis"] = all(set(e) == CAMPOS_P and all(v not in (None, "", []) or k == "vizinhos" for k, v in e.items())
+checks["campos_perfis"] = all(set(e) == CAMPOS_P and all(v not in (None, "", [], {}) or k == "vizinhos" for k, v in e.items())
                               for e in perf["estados"])
 dif = {uf: 100 * (G[uf]["area_km2"] / P[uf]["area_oficial_km2"] - 1) for uf in UFS}
 checks["area_5pct_ibge"] = all(abs(d) <= TOL_AREA.get(uf, 5.0) for uf, d in dif.items())
@@ -112,14 +130,20 @@ checks["centroide_na_caixa"] = all(e["caixa"][0] <= e[c][0] * 1e4 <= e["caixa"][
                                    for e in pais["estados"] for c in ("centroide", "rotulo"))
 checks["poligonos_validos"] = all(len(p) >= 6 and len(p) % 2 == 0 for e in pais["estados"] for p in e["poligonos"])
 checks["sem_cruzamentos"] = cruzamentos() == 0
-checks["lotes_formula"] = all(P[u]["lotes"] == lotes_formula(P[u]["area_oficial_km2"]) for u in UFS)
-checks["lotes_40_120"] = all(40 <= P[u]["lotes"] <= 120 for u in UFS) and P["DF"]["lotes"] == 40 and P["AM"]["lotes"] == 120
+checks["peso_formula"] = all(P[u]["peso"] == lotes_formula(P[u]["area_oficial_km2"]) for u in UFS)
+checks["peso_40_120"] = all(40 <= P[u]["peso"] <= 120 for u in UFS) and P["DF"]["peso"] == 40 and P["AM"]["peso"] == 120
 ordem = sorted(UFS, key=lambda u: P[u]["area_oficial_km2"])
-checks["lotes_monotonicos"] = all(P[a]["lotes"] <= P[b]["lotes"] for a, b in zip(ordem, ordem[1:]))
+checks["peso_monotonico"] = all(P[a]["peso"] <= P[b]["peso"] for a, b in zip(ordem, ordem[1:]))
+hab = [u for u in ordem if u != "DF"]
+checks["vagas_2000_df_capital"] = sum(P[u]["vagas_base"] for u in UFS) == 2000 and P["DF"]["vagas_base"] == 0 \
+    and [u for u in UFS if P[u]["capital_federal"]] == ["DF"] and all(P[u]["vagas_base"] > 0 for u in hab) \
+    and all(P[a]["vagas_base"] <= P[b]["vagas_base"] for a, b in zip(hab, hab[1:]))
+checks["capitais_no_estado"] = all(dist_borda_km(u, P[u]["capital"]["lon"], P[u]["capital"]["lat"]) <= 2.0 for u in UFS)
 checks["perfis_coerentes"] = all(P[u]["vizinhos"] == G[u]["vizinhos"] and P[u]["litoral"] == G[u]["litoral"]
                                  and P[u]["area_calculada_km2"] == G[u]["area_km2"] for u in UFS)
-checks["biomas_recursos"] = all(P[u]["bioma_dominante"] == P[u]["biomas"][0] and set(P[u]["biomas"]) <= BIOMAS
-                                and len(P[u]["recursos_fortes"]) == 2 and set(P[u]["recursos_fortes"]) <= RECURSOS for u in UFS)
+checks["biomas_regioes"] = all(P[u]["bioma_dominante"] == P[u]["biomas"][0] and set(P[u]["biomas"]) <= BIOMAS
+                               and 2 <= len(P[u]["bonus_regiao_pct"]) <= 3 and set(P[u]["bonus_regiao_pct"]) <= RECURSOS
+                               and sum(P[u]["bonus_regiao_pct"].values()) == 20 for u in UFS)
 checks["tamanho_ate_1MB"] = (DADOS / "BR.json").stat().st_size <= 1_000_000
 
 with tempfile.TemporaryDirectory() as tmp:

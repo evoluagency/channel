@@ -11,7 +11,7 @@ Sessão 1.3, 13/11/2026. Marcos **M1** (Brasil gerado do dado aberto) e **M2** (
 | `tools/mundo/folha_conferencia.py` | Folha `game/docs/imagens/mundo/BR_conferencia.png` (precisa do Pillow, só para a imagem). |
 | `tools/mundo/simular_lotes.py` | Simulação das compensações de tamanho (seção 5). |
 | `tools/mundo/FONTE.md` | Licença, origem, SHA-256 e limitações da fonte. |
-| `game/tests/test_mundo_brasil.py` | 23 checagens; entra no `tools/run_valdora_tests.sh` (também no `--py`). |
+| `game/tests/test_mundo_brasil.py` | 25 checagens; entra no `tools/run_valdora_tests.sh` (também no `--py`). |
 
 Regerar tudo: `python3 -I tools/mundo/gerar_pais.py && python3 -I tools/mundo/gerar_perfis.py && python3 -I tools/mundo/folha_conferencia.py`.
 
@@ -96,6 +96,8 @@ Para cada estado: sigla, nome, região, área oficial (IBGE 2022) e calculada co
 Diferenças de área acima de 1,5%, todas da fonte: **AC −6,4%** (divisa AC–AM com o traçado antigo; exceção registrada no teste, limite de 7%), **RS −3,3%** (lagoas dos Patos e Mirim fora do polígono), **AP −2,4%** (ilhas e estuário). O total do país fica 0,45% abaixo do oficial.
 
 ## 7. Decisões do dono
+
+> **Fechado em 13/11/2026:** o dono aprovou a folha de conferência e as propostas. Resultado em `BR_perfis.json` (`mundo-perfis/1`): o campo `lotes` virou `peso`; entraram `vagas_base` (2.000 por servidor, DF com 0), `capital_federal`, `capital` (capital estadual, conferida dentro do estado) e `bonus_regiao_pct` (substitui os recursos fortes por estado). Decisões 3 a 6 aceitas como propostas; a 1 caiu com as bases iguais; a 2 virou o bônus por região.
 
 > **Atualização (13/11/2026):** o dono decidiu que cada estado é um terreno com muitos jogadores e que o servidor é o país, com o DF como capital (`DESENHO_MUNDO_v0.1.md`, decisão 10 e seção 4.1). Com bases de tamanho igual para todos, a decisão 1 abaixo deixa de ser necessária, e o número de lotes do estado vira o peso dele na repartição das vagas de base. A simulação da seção 5 continua válida como estudo, caso as bases venham a ter tamanhos diferentes.
 

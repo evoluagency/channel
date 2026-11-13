@@ -6,10 +6,10 @@ Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PRO
 ## Feito
 
 1. **M1:** `tools/mundo/gerar_pais.py` gera `game/data/mundo/BR.json` (formato `mundo-pais/1`, 241 KB) do Natural Earth 1:10m. Escolhida a 1:10m em vez da 1:50m (litoral e divisas mais finos, mundo todo, vértices idênticos nas divisas). Simplificação por arco com tolerância proporcional ao tamanho do estado (0,001 × raiz da área, ajustada ao modo retrato com zoom) e refino automático contra cruzamentos.
-2. **M2 (aguarda decisões do dono):** `tools/mundo/gerar_perfis.py` gera `game/data/mundo/BR_perfis.json` (`mundo-perfis/1`).
+2. **M2 (fechado, aprovado pelo dono):** `tools/mundo/gerar_perfis.py` gera `game/data/mundo/BR_perfis.json` (`mundo-perfis/1`).
 3. **Simulação** das compensações de tamanho: `tools/mundo/simular_lotes.py`.
 4. **Folha de conferência:** `game/docs/imagens/mundo/BR_conferencia.png` (enviada ao dono antes de fechar os perfis).
-5. **Testes:** `game/tests/test_mundo_brasil.py` 23/23, no `tools/run_valdora_tests.sh`.
+5. **Testes:** `game/tests/test_mundo_brasil.py` 25/25, no `tools/run_valdora_tests.sh`.
 6. Documento da sessão: `game/docs/MUNDO_BRASIL_DADOS_v0.1.md` (formato, tolerância, simulação, tabela dos 27, decisões). Tabela do desenho atualizada (BA 106, PE 81, MT com Amazônia dominante).
 
 ## Decisão do dono recebida nesta sessão
@@ -18,13 +18,17 @@ Jogo em **modo retrato**, com arrastar, pinça, zoom de afastar limitado, botão
 
 E as decisões de **sociedade e economia** (movimentos, poder pacífico ou à força, regiões, migração, mercado e banco), registradas em `game/docs/SOCIEDADE_ECONOMIA_v0.1.md` com propostas numéricas para a 1.4.
 
-## Decisões do dono abertas nesta sessão
+## Aprovado no fim da sessão
+
+O dono aprovou a folha, as propostas do M2, o servidor (80 lotes, 2.000 vagas, DF sem bases) e os números de `SOCIEDADE_ECONOMIA_v0.1.md`. Decidiu o ritmo: temporada de 30 dias; sem pagar, nível 20 em 30 dias; pagando, nível 30 na metade do tempo (seção 8 daquele documento).
+
+## Decisões abertas durante a sessão (já respondidas)
 
 Seção 7 do `MUNDO_BRASIL_DADOS_v0.1.md`: (1) compensação só por densidade, `(80/lotes)^0,75` na produção e no poder; (2) dois recursos fortes por estado, +5% cada; (3) MT com Amazônia dominante; (4) aceitar a área menor do Acre na geometria; (5) DF sem divisa com MG; (6) ilhas oceânicas fora do piloto. E o OK da folha de conferência.
 
 ## Verificação
 
-- `python3 -I game/tests/test_mundo_brasil.py`: 23/23, inclusive regenerar duas vezes e comparar o SHA-256 com o arquivo versionado (a fonte precisa estar em `tools/mundo/.cache/`; sem ela essa checagem aparece como PULADA).
+- `python3 -I game/tests/test_mundo_brasil.py`: 25/25, inclusive regenerar duas vezes e comparar o SHA-256 com o arquivo versionado (a fonte precisa estar em `tools/mundo/.cache/`; sem ela essa checagem aparece como PULADA).
 - `tools/run_valdora_tests.sh --py`: 7/7. Smokes Godot não rodados: o jogo não mudou.
 - Nada publicado: sem push na `main`, deploy, OTA ou workflow.
 

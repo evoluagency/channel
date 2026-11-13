@@ -1,6 +1,6 @@
 # Mundo — Sociedade, poder e economia (v0.1)
 
-Escrito em 13/11/2026 (sessão 1.3), a partir das decisões do dono. Complementa `DESENHO_MUNDO_v0.1.md` (decisão 10 e seção 4.1). **O que está marcado como decisão veio do dono; o resto é proposta**, com números de partida para a sessão 1.4 balancear. Nada implementado.
+Escrito em 13/11/2026 (sessão 1.3), a partir das decisões do dono. **Propostas aprovadas pelo dono em 13/11/2026** (termo "movimento", taxas, colchão, regiões, migração, investimento, ciclo); os números seguem como ponto de partida para a sessão 1.4 balancear. Complementa `DESENHO_MUNDO_v0.1.md` (decisão 10 e seção 4.1). **O que está marcado como decisão veio do dono; o resto é proposta**, com números de partida para a sessão 1.4 balancear. Nada implementado.
 
 ## 1. Decisões do dono (13/11/2026)
 
@@ -84,6 +84,14 @@ Materiais ficam fortes só em duas regiões, o que cria comércio. Isso substitu
 
 Tudo isso existe primeiro contra o jogo: movimentos NPC, eleições e guerras civis NPC, mercado com compradores e vendedores NPC e banco local. Regras determinísticas (mesma seed, mesmo resultado). O mercado entre jogadores reais, o voto e o banco compartilhado exigem o servidor (M10).
 
-## 8. Pendente do dono
+## 8. Ritmo da temporada (decisão do dono, 13/11/2026)
 
-Termo "movimento" ou "partido"; taxas (banco 2% + 2%, mercado 5%, estadual 0 a 3%); parte do colchão perdida em ataque (20%); tabela das regiões; espera da migração (7 dias); redução máxima por investimento (50%); ciclo do governo (semanal).
+- Temporada de **30 dias**: governo do estado por volta do dia 15, presidência por volta do dia 30.
+- Sem pagar: **nível 20 em 30 dias**, nível 30 em cerca de 60.
+- Pagando: **nível 30 na metade do tempo** (cerca de 30 dias). Se preciso, mais níveis.
+- Como o ciclo de governo é semanal (seção 3), a temporada tem cerca de 4 ciclos estaduais; a disputa da presidência fica na última semana.
+- As curvas de tempo atuais (`COMPONENTES_NIVEIS_v0.1.md`) levam o QG ao nível 30 em cerca de 4 dias de obra; a sessão 1.4 reajusta tempo, custo e produção para essas metas.
+
+## 9. Aprovado
+
+Termo "movimento"; taxas (banco 2% + 2%, mercado 5%, estadual 0 a 3%); 20% do colchão em ataque; tabela das regiões (já em `BR_perfis.json`); migração com espera de 7 dias; redução máxima de 50% por investimento; ciclo semanal. Aprovados como ponto de partida em 13/11/2026.
