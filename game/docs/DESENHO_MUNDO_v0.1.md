@@ -17,6 +17,7 @@ Este documento é proposta. Valores numéricos são ponto de partida de balancea
 7. Reaproveitar do Valdora só o que for reutilizável (seção 9).
 8. Fase A offline e local antes de qualquer servidor; online fica na G3.
 9. **Modo retrato** (13/11/2026, sessão 1.3): o jogo inteiro roda com o celular em pé. Navegação na seção 3.1.
+10. **Servidor = país; estado = terreno com muitos jogadores** (13/11/2026, sessão 1.3). Cada estado é habitado por vários jogadores, cada um com a sua base. O **Distrito Federal é a capital**: os jogadores dos estados se organizam e disputam a capital em guerra; quem a controla torna-se o **presidente do servidor**. Primeiro objetivo: um servidor Brasil com milhares de jogadores. Servidores de outros países e de regiões (América do Sul, Central, do Norte etc.) ficam para atualizações futuras. Regras propostas na seção 4.1; substitui a ideia de "um estado por jogador" das seções 4 e 5.
 
 **Pendentes (nenhum bloqueia o documento, mas bloqueiam a arte e o nome)**
 
@@ -53,7 +54,7 @@ O jogo é em **retrato**. Referência de tela: 1080 × 2340 px (proporção 9:19
 - **Toque num estado** (na vista do país) abre aquele estado e mostra as bases dos outros jogadores que estão nele.
 - Pontos de toque com pelo menos 48 dp; estados pequenos (DF, SE, AL) recebem uma área de toque maior que o desenho.
 
-**Pergunta aberta ao dono:** "as bases dos outros jogadores" dentro de um estado indica que **um estado terá vários jogadores**. O desenho atual (seção 5) prevê um estado por jogador, com 40 a 120 lotes só dele. Com 27 estados, isso limita o Brasil a 27 jogadores por mundo. É preciso decidir entre (a) um jogador por estado, em vários mundos paralelos de 27; ou (b) vários jogadores por estado, cada um com sua base, e o estado como região disputada. A escolha muda o sentido dos lotes e o M4.
+**Respondida em 13/11/2026 (decisão 10):** vários jogadores por estado; ver a seção 4.1. Texto original da pergunta: "as bases dos outros jogadores" dentro de um estado indica que **um estado terá vários jogadores**. O desenho atual (seção 5) prevê um estado por jogador, com 40 a 120 lotes só dele. Com 27 estados, isso limita o Brasil a 27 jogadores por mundo. É preciso decidir entre (a) um jogador por estado, em vários mundos paralelos de 27; ou (b) vários jogadores por estado, cada um com sua base, e o estado como região disputada. A escolha muda o sentido dos lotes e o M4.
 
 ## 4. O jogador e o estado
 
@@ -78,7 +79,30 @@ Com isso o Distrito Federal tem 40 lotes e o Amazonas 120, em vez de 260 vezes d
 
 **Bônus de vocação:** pequeno (cerca de 5 a 10%). Nenhum estado é "o melhor". A estrutura exclusiva só funciona em quem a construiu; o produto dela pode ser comerciado.
 
+### 4.1 Servidor, estados habitados e presidência (proposta sobre a decisão 10)
+
+**Hierarquia nova:** Servidor (país) → Estado (terreno compartilhado) → Base do jogador (lotes) → Prédios.
+
+**Base do jogador.** Todas as bases têm o **mesmo tamanho** (proposta: 80 lotes, liberados pela tabela do QG, de 15% a 95%). Assim nenhum jogador nasce mais forte pelo estado onde mora, e a compensação por densidade estudada na sessão 1.3 deixa de ser necessária. O estado dá identidade: bioma, vocação, recursos fortes (+5%) e vizinhos.
+
+**Quantos jogadores.** O servidor tem uma capacidade total de bases, repartida entre os estados pela fórmula de tamanho da seção 4 (o antigo número de "lotes" do estado vira o **peso** dele). Proposta: **2.000 bases por servidor Brasil** para começar. Com esse total, o menor estado habitado (SE) recebe 50 vagas e o maior (AM) 101. Quando o servidor enche, abre-se um novo servidor Brasil (Brasil 1, Brasil 2...), o padrão do gênero. O número é um parâmetro: subir para 5.000 só muda a escala (SE 124, AM 252). A conta de custo e capacidade do servidor online (M10) decide o teto real.
+
+**Distrito Federal.** Proposta: o DF **não recebe bases de jogador**; é a zona da capital, neutra no começo da temporada e disputada. As vagas dele são redistribuídas entre os 26 estados habitados.
+
+**Caminho até a presidência (proposta):**
+1. O jogador escolhe o estado onde vai morar (atribuição: decisão pendente, seção 5) e entra numa aliança.
+2. Cada estado tem a sua **capital estadual** (posição real da capital no mapa) como ponto de disputa. A aliança que a controla governa o estado: título de governador para o líder e um bônus pequeno para o estado.
+3. Em janelas marcadas da temporada, as alianças disputam a **capital federal (DF)** em guerra. Quem a controla ao fim da janela faz o **presidente do servidor**.
+4. O presidente distribui cargos (ministérios com bônus pequenos para o servidor ou para alianças) até a próxima disputa.
+5. Mais tarde: guerra entre servidores (países) e entre regiões, em atualizações futuras.
+
+**Fase A (offline):** o jogador mora num estado com bases NPC ao redor; governos estaduais e a presidência são disputados contra alianças NPC, com regras determinísticas.
+
+**Pendente do dono:** tamanho fixo da base (80 lotes), capacidade de 2.000 bases, DF sem bases, cargos do presidente.
+
 ## 5. Piloto Brasil: os 27 estados
+
+> Pela decisão 10, a coluna "Lotes" passa a ser o **peso** do estado na repartição das vagas de base do servidor (seção 4.1), e não o tamanho da base de um jogador.
 
 Lotes pela fórmula acima, com as áreas oficiais aproximadas (IBGE). Conferido na sessão 1.3 (`MUNDO_BRASIL_DADOS_v0.1.md`): BA e PE corrigidos pela fórmula (105 → 106 e 80 → 81) e MT com a Amazônia como bioma dominante (proposta). Dados finais em `game/data/mundo/BR_perfis.json`. Bioma e vocação são **proposta** para revisão; vocações são fictícias e só inspiradas no perfil econômico geral.
 

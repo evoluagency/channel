@@ -14,7 +14,7 @@ Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PRO
 
 ## Decisão do dono recebida nesta sessão
 
-Jogo em **modo retrato**, com arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Em aberto: quantos jogadores cabem num estado (ver a seção 3.1).
+Jogo em **modo retrato**, com arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Também decidido: **servidor = país, estado com muitos jogadores, DF como capital** disputada pela presidência (`DESENHO_MUNDO_v0.1.md`, decisão 10 e seção 4.1). Propostas pendentes: base de 80 lotes igual para todos, 2.000 bases por servidor, DF sem bases. Depois do OK, `gerar_perfis.py` ganha o campo de vagas e o teste correspondente (trabalho para o Sonnet).
 
 ## Decisões do dono abertas nesta sessão
 

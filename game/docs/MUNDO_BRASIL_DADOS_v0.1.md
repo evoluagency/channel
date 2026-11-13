@@ -97,6 +97,8 @@ Diferenças de área acima de 1,5%, todas da fonte: **AC −6,4%** (divisa AC–
 
 ## 7. Decisões do dono
 
+> **Atualização (13/11/2026):** o dono decidiu que cada estado é um terreno com muitos jogadores e que o servidor é o país, com o DF como capital (`DESENHO_MUNDO_v0.1.md`, decisão 10 e seção 4.1). Com bases de tamanho igual para todos, a decisão 1 abaixo deixa de ser necessária, e o número de lotes do estado vira o peso dele na repartição das vagas de base. A simulação da seção 5 continua válida como estudo, caso as bases venham a ter tamanhos diferentes.
+
 | # | Decisão | Proposta |
 |---|---|---|
 | 1 | Compensação de tamanho | Só densidade: produção e poder por prédio × `(80/lotes)^0,75`. Transporte e tempo de obra sem penalidade por tamanho (pioram o equilíbrio). |
