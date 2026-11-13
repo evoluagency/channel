@@ -7,7 +7,7 @@ mesmo arquivo, byte a byte.
 Uso:
   python3 -I tools/mundo/gerar_pais.py                 # baixa (se preciso), confere e gera
   python3 -I tools/mundo/gerar_pais.py --fonte F.geojson --saida X.json
-  python3 -I tools/mundo/gerar_pais.py --fator 0.002 --relatorio
+  python3 -I tools/mundo/gerar_pais.py --fator 0.001 --relatorio
 
 A fonte bruta (cerca de 40 MB) não é versionada: fica em tools/mundo/.cache/
 (ignorada pelo git) e é conferida pelo SHA-256 abaixo antes de usar.
@@ -46,11 +46,12 @@ FONTE_SHA256 = "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5
 FONTE_CACHE = os.path.join(AQUI, ".cache", "ne_10m_admin_1_states_provinces.geojson")
 
 # Tolerância do Douglas-Peucker por estado: FATOR_TOL x raiz da área (o "diâmetro"),
-# limitada a [TOL_MIN_M, TOL_MAX_M]. Com 0,002, o erro fica em cerca de 2 px quando o
-# estado ocupa 1080 px da tela. Cada arco usa a menor tolerância entre os estados que
-# o tocam, para a divisa ser uma só dos dois lados.
-FATOR_TOL = 0.002
-TOL_MIN_M = 100.0
+# limitada a [TOL_MIN_M, TOL_MAX_M]. Com 0,001, o erro fica em cerca de 2 px quando o
+# estado ocupa duas larguras de tela em retrato (2 x 1080 px), o zoom máximo do mapa.
+# Abaixo disso o limite é a própria fonte (1:10m). Cada arco usa a menor tolerância
+# entre os estados que o tocam, para a divisa ser uma só dos dois lados.
+FATOR_TOL = 0.001
+TOL_MIN_M = 30.0
 TOL_MAX_M = 2500.0
 ILHA_MIN_KM2 = 100.0       # polígonos menores são descartados (ex.: Fernando de Noronha)
 QUANT = 10000              # coordenadas gravadas como inteiros de 0,0001 grau

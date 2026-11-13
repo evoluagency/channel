@@ -16,6 +16,7 @@ Este documento é proposta. Valores numéricos são ponto de partida de balancea
 6. **Brasil como piloto**, com os 27 estados; um estado por jogador, cada um com tamanho e perfil próprios.
 7. Reaproveitar do Valdora só o que for reutilizável (seção 9).
 8. Fase A offline e local antes de qualquer servidor; online fica na G3.
+9. **Modo retrato** (13/11/2026, sessão 1.3): o jogo inteiro roda com o celular em pé. Navegação na seção 3.1.
 
 **Pendentes (nenhum bloqueia o documento, mas bloqueiam a arte e o nome)**
 
@@ -39,6 +40,20 @@ Hierarquia: **Mundo → Continente (ambiente) → País → Estado (território 
 - **Territórios disputados** (por exemplo Taiwan, Crimeia, Caxemira): aparecem como **zona neutra**, como a Antártida, sem escolher lado. Proposta; precisa do OK do dono.
 - **Antártida:** nenhuma unidade pertence a jogador. Zonas de recurso e evento disputadas por todos. Não entra no piloto.
 - **Resolução:** a tela mostra o estado do jogador em detalhe e os vizinhos simplificados. O mapa-múndi completo é só navegação.
+
+### 3.1 Tela e navegação (decisão do dono, 13/11/2026)
+
+O jogo é em **retrato**. Referência de tela: 1080 × 2340 px (proporção 9:19,5; telas mais curtas só mostram menos na altura).
+
+- **O conteúdo não precisa caber na tela.** O jogador arrasta com um dedo em qualquer direção para ver o resto e usa dois dedos (pinça) para aproximar e afastar.
+- **Afastar tem limite.** O zoom de afastar para quando o próprio estado ainda é legível: proposta, o estado nunca fica com menos de 60% da largura da tela. Assim ele nunca vira um ponto minúsculo.
+- **Aproximar tem limite.** No mapa, até o estado ocupar duas larguras de tela; o arquivo `BR.json` foi simplificado para esse zoom (erro de cerca de 2 px). Mais perto que isso é a vista dos lotes e prédios (M4).
+- **Arrastar tem limite.** Até a caixa do próprio estado mais meia tela de folga, para ver as divisas e os vizinhos sem se perder.
+- **Botão do país.** Um botão mostra o Brasil inteiro (vista macro). Em retrato, o Brasil cabe na largura e ocupa cerca de metade da altura; nessa vista também há arrastar e pinça, limitados ao país. Outro botão volta ao próprio estado.
+- **Toque num estado** (na vista do país) abre aquele estado e mostra as bases dos outros jogadores que estão nele.
+- Pontos de toque com pelo menos 48 dp; estados pequenos (DF, SE, AL) recebem uma área de toque maior que o desenho.
+
+**Pergunta aberta ao dono:** "as bases dos outros jogadores" dentro de um estado indica que **um estado terá vários jogadores**. O desenho atual (seção 5) prevê um estado por jogador, com 40 a 120 lotes só dele. Com 27 estados, isso limita o Brasil a 27 jogadores por mundo. É preciso decidir entre (a) um jogador por estado, em vários mundos paralelos de 27; ou (b) vários jogadores por estado, cada um com sua base, e o estado como região disputada. A escolha muda o sentido dos lotes e o M4.
 
 ## 4. O jogador e o estado
 
@@ -139,7 +154,7 @@ Servidor decide os resultados; jogadores reais no lugar dos NPC; temporadas (nov
 | M0 | Este documento aprovado; direção visual e nome escolhidos | OK do dono |
 | M1 | ✅ (1.3) Script que gera o Brasil a partir do dado aberto, arquivo em `game/data/mundo/` | Teste Python: 27 unidades, área e vizinhos corretos; tamanho do arquivo |
 | M2 | Perfis dos 27 estados e fórmula de lotes | Teste: faixa 40 a 120, ordem por área, nenhum estado com campo faltando |
-| M3 | Tela do mapa do Brasil em Godot (desenho dos contornos, toque para selecionar) | Smoke Godot + captura de tela |
+| M3 | Tela do mapa do Brasil em Godot, em retrato (contornos, arrastar, pinça com limites, botão do país, toque para selecionar; seção 3.1) | Smoke Godot + captura de tela |
 | M4 | Escolha do estado e Cidade nos lotes com o formato do estado | Smoke; save compatível e versionado |
 | M5 | NPC, tratado e bloco | Smoke determinístico |
 | M6 | Guerra por região contra NPC | Smoke determinístico |

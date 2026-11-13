@@ -5,12 +5,16 @@ Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PRO
 
 ## Feito
 
-1. **M1:** `tools/mundo/gerar_pais.py` gera `game/data/mundo/BR.json` (formato `mundo-pais/1`, 167 KB) do Natural Earth 1:10m. Escolhida a 1:10m em vez da 1:50m (litoral e divisas mais finos, mundo todo, vértices idênticos nas divisas). Simplificação por arco com tolerância proporcional ao tamanho do estado e refino automático contra cruzamentos.
+1. **M1:** `tools/mundo/gerar_pais.py` gera `game/data/mundo/BR.json` (formato `mundo-pais/1`, 241 KB) do Natural Earth 1:10m. Escolhida a 1:10m em vez da 1:50m (litoral e divisas mais finos, mundo todo, vértices idênticos nas divisas). Simplificação por arco com tolerância proporcional ao tamanho do estado (0,001 × raiz da área, ajustada ao modo retrato com zoom) e refino automático contra cruzamentos.
 2. **M2 (aguarda decisões do dono):** `tools/mundo/gerar_perfis.py` gera `game/data/mundo/BR_perfis.json` (`mundo-perfis/1`).
 3. **Simulação** das compensações de tamanho: `tools/mundo/simular_lotes.py`.
 4. **Folha de conferência:** `game/docs/imagens/mundo/BR_conferencia.png` (enviada ao dono antes de fechar os perfis).
 5. **Testes:** `game/tests/test_mundo_brasil.py` 23/23, no `tools/run_valdora_tests.sh`.
 6. Documento da sessão: `game/docs/MUNDO_BRASIL_DADOS_v0.1.md` (formato, tolerância, simulação, tabela dos 27, decisões). Tabela do desenho atualizada (BA 106, PE 81, MT com Amazônia dominante).
+
+## Decisão do dono recebida nesta sessão
+
+Jogo em **modo retrato**, com arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Em aberto: quantos jogadores cabem num estado (ver a seção 3.1).
 
 ## Decisões do dono abertas nesta sessão
 

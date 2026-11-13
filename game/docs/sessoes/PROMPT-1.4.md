@@ -5,6 +5,7 @@ Responda em português do Brasil, de forma direta. Branch de partida: `claude/ze
 ## Contexto
 
 - Jogo moderno de base e estratégia com mapa real; nome provisório "MUNDO". Piloto Brasil, Fase A offline.
+- **Modo retrato** (decisão do dono): arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Todo ciclo e toda tela pensados para uma mão, em retrato.
 - Aprovados: desenho do mundo v0.1, 13 construções com níveis 1 a 30, visual e guia de arte, marcos M8 a M13. M1 pronto na 1.3; M2 gerado e dependente das decisões da seção 7 do `MUNDO_BRASIL_DADOS_v0.1.md` (conferir no registro o que o dono decidiu).
 
 ## Objetivo

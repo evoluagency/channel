@@ -40,10 +40,10 @@ Escolhas: anéis prontos por estado (o jogo não precisa montar arcos); inteiros
 ## 4. Simplificação
 
 - **Por arco, não por estado.** Os contornos são quebrados em arcos (divisa entre dois estados, fronteira com outro país, litoral) e cada arco é simplificado uma vez. Os dois lados de uma divisa ficam idênticos: sem buraco nem sobreposição entre vizinhos.
-- **Tolerância proporcional ao tamanho.** Douglas-Peucker em metros, `0,002 × raiz(área do estado)`, entre 100 e 2.500 m. Com isso o erro fica em cerca de 2 px quando o estado ocupa 1.080 px da tela: DF 152 m, SE 294 m, SP 997 m, AM 2.500 m. Uma divisa usa a menor tolerância dos dois lados.
-- **Sem cruzamentos.** Se dois arcos passam a se cruzar, a tolerância deles cai à metade até não sobrar nenhum (7 arcos refeitos, de 108).
+- **Tolerância proporcional ao tamanho.** Douglas-Peucker em metros, `0,001 × raiz(área do estado)`, entre 30 e 2.500 m. O jogo é em retrato (1.080 px de largura) e o mapa aceita zoom até o estado ocupar duas larguras de tela; nesse zoom máximo o erro fica em cerca de 2 px: DF 76 m, SE 147 m, SP 499 m, AM 1.252 m. Mais perto que isso, o limite é a própria fonte (o DF já usa 76 dos 86 pontos dela). Uma divisa usa a menor tolerância dos dois lados. (Primeira escolha da sessão: 0,002, para o estado ocupar uma largura de tela; refeita depois da decisão do modo retrato com zoom.)
+- **Sem cruzamentos.** Se dois arcos passam a se cruzar, a tolerância deles cai à metade até não sobrar nenhum (4 arcos refeitos, de 108).
 - **Ilhas com menos de 100 km² saem** (15 polígonos): Fernando de Noronha (que a fonte atribui ao RN), São Pedro e São Paulo, Trindade e Martim Vaz, e ilhas costeiras pequenas (entre elas São Vicente, SP, e Itamaracá, PE). Ficam, por exemplo, Marajó, São Luís, Florianópolis e Ilhabela.
-- **Resultado:** 167 KB e 10.296 vértices (meta: até 1 MB). Área de cada estado a menos de 0,3% da fonte sem simplificar. Testadas também tolerâncias fixas (500 m: 221 KB; 1.500 m: 113 KB; 4.000 m: 58 KB): com valor fixo o DF ficava com 14 vértices.
+- **Resultado:** 241 KB e 15.131 vértices (meta: até 1 MB). Área de cada estado a menos de 0,3% da fonte sem simplificar. Testadas também tolerâncias fixas (500 m: 221 KB; 1.500 m: 113 KB; 4.000 m: 58 KB): com valor fixo de 1.500 m o DF ficava com 14 vértices.
 
 ## 5. Lotes e compensações de tamanho
 

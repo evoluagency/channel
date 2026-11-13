@@ -72,10 +72,11 @@ Defeitos encontrados:
 
 ### Brasil em dados: marcos M1 e M2 (sessão 1.3, 13/11/2026)
 
-- **M1 pronto:** `tools/mundo/gerar_pais.py` (Python puro) gera `game/data/mundo/BR.json` do Natural Earth 1:10m (domínio público; commit e SHA-256 fixos em `tools/mundo/FONTE.md`; fonte bruta de 40 MB não versionada). 167 KB, 10.296 vértices, 27 estados com área, centroide, ponto do rótulo, litoral, fronteira externa e vizinhos. Simplificação por arco (divisas idênticas dos dois lados), tolerância proporcional ao tamanho do estado (0,002 × raiz da área, 100 a 2.500 m), sem cruzamentos. Determinístico.
+- **M1 pronto:** `tools/mundo/gerar_pais.py` (Python puro) gera `game/data/mundo/BR.json` do Natural Earth 1:10m (domínio público; commit e SHA-256 fixos em `tools/mundo/FONTE.md`; fonte bruta de 40 MB não versionada). 241 KB, 15.131 vértices, 27 estados com área, centroide, ponto do rótulo, litoral, fronteira externa e vizinhos. Simplificação por arco (divisas idênticas dos dois lados), tolerância proporcional ao tamanho do estado (0,001 × raiz da área, 30 a 2.500 m, para o zoom do modo retrato), sem cruzamentos. Determinístico.
 - **M2 gerado, aguardando decisões do dono:** `game/data/mundo/BR_perfis.json` (região, área IBGE e calculada, lotes, biomas, vocação, recursos fortes). Fórmula de lotes mantida; BA 106 e PE 81 corrigidos pela fórmula; MT com Amazônia dominante (proposta).
 - Simulação das compensações (`tools/mundo/simular_lotes.py`): sem compensação o AM fica 3 vezes mais forte que o DF; com produção e poder por prédio × `(80/lotes)^0,75`, nenhum estado passa de ±21% da mediana. Transporte e tempo de obra por tamanho pioram o equilíbrio. Proposta e tabela dos 27 em `game/docs/MUNDO_BRASIL_DADOS_v0.1.md`, com 6 decisões do dono.
 - Folha de conferência: `game/docs/imagens/mundo/BR_conferencia.png`.
+- **Decisão do dono (13/11/2026): jogo em modo retrato**, com arrastar e pinça para zoom, zoom de afastar limitado para o próprio estado continuar legível, botão para ver o país inteiro e toque num estado para ver as bases dos outros jogadores. Regras em `DESENHO_MUNDO_v0.1.md`, seção 3.1.
 - Testes: `game/tests/test_mundo_brasil.py` 23/23 (entra no `tools/run_valdora_tests.sh`, também no `--py`). Nada do jogo instalado mudou.
 
 ## 2. O que está onde
