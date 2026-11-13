@@ -76,15 +76,16 @@ func ouro() -> StandardMaterial3D:
 	# o renderizador de compatibilidade não tem reflexo rico: ouro "pintado", não metálico
 	return mat(PALETA["ouro"], 0.3, 0.3, 0.05)
 
-func feixe(cor: Color, alfa := 0.35, energia := 3.0) -> StandardMaterial3D:
-	var chave := "feixe|%s|%.2f|%.2f" % [cor.to_html(), alfa, energia]
+func feixe(cor: Color, alfa := 0.35, energia := 3.0, aditivo := true) -> StandardMaterial3D:
+	var chave := "feixe|%s|%.2f|%.2f|%s" % [cor.to_html(), alfa, energia, aditivo]
 	if _mats.has(chave):
 		return _mats[chave]
 	var m := StandardMaterial3D.new()
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	m.albedo_color = Color(cor * energia, alfa)
 	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	if aditivo:
+		m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
 	m.no_depth_test = false
 	_mats[chave] = m
