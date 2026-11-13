@@ -1,6 +1,6 @@
 # Valdora 1.4 (Jogabilidade, ciclo diário e chat)
 
-Responda em português do Brasil, de forma direta. Branch de partida: `claude/zealous-tesla-kfhwld`. Leia antes de agir: `game/docs/ESTADO_DO_PROJETO.md`, `game/docs/sessoes/HANDOFF-1.3.md`, `game/docs/DESENHO_MUNDO_v0.1.md`, `game/docs/COMPONENTES_NIVEIS_v0.1.md` (seções 1, 2, 7 e 9 do chat) e `game/docs/MUNDO_BRASIL_DADOS_v0.1.md` (seções 5 a 7).
+Responda em português do Brasil, de forma direta. Branch de partida: `claude/zealous-tesla-kfhwld`. Leia antes de agir: `game/docs/ESTADO_DO_PROJETO.md`, `game/docs/sessoes/HANDOFF-1.3.md`, `game/docs/DESENHO_MUNDO_v0.1.md`, `game/docs/COMPONENTES_NIVEIS_v0.1.md` (seções 1, 2, 7 e 9 do chat) e `game/docs/MUNDO_BRASIL_DADOS_v0.1.md` (seções 5 a 7) e `game/docs/SOCIEDADE_ECONOMIA_v0.1.md` (decisões do dono sobre movimentos, poder, regiões, migração, mercado e banco).
 
 ## Contexto
 
@@ -14,7 +14,8 @@ Responda em português do Brasil, de forma direta. Branch de partida: `claude/ze
 Desenhar, em documento e dados (sem tela nova e sem mudar o jogo instalado), a jogabilidade da Fase A:
 
 1. **Ciclo diário:** o que o jogador faz em 5, 15 e 30 minutos por dia; produção offline (até 8 h), filas de obra (quantas obras simultâneas; a simulação da 1.3 supôs 2), missões diárias e baús.
-2. **Economia:** fluxo dos quatro recursos e das moedas por dia, por nível do QG, com as compensações de tamanho decididas; refazer `tools/mundo/simular_lotes.py` com os recursos travando as obras.
+2. **Economia:** fluxo dos quatro recursos e da moeda por dia e por nível do QG, com mercado, taxas do banco, colchão, rendimento, empréstimos com nota fiscal e aceleração de obra por investimento (`SOCIEDADE_ECONOMIA_v0.1.md`, seção 6). Simulação em Python mostrando que a moeda não perde valor (fontes e drenos equilibrados) e que nenhuma região fica claramente melhor.
+2b. **Poder:** regras numéricas de movimentos, eleição, guerra civil, governador e presidência (seção 3 do mesmo documento).
 3. **NPC:** bases e alianças NPC morando nos estados, governos estaduais e disputa da capital federal contra NPC; como crescem, comerciam e reagem (determinístico, mesma seed).
 4. **Chat:** canais (aliança, estado, global, sistema), o que existe offline na Fase A (mensagens de sistema e NPC) e o que fica para o servidor (M10), com moderação.
 5. **Testes Python** dos números novos e entrada no `tools/run_valdora_tests.sh`.

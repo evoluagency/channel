@@ -78,6 +78,7 @@ Defeitos encontrados:
 - Folha de conferência: `game/docs/imagens/mundo/BR_conferencia.png`.
 - **Decisão do dono (13/11/2026): jogo em modo retrato**, com arrastar e pinça para zoom, zoom de afastar limitado para o próprio estado continuar legível, botão para ver o país inteiro e toque num estado para ver as bases dos outros jogadores. Regras em `DESENHO_MUNDO_v0.1.md`, seção 3.1.
 - **Decisão do dono (13/11/2026): servidor = país; estado = terreno com muitos jogadores; DF é a capital**, disputada em guerra; quem a controla elege o presidente do servidor. Servidores de outros países e regiões em atualizações futuras. Proposta em `DESENHO_MUNDO_v0.1.md`, seção 4.1: base de tamanho igual para todos (80 lotes), 2.000 bases por servidor Brasil repartidas pelo peso de cada estado, DF sem bases. A coluna "lotes" de `BR_perfis.json` passa a ser esse peso; o arquivo muda quando o dono confirmar os números.
+- **Decisão do dono (13/11/2026): sociedade e economia.** Servidores com nome de país, movimentos (até 100 membros) que tomam o estado por voto ou guerra civil, recursos fortes por região, migração, comércio entre jogadores e o jogo como banco (colchão ou banco, taxas, empréstimos). Registro e propostas em `game/docs/SOCIEDADE_ECONOMIA_v0.1.md`; números ficam para a sessão 1.4.
 - Testes: `game/tests/test_mundo_brasil.py` 23/23 (entra no `tools/run_valdora_tests.sh`, também no `--py`). Nada do jogo instalado mudou.
 
 ## 2. O que está onde

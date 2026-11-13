@@ -16,6 +16,8 @@ Branch: `claude/zealous-tesla-kfhwld`. Registro único: `game/docs/ESTADO_DO_PRO
 
 Jogo em **modo retrato**, com arrastar, pinça, zoom de afastar limitado, botão do país e toque num estado para ver as bases dos outros jogadores (`DESENHO_MUNDO_v0.1.md`, seção 3.1). Também decidido: **servidor = país, estado com muitos jogadores, DF como capital** disputada pela presidência (`DESENHO_MUNDO_v0.1.md`, decisão 10 e seção 4.1). Propostas pendentes: base de 80 lotes igual para todos, 2.000 bases por servidor, DF sem bases. Depois do OK, `gerar_perfis.py` ganha o campo de vagas e o teste correspondente (trabalho para o Sonnet).
 
+E as decisões de **sociedade e economia** (movimentos, poder pacífico ou à força, regiões, migração, mercado e banco), registradas em `game/docs/SOCIEDADE_ECONOMIA_v0.1.md` com propostas numéricas para a 1.4.
+
 ## Decisões do dono abertas nesta sessão
 
 Seção 7 do `MUNDO_BRASIL_DADOS_v0.1.md`: (1) compensação só por densidade, `(80/lotes)^0,75` na produção e no poder; (2) dois recursos fortes por estado, +5% cada; (3) MT com Amazônia dominante; (4) aceitar a área menor do Acre na geometria; (5) DF sem divisa com MG; (6) ilhas oceânicas fora do piloto. E o OK da folha de conferência.

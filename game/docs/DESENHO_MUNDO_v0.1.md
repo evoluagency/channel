@@ -18,6 +18,7 @@ Este documento é proposta. Valores numéricos são ponto de partida de balancea
 8. Fase A offline e local antes de qualquer servidor; online fica na G3.
 9. **Modo retrato** (13/11/2026, sessão 1.3): o jogo inteiro roda com o celular em pé. Navegação na seção 3.1.
 10. **Servidor = país; estado = terreno com muitos jogadores** (13/11/2026, sessão 1.3). Cada estado é habitado por vários jogadores, cada um com a sua base. O **Distrito Federal é a capital**: os jogadores dos estados se organizam e disputam a capital em guerra; quem a controla torna-se o **presidente do servidor**. Primeiro objetivo: um servidor Brasil com milhares de jogadores. Servidores de outros países e de regiões (América do Sul, Central, do Norte etc.) ficam para atualizações futuras. Regras propostas na seção 4.1; substitui a ideia de "um estado por jogador" das seções 4 e 5.
+11. **Sociedade e economia** (13/11/2026, sessão 1.3): servidores com nome de país; **movimentos** de até 100 membros disputam o governo do estado por via pacífica ou guerra civil; regiões fortes em 2 ou 3 recursos; migração livre; comércio entre jogadores; o jogo é o banco (colchão ou banco, taxas, empréstimo por saúde fiscal); obra acelera com investimento. Detalhes e propostas em `SOCIEDADE_ECONOMIA_v0.1.md`; os movimentos substituem as alianças da seção 6 no nível do estado.
 
 **Pendentes (nenhum bloqueia o documento, mas bloqueiam a arte e o nome)**
 
