@@ -35,6 +35,12 @@ Defeitos encontrados:
 | Botões do topo (MÓDULOS e outros) desenhados por cima dos painéis de Heróis e Arena | `main.gd`: botões adicionados à mesma camada depois dos painéis | APK |
 | Mensagem de status do topo passa por baixo dos botões | `main.gd` | APK |
 
+### Direção visual e site novo (13/11/2026)
+
+- Guia em `docs/DIRECAO_VISUAL.md` (texto) e `docs/direcao-visual/guia-visual.html` (ilustrado).
+- Site refeito com cinco páginas na branch `claude/zealous-tesla-kfhwld`, sobre o `site/` da `main`. **Não publicado**: publicar exige "OK, subir" e gera 1 deploy.
+- Telas do jogo: Cidade pelo OTA (`city-10`, precisa da chave OTA); demais telas no APK junto com o CP013.
+
 ## 2. O que está onde
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |

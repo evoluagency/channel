@@ -1,0 +1,401 @@
+<title>Direção Visual Valdora</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Guia de direção visual Valdora v1 — mesma paleta e tipos de site/assets/valdora.css.
+   Layout: coluna única de leitura com índice fixo à esquerda no computador; amostras vivas em cada seção. */
+:root {
+  --noite: #0a0f22; --noite-2: #10183a; --noite-3: #19234d;
+  --violeta: #6a3fd4; --violeta-2: #8b5cf0; --violeta-3: #3a1f87; --violeta-luz: #b892ff;
+  --ouro: #e2b865; --ouro-2: #f5dc9c; --ouro-3: #9c7a3a;
+  --pedra: #ece6da; --texto: #e4e1ee; --texto-2: #a9a7c2;
+  --linha: rgba(226,184,101,.30); --linha-fria: rgba(184,146,255,.24);
+  --campo: #2f9e4f; --alerta: #f0a33c; --erro: #e35d6a;
+  --ferro: #a7b1c2; --nevoa: #7cc3d1; --aurora: #f2a7c8; --brasa: #ff8a4c;
+  --f-titulo: "Cinzel", Georgia, "Times New Roman", serif;
+  --f-texto: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --f-codigo: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(900px 420px at 90% -5%, rgba(106,63,212,.25), transparent 70%), var(--noite); color: var(--texto); font-family: var(--f-texto); font-size: 16px; line-height: 1.6; }
+a { color: var(--ouro-2); }
+a:focus-visible { outline: 2px solid var(--violeta-luz); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-titulo); color: var(--pedra); line-height: 1.15; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+code { font-family: var(--f-codigo); font-size: .88em; color: var(--ouro-2); }
+.pagina { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 48px; max-width: 1240px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (max-width: 900px) { .pagina { grid-template-columns: 1fr; gap: 24px; padding-block: 24px 60px; } }
+.indice { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); align-self: start; display: grid; gap: 4px; font-size: 14px; }
+.indice a { color: var(--texto-2); text-decoration: none; padding: 6px 10px; border-left: 2px solid transparent; }
+.indice a:hover { color: var(--pedra); border-left-color: var(--violeta-2); }
+.indice strong { font-family: var(--f-titulo); color: var(--ouro); font-size: 15px; letter-spacing: .08em; padding: 0 10px 10px; }
+@media (max-width: 900px) { .indice { position: static; display: flex; flex-wrap: wrap; gap: 4px 6px; } .indice strong { width: 100%; padding: 0 0 4px; } .indice a { border: 1px solid var(--linha-fria); border-radius: 999px; padding: 4px 12px; } }
+main { display: grid; gap: 64px; min-width: 0; }
+section { display: grid; gap: 20px; min-width: 0; }
+.rotulo { font-size: 12px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--ouro); }
+.abre { display: grid; gap: 16px; padding: 32px; border-radius: 20px; border: 1px solid var(--linha); background: linear-gradient(120deg, rgba(58,31,135,.55), rgba(16,24,58,.9) 55%); }
+.abre h1 { font-size: clamp(34px, 5vw, 58px); }
+.abre p { max-width: 44em; color: var(--texto); font-size: 17px; }
+h2 { font-size: clamp(26px, 3.2vw, 36px); }
+h3 { font-size: 20px; }
+.texto { max-width: 46em; color: var(--texto-2); }
+.texto b { color: var(--pedra); }
+.grade { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.grade > * { min-width: 0; }
+.cartao { padding: 20px; border-radius: 16px; background: var(--noite-2); border: 1px solid var(--linha-fria); display: grid; gap: 8px; align-content: start; }
+.cartao p { color: var(--texto-2); font-size: 15px; }
+.sim, .nao { padding: 18px 20px; border-radius: 14px; border: 1px solid; display: grid; gap: 8px; }
+.sim { border-color: rgba(111,219,143,.45); background: rgba(47,158,79,.08); }
+.nao { border-color: rgba(227,93,106,.45); background: rgba(227,93,106,.07); }
+.sim h3, .nao h3 { font-family: var(--f-texto); font-size: 15px; letter-spacing: .14em; text-transform: uppercase; }
+.sim h3 { color: #6fdb8f; } .nao h3 { color: #f08b95; }
+ul.marcas { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; }
+/* Amostras de cor */
+.cores { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.cor { border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: var(--noite-2); }
+.cor i { display: block; height: 74px; }
+.cor div { padding: 10px 12px; display: grid; gap: 2px; font-size: 13px; }
+.cor b { color: var(--pedra); font-size: 14px; }
+.cor code { font-size: 12px; }
+.cor span { color: var(--texto-2); }
+/* Tipo */
+.tipo { display: grid; gap: 14px; padding: 24px; border-radius: 16px; background: var(--noite-2); border: 1px solid var(--linha-fria); }
+.tipo .linha { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; align-items: baseline; border-bottom: 1px solid rgba(255,255,255,.06); padding-bottom: 12px; }
+.tipo .linha:last-child { border-bottom: 0; padding-bottom: 0; }
+.tipo small { color: var(--texto-2); font-size: 12px; font-family: var(--f-codigo); }
+@media (max-width: 560px) { .tipo .linha { grid-template-columns: 1fr; gap: 4px; } }
+/* Componentes vivos */
+.vitrine { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; padding: 28px; border-radius: 16px; background: var(--noite); border: 1px dashed var(--linha-fria); }
+.cta { --c: 16px; display: inline-block; padding: 2px; background: linear-gradient(180deg, var(--ouro-2), var(--ouro-3)); clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% 50%, calc(100% - var(--c)) 100%, var(--c) 100%, 0 50%); }
+.cta span { display: block; padding: 16px 38px; font-weight: 700; font-size: 18px; color: #fff; background: linear-gradient(180deg, var(--violeta-2), var(--violeta) 55%, var(--violeta-3)); clip-path: inherit; }
+.botao { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; border: 1px solid var(--linha); color: var(--pedra); background: rgba(16,24,58,.7); font-weight: 600; font-size: 15px; }
+.botao.verde { background: linear-gradient(180deg, #38b45b, var(--campo)); border-color: #64d184; color: #fff; }
+.hexa { display: grid; place-items: center; width: 72px; height: 80px; background: linear-gradient(180deg, var(--ouro-2), var(--ouro-3)); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.hexa::before { content: ""; grid-area: 1/1; width: 68px; height: 76px; background: radial-gradient(circle at 50% 35%, #2a2156, #120c2c); clip-path: inherit; }
+.hexa svg { grid-area: 1/1; position: relative; width: 34px; height: 34px; fill: none; stroke: var(--ouro); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.estado { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; border: 1px solid currentColor; }
+.estado::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pronto { color: #6fdb8f; } .fazendo { color: var(--alerta); } .planejado { color: var(--violeta-luz); }
+.painel-amostra { padding: 18px 20px; border-radius: 18px; background: var(--noite-2); border: 1px solid var(--linha-fria); min-width: 200px; color: var(--texto-2); font-size: 14px; }
+.painel-amostra.foco { border: 2px solid var(--ouro); }
+.painel-amostra b { display: block; font-family: var(--f-titulo); color: var(--pedra); font-size: 18px; margin-bottom: 4px; }
+/* Mockups do jogo (16:9) */
+.telas { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.tela { display: grid; gap: 10px; min-width: 0; }
+.quadro { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 14px; overflow: hidden; border: 3px solid #1c1f2c; background: #2a3550; font-size: clamp(6px, 1.05vw, 10px); container-type: inline-size; }
+.tela figcaption { display: grid; gap: 4px; font-size: 14px; color: var(--texto-2); }
+.tela figcaption b { color: var(--pedra); font-family: var(--f-titulo); font-size: 17px; }
+.q-mundo { position: absolute; inset: 0; background: linear-gradient(180deg, #8fb0d6 0, #b9c9e4 34%, #7da06b 34%, #6d9160 100%); }
+.q-mundo::after { content: ""; position: absolute; left: 38%; right: 38%; top: 34%; bottom: 0; background: #d8c39a; clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); }
+.q-barra { position: absolute; left: 0; right: 0; top: 0; height: 13%; display: flex; align-items: center; gap: 2%; padding: 0 2.5%; background: rgba(10,15,34,.92); border-bottom: 1px solid rgba(184,146,255,.3); }
+.q-barra .nome { font-family: var(--f-titulo); color: var(--pedra); font-weight: 700; font-size: 2.6cqw; letter-spacing: .08em; }
+.q-chip { padding: .5cqw 1.2cqw; border-radius: 99px; background: rgba(226,184,101,.12); border: 1px solid rgba(226,184,101,.45); color: var(--ouro-2); font-size: 1.4cqw; font-weight: 700; white-space: nowrap; }
+.q-menu { margin-left: auto; display: flex; gap: 1cqw; }
+.q-menu span { padding: .8cqw 1.4cqw; border-radius: .8cqw; background: rgba(16,24,58,.85); border: 1px solid rgba(184,146,255,.3); color: var(--pedra); font-size: 1.35cqw; font-weight: 600; }
+.q-menu span.ativo { border-color: var(--ouro); color: #fff; }
+.q-aviso { position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%); padding: .9cqw 2cqw; border-radius: 99px; background: rgba(10,15,34,.9); border: 1px solid var(--linha); color: var(--pedra); font-size: 1.4cqw; white-space: nowrap; }
+.q-joy { position: absolute; left: 4%; bottom: 7%; width: 14cqw; height: 14cqw; border-radius: 50%; background: rgba(10,15,34,.55); border: 2px solid rgba(226,184,101,.45); }
+.q-joy::after { content: ""; position: absolute; inset: 32%; border-radius: 50%; background: var(--ouro); }
+.q-cta { position: absolute; right: 4%; bottom: 8%; padding: 2px; background: linear-gradient(180deg, var(--ouro-2), var(--ouro-3)); clip-path: polygon(1.4cqw 0, calc(100% - 1.4cqw) 0, 100% 50%, calc(100% - 1.4cqw) 100%, 1.4cqw 100%, 0 50%); }
+.q-cta span { display: block; padding: 1.6cqw 3.4cqw; color: #fff; font-weight: 700; font-size: 1.8cqw; background: linear-gradient(180deg, var(--violeta-2), var(--violeta)); clip-path: inherit; }
+.q-modal-fundo { position: absolute; inset: 0; background: rgba(6,9,22,.72); }
+.q-modal { position: absolute; left: 7%; right: 7%; top: 9%; bottom: 9%; border-radius: 1.6cqw; background: var(--noite-2); border: 2px solid var(--ouro); display: grid; grid-template-rows: auto 1fr auto; padding: 2cqw; gap: 1.4cqw; }
+.q-modal header { display: flex; justify-content: space-between; align-items: center; }
+.q-modal h4 { margin: 0; font-family: var(--f-titulo); color: var(--pedra); font-size: 2.4cqw; }
+.q-fechar { padding: .7cqw 1.6cqw; border-radius: .8cqw; border: 1px solid var(--linha); color: var(--pedra); font-size: 1.3cqw; }
+.q-colunas { display: grid; grid-template-columns: 30% 1fr; gap: 1.6cqw; min-height: 0; }
+.q-lista { display: grid; gap: .8cqw; align-content: start; }
+.q-lista span { padding: 1.1cqw; border-radius: .8cqw; background: rgba(10,15,34,.6); border: 1px solid rgba(184,146,255,.25); color: var(--pedra); font-size: 1.3cqw; }
+.q-lista span.ativo { border-color: var(--aurora); color: #fff; }
+.q-detalhe { border-radius: 1cqw; background: rgba(10,15,34,.45); padding: 1.4cqw; display: grid; gap: .9cqw; align-content: start; color: var(--texto-2); font-size: 1.25cqw; }
+.q-detalhe b { color: var(--aurora); font-size: 1.2cqw; letter-spacing: .14em; }
+.q-barra-attr { height: .7cqw; border-radius: 9px; background: rgba(255,255,255,.08); }
+.q-barra-attr i { display: block; height: 100%; width: 70%; border-radius: inherit; background: var(--aurora); }
+.q-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: .8cqw; }
+.q-slots span { padding: .9cqw 0; text-align: center; border-radius: .8cqw; border: 1px solid rgba(184,146,255,.3); color: var(--ouro); font-size: 1.15cqw; font-weight: 700; }
+.q-cidade { position: absolute; inset: 0; background: linear-gradient(160deg, #6f9a63, #557b4c); }
+.q-cidade::before { content: ""; position: absolute; left: 6%; right: 32%; top: 22%; bottom: 22%; background: repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 1px, transparent 1px 8.3%), repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0 1px, transparent 1px 10%), #7fa86f; transform: perspective(60cqw) rotateX(38deg); border: 2px solid rgba(226,184,101,.5); }
+.q-lado { position: absolute; right: 2%; top: 16%; bottom: 17%; width: 27%; border-radius: 1.4cqw; background: rgba(10,15,34,.93); border: 1px solid rgba(184,146,255,.3); padding: 1.6cqw; display: grid; gap: 1cqw; align-content: start; }
+.q-lado b { font-family: var(--f-titulo); color: var(--ouro-2); font-size: 1.7cqw; }
+.q-lado span { padding: 1cqw; border-radius: .8cqw; border: 1px solid var(--linha); color: var(--pedra); font-size: 1.2cqw; text-align: center; }
+.q-obras { position: absolute; left: 2%; right: 31%; bottom: 3%; height: 11%; border-radius: 1.2cqw; background: rgba(10,15,34,.93); border: 1px solid rgba(184,146,255,.3); display: flex; gap: 1cqw; align-items: center; padding: 0 1.4cqw; overflow: hidden; }
+.q-obras span { padding: .8cqw 1.4cqw; border-radius: .8cqw; border: 1px solid rgba(184,146,255,.3); color: var(--pedra); font-size: 1.25cqw; white-space: nowrap; }
+.q-obras span.ativo { border-color: var(--ouro); color: var(--ouro-2); }
+.q-marca { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, #1b1450, var(--noite) 70%); display: grid; place-items: center; }
+.q-cartao-marca { width: 40%; padding: 2.4cqw; border-radius: 1.6cqw; border: 2px solid var(--ouro); background: rgba(16,24,58,.92); display: grid; gap: 1.1cqw; justify-items: center; }
+.q-cartao-marca h4 { margin: 0; font-family: var(--f-titulo); font-size: 4.4cqw; color: var(--pedra); letter-spacing: .06em; }
+.q-cartao-marca small { color: var(--texto-2); font-size: 1.2cqw; letter-spacing: .3em; }
+.q-cartao-marca span { width: 100%; padding: 1.2cqw 0; text-align: center; border-radius: 1cqw; border: 1px solid var(--linha); color: var(--ouro-2); font-family: var(--f-titulo); font-weight: 700; font-size: 1.5cqw; }
+.q-cartao-marca span.principal { background: linear-gradient(180deg, var(--violeta-2), var(--violeta)); color: #fff; border-color: var(--ouro-2); }
+/* Tabelas e código */
+.rolagem { overflow-x: auto; border-radius: 14px; border: 1px solid var(--linha-fria); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14.5px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: top; }
+th { color: var(--ouro); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; background: rgba(16,24,58,.9); }
+td { color: var(--texto); }
+td small { color: var(--texto-2); }
+pre { margin: 0; padding: 18px 20px; overflow-x: auto; border-radius: 14px; background: #070b19; border: 1px solid var(--linha-fria); font-family: var(--f-codigo); font-size: 13px; line-height: 1.55; color: #d7d4ea; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.links a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--linha); background: var(--noite-2); color: var(--pedra); text-decoration: none; font-weight: 600; font-size: 15px; }
+.links a:hover { border-color: var(--ouro); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="pagina">
+  <nav class="indice" aria-label="Seções do guia">
+    <strong>VALDORA</strong>
+    <a href="#essencia">Essência</a>
+    <a href="#cores">Cores</a>
+    <a href="#tipo">Tipografia</a>
+    <a href="#componentes">Componentes</a>
+    <a href="#imagem">Imagem e ícones</a>
+    <a href="#texto">Texto</a>
+    <a href="#site">Site</a>
+    <a href="#jogo">Telas do jogo</a>
+    <a href="#godot">Godot</a>
+  </nav>
+
+  <main>
+    <header class="abre">
+      <p class="rotulo">EVOLU Channel · Direção visual v1 · 13/11/2026</p>
+      <h1>Direção visual de Valdora</h1>
+      <p>Uma linguagem só para o site e para o jogo, tirada da arte-chave e do primeiro site do Channel: noite índigo, violeta real, ouro em molduras e títulos em capitulares clássicas. O site já foi refeito com estas regras. As telas do jogo seguem o plano da última seção.</p>
+      <div class="links">
+        <a href="site/index.html">Ver o site novo</a>
+        <a href="site/classes.html">Classes</a>
+        <a href="site/reinos.html">Reinos</a>
+        <a href="site/universo.html">Universo</a>
+        <a href="site/download.html">Download</a>
+      </div>
+    </header>
+
+    <section id="essencia">
+      <p class="rotulo">Essência</p>
+      <h2>Fantasia medieval de blocos, à noite</h2>
+      <p class="texto">O mundo é de blocos e polígonos simples, como no jogo. A luz é de crepúsculo: céu violeta, pedra clara e lanternas quentes. O <b>ouro</b> aparece só no que importa: moldura do título, ação principal e item em foco. O <b>violeta</b> é a cor de agir. Cada herói tem a cor da sua força.</p>
+      <div class="grade">
+        <div class="sim"><h3>Fazer</h3><ul class="marcas"><li>Fundo escuro em todas as telas</li><li>Um único botão violeta por tela</li><li>Moldura dourada só no destaque</li><li>Separar o que está pronto do que vem depois</li></ul></div>
+        <div class="nao"><h3>Evitar</h3><ul class="marcas"><li>Fundo claro ou branco</li><li>Ouro em todo painel</li><li>Texto sobre arte sem escurecer a imagem</li><li>Logos e nomes do Minecraft no jogo Valdora</li></ul></div>
+      </div>
+    </section>
+
+    <section id="cores">
+      <p class="rotulo">Cores</p>
+      <h2>Paleta</h2>
+      <p class="texto">Os nomes abaixo são os mesmos do arquivo de estilo do site. No Godot, use os mesmos valores.</p>
+      <div class="cores">
+        <div class="cor"><i style="background:#0a0f22"></i><div><b>Noite</b><code>#0a0f22</code><span>Fundo de tudo</span></div></div>
+        <div class="cor"><i style="background:#10183a"></i><div><b>Noite 2</b><code>#10183a</code><span>Painéis</span></div></div>
+        <div class="cor"><i style="background:#19234d"></i><div><b>Noite 3</b><code>#19234d</code><span>Painel em foco, toque</span></div></div>
+        <div class="cor"><i style="background:linear-gradient(180deg,#8b5cf0,#6a3fd4 55%,#3a1f87)"></i><div><b>Violeta</b><code>#6a3fd4</code><span>Ação principal</span></div></div>
+        <div class="cor"><i style="background:#b892ff"></i><div><b>Violeta luz</b><code>#b892ff</code><span>Ativo, contornos frios</span></div></div>
+        <div class="cor"><i style="background:linear-gradient(180deg,#f5dc9c,#e2b865 50%,#9c7a3a)"></i><div><b>Ouro</b><code>#e2b865</code><span>Molduras, ícones, rótulos</span></div></div>
+        <div class="cor"><i style="background:#ece6da"></i><div><b>Pedra</b><code>#ece6da</code><span>Títulos</span></div></div>
+        <div class="cor"><i style="background:#e4e1ee"></i><div><b>Texto</b><code>#e4e1ee</code><span>Corpo</span></div></div>
+        <div class="cor"><i style="background:#a9a7c2"></i><div><b>Texto 2</b><code>#a9a7c2</code><span>Apoio, legendas</span></div></div>
+        <div class="cor"><i style="background:#2f9e4f"></i><div><b>Campo</b><code>#2f9e4f</code><span>Confirmar, instalar, pronto</span></div></div>
+        <div class="cor"><i style="background:#f0a33c"></i><div><b>Alerta</b><code>#f0a33c</code><span>Em andamento, atenção</span></div></div>
+        <div class="cor"><i style="background:#e35d6a"></i><div><b>Erro</b><code>#e35d6a</code><span>Falha, recusa</span></div></div>
+      </div>
+      <h3>Cores das forças</h3>
+      <div class="cores">
+        <div class="cor"><i style="background:#a7b1c2"></i><div><b>Ferro</b><code>#a7b1c2</code><span>Pietro · Guardião</span></div></div>
+        <div class="cor"><i style="background:#7cc3d1"></i><div><b>Névoa</b><code>#7cc3d1</code><span>Henzo · Patrulheiro</span></div></div>
+        <div class="cor"><i style="background:#f2a7c8"></i><div><b>Aurora</b><code>#f2a7c8</code><span>Giulia · Clérigo</span></div></div>
+        <div class="cor"><i style="background:#ff8a4c"></i><div><b>Brasa</b><code>#ff8a4c</code><span>Arthur · Berserker</span></div></div>
+      </div>
+    </section>
+
+    <section id="tipo">
+      <p class="rotulo">Tipografia</p>
+      <h2>Duas famílias, papéis fixos</h2>
+      <p class="texto"><b>Cinzel</b> nos títulos, nomes de herói, nomes de cidade e no logotipo VALDORA. <b>Montserrat</b> em todo o resto: texto, botões, números e rótulos. As duas têm licença livre OFL e podem ir dentro do APK.</p>
+      <div class="tipo">
+        <div class="linha"><small>Título 1</small><span style="font-family:var(--f-titulo);font-size:44px;color:var(--pedra);font-weight:700">VALDORA</span></div>
+        <div class="linha"><small>Título 2</small><span style="font-family:var(--f-titulo);font-size:30px;color:var(--pedra);font-weight:700">Quatro heróis, quatro forças</span></div>
+        <div class="linha"><small>Título 3</small><span style="font-family:var(--f-titulo);font-size:22px;color:var(--pedra);font-weight:700">Cidade · Estado · País</span></div>
+        <div class="linha"><small>Rótulo</small><span class="rotulo">Alpha 0.4.1 · Android</span></div>
+        <div class="linha"><small>Corpo</small><span>Funde sua cidade, forme seus heróis e negocie com as cidades vizinhas.</span></div>
+        <div class="linha"><small>Número</small><span style="font-variant-numeric:tabular-nums;font-weight:700;color:var(--pedra)">PV 220 · Foco 102 · Ataque 60</span></div>
+      </div>
+    </section>
+
+    <section id="componentes">
+      <p class="rotulo">Componentes</p>
+      <h2>Peças que se repetem</h2>
+      <div class="vitrine" aria-label="Botões">
+        <span class="cta"><span>Baixar Valdora</span></span>
+        <span class="botao">Botão secundário</span>
+        <span class="botao verde">Instalar</span>
+      </div>
+      <div class="vitrine" aria-label="Selos e estados">
+        <span class="hexa"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.5 19.5c.6-3.4 2.8-5.5 5.5-5.5s4.9 2.1 5.5 5.5"/><path d="M14 14.4c.8-.3 1.6-.4 2.5-.4 2.4 0 4.3 1.9 4.9 5"/></svg></span>
+        <span class="hexa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l9.5 9.5"/><path d="M20 4l-9.5 9.5"/><path d="M4 4h3v3"/><path d="M20 4h-3v3"/><path d="m12 15.5 3.5 3.5"/><path d="m12 15.5-3.5 3.5"/></svg></span>
+        <span class="estado pronto">Pronto</span><span class="estado fazendo">Em desenvolvimento</span><span class="estado planejado">Planejado</span>
+      </div>
+      <div class="vitrine" aria-label="Painéis">
+        <div class="painel-amostra"><b>Painel</b>Fundo noite 2, contorno violeta fraco, raio 18.</div>
+        <div class="painel-amostra foco"><b>Painel em foco</b>Moldura dourada de 2 px. Um por tela.</div>
+      </div>
+      <div class="rolagem">
+        <table>
+          <thead><tr><th>Peça</th><th>Regra</th><th>Onde</th></tr></thead>
+          <tbody>
+            <tr><td>Botão real</td><td>Violeta em degradê, moldura dourada de 2 px, pontas cortadas. Altura mínima 56 px. <small>Um por tela.</small></td><td>Baixar, Explorar, Fundar estado</td></tr>
+            <tr><td>Botão secundário</td><td>Noite com contorno dourado fraco, raio 10, altura mínima 48 px.</td><td>Menus, fechar, filtros</td></tr>
+            <tr><td>Selo hexagonal</td><td>Hexágono com borda dourada e ícone de traço dourado. Sempre com rótulo abaixo.</td><td>Destaques do site, atalhos do menu inicial</td></tr>
+            <tr><td>Estado</td><td>Pílula com contorno e ponto. Verde pronto, âmbar em andamento, violeta planejado.</td><td>Roteiro, recursos, missões</td></tr>
+            <tr><td>Passos</td><td>Círculos numerados violeta, só quando a ordem importa.</td><td>Instalar, primeira sessão</td></tr>
+            <tr><td>Aviso</td><td>Contorno violeta forte com sombra. Título com ícone de alerta.</td><td>Perda de dados, requisitos</td></tr>
+            <tr><td>Cartão de herói</td><td>Fundo tingido pela cor da força, emblema hexagonal, barras de atributo na cor da força.</td><td>Classes, painel de heróis</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="imagem">
+      <p class="rotulo">Imagem e ícones</p>
+      <h2>A arte-chave manda</h2>
+      <div class="grade">
+        <div class="cartao"><h3>Arte-chave</h3><p>É a capa com o herói de escudo, o castelo de pedra clara e o mercado. Ela é concept art, não captura do jogo. Use sempre com uma camada escura por baixo do texto.</p></div>
+        <div class="cartao"><h3>Título impresso</h3><p>A arte original traz VALDORA escrito. No site essa área é escurecida, para o título real em texto não aparecer duplicado.</p></div>
+        <div class="cartao"><h3>Ícones</h3><p>Traço de 1,8 px, cantos redondos, grade de 24 px, cor do texto ou ouro. Sem ícones cheios e sem emoji.</p></div>
+        <div class="cartao"><h3>Brasão</h3><p>Coroa violeta de três pontas com losango dourado. Vai acima do nome VALDORA e no ícone do site.</p></div>
+      </div>
+    </section>
+
+    <section id="texto">
+      <p class="rotulo">Texto</p>
+      <h2>Voz do reino, honesta com o jogador</h2>
+      <ul class="marcas texto">
+        <li>Português do Brasil, frases curtas e verbos de ação: Construir, Governar, Expandir.</li>
+        <li>Tudo o que aparece como recurso diz se já está no jogo, em desenvolvimento ou planejado.</li>
+        <li>Nomes do jogo sempre com inicial maiúscula: Valeverde, Aurora, Estado, Temporada 1.</li>
+        <li>Aviso de risco diz o que se perde e como evitar: "Desinstalar apaga sua cidade".</li>
+      </ul>
+    </section>
+
+    <section id="site">
+      <p class="rotulo">Site</p>
+      <h2>As cinco páginas</h2>
+      <div class="rolagem">
+        <table>
+          <thead><tr><th>Página</th><th>Tarefa</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td><a href="site/index.html">Início</a></td><td>Apresentar o jogo e levar ao download</td><td>Brasão, título, lema, botão real, quatro selos, passos e o que está pronto</td></tr>
+            <tr><td><a href="site/universo.html">Universo</a></td><td>Dar contexto ao mundo</td><td>Origem de Valdora, as quatro forças, Temporada 1</td></tr>
+            <tr><td><a href="site/classes.html">Classes</a></td><td>Mostrar os heróis</td><td>Quatro cartões com atributos e habilidades do catálogo do jogo, formação e arena</td></tr>
+            <tr><td><a href="site/reinos.html">Reinos</a></td><td>Explicar a progressão</td><td>Cidade, estado e país, mapa da região, doze construções, regras do primeiro estado</td></tr>
+            <tr><td><a href="site/download.html">Download</a></td><td>Instalar sem perder progresso</td><td>Ficha da Alpha, aviso de não desinstalar, passos, tipos de atualização, add-on Minecraft</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="jogo">
+      <p class="rotulo">Telas do jogo</p>
+      <h2>Como o jogo deve ficar</h2>
+      <p class="texto">Os quadros mostram a composição alvo em 1280 por 720, a resolução de referência do projeto. Eles corrigem os quatro defeitos vistos no aparelho em 13/11.</p>
+      <div class="telas">
+        <figure class="tela">
+          <div class="quadro" aria-hidden="true">
+            <div class="q-marca"><div class="q-cartao-marca"><h4>VALDORA</h4><small>CONSTRUA · GOVERNE · EXPANDA</small><span class="principal">MINHA CIDADE</span><span>EXPLORAÇÃO 3D</span><span>HERÓIS</span><span>COMBATE</span></div></div>
+          </div>
+          <figcaption><b>Tela de marca</b>Já está próxima do alvo. Falta o brasão acima do nome, Cinzel no título e o botão principal em violeta com moldura dourada.</figcaption>
+        </figure>
+        <figure class="tela">
+          <div class="quadro" aria-hidden="true">
+            <div class="q-mundo"></div>
+            <div class="q-barra"><span class="nome">VALDORA</span><span class="q-chip">Moedas 0</span><span class="q-chip">Banco 0</span><span class="q-chip">Poções 3</span><div class="q-menu"><span>MÓDULOS</span><span>COMBATE</span><span>HERÓIS</span><span>ATUALIZAR</span></div></div>
+            <div class="q-aviso">Conteúdo v10 recebido</div>
+            <div class="q-joy"></div>
+            <div class="q-cta"><span>EXPLORAR</span></div>
+          </div>
+          <figcaption><b>Exploração</b>Uma barra superior de altura fixa com nome, moedas em pílulas e botões. As mensagens saem da barra e aparecem num aviso no rodapé, centralizado. O AUTO TESTE sai da versão de jogador.</figcaption>
+        </figure>
+        <figure class="tela">
+          <div class="quadro" aria-hidden="true">
+            <div class="q-mundo"></div>
+            <div class="q-modal-fundo"></div>
+            <div class="q-modal">
+              <header><h4>HERÓIS · TEMPORADA 1</h4><span class="q-fechar">FECHAR</span></header>
+              <div class="q-colunas"><div class="q-lista"><span>Pietro · Guardião</span><span>Henzo · Patrulheiro</span><span class="ativo">Giulia · Clérigo</span><span>Arthur · Berserker</span></div><div class="q-detalhe"><b>AURORA · SUPORTE</b><div class="q-barra-attr"><i></i></div><div class="q-barra-attr"><i style="width:55%"></i></div>Toque de Aurora · Alento da Aurora</div></div>
+              <div class="q-slots"><span>FRENTE 1</span><span>FRENTE 2</span><span>TRÁS 1</span><span>TRÁS 2</span><span>TRÁS 3</span></div>
+            </div>
+          </div>
+          <figcaption><b>Heróis e Arena</b>Painel em camada acima do HUD, com fundo escurecido. Enquanto ele estiver aberto, os botões do HUD ficam ocultos. A cor da força marca o herói selecionado.</figcaption>
+        </figure>
+        <figure class="tela">
+          <div class="quadro" aria-hidden="true">
+            <div class="q-cidade"></div>
+            <div class="q-barra"><span class="nome">AUREN</span><span class="q-chip">Madeira 120</span><span class="q-chip">Pedra 80</span><span class="q-chip">Comida 40</span><div class="q-menu"><span class="ativo">FECHAR MÓDULO</span></div></div>
+            <div class="q-lado"><b>TERRITÓRIOS · CIDADE</b><span>EDITAR NOME</span><span>GOVERNO · MISSÕES · REGIÃO</span><span>COLETAR PRODUÇÃO</span></div>
+            <div class="q-obras"><span>INSPECIONAR</span><span class="ativo">Fundar</span><span>Casa</span><span>Fazenda</span><span>Serraria</span><span>Pedreira</span></div>
+          </div>
+          <figcaption><b>Minha cidade</b>Barra superior fixa e baixa, recursos em pílulas, mapa sempre visível entre a barra, o painel lateral e a barra de obras. Sem texto de versão desenhado no mapa.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="godot">
+      <p class="rotulo">Godot</p>
+      <h2>Regras para implementar no jogo</h2>
+      <div class="rolagem">
+        <table>
+          <thead><tr><th>Regra</th><th>Valor</th><th>Por quê</th></tr></thead>
+          <tbody>
+            <tr><td>Camadas</td><td>Mundo, depois HUD na camada 1, painéis na 2, avisos e diálogos de confirmação na 3</td><td>Corrige botões do HUD por cima de Heróis e Arena</td></tr>
+            <tr><td>Painel aberto</td><td>Oculta os botões do HUD e escurece o mundo com noite a 72%</td><td>Um foco por vez</td></tr>
+            <tr><td>Barra superior</td><td>Altura fixa de 60 px, sem quebra de linha</td><td>Corrige a barra da Cidade esticando até o meio da tela</td></tr>
+            <tr><td>Rótulos em linha</td><td>Sem quebra automática dentro de linhas horizontais, ou com largura mínima</td><td>Corrige a coluna de letras soltas</td></tr>
+            <tr><td>Toque</td><td>Alvo mínimo de 48 px, botão principal de 56 px</td><td>Uso com o polegar</td></tr>
+            <tr><td>Tamanhos de letra</td><td>Título 28 a 40, corpo 16 a 18, mínimo 14</td><td>Leitura em celular a 1280 por 720</td></tr>
+            <tr><td>Fontes</td><td>Cinzel e Montserrat em TTF dentro do projeto</td><td>Licença OFL, sem depender de internet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <pre><code># res://scripts/ui/valdora_tema.gd (proposta, entra junto com o CP013)
+extends RefCounted
+const NOITE := Color("#0a0f22")
+const NOITE_2 := Color("#10183a")
+const VIOLETA := Color("#6a3fd4")
+const VIOLETA_LUZ := Color("#b892ff")
+const OURO := Color("#e2b865")
+const PEDRA := Color("#ece6da")
+const TEXTO_2 := Color("#a9a7c2")
+const FORCAS := {"ferro": Color("#a7b1c2"), "nevoa": Color("#7cc3d1"),
+                 "aurora": Color("#f2a7c8"), "brasa": Color("#ff8a4c")}
+
+static func painel(foco := false) -> StyleBoxFlat:
+    var s := StyleBoxFlat.new()
+    s.bg_color = Color(NOITE_2, 0.94)
+    s.border_color = OURO if foco else Color(VIOLETA_LUZ, 0.24)
+    s.set_border_width_all(2 if foco else 1)
+    s.set_corner_radius_all(18)
+    s.set_content_margin_all(20)
+    return s
+
+static func botao_principal() -> StyleBoxFlat:
+    var s := StyleBoxFlat.new()
+    s.bg_color = VIOLETA
+    s.border_color = OURO
+    s.set_border_width_all(2)
+    s.set_corner_radius_all(12)
+    s.content_margin_left = 32
+    s.content_margin_right = 32
+    return s</code></pre>
+      <div class="rolagem">
+        <table>
+          <thead><tr><th>Tela</th><th>Arquivo</th><th>Como chega ao celular</th></tr></thead>
+          <tbody>
+            <tr><td>Minha cidade</td><td><code>modules/city/city.gd</code></td><td>Atualização automática, módulo city-10 assinado</td></tr>
+            <tr><td>Tela de marca, exploração, Heróis, Arena, Módulos</td><td><code>scripts/main.gd</code>, <code>scripts/ui/*</code></td><td>APK novo. Entra junto com o CP013, que já reescreve o HUD</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
