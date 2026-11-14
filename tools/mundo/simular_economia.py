@@ -73,7 +73,7 @@ AJUDAS_POR_OBRA = 10  # ajudas médias recebidas do movimento por obra
 AJUDA_CORTE = 0.01    # cada ajuda corta 1% do tempo-base (mínimo 1 min)
 AJUDA_MAX = 20
 # v0.3: impostos só na venda, abatidos de quem vende (substituem a taxa de 5% do sistema)
-IMPOSTO = {"estadual": 0.05, "federal": 0.05}  # governador e presidente NPC; faixas 0-20% e 0-15%
+IMPOSTO = {"estadual": 0.05, "federal": 0.05}  # governador e presidente NPC; cada um de 0 a 30% (aprovado na 1.5)
 MARGEM = 0.10           # margem de quem vende sobre o preço de referência (0 a 15%)
 TESOURO_GASTO_DIA = 1 / 7   # fração do saldo gasta por dia em obras públicas
 TESOURO_TETO_DIAS = 7       # teto do saldo: 7 dias de arrecadação média
@@ -183,12 +183,12 @@ def tempo_h(tipo: str, n: int) -> float:
 
 
 def custo_pesq(k: int) -> dict:
-    """Custo do nível k de uma linha de pesquisa: 15% da obra da Prefeitura no nível 3k."""
-    return {r: v * PESQ_FRACAO for r, v in custo("hq", min(30, 3 * k)).items()}
+    """Custo do nível k de uma linha: 15% da obra da Prefeitura no nível 3k (no mínimo a 10, onde o Centro abre)."""
+    return {r: v * PESQ_FRACAO for r, v in custo("hq", min(30, max(TEC_DESBLOQUEIO, 3 * k))).items()}
 
 
 def tempo_pesq_h(k: int) -> float:
-    return t_qg_h(min(30, 3 * k)) * PESQ_FRACAO
+    return t_qg_h(min(30, max(TEC_DESBLOQUEIO, 3 * k))) * PESQ_FRACAO
 
 
 # ---------------------------------------------------------------- mercado e tesouros

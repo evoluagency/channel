@@ -76,6 +76,8 @@ Cada nível da Prefeitura libera algo, e cada prédio novo exige outro num níve
 
 ## 5. Economia (decisões 4 e 6)
 
+> **Sessão 1.5:** mercado, impostos, tesouro, regiões, passe e Centro tecnológico mudaram na v0.3. Valem as regras de `ECONOMIA_v0.3.md` onde diferirem desta seção e da seção 6.
+
 **A economia gira em torno da produção.** Toda moeda nasce da produção ou de jogar (missões); todo preço em moeda é medido em horas de produção do nível.
 
 **Banco da cidade (prédio próprio, o 14º; arte pendente).** A moeda é do sistema e fica no banco de cada cidade, protegida até 12 h de produção de referência do nível do banco; o que passa disso fica no **cofre**, e um ataque vencido leva 20% do cofre. Entrada 2% e saída 2%; rendimento de 1% por semana sobre até 7 dias de produção. Taxas e rendimento são regra do sistema; não existe saldo central.

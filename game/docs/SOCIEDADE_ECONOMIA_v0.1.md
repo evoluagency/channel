@@ -149,3 +149,19 @@ Medida rápida na simulação atual, com o imposto só na venda (sem a taxa de 5
 | Atribuição | Norte: metal e energia fortes; Nordeste: energia e alimentos; Centro-Oeste: alimentos e metal; Sudeste: materiais e metal; Sul: alimentos e materiais. Fracos: os outros dois | Com +30%/−20%, a produção das regiões ficou entre 0,98 e 1,02 da média e o nível 30 entre os dias 62,9 e 63,2 |
 | Servidor que não reinicia | Bônus de recém-chegado: obras mais rápidas para quem está abaixo da cidade mediana do servidor | Quem chega na temporada 2 alcança os outros |
 | Migração entre países | Item de transferência pago, com requisitos (sem cargo, sem dívida e sem guerra); a moeda e os recursos levados têm teto | Impede levar uma economia inteira de um país para outro |
+
+## 13. Decisões do dono (13/11/2026, sessão 1.5)
+
+1. **Aprovadas as 6 recomendações da seção 12:**
+   - banco sem cobrança;
+   - fila extra de obra e de pesquisa no passe;
+   - Centro tecnológico como 15º prédio;
+   - especialização +30%/−20% com limite de 2 prédios por recurso fraco;
+   - bônus de recém-chegado;
+   - migração entre países com teto.
+2. **Atribuição revista:** o Nordeste fica forte em **alimentos e materiais** (antes: energia e alimentos). As outras regiões ficam como na seção 12.
+3. **Fraco em −20%** (comércio entre jogadores de 18% da produção).
+4. **Impostos:** estadual e federal de 0 a 30% cada. Faixas de capacidade pelo imposto somado: verde até 20%, amarela até 40%, vermelha acima disso.
+5. **Recém-chegado:** obras 50% mais rápidas.
+
+Regras e números: `ECONOMIA_v0.3.md`. A migração e a disputa entre países (seção 3 dele) são proposta para confirmar.

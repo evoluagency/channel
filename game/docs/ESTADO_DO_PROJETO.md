@@ -92,6 +92,22 @@ Defeitos encontrados:
 - Decisões finais da sessão: impostos estadual e federal só na venda, com aviso de capacidade de pagamento; comércio entre estados com margem de lucro; Banco como prédio próprio; servidor sem reinício, com disputa entre países e migração paga; siglas livres (`SOCIEDADE_ECONOMIA_v0.1.md`, seções 11 e 12). Próxima sessão: 1.5, economia v0.3; Cidade 3D na 1.6.
 - Testes: `game/tests/test_economia_mundo.py` 22/22, no `tools/run_valdora_tests.sh` (o `--py` passa 8/8). Nada do jogo instalado mudou.
 
+### Economia v0.3 (sessão 1.5, 13/11/2026)
+
+- **Aprovado pelo dono:**
+  - as 6 recomendações da seção 12 de `SOCIEDADE_ECONOMIA_v0.1.md`;
+  - Nordeste forte em alimentos e materiais;
+  - fraco em −20%;
+  - impostos estadual e federal de 0 a 30%, com faixas verde até 20%, amarela até 40% e vermelha acima;
+  - recém-chegado com obras 50% mais rápidas.
+- **Simulação v0.3:**
+  - Mercado entre jogadores com margem, impostos só na venda, tesouro com obras públicas (bônus até 3% + 3%), Centro tecnológico com 5 linhas de pesquisa e produção do passe não vendável.
+  - Resultados: 15 min/dia chega ao nível 20 no dia 29,6 e ao 30 no 63,6; o pagante, ao 30 no dia 31.
+  - Regiões a ±2%; comércio entre jogadores de 18% da produção (abaixo da meta de 20%, aceito); moeda guardada abaixo de 0,5 dia.
+- **Dados:** `game/data/mundo_componentes_v0.3.json` (15 prédios, com pesquisa, regiões, mercado, impostos, tesouro, passe, recém-chegado, migração e disputa entre países), gerado por `tools/mundo/gerar_componentes_v03.py`. As curvas da v0.2 continuam iguais (o teste confere).
+- **Regras:** `game/docs/ECONOMIA_v0.3.md`. A migração e a disputa entre países são proposta a confirmar.
+- **Testes:** `game/tests/test_economia_mundo.py` 35/35; o `--py` passa 8/8. Nada do jogo instalado mudou.
+
 ## 2. O que está onde
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |
