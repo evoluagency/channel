@@ -1,8 +1,8 @@
 # MUNDO — Guia de arte (v0.1)
 
-Escrito na sessão 1.2 (13/11/2026). Consolida o visual das 13 construções em seis faixas. Nome do jogo provisório. As referências comerciais (Last War e parecidos) guiam o nível de acabamento; **nenhuma arte, personagem, nome ou logotipo é copiado**.
+Escrito na sessão 1.2 (13/11/2026). Consolida o visual das 13 construções em seis faixas; a sessão 1.6 acrescentou o Banco da cidade e o Centro tecnológico (15 no total) e trocou o Quartel-general pela Prefeitura. Nome do jogo provisório. As referências comerciais (Last War e parecidos) guiam o nível de acabamento; **nenhuma arte, personagem, nome ou logotipo é copiado**.
 
-Imagens: `game/docs/imagens/componentes/` (uma folha de faixas e uma de detalhe com alianças por construção, mais `catalogo_13_construcoes.png`). Gerador: `tools/arte3d/` (ver `LEIAME.md`).
+Imagens: `game/docs/imagens/componentes/` (uma folha de faixas e uma de detalhe com alianças por construção, mais `catalogo_15_construcoes.png`). Gerador: `tools/arte3d/` (ver `LEIAME.md`).
 
 ## 1. Método
 
@@ -16,7 +16,7 @@ Imagens: `game/docs/imagens/componentes/` (uma folha de faixas e uma de detalhe 
 - **Lote** de 5,4 × 5,4 unidades com laje verde e piso que muda por faixa: terra (1), calçada (2 a 5), piso na cor da aliança escurecida (6).
 - **Bisel** em toda caixa (0,02 a 0,1): quinas chanfradas dão o ar de brinquedo e pegam luz.
 - **Silhueta muda a cada faixa**, nunca só a cor. Regra prática: faixa 1 é baixa e espalhada; faixas 3 e 4 ganham altura; a 5 ganha peças técnicas (painéis, drones, tubos); a 6 ganha coroa, dourado e efeito.
-- **Altura máxima** perto de 9 unidades (QG faixa 6) para caber na mesma escala; a cidade usa a mesma escala.
+- **Altura máxima** perto de 9 unidades (Prefeitura faixa 6) para caber na mesma escala; a cidade usa a mesma escala.
 - **Escala humana**: pessoa de cerca de 0,55 unidade; veículo de 1,1 a 1,6.
 - **Peças do kit**: caixa chanfrada, cilindro, esfera, cone, toro, arco, túnel, cúpula, janelas, luzes de fachada, contêiner, toldo, bandeira, antena, poste, banco, árvore, pessoa, veículo, helicóptero, blindado, guindaste, turbina, tenda, drone, painel solar, fileira de plantas e selo.
 
@@ -34,7 +34,7 @@ Imagens: `game/docs/imagens/componentes/` (uma folha de faixas e uma de detalhe 
 
 | Construção | Assinatura |
 |---|---|
-| Quartel-general | azul e vidro; dourado no topo |
+| Prefeitura | azul e vidro; dourado no topo; letreiro "PREFEITURA" na faixa 3 |
 | Alojamento | creme, coral e tijolo |
 | Estufa | verde e vidro; roxo na faixa 3 |
 | Usina | tijolo, aço e laranja de segurança |
@@ -47,6 +47,8 @@ Imagens: `game/docs/imagens/componentes/` (uma folha de faixas e uma de detalhe 
 | Parque | verde e flores |
 | Estação de água | azul-água e branco |
 | Heliponto | círculo com "H" |
+| Banco da cidade (1.6) | creme-mármore, verde-cédula `1f8a5b` e dourado; moeda e porta de cofre redonda |
+| Centro tecnológico (1.6) | branco, grafite `2d3442` e verde-circuito `4fe08a`; telas, racks e anel de pesquisa |
 
 **Cores de aliança**: azul `1f63e8`, vermelha `f0453a`, verde `22b860`, roxa `8e4dff`, amarela `ffb400`. Ver seção 6.
 
@@ -82,7 +84,7 @@ Nada disso está implementado. Durações pensadas para o celular.
 | Mudar de faixa | Nuvem de poeira cobre o prédio, troca de modelo, salto elástico, brilho varrendo a fachada (1,2 s); na faixa 6, o selo vira dourado com partículas. |
 | Coletar produção | Ícone do recurso sobe do prédio e voa até a barra do topo. |
 
-**Movimento contínuo por construção**: fumaça (Usina, gerador), pás das turbinas, parabólica girando (QG faixa 5, Radar), drones em órbita, varredura do radar, chafarizes, anéis do reator, esteiras, rotor do helicóptero, holograma girando, luzes piscando nas antenas, carros na Via.
+**Movimento contínuo por construção**: fumaça (Usina, gerador), pás das turbinas, parabólica girando (Prefeitura faixa 5, Radar), drones em órbita, varredura do radar, chafarizes, anéis do reator, esteiras, rotor do helicóptero, holograma girando, luzes piscando nas antenas, carros na Via.
 
 **Orçamento**: animação por transformação (girar, mover, escalar) e material (emissão pulsando). Sem esqueleto nem física. Partículas pelo `CPUParticles3D`, com no máximo cerca de 30 por prédio.
 
@@ -102,6 +104,17 @@ A Estufa e o Parque são os mais pesados, por causa das plantas feitas com esfer
   3. Materiais compartilhados entre prédios.
   4. Nível de detalhe: sem pessoas, drones e plantas miúdas quando a câmera se afasta.
   5. Exportar `.glb` por construção e faixa, se for mais simples carregar do que gerar no aparelho.
+
+### 8.1 Cidade 3D (sessão 1.6, M8)
+
+Feito o que a lista acima pedia (itens 1 a 4); o item 5 (`.glb`) não foi preciso: montar e fundir a cidade cheia leva cerca de 0,4 s no PC.
+
+- **Fusão** (`tools/arte3d/fusao.gd`): cada construção e faixa vira uma malha com no máximo 5 superfícies, uma por tipo de mistura (opaco, translúcido, feixe, aditivo e sem sombra). Cor, rugosidade, metal e emissão do material do kit passam para atributos de vértice, lidos por 4 shaders compartilhados pela cidade inteira. Conferido pixel a pixel contra as folhas aprovadas: diferença média de 0,0 a 0,02 em 255.
+- **Modo cidade do kit**: esferas 10×5 (16×8 nas folhas), cilindros até 16 lados, toros 20×6. As folhas aprovadas não mudam (o modo vem desligado).
+- **Nível de detalhe 1** (de longe): sem pessoas, drones, veículos, bancos, plantas miúdas, peças com menos de 0,3 no maior lado e tiras com menos de 0,09; esferas 6×3, cilindros até 8 lados.
+- **Instâncias**: uma `MultiMesh` por construção e faixa; o LOD 0 em blocos de 2×2 lotes, para a câmera recortar de perto; de perto a sombra vem da malha do LOD 1.
+- **Selos** em 2D numa malha só, por cima da cena; somem quando o lote fica com menos de 45 px.
+- Números e cenários: `HANDOFF-1.6.md` e `game/docs/logs/cidade3d/`.
 
 ## 9. O que não chega ao nível comercial
 
@@ -124,8 +137,8 @@ A Estufa e o Parque são os mais pesados, por causa das plantas feitas com esfer
 ## 11. Gerar de novo
 
 ```bash
-GODOT=/caminho/Godot_v4.7.2-stable_linux.x86_64 tools/arte3d/gerar.sh quartel_general "Quartel-general" /tmp/arte/qg
-python3 tools/arte3d/catalogo.py game/docs/imagens/componentes/catalogo_13_construcoes.png /tmp/arte/qg /tmp/arte/...
+GODOT=/caminho/Godot_v4.7.2-stable_linux.x86_64 tools/arte3d/gerar.sh prefeitura "Prefeitura" /tmp/arte/pref
+python3 tools/arte3d/catalogo.py game/docs/imagens/componentes/catalogo_15_construcoes.png /tmp/arte/pref /tmp/arte/...
 ```
 
 Contar peças e triângulos: acrescente `--contar` aos argumentos do `render.gd` (depois de `--`).

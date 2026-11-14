@@ -1,0 +1,1502 @@
+{
+  "agu|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 26,
+    "receita": "estacao_agua",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.3,
+    "triangulos_folha": 3104,
+    "triangulos_lod0": 1888,
+    "triangulos_lod1": 880
+  },
+  "agu|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 29,
+    "receita": "estacao_agua",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.3,
+    "triangulos_folha": 3396,
+    "triangulos_lod0": 1956,
+    "triangulos_lod1": 804
+  },
+  "agu|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 31,
+    "receita": "estacao_agua",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 5.2,
+    "triangulos_folha": 4132,
+    "triangulos_lod0": 2548,
+    "triangulos_lod1": 988
+  },
+  "agu|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 38,
+    "receita": "estacao_agua",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 4.4,
+    "triangulos_folha": 5040,
+    "triangulos_lod0": 3072,
+    "triangulos_lod1": 1188
+  },
+  "agu|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 52,
+    "receita": "estacao_agua",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 3.6,
+    "triangulos_folha": 8560,
+    "triangulos_lod0": 4696,
+    "triangulos_lod1": 1268
+  },
+  "agu|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 93,
+    "receita": "estacao_agua",
+    "superficies_lod0": 4,
+    "superficies_lod1": 4,
+    "topo": 3.6,
+    "triangulos_folha": 7192,
+    "triangulos_lod0": 4488,
+    "triangulos_lod1": 2748
+  },
+  "alo|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 117,
+    "receita": "alojamento",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.6,
+    "triangulos_folha": 6212,
+    "triangulos_lod0": 5204,
+    "triangulos_lod1": 1412
+  },
+  "alo|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 75,
+    "receita": "alojamento",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.90000004768372,
+    "triangulos_folha": 4700,
+    "triangulos_lod0": 3524,
+    "triangulos_lod1": 2420
+  },
+  "alo|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 113,
+    "receita": "alojamento",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 6.00000009536743,
+    "triangulos_folha": 6596,
+    "triangulos_lod0": 5252,
+    "triangulos_lod1": 3524
+  },
+  "alo|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 63,
+    "receita": "alojamento",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 6.35000000074506,
+    "triangulos_folha": 5940,
+    "triangulos_lod0": 3588,
+    "triangulos_lod1": 1224
+  },
+  "alo|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 74,
+    "receita": "alojamento",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 8.04999990537763,
+    "triangulos_folha": 4880,
+    "triangulos_lod0": 3536,
+    "triangulos_lod1": 1612
+  },
+  "alo|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 101,
+    "receita": "alojamento",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 9.66,
+    "triangulos_folha": 6968,
+    "triangulos_lod0": 4384,
+    "triangulos_lod1": 1972
+  },
+  "ban|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 61,
+    "receita": "banco",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.6,
+    "triangulos_folha": 6196,
+    "triangulos_lod0": 3924,
+    "triangulos_lod1": 1104
+  },
+  "ban|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 43,
+    "receita": "banco",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.4,
+    "triangulos_folha": 3948,
+    "triangulos_lod0": 2476,
+    "triangulos_lod1": 1328
+  },
+  "ban|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 71,
+    "receita": "banco",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 4.07,
+    "triangulos_folha": 5148,
+    "triangulos_lod0": 4012,
+    "triangulos_lod1": 2280
+  },
+  "ban|4": {
+    "avisos": [],
+    "extras": 1,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 60,
+    "receita": "banco",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 7.86999995708466,
+    "triangulos_folha": 4496,
+    "triangulos_lod0": 3024,
+    "triangulos_lod1": 1080
+  },
+  "ban|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 71,
+    "receita": "banco",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 7.15,
+    "triangulos_folha": 4992,
+    "triangulos_lod0": 3520,
+    "triangulos_lod1": 1168
+  },
+  "ban|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo",
+      "sem_sombra"
+    ],
+    "pecas": 191,
+    "receita": "banco",
+    "superficies_lod0": 4,
+    "superficies_lod1": 4,
+    "topo": 6.49,
+    "triangulos_folha": 11996,
+    "triangulos_lod0": 8156,
+    "triangulos_lod1": 4384
+  },
+  "bas|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 44,
+    "receita": "base_militar",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.9,
+    "triangulos_folha": 3780,
+    "triangulos_lod0": 2436,
+    "triangulos_lod1": 816
+  },
+  "bas|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 76,
+    "receita": "base_militar",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.9,
+    "triangulos_folha": 7600,
+    "triangulos_lod0": 4648,
+    "triangulos_lod1": 1684
+  },
+  "bas|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 69,
+    "receita": "base_militar",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.2,
+    "triangulos_folha": 5406,
+    "triangulos_lod0": 3558,
+    "triangulos_lod1": 1042
+  },
+  "bas|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco",
+      "sem_sombra"
+    ],
+    "pecas": 100,
+    "receita": "base_militar",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 4.9,
+    "triangulos_folha": 4572,
+    "triangulos_lod0": 3060,
+    "triangulos_lod1": 1400
+  },
+  "bas|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "sem_sombra"
+    ],
+    "pecas": 157,
+    "receita": "base_militar",
+    "superficies_lod0": 3,
+    "superficies_lod1": 2,
+    "topo": 3.6,
+    "triangulos_folha": 7004,
+    "triangulos_lod0": 4716,
+    "triangulos_lod1": 2096
+  },
+  "bas|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 44,
+    "receita": "base_militar",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 5.0,
+    "triangulos_folha": 5840,
+    "triangulos_lod0": 3992,
+    "triangulos_lod1": 2816
+  },
+  "ene|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 38,
+    "receita": "central_energia",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 2.2,
+    "triangulos_folha": 3020,
+    "triangulos_lod0": 2012,
+    "triangulos_lod1": 1004
+  },
+  "ene|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 52,
+    "receita": "central_energia",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.4,
+    "triangulos_folha": 3804,
+    "triangulos_lod0": 2628,
+    "triangulos_lod1": 1392
+  },
+  "ene|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 44,
+    "receita": "central_energia",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 5.6,
+    "triangulos_folha": 2788,
+    "triangulos_lod0": 2116,
+    "triangulos_lod1": 1036
+  },
+  "ene|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 52,
+    "receita": "central_energia",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 4.9,
+    "triangulos_folha": 2480,
+    "triangulos_lod0": 2144,
+    "triangulos_lod1": 980
+  },
+  "ene|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "aditivo"
+    ],
+    "pecas": 60,
+    "receita": "central_energia",
+    "superficies_lod0": 3,
+    "superficies_lod1": 2,
+    "topo": 3.6,
+    "triangulos_folha": 7546,
+    "triangulos_lod0": 4426,
+    "triangulos_lod1": 1928
+  },
+  "ene|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "aditivo"
+    ],
+    "pecas": 30,
+    "receita": "central_energia",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 4.9,
+    "triangulos_folha": 5752,
+    "triangulos_lod0": 3144,
+    "triangulos_lod1": 1348
+  },
+  "ent|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 44,
+    "receita": "entreposto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.4,
+    "triangulos_folha": 2896,
+    "triangulos_lod0": 2056,
+    "triangulos_lod1": 1052
+  },
+  "ent|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 43,
+    "receita": "entreposto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.0,
+    "triangulos_folha": 2572,
+    "triangulos_lod0": 1900,
+    "triangulos_lod1": 848
+  },
+  "ent|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 84,
+    "receita": "entreposto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.4,
+    "triangulos_folha": 4488,
+    "triangulos_lod0": 3480,
+    "triangulos_lod1": 1336
+  },
+  "ent|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 362,
+    "receita": "entreposto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.0,
+    "triangulos_folha": 16728,
+    "triangulos_lod0": 16056,
+    "triangulos_lod1": 2072
+  },
+  "ent|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 448,
+    "receita": "entreposto",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 3.9,
+    "triangulos_folha": 21384,
+    "triangulos_lod0": 20544,
+    "triangulos_lod1": 2732
+  },
+  "ent|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 207,
+    "receita": "entreposto",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 4.6,
+    "triangulos_folha": 15616,
+    "triangulos_lod0": 11656,
+    "triangulos_lod1": 2356
+  },
+  "est|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 210,
+    "receita": "estufa",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 2.0,
+    "triangulos_folha": 37984,
+    "triangulos_lod0": 16816,
+    "triangulos_lod1": 1024
+  },
+  "est|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 196,
+    "receita": "estufa",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 2.9,
+    "triangulos_folha": 34876,
+    "triangulos_lod0": 15556,
+    "triangulos_lod1": 772
+  },
+  "est|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 173,
+    "receita": "estufa",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.20000004768372,
+    "triangulos_folha": 34556,
+    "triangulos_lod0": 15740,
+    "triangulos_lod1": 1656
+  },
+  "est|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 199,
+    "receita": "estufa",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 5.20000007227063,
+    "triangulos_folha": 46756,
+    "triangulos_lod0": 20548,
+    "triangulos_lod1": 4684
+  },
+  "est|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 179,
+    "receita": "estufa",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 7.35000000074506,
+    "triangulos_folha": 36504,
+    "triangulos_lod0": 17184,
+    "triangulos_lod1": 5108
+  },
+  "est|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "aditivo"
+    ],
+    "pecas": 156,
+    "receita": "estufa",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 4.5,
+    "triangulos_folha": 17528,
+    "triangulos_lod0": 8944,
+    "triangulos_lod1": 3484
+  },
+  "hel|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 24,
+    "receita": "heliponto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.2,
+    "triangulos_folha": 2388,
+    "triangulos_lod0": 1516,
+    "triangulos_lod1": 544
+  },
+  "hel|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 20,
+    "receita": "heliponto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.6,
+    "triangulos_folha": 2428,
+    "triangulos_lod0": 1452,
+    "triangulos_lod1": 588
+  },
+  "hel|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 50,
+    "receita": "heliponto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.9,
+    "triangulos_folha": 8312,
+    "triangulos_lod0": 4080,
+    "triangulos_lod1": 792
+  },
+  "hel|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 72,
+    "receita": "heliponto",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.4,
+    "triangulos_folha": 7392,
+    "triangulos_lod0": 4000,
+    "triangulos_lod1": 1072
+  },
+  "hel|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 65,
+    "receita": "heliponto",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 4.8,
+    "triangulos_folha": 10780,
+    "triangulos_lod0": 5340,
+    "triangulos_lod1": 1036
+  },
+  "hel|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 62,
+    "receita": "heliponto",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 3.5,
+    "triangulos_folha": 11786,
+    "triangulos_lod0": 5658,
+    "triangulos_lod1": 1292
+  },
+  "min|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 61,
+    "receita": "mineradora",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.4,
+    "triangulos_folha": 3856,
+    "triangulos_lod0": 3016,
+    "triangulos_lod1": 1580
+  },
+  "min|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 45,
+    "receita": "mineradora",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.6,
+    "triangulos_folha": 2772,
+    "triangulos_lod0": 2268,
+    "triangulos_lod1": 1588
+  },
+  "min|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 74,
+    "receita": "mineradora",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.6,
+    "triangulos_folha": 5388,
+    "triangulos_lod0": 4044,
+    "triangulos_lod1": 2484
+  },
+  "min|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 79,
+    "receita": "mineradora",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 6.5,
+    "triangulos_folha": 5124,
+    "triangulos_lod0": 3444,
+    "triangulos_lod1": 1748
+  },
+  "min|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 69,
+    "receita": "mineradora",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 3.6,
+    "triangulos_folha": 8188,
+    "triangulos_lod0": 4724,
+    "triangulos_lod1": 1908
+  },
+  "min|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 72,
+    "receita": "mineradora",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 4.6,
+    "triangulos_folha": 6970,
+    "triangulos_lod0": 4578,
+    "triangulos_lod1": 2094
+  },
+  "par|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 91,
+    "receita": "parque",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.4,
+    "triangulos_folha": 21360,
+    "triangulos_lod0": 9264,
+    "triangulos_lod1": 436
+  },
+  "par|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 51,
+    "receita": "parque",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.2,
+    "triangulos_folha": 4956,
+    "triangulos_lod0": 2772,
+    "triangulos_lod1": 860
+  },
+  "par|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 57,
+    "receita": "parque",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.0,
+    "triangulos_folha": 9140,
+    "triangulos_lod0": 4340,
+    "triangulos_lod1": 928
+  },
+  "par|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 44,
+    "receita": "parque",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.0,
+    "triangulos_folha": 4000,
+    "triangulos_lod0": 2320,
+    "triangulos_lod1": 876
+  },
+  "par|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "feixe"
+    ],
+    "pecas": 104,
+    "receita": "parque",
+    "superficies_lod0": 3,
+    "superficies_lod1": 2,
+    "topo": 2.6,
+    "triangulos_folha": 17908,
+    "triangulos_lod0": 8740,
+    "triangulos_lod1": 1268
+  },
+  "par|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 90,
+    "receita": "parque",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.0,
+    "triangulos_folha": 11296,
+    "triangulos_lod0": 5856,
+    "triangulos_lod1": 1836
+  },
+  "pref|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 113,
+    "receita": "prefeitura",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.4,
+    "triangulos_folha": 6712,
+    "triangulos_lod0": 5536,
+    "triangulos_lod1": 1672
+  },
+  "pref|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 78,
+    "receita": "prefeitura",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.9,
+    "triangulos_folha": 5844,
+    "triangulos_lod0": 4164,
+    "triangulos_lod1": 2340
+  },
+  "pref|3": {
+    "avisos": [],
+    "extras": 1,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 74,
+    "receita": "prefeitura",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 5.46999988555908,
+    "triangulos_folha": 7688,
+    "triangulos_lod0": 4512,
+    "triangulos_lod1": 1480
+  },
+  "pref|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 71,
+    "receita": "prefeitura",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 7.54999976158142,
+    "triangulos_folha": 6980,
+    "triangulos_lod0": 3956,
+    "triangulos_lod1": 1268
+  },
+  "pref|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 88,
+    "receita": "prefeitura",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 8.31000000238419,
+    "triangulos_folha": 6820,
+    "triangulos_lod0": 5108,
+    "triangulos_lod1": 2792
+  },
+  "pref|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 138,
+    "receita": "prefeitura",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 10.8099999761581,
+    "triangulos_folha": 6908,
+    "triangulos_lod0": 4620,
+    "triangulos_lod1": 1532
+  },
+  "rad|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 30,
+    "receita": "radar",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 4.2,
+    "triangulos_folha": 2020,
+    "triangulos_lod0": 1516,
+    "triangulos_lod1": 700
+  },
+  "rad|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 40,
+    "receita": "radar",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 5.0,
+    "triangulos_folha": 2768,
+    "triangulos_lod0": 1712,
+    "triangulos_lod1": 716
+  },
+  "rad|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 40,
+    "receita": "radar",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 4.4,
+    "triangulos_folha": 3560,
+    "triangulos_lod0": 2400,
+    "triangulos_lod1": 864
+  },
+  "rad|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 37,
+    "receita": "radar",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 7.1,
+    "triangulos_folha": 3820,
+    "triangulos_lod0": 2596,
+    "triangulos_lod1": 652
+  },
+  "rad|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "aditivo"
+    ],
+    "pecas": 51,
+    "receita": "radar",
+    "superficies_lod0": 3,
+    "superficies_lod1": 2,
+    "topo": 4.4,
+    "triangulos_folha": 6300,
+    "triangulos_lod0": 4220,
+    "triangulos_lod1": 1668
+  },
+  "rad|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 39,
+    "receita": "radar",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 7.0,
+    "triangulos_folha": 5992,
+    "triangulos_lod0": 2968,
+    "triangulos_lod1": 1276
+  },
+  "tec|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 51,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.9,
+    "triangulos_folha": 3192,
+    "triangulos_lod0": 2520,
+    "triangulos_lod1": 796
+  },
+  "tec|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 54,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.4,
+    "triangulos_folha": 3594,
+    "triangulos_lod0": 2586,
+    "triangulos_lod1": 1332
+  },
+  "tec|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco",
+      "sem_sombra"
+    ],
+    "pecas": 116,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 4.40999999046326,
+    "triangulos_folha": 6156,
+    "triangulos_lod0": 4580,
+    "triangulos_lod1": 2348
+  },
+  "tec|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 84,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 6.94999998807907,
+    "triangulos_folha": 4752,
+    "triangulos_lod0": 3408,
+    "triangulos_lod1": 2100
+  },
+  "tec|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido",
+      "feixe"
+    ],
+    "pecas": 87,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 3,
+    "superficies_lod1": 2,
+    "topo": 6.05,
+    "triangulos_folha": 5436,
+    "triangulos_lod0": 3964,
+    "triangulos_lod1": 1480
+  },
+  "tec|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "feixe",
+      "aditivo"
+    ],
+    "pecas": 104,
+    "receita": "centro_tecnologico",
+    "superficies_lod0": 3,
+    "superficies_lod1": 3,
+    "topo": 8.51,
+    "triangulos_folha": 7708,
+    "triangulos_lod0": 4708,
+    "triangulos_lod1": 2024
+  },
+  "usi|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 66,
+    "receita": "usina",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 2.2,
+    "triangulos_folha": 4900,
+    "triangulos_lod0": 3532,
+    "triangulos_lod1": 1972
+  },
+  "usi|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 65,
+    "receita": "usina",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.6,
+    "triangulos_folha": 4316,
+    "triangulos_lod0": 3308,
+    "triangulos_lod1": 1992
+  },
+  "usi|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 79,
+    "receita": "usina",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 3.3,
+    "triangulos_folha": 5036,
+    "triangulos_lod0": 4028,
+    "triangulos_lod1": 2424
+  },
+  "usi|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 75,
+    "receita": "usina",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 3.29999995231628,
+    "triangulos_folha": 4384,
+    "triangulos_lod0": 3544,
+    "triangulos_lod1": 1700
+  },
+  "usi|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 45,
+    "receita": "usina",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 4.3,
+    "triangulos_folha": 4052,
+    "triangulos_lod0": 2876,
+    "triangulos_lod1": 1488
+  },
+  "usi|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 67,
+    "receita": "usina",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 5.80000004768372,
+    "triangulos_folha": 10504,
+    "triangulos_lod0": 5400,
+    "triangulos_lod1": 1884
+  },
+  "via|1": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 1,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 32,
+    "receita": "via",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.2,
+    "triangulos_folha": 4792,
+    "triangulos_lod0": 2440,
+    "triangulos_lod1": 440
+  },
+  "via|2": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 2,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 29,
+    "receita": "via",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.2,
+    "triangulos_folha": 2524,
+    "triangulos_lod0": 1852,
+    "triangulos_lod1": 544
+  },
+  "via|3": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 3,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 60,
+    "receita": "via",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.6,
+    "triangulos_folha": 3428,
+    "triangulos_lod0": 2588,
+    "triangulos_lod1": 656
+  },
+  "via|4": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 4,
+    "grupos_lod0": [
+      "opaco"
+    ],
+    "pecas": 79,
+    "receita": "via",
+    "superficies_lod0": 1,
+    "superficies_lod1": 1,
+    "topo": 1.6,
+    "triangulos_folha": 7644,
+    "triangulos_lod0": 4540,
+    "triangulos_lod1": 904
+  },
+  "via|5": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 5,
+    "grupos_lod0": [
+      "opaco",
+      "translucido"
+    ],
+    "pecas": 74,
+    "receita": "via",
+    "superficies_lod0": 2,
+    "superficies_lod1": 1,
+    "topo": 2.2,
+    "triangulos_folha": 3588,
+    "triangulos_lod0": 3084,
+    "triangulos_lod1": 680
+  },
+  "via|6": {
+    "avisos": [],
+    "extras": 0,
+    "faixa": 6,
+    "grupos_lod0": [
+      "opaco",
+      "aditivo"
+    ],
+    "pecas": 57,
+    "receita": "via",
+    "superficies_lod0": 2,
+    "superficies_lod1": 2,
+    "topo": 2.3,
+    "triangulos_folha": 3824,
+    "triangulos_lod0": 2672,
+    "triangulos_lod1": 764
+  }
+}

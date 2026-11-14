@@ -192,7 +192,7 @@ Servidor decide os resultados; jogadores reais no lugar dos NPC; temporadas (nov
 
 | Marco | Entrega | Como se verifica |
 |---|---|---|
-| M8 | Desempenho da cidade 3D: malhas fundidas por material, nível de detalhe, 30 FPS em Samsung e Xiaomi | Medição em aparelho; contagem de chamadas de desenho |
+| M8 | (1.6: fusão, LOD e contagens feitos; falta o aparelho) Desempenho da cidade 3D: malhas fundidas por material, nível de detalhe, 30 FPS em Samsung e Xiaomi | Medição em aparelho; contagem de chamadas de desenho |
 | M9 | OTA só de conteúdo (imagens, textos, balanceamento, eventos); lógica do jogo dentro do app, para cumprir a regra do Google contra baixar código executável | Smoke: módulo OTA sem script; app atualiza conteúdo |
 | M10 | Servidor online no Supabase (plano gratuito, protótipo): login, saves, alianças, chat em tempo real e funções que validam ataques e compras no servidor | Testes de API; nenhum resultado decidido pelo celular |
 | M11 | Preparação da loja: nome e pacote definitivos do app (permanentes na Play Store), política de privacidade no site, formulário de segurança de dados, classificação etária, exportação em AAB, Play App Signing com a chave atual | Lista conferida; AAB assinado gerado localmente |

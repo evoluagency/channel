@@ -1,10 +1,11 @@
 extends Node3D
 ## Renderiza construções em PNG. Uso:
 ##   godot --path tools/arte3d --rendering-driver opengl3 -- \
-##     --construcao=quartel_general --saida=PASTA --trabalhos=1:azul:folha,6:azul:detalhe
+##     --construcao=prefeitura --saida=PASTA --trabalhos=1:azul:folha,6:azul:detalhe
 ## Cada trabalho é faixa:aliança:enquadramento (folha = escala comum; detalhe = mais perto).
 
 const KIT := preload("res://kit.gd")
+const FUSAO := preload("res://fusao.gd")
 
 var args := {}
 
@@ -12,7 +13,7 @@ func _ready() -> void:
 	for a in OS.get_cmdline_user_args():
 		var par := a.trim_prefix("--").split("=", true, 1)
 		args[par[0]] = par[1] if par.size() > 1 else ""
-	var construcao: String = args.get("construcao", "quartel_general")
+	var construcao: String = args.get("construcao", "prefeitura")
 	var saida: String = args.get("saida", "user://")
 	var script = load("res://construcoes/%s.gd" % construcao)
 	if script == null or not script.can_instantiate():
@@ -37,11 +38,26 @@ func _renderizar(receita, faixa: int, cor: String, enq: String, arquivo: String)
 	_cena(raiz, enq)
 	var k = KIT.new(cor)
 	var cam: Camera3D = raiz.get_node("Camera")
-	var topo: float = receita.construir(k, raiz, faixa)
+	k.modo_cidade = args.has("cidade")
+	var obra := Node3D.new()
+	raiz.add_child(obra)
+	var topo: float = receita.construir(k, obra, faixa)
 	if args.has("contar"):
 		var n := [0, 0]
-		_contar(raiz, n)
+		_contar(obra, n)
 		print("CONTAGEM %s f%d malhas=%d triangulos=%d" % [args.get("construcao"), faixa, n[0], n[1]])
+	if args.has("fundir"):
+		# --fundir=0 ou 1: troca as peças pela malha fundida do LOD pedido (conferência)
+		var f: Dictionary = FUSAO.fundir(obra)
+		var mi := MeshInstance3D.new()
+		mi.mesh = f["lod%d" % int(args.get("fundir", "0"))]
+		raiz.add_child(mi)
+		for e in f.extras:
+			e[0].get_parent().remove_child(e[0])
+			e[0].transform = e[1]
+			raiz.add_child(e[0])
+		obra.queue_free()
+		print("FUNDIDA %s f%d superficies=%d triangulos=%d avisos=%s" % [args.get("construcao"), faixa, mi.mesh.get_surface_count(), FUSAO.triangulos(mi.mesh), f.avisos])
 	var nivel := 1 + (faixa - 1) * 5
 	if enq != "alianca":
 		k.selo(raiz, Vector3(0, topo + 0.7, 0), nivel, 1, faixa == 6, cam.global_transform.basis)

@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **13/11/2026** (sessão 1.4). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **14/11/2026** (sessão 1.6). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -112,6 +112,25 @@ Defeitos encontrados:
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
 
+### Cidade 3D, M8 (sessão 1.6, 14/11/2026)
+
+- **Feito no projeto de arte e teste `tools/arte3d/`**, separado do jogo; o jogo instalado e o OTA não mudaram.
+  - Fusão de malhas: até 4 superfícies por construção e faixa, idêntica às folhas pixel a pixel.
+  - LOD por zoom.
+  - Cidade de 80 lotes em retrato, com arrastar e pinça nos limites da seção 3.1.
+  - Selos em 2D.
+  - Painel de medição para o aparelho.
+- **Contagens medidas** (Godot 4.7.2 oficial, GL Compatibility), cidade cheia no nível 30 com sombra: de 59 a 166 chamadas de desenho e de 227 a 360 mil triângulos. Sem a fusão seriam de 3.107 a 13.266 chamadas. Tabelas em `sessoes/HANDOFF-1.6.md`; dados em `logs/cidade3d/`.
+- **O tempo de quadro local não vale:** a máquina de teste desenha por software. **Os 30 FPS em Samsung e Xiaomi ainda não foram medidos.** O roteiro está em `ROTEIRO_APARELHO_M8.md`, e o APK de teste (pacote separado `ink.evolu.mundo.teste3d`) depende do OK do dono.
+- **Arte:**
+  - Banco da cidade e Centro tecnológico nas seis faixas, à espera da avaliação do dono.
+  - Prefeitura no lugar do Quartel-general (receita e letreiro).
+  - Catálogo `catalogo_15_construcoes.png`.
+- **Testes:**
+  - `smoke_cidade.gd` passou;
+  - `test_cidade3d.py` entrou no `--py`;
+  - componentes 12/12 e economia 37/37.
+
 ## 2. O que está onde
 
 | Conteúdo | `main` (site) | `release/valdora-android` | Produção em 11/11 |
@@ -154,7 +173,7 @@ Workflows da `release` (a `main` só tem `valdora-android-release`):
 
 ## 6. Testes
 
-- `game/tests`: 16 smokes Godot (o `city_visual_smoke` entra no `--all`; ainda não executado) e 6 testes Python (`componentes`, `mundo_brasil` e `economia_mundo` são do jogo novo).
+- `game/tests`: 16 smokes Godot (o `city_visual_smoke` entra no `--all`; ainda não executado) e 7 testes Python (`componentes`, `mundo_brasil`, `economia_mundo` e `cidade3d` são do jogo novo). Fora do jogo: `tools/arte3d/smoke_cidade.gd` (precisa de renderizador; ver `tools/arte3d/LEIAME.md`).
 - Comando único: `tools/run_valdora_tests.sh`. Sem opção, roda Python mais os 8 testes Godot que os workflows rodam hoje. Com `--py`, só Python. Com `--all`, inclui os 4 smokes extras que devem passar hoje. Com `--historico`, inclui também CP008, CP009 e CP010, que estão presos às revisões 7, 8 e 9 do manifesto e falham por desenho contra o manifesto atual. O script copia o manifesto e os ZIPs de `site/updates/v2/` para `game/tests/fixtures/` antes dos smokes, como o workflow `cp004-ota`; sem essa cópia 10 smokes falhavam (defeito corrigido em 12/11).
 - Godot esperado: 4.7.2 (Linux x86_64, zip com SHA-256 `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`).
 - **Primeira execução real dos smokes: 12/11/2026**, Godot 4.7.2 oficial com o hash conferido, código do jogo igual ao da release `8a29073`. Log em `game/docs/logs/smokes_2026-11-12.log`.

@@ -1,0 +1,84 @@
+{
+  "cenario": "n30",
+  "fusao": true,
+  "janela": [
+    540,
+    1170
+  ],
+  "lod_tamanho": 24.0,
+  "montagem": {
+    "composicao": {
+      "agu": 1,
+      "alo": 4,
+      "ban": 1,
+      "bas": 1,
+      "ene": 5,
+      "ent": 1,
+      "est": 5,
+      "hel": 1,
+      "min": 5,
+      "par": 1,
+      "pref": 1,
+      "rad": 1,
+      "tec": 1,
+      "usi": 5,
+      "vazio": 30,
+      "via": 17
+    },
+    "construcoes_diferentes": 16,
+    "pecas_soltas": 4056,
+    "triangulos_lod0": 229352,
+    "triangulos_lod1": 89150
+  },
+  "montagem_ms": 407.92,
+  "placa_video": "llvmpipe (LLVM 20.1.2, 256 bits)",
+  "sombra": true,
+  "zoom_max": 127.279220581055,
+  "zoom_min": 9.81630611419678,
+  "zooms": {
+    "longe": {
+      "chamadas_desenho": 61,
+      "largura_visivel": 127.279220581055,
+      "lod": 1,
+      "objetos": 61,
+      "quadro_ms_medio": 103.65995,
+      "quadro_ms_pior": 119.979,
+      "render_cpu_ms": 100.285833485921,
+      "render_gpu_ms": 100.279983139038,
+      "triangulos": 178304
+    },
+    "medio": {
+      "chamadas_desenho": 63,
+      "largura_visivel": 30.0,
+      "lod": 1,
+      "objetos": 106,
+      "quadro_ms_medio": 186.51185,
+      "quadro_ms_pior": 213.388,
+      "render_cpu_ms": 182.976549275716,
+      "render_gpu_ms": 183.219633229574,
+      "triangulos": 179316
+    },
+    "padrao": {
+      "chamadas_desenho": 121,
+      "largura_visivel": 20.0,
+      "lod": 0,
+      "objetos": 156,
+      "quadro_ms_medio": 260.894633333333,
+      "quadro_ms_pior": 289.123,
+      "render_cpu_ms": 256.785016123454,
+      "render_gpu_ms": 257.169882202148,
+      "triangulos": 233776
+    },
+    "perto": {
+      "chamadas_desenho": 87,
+      "largura_visivel": 9.81630611419678,
+      "lod": 0,
+      "objetos": 98,
+      "quadro_ms_medio": 251.949133333333,
+      "quadro_ms_pior": 297.208,
+      "render_cpu_ms": 248.681183624268,
+      "render_gpu_ms": 248.780500284831,
+      "triangulos": 176146
+    }
+  }
+}

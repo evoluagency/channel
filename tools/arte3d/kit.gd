@@ -27,6 +27,11 @@ const ALIANCAS := {
 }
 
 var cor_alianca: Color = ALIANCAS["azul"]
+## Cidade 3D (sessão 1.6): marca peças miúdas para o nível de detalhe e reduz segmentos.
+## Com os valores padrão as folhas aprovadas saem iguais.
+var detalhe := 0          # > 0 enquanto uma peça miúda (pessoa, drone...) é montada
+var modo_cidade := false  # menos segmentos em esferas, toros e cilindros de muitos lados
+var longe := false        # LOD 1 da cidade: ainda menos segmentos
 var _mats := {}
 var _malhas := {}
 var fonte: Font
@@ -164,6 +169,8 @@ func _no(malha: Mesh, material: Material, pos: Vector3, pai: Node3D, sombra := t
 	mi.position = pos
 	if not sombra:
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if detalhe > 0:
+		mi.set_meta("detalhe", true)
 	pai.add_child(mi)
 	return mi
 
@@ -176,7 +183,7 @@ func cilindro(pai: Node3D, pos: Vector3, raio: float, altura: float, material: M
 	m.bottom_radius = raio
 	m.top_radius = raio if raio_topo < 0.0 else raio_topo
 	m.height = altura
-	m.radial_segments = lados
+	m.radial_segments = (mini(lados, 8) if longe else mini(lados, 16)) if modo_cidade else lados
 	m.rings = 1
 	return _no(m, material, pos + Vector3(0, altura * 0.5, 0), pai)
 
@@ -184,8 +191,8 @@ func esfera(pai: Node3D, pos: Vector3, raio: float, material: Material, achatar 
 	var m := SphereMesh.new()
 	m.radius = raio
 	m.height = raio * 2.0 * achatar
-	m.radial_segments = 16
-	m.rings = 8
+	m.radial_segments = (6 if longe else 10) if modo_cidade else 16
+	m.rings = (3 if longe else 5) if modo_cidade else 8
 	return _no(m, material, pos, pai)
 
 func cone(pai: Node3D, pos: Vector3, raio: float, altura: float, material: Material, lados := 8) -> MeshInstance3D:
@@ -195,8 +202,8 @@ func toro(pai: Node3D, pos: Vector3, raio: float, espessura: float, material: Ma
 	var m := TorusMesh.new()
 	m.inner_radius = raio - espessura
 	m.outer_radius = raio + espessura
-	m.rings = 32
-	m.ring_segments = 8
+	m.rings = (12 if longe else 20) if modo_cidade else 32
+	m.ring_segments = (4 if longe else 6) if modo_cidade else 8
 	return _no(m, material, pos, pai)
 
 func grupo(pai: Node3D, pos := Vector3.ZERO, rot_y_graus := 0.0) -> Node3D:
@@ -235,9 +242,11 @@ func arvore(pai: Node3D, pos: Vector3, escala := 1.0) -> void:
 	esfera(pai, pos + Vector3(0.12, 0.78, 0.05) * escala, 0.2 * escala, p("folha_clara", 0.85))
 
 func pessoa(pai: Node3D, pos: Vector3, cor: Color, escala := 1.0) -> void:
+	detalhe += 1
 	cilindro(pai, pos, 0.11 * escala, 0.3 * escala, mat(cor, 0.6), 10, 0.08 * escala)
 	esfera(pai, pos + Vector3(0, 0.42 * escala, 0), 0.1 * escala, p("pele", 0.6))
 	esfera(pai, pos + Vector3(0, 0.47 * escala, 0), 0.105 * escala, mat(cor.darkened(0.3), 0.6), 0.55)
+	detalhe -= 1
 
 func bandeira(pai: Node3D, pos: Vector3, altura: float, cor: Color, segunda: Color = Color("ffffff")) -> void:
 	cilindro(pai, pos, 0.04, altura, p("aco", 0.4, 0.6), 8)
@@ -252,11 +261,13 @@ func antena(pai: Node3D, pos: Vector3, altura: float, luz_cor := Color("ff3b30")
 	esfera(pai, pos + Vector3(0, altura + 0.05, 0), 0.07, luz(luz_cor, 2.0))
 
 func drone(pai: Node3D, pos: Vector3, cor: Color) -> void:
+	detalhe += 1
 	var g := grupo(pai, pos)
 	caixa(g, Vector3.ZERO, Vector3(0.32, 0.1, 0.32), mat(cor, 0.4), 0.04)
 	for d in [Vector3(1, 0, 1), Vector3(-1, 0, 1), Vector3(1, 0, -1), Vector3(-1, 0, -1)]:
 		cilindro(g, d * 0.22 + Vector3(0, 0.08, 0), 0.12, 0.015, mat(Color("20242c"), 0.4, 0.0, 0.0, 0.7), 12)
 	esfera(g, Vector3(0, -0.03, 0.17), 0.04, luz(PALETA["neon"], 5.0))
+	detalhe -= 1
 
 func painel_solar(pai: Node3D, pos: Vector3, rot_y: float, largura := 0.9) -> void:
 	var g := grupo(pai, pos, rot_y)
@@ -311,6 +322,7 @@ func selo(pai: Node3D, pos: Vector3, nivel: int, pontos: int, dourado: bool, cam
 		g.add_child(d)
 
 func veiculo(pai: Node3D, pos: Vector3, rot_y: float, cor: Color, tipo := "jipe") -> void:
+	detalhe += 1
 	var g := grupo(pai, pos, rot_y)
 	var comp := 1.1 if tipo == "jipe" else 1.6
 	caixa(g, Vector3(0, 0.12, 0), Vector3(comp, 0.32, 0.6), mat(cor, 0.45), 0.08)
@@ -326,6 +338,7 @@ func veiculo(pai: Node3D, pos: Vector3, rot_y: float, cor: Color, tipo := "jipe"
 			var r := cilindro(g, Vector3.ZERO, 0.14, 0.12, mat(Color("23262d"), 0.8), 12)
 			r.rotation_degrees.x = 90
 			r.position = Vector3(x, 0.14, z)
+	detalhe -= 1
 
 ## Grade de janelas acesas (pontos de luz) numa face, para torres.
 func luzes_fachada(pai: Node3D, centro: Vector3, normal: Vector3, largura: float, y0: float, y1: float, passo: Vector2, cor: Color, chance := 0.55, semente := 7) -> void:
@@ -381,6 +394,7 @@ func toldo(pai: Node3D, pos: Vector3, normal: Vector3, largura: float, fundo := 
 
 ## Fileira de plantas a partir de pos, na direção dir. tipo: alface, tomate, broto, luminosa.
 func fileira(pai: Node3D, pos: Vector3, dir: Vector3, n: int, passo: float, tipo := "alface", escala := 1.0) -> void:
+	detalhe += 1
 	for i in n:
 		var q := pos + dir * (i * passo)
 		match tipo:
@@ -397,6 +411,7 @@ func fileira(pai: Node3D, pos: Vector3, dir: Vector3, n: int, passo: float, tipo
 			_:
 				esfera(pai, q + Vector3(0, 0.07, 0) * escala, 0.12 * escala, p("folha_clara", 0.85), 0.75)
 				esfera(pai, q + Vector3(0, 0.1, 0) * escala, 0.07 * escala, p("folha", 0.85))
+	detalhe -= 1
 
 ## Túnel de meio cilindro ao longo de X (estufa de plástico): segmentos planos e arcos.
 func tunel(pai: Node3D, pos: Vector3, raio: float, comp: float, pele: Material, arco_m: Material, segmentos := 7, arcos := 5) -> void:
@@ -470,11 +485,13 @@ func poste(pai: Node3D, pos: Vector3, altura := 1.3, cor_luz := Color("fff1b0"),
 		caixa(pai, pos + Vector3(0, altura * 0.55 + 0.04, 0.051), Vector3(0.07, 0.15, 0.01), luz(PALETA["neon"], 1.2), 0.0)
 
 func banco(pai: Node3D, pos: Vector3, rot_y := 0.0) -> void:
+	detalhe += 1
 	var g := grupo(pai, pos, rot_y)
 	caixa(g, Vector3(0, 0.15, 0), Vector3(0.6, 0.05, 0.2), p("madeira"), 0.01)
 	caixa(g, Vector3(0, 0.2, -0.09), Vector3(0.6, 0.18, 0.04), p("madeira"), 0.01)
 	for x in [-0.25, 0.25]:
 		caixa(g, Vector3(x, 0, 0), Vector3(0.04, 0.15, 0.18), p("aco_escuro"), 0.0)
+	detalhe -= 1
 
 func turbina(pai: Node3D, pos: Vector3, altura: float, rot_y := 30.0, cor := Color("f4f6fa")) -> void:
 	cilindro(pai, pos, 0.09, altura, mat(cor, 0.4), 10, 0.05)

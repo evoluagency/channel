@@ -1,14 +1,15 @@
-"""Catálogo: as 13 construções nas seis faixas, numa só imagem.
+"""Catálogo: as 15 construções nas seis faixas, numa só imagem.
 Uso: python3 tools/arte3d/catalogo.py SAIDA.png PASTA_PNG_1 [PASTA_PNG_2 ...]
 Procura <construcao>_f<faixa>_azul_folha.png nas pastas dadas."""
 import sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-ORDEM = [("quartel_general", "Quartel-general"), ("alojamento", "Alojamento"), ("estufa", "Estufa"),
+ORDEM = [("prefeitura", "Prefeitura"), ("alojamento", "Alojamento"), ("estufa", "Estufa"),
          ("usina", "Usina"), ("mineradora", "Mineradora"), ("central_energia", "Central de energia"),
          ("radar", "Radar e antena"), ("base_militar", "Base militar"), ("entreposto", "Entreposto"),
-         ("via", "Via"), ("parque", "Parque"), ("estacao_agua", "Estação de água"), ("heliponto", "Heliponto")]
+         ("via", "Via"), ("parque", "Parque"), ("estacao_agua", "Estação de água"), ("heliponto", "Heliponto"),
+         ("banco", "Banco da cidade"), ("centro_tecnologico", "Centro tecnológico")]
 FAIXAS = ["Acampamento", "Pré-fabricado", "Concreto", "Vidro e aço", "Tecnológico", "Elite"]
 FONTE = Path(__file__).with_name("fontes") / "Montserrat.ttf"
 FUNDO, TINTA = (214, 232, 245), (20, 32, 56)
@@ -36,7 +37,7 @@ def main():
     lado, rot, topo = 230, 200, 110
     img = Image.new("RGB", (rot + lado * 6, topo + lado * len(ORDEM)), FUNDO)
     d = ImageDraw.Draw(img)
-    d.text((20, 18), "MUNDO — 13 construções × 6 faixas (níveis 1, 6, 11, 16, 21, 26)", font=fonte(34, 800), fill=TINTA)
+    d.text((20, 18), "MUNDO — 15 construções × 6 faixas (níveis 1, 6, 11, 16, 21, 26)", font=fonte(34, 800), fill=TINTA)
     for j, n in enumerate(FAIXAS):
         d.text((rot + j * lado + 12, 74), f"{j + 1} · {n}", font=fonte(17, 700), fill=(70, 86, 110))
     for i, (c, nome) in enumerate(ORDEM):

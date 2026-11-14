@@ -1,5 +1,5 @@
 extends RefCounted
-## Quartel-general: receita das seis faixas visuais.
+## Prefeitura (antigo Quartel-general): receita das seis faixas visuais.
 ## Lado visível pela câmera: faces +X e +Z (frente = +Z).
 
 const LOTE := 5.4
@@ -111,10 +111,10 @@ func _f3(k, pai: Node3D) -> float:
 	for i in 5:
 		k.caixa(pai, Vector3(t0.x - 1.2 + i * 0.6, t0.y, t0.z + 1.34), Vector3(0.12, 3.6, 0.1), k.p("concreto", 0.8), 0.02)
 	# letreiro luminoso
-	k.caixa(pai, Vector3(t0.x, t0.y + 3.0, t0.z + 1.36), Vector3(1.5, 0.48, 0.1), k.p("aco_escuro"), 0.03)
-	k.caixa(pai, Vector3(t0.x, t0.y + 3.05, t0.z + 1.42), Vector3(1.36, 0.38, 0.03), k.luz(k.cor_alianca, 2.2), 0.0)
+	k.caixa(pai, Vector3(t0.x, t0.y + 3.0, t0.z + 1.36), Vector3(2.5, 0.48, 0.1), k.p("aco_escuro"), 0.03)
+	k.caixa(pai, Vector3(t0.x, t0.y + 3.05, t0.z + 1.42), Vector3(2.36, 0.38, 0.03), k.luz(k.cor_alianca, 2.2), 0.0)
 	var l := Label3D.new()
-	l.text = "QG"; l.font = k.fonte; l.font_size = 96; l.pixel_size = 0.004
+	l.text = "PREFEITURA"; l.font = k.fonte; l.font_size = 60; l.pixel_size = 0.004
 	l.modulate = Color.WHITE; l.outline_size = 0; l.shaded = false
 	l.position = Vector3(t0.x, t0.y + 3.24, t0.z + 1.45)
 	pai.add_child(l)
