@@ -115,22 +115,41 @@ def gerar() -> dict:
                   "producao_extra_vendavel": False, "regra": "a produção a mais do passe só paga obras e pesquisa do próprio jogador; não se vende, não se doa"}
     d["recem_chegado"] = {"corte_obras": se.RECEM_CORTE, "vale_ate": "Prefeitura 3 ou mais níveis abaixo da mediana do servidor",
                           "corte_maximo_somado": se.CORTE_MAX}
+    d["valor_cidade"] = "soma do custo, a preço de referência, de todos os prédios e níveis de pesquisa da cidade"
     d["migracao_paises"] = {
-        "status": "aprovada a forma (item pago com teto); números propostos na sessão 1.5",
-        "item": "item de transferência da loja (preço: M13); 1 por cidade por temporada; só na semana 1 da temporada",
+        "status": "aprovada pelo dono na sessão 1.5; sem dinheiro real",
+        "abre": f"dia {se.DIA_ABRE_MIGRACAO} (15 dias depois do fim da primeira disputa entre países); depois, fora da janela da disputa",
+        "frequencia": "1 migração por cidade por temporada",
         "requisitos": ["sem cargo", "sem dívida no banco", "sem guerra em andamento", "cidade com 14 dias ou mais", "sai do movimento"],
+        "reserva_minima": {"fracao_valor_cidade": se.RESERVA_MIGRACAO, "onde": "conta de migração no Banco, protegida de saque",
+                           "destino": "gasta na mudança: vai para o tesouro federal do país de destino (taxa de entrada)"},
         "leva": {"predios_e_pesquisa": True, "moeda_teto_dias_producao": 2, "recursos_teto_dias_producao": 1},
         "excedente": "o que passa do teto fica no tesouro do estado de origem",
         "teto_destino": "o país de destino recebe até 5% da sua população por temporada, respeitando as vagas de cada estado",
         "recem_chegado": "não vale para cidade migrada",
     }
+    d["venda_cidade"] = {
+        "status": "aprovada pelo dono na sessão 1.5: só em moeda do jogo; dinheiro real proibido",
+        "abre": f"dia {se.DIA_ABRE_MIGRACAO}, com a cidade tendo 60 dias ou mais; fora da janela da disputa",
+        "requisitos_vendedor": ["sem cargo", "sem dívida no banco", "sem guerra em andamento"],
+        "cartorio": "anúncio público por 72 h antes de fechar (tempo para o dono perceber roubo de conta)",
+        "comprador": "conta sem cidade naquele país; assume a cidade como está; nunca duas cidades por conta no mesmo país",
+        "preco": {"moeda_do_jogo": True, "piso_fracao_valor_cidade": se.VENDA_PISO},
+        "taxa": {"fracao": se.VENDA_TAXA, "em": "moeda do jogo, sai da economia"},
+        "nao_transfere": "passe e itens comprados ficam com a conta de quem vendeu",
+    }
+    d["abandono"] = {"protecao_apos_dias_inativo": 14,
+                     "libera_apos_dias_inativo": 30,
+                     "destino": "moeda e recursos vão metade para o movimento e metade para o tesouro do estado; o lote fica livre para recém-chegado"}
     d["disputa_paises"] = {
-        "status": "proposta inicial (sessão 1.5), a confirmar",
-        "inicio": "depois da temporada 1; o servidor não reinicia",
-        "calendario": {"politica_interna": [1, 21], "disputa": [22, 28], "resultado_e_tratados": [29, 30]},
+        "status": "proposta inicial (sessão 1.5); calendário aprovado pelo dono",
+        "inicio": "logo depois da temporada 1; o servidor não reinicia",
+        "calendario": {"disputa": "dias 1 a 15 de cada temporada a partir da 2ª (a primeira: dias 31 a 45)",
+                       "politica_interna": "dias 16 a 30 de cada temporada",
+                       "migracao_e_venda": f"a partir do dia {se.DIA_ABRE_MIGRACAO}, fora da janela da disputa"},
         "grupos": "4 países por grupo, pela soma do poder das 200 maiores cidades",
         "pontos": {"missoes_nacionais": 0.40, "territorio_de_fronteira": 0.40, "tecnologia": 0.20},
-        "territorio": "zonas neutras entre os países do grupo; 3 janelas de 2 h na semana da disputa; só cidades com Prefeitura 15 ou mais",
+        "territorio": "zonas neutras entre os países do grupo; 3 janelas de 2 h por semana da disputa; só cidades com Prefeitura 15 ou mais",
         "premio_temporada_seguinte": {"1": 0.05, "2": 0.03, "3": 0.01, "4": 0.0},
         "perdas": "nunca cidade nem nível; só recursos do cofre, como na guerra civil",
         "tecnologias": {
@@ -140,6 +159,7 @@ def gerar() -> dict:
             "limite": "até 2 tratados por país por temporada",
         },
     }
+    d["cobranca"] = "sem dinheiro real por enquanto; forma de cobrança a definir (M13). Transações entre jogadores só em moeda do jogo"
     return d
 
 

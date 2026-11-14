@@ -164,4 +164,8 @@ Medida rápida na simulação atual, com o imposto só na venda (sem a taxa de 5
 4. **Impostos:** estadual e federal de 0 a 30% cada. Faixas de capacidade pelo imposto somado: verde até 20%, amarela até 40%, vermelha acima disso.
 5. **Recém-chegado:** obras 50% mais rápidas.
 
-Regras e números: `ECONOMIA_v0.3.md`. A migração e a disputa entre países (seção 3 dele) são proposta para confirmar.
+6. **Sem cobrança em dinheiro real por enquanto**; a forma de cobrança será analisada depois. As transações entre jogadores valem com a moeda do jogo.
+7. **Migração** a partir do dia 60 (15 dias depois da primeira disputa entre países, nos dias 31 a 45), com reserva mínima de 25% do valor da cidade, em moeda.
+8. **Venda da cidade** por quem desiste: permitida, só em moeda do jogo; venda por dinheiro real proibida.
+
+Regras e números: `ECONOMIA_v0.3.md`, seção 3. O resto da disputa entre países (grupos, pontos, prêmios, tratados) é proposta para confirmar.

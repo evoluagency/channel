@@ -16,6 +16,11 @@ Branch: `claude/zealous-tesla-kfhwld`. Nada publicado: sem push na `main`, deplo
   - fraco continua em −20%;
   - impostos de 0 a 30% cada, com faixas verde até 20%, amarela até 40% e vermelha acima;
   - recém-chegado com obras 50% mais rápidas.
+- Na conversa seguinte:
+  - sem cobrança em dinheiro real por enquanto;
+  - migração a partir do dia 60, com reserva de 25% do valor da cidade, em moeda;
+  - venda da cidade só em moeda do jogo;
+  - disputa entre países nos dias 1 a 15 de cada temporada a partir da 2ª.
 - Registro: `SOCIEDADE_ECONOMIA_v0.1.md`, seção 13.
 
 ## Feito
@@ -34,7 +39,7 @@ Branch: `claude/zealous-tesla-kfhwld`. Nada publicado: sem push na `main`, deplo
   As curvas são as da v0.2.
 - **`tools/mundo/gerar_componentes_v03.py`** gera `game/data/mundo_componentes_v0.3.json`, com 15 prédios. Contém o Centro tecnológico (abre na Prefeitura 10 com Entreposto 4) e as seções de pesquisa, regiões, mercado, impostos, tesouro, passe, recém-chegado, migração e disputa entre países. A v0.2 continua no repositório, sem mudança.
 - **`game/docs/ECONOMIA_v0.3.md`:** regras, migração, proposta da disputa entre países, todas as tabelas da simulação e a leitura.
-- **`game/tests/test_economia_mundo.py`:** 35/35. Inclui:
+- **`game/tests/test_economia_mundo.py`:** 37/37. Inclui:
   - os geradores v0.2 e v0.3 são determinísticos e as curvas da v0.2 ficaram iguais;
   - regiões a ±3%;
   - comércio entre 15% e 35%;
@@ -65,7 +70,7 @@ Branch: `claude/zealous-tesla-kfhwld`. Nada publicado: sem push na `main`, deplo
 
 ## Pendências
 
-- **Confirmar com o dono:** os números da migração e a proposta da disputa entre países (`ECONOMIA_v0.3.md`, seção 3); o preço do item de migração e do passe ficam para o M13.
+- **Confirmar com o dono:** grupos, pontos, prêmios e tratados da disputa entre países (`ECONOMIA_v0.3.md`, seção 3). A forma de cobrança fica para o M13.
 - **Arte:** Banco e Centro tecnológico nas seis faixas, na sessão 1.6.
 - **Limites do modelo:** a margem do vendedor é fixa (não reage à procura); o mercado online só se mede no M10.
 - **Pendências antigas do dono:** nome do jogo, cor final, atribuição do estado, territórios disputados, pacote do app, nomes dos heróis.

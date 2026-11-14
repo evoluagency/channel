@@ -6510,9 +6510,11 @@
   "vale_ate": "Prefeitura 3 ou mais níveis abaixo da mediana do servidor",
   "corte_maximo_somado": 0.8
  },
+ "valor_cidade": "soma do custo, a preço de referência, de todos os prédios e níveis de pesquisa da cidade",
  "migracao_paises": {
-  "status": "aprovada a forma (item pago com teto); números propostos na sessão 1.5",
-  "item": "item de transferência da loja (preço: M13); 1 por cidade por temporada; só na semana 1 da temporada",
+  "status": "aprovada pelo dono na sessão 1.5; sem dinheiro real",
+  "abre": "dia 60 (15 dias depois do fim da primeira disputa entre países); depois, fora da janela da disputa",
+  "frequencia": "1 migração por cidade por temporada",
   "requisitos": [
    "sem cargo",
    "sem dívida no banco",
@@ -6520,6 +6522,11 @@
    "cidade com 14 dias ou mais",
    "sai do movimento"
   ],
+  "reserva_minima": {
+   "fracao_valor_cidade": 0.25,
+   "onde": "conta de migração no Banco, protegida de saque",
+   "destino": "gasta na mudança: vai para o tesouro federal do país de destino (taxa de entrada)"
+  },
   "leva": {
    "predios_e_pesquisa": true,
    "moeda_teto_dias_producao": 2,
@@ -6529,22 +6536,38 @@
   "teto_destino": "o país de destino recebe até 5% da sua população por temporada, respeitando as vagas de cada estado",
   "recem_chegado": "não vale para cidade migrada"
  },
+ "venda_cidade": {
+  "status": "aprovada pelo dono na sessão 1.5: só em moeda do jogo; dinheiro real proibido",
+  "abre": "dia 60, com a cidade tendo 60 dias ou mais; fora da janela da disputa",
+  "requisitos_vendedor": [
+   "sem cargo",
+   "sem dívida no banco",
+   "sem guerra em andamento"
+  ],
+  "cartorio": "anúncio público por 72 h antes de fechar (tempo para o dono perceber roubo de conta)",
+  "comprador": "conta sem cidade naquele país; assume a cidade como está; nunca duas cidades por conta no mesmo país",
+  "preco": {
+   "moeda_do_jogo": true,
+   "piso_fracao_valor_cidade": 0.25
+  },
+  "taxa": {
+   "fracao": 0.1,
+   "em": "moeda do jogo, sai da economia"
+  },
+  "nao_transfere": "passe e itens comprados ficam com a conta de quem vendeu"
+ },
+ "abandono": {
+  "protecao_apos_dias_inativo": 14,
+  "libera_apos_dias_inativo": 30,
+  "destino": "moeda e recursos vão metade para o movimento e metade para o tesouro do estado; o lote fica livre para recém-chegado"
+ },
  "disputa_paises": {
-  "status": "proposta inicial (sessão 1.5), a confirmar",
-  "inicio": "depois da temporada 1; o servidor não reinicia",
+  "status": "proposta inicial (sessão 1.5); calendário aprovado pelo dono",
+  "inicio": "logo depois da temporada 1; o servidor não reinicia",
   "calendario": {
-   "politica_interna": [
-    1,
-    21
-   ],
-   "disputa": [
-    22,
-    28
-   ],
-   "resultado_e_tratados": [
-    29,
-    30
-   ]
+   "disputa": "dias 1 a 15 de cada temporada a partir da 2ª (a primeira: dias 31 a 45)",
+   "politica_interna": "dias 16 a 30 de cada temporada",
+   "migracao_e_venda": "a partir do dia 60, fora da janela da disputa"
   },
   "grupos": "4 países por grupo, pela soma do poder das 200 maiores cidades",
   "pontos": {
@@ -6552,7 +6575,7 @@
    "territorio_de_fronteira": 0.4,
    "tecnologia": 0.2
   },
-  "territorio": "zonas neutras entre os países do grupo; 3 janelas de 2 h na semana da disputa; só cidades com Prefeitura 15 ou mais",
+  "territorio": "zonas neutras entre os países do grupo; 3 janelas de 2 h por semana da disputa; só cidades com Prefeitura 15 ou mais",
   "premio_temporada_seguinte": {
    "1": 0.05,
    "2": 0.03,
@@ -6566,5 +6589,6 @@
    "efeito": "quem recebe pesquisa aquela linha 50% mais rápido por 1 temporada (não recebe níveis prontos)",
    "limite": "até 2 tratados por país por temporada"
   }
- }
+ },
+ "cobranca": "sem dinheiro real por enquanto; forma de cobrança a definir (M13). Transações entre jogadores só em moeda do jogo"
 }

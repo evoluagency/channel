@@ -19,6 +19,7 @@ Também foram aprovados, depois das tabelas:
 2. **Fraco continua em −20%.** O comércio entre jogadores fica em 18%; −30% levaria a cerca de 20%.
 3. **Faixas de imposto:** verde até 20% somados, amarela até 40%, vermelha acima disso. O estadual e o federal vão de 0 a 30% cada.
 4. **Recém-chegado:** obras 50% mais rápidas.
+5. **Sem dinheiro real por enquanto.** Migração e venda da cidade só em moeda do jogo; reserva de migração de 25% do valor da cidade; abertura no dia 60 (seção 3).
 
 ## 2. Regras
 
@@ -36,27 +37,52 @@ Também foram aprovados, depois das tabelas:
 | Banco | Sem cobrança de acesso: construído com recursos, como os outros prédios. Taxas de 2% na entrada e na saída, rendimento e empréstimo como na v0.2 |
 | Recém-chegado | Obras 50% mais rápidas enquanto a Prefeitura estiver 3 ou mais níveis abaixo da mediana do servidor. Não vale para cidade migrada. Corte somado (passe, recém-chegado, pesquisa) com teto de 80% |
 
-## 3. Migração entre países e disputa entre servidores
+## 3. Migração, venda da cidade e disputa entre países
 
-**Migração (forma aprovada; números propostos):**
+**Decisões do dono (sessão 1.5):**
+- Sem cobrança em dinheiro real por enquanto; a forma de cobrança será definida depois (M13).
+- Transações entre jogadores, inclusive a venda da cidade, só em moeda do jogo.
+- Migração e venda abrem no dia 60, 15 dias depois do fim da primeira disputa entre países.
+- Reserva de migração: 25% do valor da cidade.
 
-| Regra | Proposta |
+**Valor da cidade:** a soma do custo, a preço de referência, de todos os prédios e níveis de pesquisa. No fim da temporada 2 (seção 4.7), vai de 2,4 milhões (5 min/dia, nível 27) a 5,4 milhões (pagante); a reserva de 25% equivale a 4 a 7 dias de produção.
+
+**Migração entre países:**
+
+| Regra | Valor |
 |---|---|
-| Item | Item de transferência da loja (preço no M13); 1 por cidade por temporada, só na semana 1 |
+| Quando | A partir do dia 60, fora da janela da disputa; 1 por cidade por temporada |
 | Requisitos | Sem cargo, sem dívida no banco, sem guerra em andamento, cidade com 14 dias ou mais; a cidade sai do movimento |
+| Reserva mínima | 25% do valor da cidade, juntada numa conta de migração no Banco, protegida de saque. É gasta na mudança e vai para o tesouro federal do país de destino (taxa de entrada) |
 | O que leva | Prédios, níveis e pesquisa; moeda até 2 dias de produção de referência; cada recurso até 1 dia |
 | Excedente | O que passa do teto fica no tesouro do estado de origem |
 | Teto do destino | O país recebe até 5% da sua população por temporada, respeitando as vagas de cada estado |
+| Recém-chegado | O bônus não vale para cidade migrada |
 
-**Disputa entre países (proposta inicial, a confirmar):**
+**Venda da cidade (desistência):**
+
+| Regra | Valor |
+|---|---|
+| Moeda | Só moeda do jogo; venda por dinheiro real proibida |
+| Quando | A partir do dia 60, com a cidade tendo 60 dias ou mais; fora da janela da disputa |
+| Quem vende | Sem cargo, sem dívida, sem guerra |
+| Cartório | Anúncio público por 72 h antes de fechar, tempo para o dono perceber roubo de conta |
+| Quem compra | Uma conta sem cidade naquele país, que assume a cidade como está; nunca duas cidades por conta no mesmo país |
+| Preço e taxa | Preço livre, com piso de 25% do valor da cidade; taxa de 10% em moeda, que sai da economia |
+| Não vai junto | Passe e itens comprados ficam com a conta de quem vendeu |
+
+**Abandono:**
+- Depois de 14 dias inativa, a cidade fica protegida.
+- Depois de 30 dias, a moeda e os recursos vão metade para o movimento e metade para o tesouro do estado. O lote fica livre para um recém-chegado.
+
+**Disputa entre países (calendário aprovado; o resto é proposta inicial, a confirmar):**
 
 | Regra | Proposta |
 |---|---|
-| Início | Depois da temporada 1; o servidor não reinicia |
-| Calendário de cada temporada | Dias 1 a 21: política interna. Dias 22 a 28: disputa. Dias 29 e 30: resultado e tratados |
+| Calendário | Temporada 1 (dias 1 a 30): só interna. A partir da 2ª, dias 1 a 15 de cada temporada: disputa (a primeira, dias 31 a 45); dias 16 a 30: política interna |
 | Grupos | 4 países por grupo, pela soma do poder das 200 maiores cidades |
 | Pontos | Missões nacionais 40%, território de fronteira 40%, tecnologia 20% |
-| Território | Zonas neutras entre os países do grupo; 3 janelas de 2 h na semana da disputa; só cidades com Prefeitura 15 ou mais |
+| Território | Zonas neutras entre os países do grupo; 3 janelas de 2 h por semana da disputa; só cidades com Prefeitura 15 ou mais |
 | Prêmio | Produção do país inteiro na temporada seguinte: +5% para o 1º, +3% para o 2º, +1% para o 3º |
 | Perdas | Nunca cidade nem nível; só recursos do cofre, como na guerra civil |
 | Tecnologia nacional | Linha com nível 11 ou mais pesquisado por 20% ou mais das cidades do país |
@@ -148,6 +174,15 @@ Também foram aprovados, depois das tabelas:
 - Passe da temporada: obras 60% mais rápidas, produção +75%, +1 fila de obra e +1 de pesquisa. Equivale a 2.288 h de aceleração. A produção a mais do passe fica marcada e só paga obras e pesquisa do próprio jogador: nunca entra numa venda.
 - Ajuda do movimento (10 ajudas por obra, 1% cada): 5 min/dia 243 h, 15 min/dia 288 h, 30 min/dia 330 h, pagante médio (passe, 15 min) 440 h poupadas.
 - Sessões em que faltou recurso para iniciar obra: p5 2, p15 0, p30 55, pag 41
+
+**Valor da cidade no dia 66 e reserva de migração (25%, em moeda do jogo):**
+
+| Perfil | Prefeitura | Valor da cidade | Reserva (25%) | Reserva em dias de produção de referência |
+|---|---|---|---|---|
+| 5 min/dia | 27 | 2.393.955 | 598.489 | 3,9 |
+| 15 min/dia | 30 | 3.544.651 | 886.163 | 4,5 |
+| 30 min/dia | 30 | 4.061.297 | 1.015.324 | 5,1 |
+| pagante médio (passe, 15 min) | 30 | 5.356.458 | 1.339.114 | 6,7 |
 
 **Resumo:** comércio entre jogadores 17,9% da produção; vendas ao sistema 21,0%; impostos 3,9% (carga do jogador de 15 min: 3,3% da produção); regiões: produção 3,9% e poder 1,3% entre a maior e a menor, nível 30 com 0,9 dia de diferença; moeda guardada até 0,49 dia de produção.
 

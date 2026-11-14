@@ -42,6 +42,8 @@ ck["nordeste_aprovado"] = sorted(fortes["Nordeste"]) == ["alimentos", "materiais
 ck["impostos_faixas"] = d["impostos"]["estadual"]["faixa"] == [0.0, 0.30] and d["impostos"]["federal"]["faixa"] == [0.0, 0.30] \
     and [f["faixa"] for f in d["impostos"]["faixas_capacidade"]] == ["verde", "amarela", "vermelha"]
 ck["passe_nao_vende"] = d["passe"]["producao_extra_vendavel"] is False
+ck["migracao_e_venda_so_em_moeda"] = d["migracao_paises"]["reserva_minima"]["fracao_valor_cidade"] == 0.25 \
+    and d["venda_cidade"]["preco"]["moeda_do_jogo"] is True and "dia 60" in d["migracao_paises"]["abre"]
 with tempfile.TemporaryDirectory() as tmp:
     for nome, ger, ref in (("v02", "gerar_componentes_v02.py", V02), ("v03", "gerar_componentes_v03.py", V03)):
         out = Path(tmp) / f"{nome}.json"
@@ -68,6 +70,9 @@ ck["moeda_guardada_abaixo_de_1_dia"] = R["my_max"] < 1.0
 ck["sistema_quase_nao_vende"] = R["compra_sistema"] < 0.02
 ck["bonus_obras_publicas_ate_6pct"] = 0 < R["bonus_pub"] <= 2 * se.OBRA_PUB_BONUS_MAX + 1e-9
 ck["tesouro_no_teto"] = all(h["saldo_est"] <= se.TESOURO_TETO_DIAS * max(h["imp_est"], 1e-9) * 1.5 + 1 for h in hist[14:60])
+# reserva de migração no nível 30: entre 3 e 8 dias de produção (cara, mas alcançável)
+r30 = [se.RESERVA_MIGRACAO * a.valor_cidade() / (24 * se.YREF[30]) for a in ags if a.qg == 30]
+ck["reserva_migracao_3_a_8_dias"] = bool(r30) and all(3 <= x <= 8 for x in r30)
 # passe: o que o pagante vende nunca passa da produção sem o passe
 for a in ags:
     if a.perfil != "pag":

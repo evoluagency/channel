@@ -105,8 +105,12 @@ Defeitos encontrados:
   - Resultados: 15 min/dia chega ao nível 20 no dia 29,6 e ao 30 no 63,6; o pagante, ao 30 no dia 31.
   - Regiões a ±2%; comércio entre jogadores de 18% da produção (abaixo da meta de 20%, aceito); moeda guardada abaixo de 0,5 dia.
 - **Dados:** `game/data/mundo_componentes_v0.3.json` (15 prédios, com pesquisa, regiões, mercado, impostos, tesouro, passe, recém-chegado, migração e disputa entre países), gerado por `tools/mundo/gerar_componentes_v03.py`. As curvas da v0.2 continuam iguais (o teste confere).
-- **Regras:** `game/docs/ECONOMIA_v0.3.md`. A migração e a disputa entre países são proposta a confirmar.
-- **Testes:** `game/tests/test_economia_mundo.py` 35/35; o `--py` passa 8/8. Nada do jogo instalado mudou.
+- **Sem dinheiro real por enquanto** (decisão do dono); a cobrança será definida no M13.
+  - Migração a partir do dia 60, com reserva de 25% do valor da cidade (4 a 7 dias de produção).
+  - Venda da cidade só em moeda do jogo.
+  - Disputa entre países nos dias 1 a 15 de cada temporada a partir da 2ª.
+- **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
+- **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
 
 ## 2. O que está onde
 

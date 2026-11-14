@@ -98,6 +98,11 @@ PASSE_FILA_PESQ = 1
 RECEM_CORTE = 0.50
 RECEM_MARGEM_NIVEIS = 3     # vale enquanto a Prefeitura estiver 3 ou mais níveis abaixo da mediana
 CORTE_MAX = 0.80            # corte de tempo somado (passe, recém-chegado) nunca passa disso
+# Migração entre países e venda da cidade (decisões do dono, sessão 1.5): só em moeda do jogo
+RESERVA_MIGRACAO = 0.25     # reserva mínima = 25% do valor da cidade, gasta na mudança
+VENDA_PISO = 0.25           # piso do preço de venda da cidade (fração do valor)
+VENDA_TAXA = 0.10           # taxa da venda em moeda, sai da economia
+DIA_ABRE_MIGRACAO = 60      # 15 dias depois da primeira disputa entre países (dias 31 a 45)
 BANCO_ENTRADA = BANCO_SAIDA = 0.02
 BANCO_REND_SEMANA = 0.01
 BANCO_TETO_DIAS = 7.0   # rendimento só até 7 dias de produção de referência
@@ -377,6 +382,18 @@ class Agente:
     def poder(self) -> float:
         niveis = [self.qg, self.bas, self.tec] + self.alo + [n for r in RES for n in self.prod[r]]
         return sum(40 * n ** 1.55 for n in niveis if n > 0) + self.tropas / 20
+
+    def valor_cidade(self) -> float:
+        """Soma do custo (a preço de referência) dos prédios e da pesquisa: base da reserva de
+        migração e do piso de venda da cidade (sessão 1.5)."""
+        def v(t, n):
+            return sum(x * PRECO_REF[r] for r, x in custo(t, n).items())
+        s = sum(v("hq", n) for n in range(2, self.qg + 1)) + sum(v("bas", n) for n in range(1, self.bas + 1))
+        s += sum(v("tec", n) for n in range(1, self.tec + 1))
+        s += sum(v("alo", n) for lv in self.alo for n in range(1, lv + 1))
+        s += sum(v("prod", n) for r in RES for lv in self.prod[r] for n in range(1, lv + 1))
+        s += sum(sum(x * PRECO_REF[r] for r, x in custo_pesq(k).items()) for ln in LINHAS for k in range(1, self.pesq[ln] + 1))
+        return s
 
     def recem_ativo(self) -> bool:
         return self.recem_mediana is not None and self.qg <= self.recem_mediana - RECEM_MARGEM_NIVEIS
@@ -988,6 +1005,14 @@ def relatorio(ags, hist, dias, md=True):
       + ", ".join(f"{NOME_PERFIL[pf]} {br(sum(a.ajuda_h for a in ags if a.perfil == pf) / 5)} h" for pf in PERFIS) + " poupadas.")
     esp = {pf: sum(a.espera_recurso for a in ags if a.perfil == pf) / 5 for pf in PERFIS}
     p("- Sessões em que faltou recurso para iniciar obra: " + ", ".join(f"{k} {br(v)}" for k, v in esp.items()))
+    p(f"\n**Valor da cidade no dia {dias} e reserva de migração (25%, em moeda do jogo):**\n")
+    p("| Perfil | Prefeitura | Valor da cidade | Reserva (25%) | Reserva em dias de produção de referência |")
+    p("|---|---|---|---|---|")
+    for pf in PERFIS:
+        gp = [a for a in ags if a.perfil == pf]
+        v = sum(a.valor_cidade() for a in gp) / len(gp)
+        q = round(sum(a.qg for a in gp) / len(gp))
+        p(f"| {NOME_PERFIL[pf]} | {q} | {br(v)} | {br(RESERVA_MIGRACAO * v)} | {br(RESERVA_MIGRACAO * v / (24 * YREF[q]), 1)} |")
     p(f"\n**Resumo:** comércio entre jogadores {br(100 * R['comercio'], 1)}% da produção; vendas ao sistema {br(100 * R['venda_sistema'], 1)}%; "
       f"impostos {br(100 * R['impostos'], 1)}% (carga do jogador de 15 min: {br(100 * R['carga_p15'], 1)}% da produção); "
       f"regiões: produção {br(100 * (R['reg_prod'] - 1), 1)}% e poder {br(100 * (R['reg_poder'] - 1), 1)}% entre a maior e a menor, "
