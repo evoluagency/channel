@@ -24,6 +24,12 @@ float ruido(vec2 p) {
 	return mix(mix(h21(i), h21(i + vec2(1, 0)), u.x), mix(h21(i + vec2(0, 1)), h21(i + vec2(1, 1)), u.x), u.y);
 }
 float fbm(vec2 p) { return ruido(p) * 0.5 + ruido(p * 2.1) * 0.3 + ruido(p * 4.3) * 0.2; }
+// Derivada em tela: detalhes menores que um pixel devem se aproximar
+// do tom médio, evitando o efeito de pontos piscando ao caminhar.
+float cobertura_micro(vec2 uv, float frequencia) {
+	vec2 delta = fwidth(uv * frequencia);
+	return 1.0 - smoothstep(0.65, 1.8, max(delta.x, delta.y));
+}
 
 // distância à borda da célula de Voronoi (pedras irregulares) e id da pedra
 vec2 voronoi(vec2 p) {
@@ -66,7 +72,8 @@ vec2 padrao(vec2 uv, float y_mundo) {
 	} else if (tipo == 3) { // concreto em placas
 		vec2 c = fract(uv * 0.5);
 		float junta = min(min(c.x, 1.0 - c.x), min(c.y, 1.0 - c.y));
-		return vec2(fbm(uv * 3.0), smoothstep(0.004, 0.012, junta));
+		float largura = max(0.012, max(fwidth(uv.x), fwidth(uv.y)));
+		return vec2(fbm(uv * 3.0), smoothstep(0.004, 0.012 + largura * 0.3, junta));
 	} else if (tipo == 4) { // madeira em tábuas
 		vec2 q = uv * vec2(1.0, 5.0);
 		float tab = floor(q.y);
@@ -74,10 +81,11 @@ vec2 padrao(vec2 uv, float y_mundo) {
 		float junta = min(fract(q.y), 1.0 - fract(q.y));
 		return vec2(veio * 0.5 + h21(vec2(tab, 3.0)) * 0.5, smoothstep(0.03, 0.08, junta));
 	} else if (tipo == 5) { // metal ondulado
-		float o = sin(uv.x * 18.0) * 0.5 + 0.5;
+		float o = 0.5 + sin(uv.x * 18.0) * (0.5 * cobertura_micro(uv, 18.0));
 		return vec2(o, 1.0);
 	} else if (tipo == 6) { // grama
-		return vec2(fbm(uv * 4.0) * 0.6 + ruido(uv * 40.0) * 0.4, 1.0);
+		float micro = mix(0.5, ruido(uv * 40.0), cobertura_micro(uv, 40.0));
+		return vec2(fbm(uv * 4.0) * 0.6 + micro * 0.4, 1.0);
 	} else if (tipo == 7) { // azulejo
 		vec2 q = uv * 3.0;
 		vec2 c = fract(q);
@@ -86,9 +94,11 @@ vec2 padrao(vec2 uv, float y_mundo) {
 		float desenho = step(abs(d.x - d.y), 0.06) + step(length(c - 0.5), 0.17) - step(length(c - 0.5), 0.11);
 		return vec2(clamp(desenho, 0.0, 1.0), smoothstep(0.02, 0.05, junta));
 	} else if (tipo == 8) { // asfalto
-		return vec2(ruido(uv * 30.0) * 0.5 + fbm(uv * 2.0) * 0.5, 1.0);
+		float micro = mix(0.5, ruido(uv * 30.0), cobertura_micro(uv, 30.0));
+		return vec2(micro * 0.5 + fbm(uv * 2.0) * 0.5, 1.0);
 	} else if (tipo == 10) { // terra
-		return vec2(fbm(uv * 1.5) * 0.7 + ruido(uv * 25.0) * 0.3, 1.0);
+		float micro = mix(0.5, ruido(uv * 25.0), cobertura_micro(uv, 25.0));
+		return vec2(fbm(uv * 1.5) * 0.7 + micro * 0.3, 1.0);
 	} else if (tipo == 11) { // telha
 		vec2 q = uv * vec2(4.0, 3.0);
 		q.x += step(1.0, mod(floor(q.y), 2.0)) * 0.5;
