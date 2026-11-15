@@ -66,3 +66,37 @@ func instalar(identificador: int) -> String:
 	abrir.addFlags(intent_class.FLAG_GRANT_READ_URI_PERMISSION)
 	activity.startActivity(abrir)
 	return "" if java.get_exception() == null else "O Android não conseguiu abrir o instalador."
+
+## Lê o estado verdadeiro do DownloadManager. Consultar o arquivo parcial não é confiável
+## em Android recente, pois ele pode permanecer oculto até a conclusão do download.
+func progresso(identificador: int) -> Dictionary:
+	var retorno := {"status": -1, "baixado": 0, "total": -1, "motivo": 0}
+	if identificador <= 0 or manager == null:
+		return retorno
+	var dm_class = java.wrap("android.app.DownloadManager")
+	var query_class = java.wrap("android.app.DownloadManager$Query")
+	var consulta = query_class.Query()
+	var cursor = manager.query(consulta)
+	if cursor == null or java.get_exception() != null:
+		return retorno
+	while cursor.moveToNext():
+		var col_id: int = cursor.getColumnIndex(dm_class.COLUMN_ID)
+		if col_id < 0:
+			break
+		if int(cursor.getLong(col_id)) != identificador:
+			continue
+		var col_status: int = cursor.getColumnIndex(dm_class.COLUMN_STATUS)
+		var col_bytes: int = cursor.getColumnIndex(dm_class.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+		var col_total: int = cursor.getColumnIndex(dm_class.COLUMN_TOTAL_SIZE_BYTES)
+		var col_motivo: int = cursor.getColumnIndex(dm_class.COLUMN_REASON)
+		if col_status >= 0:
+			retorno["status"] = int(cursor.getInt(col_status))
+		if col_bytes >= 0:
+			retorno["baixado"] = int(cursor.getLong(col_bytes))
+		if col_total >= 0:
+			retorno["total"] = int(cursor.getLong(col_total))
+		if col_motivo >= 0:
+			retorno["motivo"] = int(cursor.getInt(col_motivo))
+		break
+	cursor.close()
+	return retorno
