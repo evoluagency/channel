@@ -53,6 +53,7 @@ run "test_componentes_mundo"    60 python3 -I game/tests/test_componentes_mundo.
 run "test_mundo_brasil"         120 python3 -I game/tests/test_mundo_brasil.py
 run "test_economia_mundo"       120 python3 -I game/tests/test_economia_mundo.py
 run "test_cidade3d"            60 python3 -I game/tests/test_cidade3d.py
+run "test_mapas_pvp"           60 python3 -I game/tests/test_mapas_pvp.py
 run "ota_manifest --verify"     60 python3 -I tools/ota_manifest.py --verify-existing
 
 GODOT_MISSING=0

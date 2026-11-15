@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **14/11/2026** (sessão 1.6). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **15/11/2026** (sessão 1.6, PvP). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -111,6 +111,18 @@ Defeitos encontrados:
   - Disputa entre países nos dias 1 a 15 de cada temporada a partir da 2ª.
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
+
+### Valdora PvP: menus e mapas (sessão 1.6, 15/11/2026)
+
+- **Mudança de rumo do dono:**
+  - versão **PvP** do Valdora;
+  - jogabilidade e estrutura de menus de tiro competitivo mobile (referência: Standoff 2);
+  - acabamento de estratégia mobile (referência: Last War), com identidade própria.
+- **Feito:** layout das 10 telas de menu, só com espaços reservados, e 5 mapas do modo Desarmar com regras de equilíbrio testadas.
+- O cenário de Brasília está sendo construído pelo Codex.
+- Registro completo em `PVP_v0.1.md`.
+- Nada publicado; a `Main.tscn` e o jogo instalado não mudaram.
+- Testes: `pvp_menu_smoke` passou (10 telas); `test_mapas_pvp` 67/67; `--py` 10/10.
 
 ### Cidade 3D, M8 (sessão 1.6, 14/11/2026)
 
