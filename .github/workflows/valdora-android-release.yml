@@ -1,6 +1,11 @@
 name: Valdora - Android release permanente
 on:
   workflow_dispatch:
+    inputs:
+      fonte:
+        description: 'Branch de origem do código (padrão: release/valdora-android)'
+        required: false
+        default: 'release/valdora-android'
 permissions:
   contents: read
 jobs:
@@ -11,7 +16,7 @@ jobs:
       - name: Fonte de release controlada
         uses: actions/checkout@v4
         with:
-          ref: release/valdora-android
+          ref: ${{ inputs.fonte || 'release/valdora-android' }}
           persist-credentials: false
       - name: Preflight — segredos obrigatórios
         shell: bash
