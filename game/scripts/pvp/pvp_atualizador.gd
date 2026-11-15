@@ -97,19 +97,45 @@ func iniciar_download(d: Dictionary) -> void:
 	_ultimo_pct = -1
 	download_progresso.emit(0)
 	set_process(true)
-	_verificar_arquivo()
+	_verificar_download()
 
 func _process(delta: float) -> void:
-	if _dados.is_empty() or _pronto or _id <= 0:
+	if _dados.is_empty() or _pronto or _id <= 0 or _ponte == null:
 		return
 	_tempo += delta
 	_intervalo += delta
 	if _intervalo >= 1.0:
 		_intervalo = 0.0
-		_verificar_arquivo()
+		_verificar_download()
 	if _tempo > 1800.0:
 		set_process(false)
-		download_erro.emit("Download pausado ou muito lento. Verifique a conexão e abra novamente o jogo.")
+		download_erro.emit("Download interrompido ou muito lento. Abra novamente o Valdora para retomar.")
+
+## O Android mantém seu próprio registro e a contagem de bytes até a conclusão.
+## Nunca habilitar instalação enquanto o DownloadManager não informar sucesso.
+func _verificar_download() -> void:
+	var info: Dictionary = _ponte.progresso(_id)
+	var status := int(info.get("status", -1))
+	if status == 1 or status == 2 or status == 4:
+		var esperado := int(_dados.get("bytes", 0))
+		var baixado := int(info.get("baixado", 0))
+		if esperado > 0 and baixado >= 0 and baixado <= esperado:
+			var pct := mini(99, int(float(baixado) * 100.0 / float(esperado)))
+			if pct != _ultimo_pct:
+				_ultimo_pct = pct
+				download_progresso.emit(pct)
+		return
+	if status == 8:
+		_verificar_arquivo()
+		return
+	set_process(false)
+	# Registro perdido ou falha definitiva: permitir que uma nova abertura faça
+	# novo download em vez de reaproveitar indefinidamente uma tarefa quebrada.
+	_salvar_estado({})
+	if status == 16:
+		download_erro.emit("O Android não conseguiu baixar a atualização. Verifique a rede e reabra o jogo.")
+	else:
+		download_erro.emit("Download não encontrado no Android. Abra o jogo novamente para tentar.")
 
 func _verificar_arquivo() -> void:
 	if not FileAccess.file_exists(_arquivo):
