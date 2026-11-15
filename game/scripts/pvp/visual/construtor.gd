@@ -145,6 +145,39 @@ func telhado(base: Vector3, t: Vector3, altura: float, chave: String, beiral := 
 				st.add_vertex(v)
 	_tri += 6
 
+## Coluna escultural com seção retangular e curvatura suave (sem colisão).
+## A linha central se desloca pela progressão cúbica; cria uma silhueta
+## realmente curva, não uma sequência de cubos. Útil para o modernismo da Esplanada.
+func coluna_curva(base: Vector3, altura: float, desvio: Vector3, largura: float,
+		profundidade: float, chave: String, segmentos := 8) -> void:
+	var st: SurfaceTool = _s(chave)
+	var n: int = maxi(3, segmentos)
+	for i in n:
+		var t0: float = float(i) / float(n)
+		var t1: float = float(i + 1) / float(n)
+		var k0: float = t0 * t0 * (3.0 - 2.0 * t0)
+		var k1: float = t1 * t1 * (3.0 - 2.0 * t1)
+		var p0 := base + Vector3(0, altura * t0, 0) + desvio * k0
+		var p1 := base + Vector3(0, altura * t1, 0) + desvio * k1
+		var x0: float = largura * 0.5 * (1.0 - t0 * 0.15)
+		var x1: float = largura * 0.5 * (1.0 - t1 * 0.15)
+		var z0: float = profundidade * 0.5 * (1.0 - t0 * 0.15)
+		var z1: float = profundidade * 0.5 * (1.0 - t1 * 0.15)
+		_quad(st, p0 + Vector3(-x0, 0, z0), p0 + Vector3(x0, 0, z0),
+			p1 + Vector3(x1, 0, z1), p1 + Vector3(-x1, 0, z1))
+		_quad(st, p0 + Vector3(x0, 0, -z0), p0 + Vector3(-x0, 0, -z0),
+			p1 + Vector3(-x1, 0, -z1), p1 + Vector3(x1, 0, -z1))
+		_quad(st, p0 + Vector3(-x0, 0, -z0), p0 + Vector3(-x0, 0, z0),
+			p1 + Vector3(-x1, 0, z1), p1 + Vector3(-x1, 0, -z1))
+		_quad(st, p0 + Vector3(x0, 0, z0), p0 + Vector3(x0, 0, -z0),
+			p1 + Vector3(x1, 0, -z1), p1 + Vector3(x1, 0, z1))
+	# Só o tampo é visível, o pé está apoiado no terreno.
+	var topo := base + Vector3(0, altura, 0) + desvio
+	var hx := largura * 0.425
+	var hz := profundidade * 0.425
+	_quad(st, topo + Vector3(-hx, 0, -hz), topo + Vector3(hx, 0, -hz),
+		topo + Vector3(hx, 0, hz), topo + Vector3(-hx, 0, hz))
+
 ## Plano horizontal (água, marcações no chão).
 func plano(centro: Vector3, t: Vector2, chave: String) -> void:
 	var st := _s(chave)
