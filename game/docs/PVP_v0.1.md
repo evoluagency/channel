@@ -109,6 +109,30 @@ Velocidade de corrida usada: 5 m/s.
 
 O código do jogo antigo continua no repositório, sem uso, porque os testes do sistema de atualização dependem dele. Remover fica para depois do APK homologado.
 
+## Cenários regionais e APK 0.5.1 (15/11/2026)
+
+O dono pediu o acabamento da arte conceitual, com o ambiente de cada região. Regras da rodada ficam para depois.
+
+**Feito em `game/scripts/pvp/visual/`:**
+- **Texturas procedurais** (`superficie.gdshader`), sem imagem externa: paralelepípedo, pedra portuguesa em ondas, tijolo, reboco, concreto, madeira, metal ondulado, grama, azulejo, asfalto, terra e telha. Têm sujeira perto do chão e sombra falsa nas paredes.
+- **Água animada** (`agua.gdshader`).
+- **Construtor** (`construtor.gd`): junta a geometria por material e fica com 21 a 32 malhas por arena (chamadas de desenho).
+- **Cenário** (`cenario.gd`): as paredes da grade viram prédios da região; a colisão é a mesma da grade.
+
+| Mapa | Ambiente |
+|---|---|
+| Esplanada | Brasília modernista: prédios brancos com janelas em faixa e brises, placas de concreto, ipês amarelos e rosa, terra vermelha do cerrado. Ao fundo: torres gêmeas, cúpula, cúpula invertida, catedral de pilares e ministérios |
+| Porto | armazéns de tijolo com portões de carga e telhado de zinco, pedra portuguesa em ondas, contêineres, guindastes, baía e morros |
+| Ladeira | casario colonial colorido com cantaria branca, venezianas, sacadas e telhado de telha, igreja com torres de azulejo, paralelepípedo, barracas, palmeiras e mar ao fundo |
+| Estação | tijolo aparente com cantaria clara, trilhos com dormentes, bancas, torre do relógio e prédios altos ao fundo |
+| Represa | casas de madeira coloridas sobre palafitas, assoalho de tábuas, rio com três pontes, mata fechada no limite, barragem ao fundo |
+
+- Em todos os mapas: estandartes verde-azulados com o V dourado (identidade Valdora), postes, árvores junto às paredes sem fechar passagem, bordas pintadas nas bases e nos pontos A e B, e luz quente.
+- Capturas: `game/docs/imagens/pvp/cenarios/` (vista aérea e três vistas em primeira pessoa por mapa).
+- `--rendering-method` não muda: tudo roda no GL Compatibility do celular.
+- **Limite:** o nível da arte conceitual (pintura digital) não sai inteiro de geometria feita por código. A distância está em detalhe de modelagem (ornamentos, arcos, vegetação densa) e em texturas pintadas. Os próximos passos de arte são modelos dedicados por marco e mais adereços.
+- **APK 0.5.1-pvp (versionCode 105):** atualização por cima da 0.5.0. O link direto fica na pré-versão `valdora-0.5.1-pvp` do GitHub.
+
 ## Próximos passos (propostos)
 
 1. O dono avalia os menus e os mapas.

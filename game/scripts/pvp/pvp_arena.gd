@@ -8,6 +8,7 @@ const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
 const JOGADOR := preload("res://scripts/pvp/pvp_jogador.gd")
 const HUD := preload("res://scripts/pvp/pvp_hud.gd")
 const DADOS := "res://data/pvp/mapas_v0.1.json"
+const CENARIO := preload("res://scripts/pvp/visual/cenario.gd")
 
 const CELULA := 3.0
 const ALTURA_PAREDE := 4.2
@@ -17,6 +18,9 @@ const ALTURA_CAIXOTE := 1.15
 const ALTURA_CONTEINER := 2.4
 
 static var mapa_escolhido := "esplanada"
+## false: arena em blocos simples (teste de espaço); true: cenário da região (cenario.gd).
+static var visual := true
+var chamadas_cenario := 0
 
 var mapa: Dictionary = {}
 var grade: Array = []
@@ -32,12 +36,15 @@ func _ready() -> void:
 	grade = mapa.get("grade", [])
 	altura = grade.size()
 	largura = String(grade[0]).length() if altura > 0 else 0
-	_ambiente()
+	if not visual:
+		_ambiente()
 	_chao()
 	_paredes()
 	_coberturas()
 	_marcas()
 	_cerca()
+	if visual:
+		chamadas_cenario = CENARIO.new().montar(self)
 	jogador = JOGADOR.new()
 	add_child(jogador)
 	jogador.global_position = centro_de("T") + Vector3(0, 1.0, 0)
@@ -121,12 +128,16 @@ func bloco(pos: Vector3, tam: Vector3, mat: Material, colide := true, nome := ""
 	if nome != "":
 		corpo.name = nome
 	corpo.position = pos + Vector3(0, tam.y * 0.5, 0)
-	var mi := MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = tam
-	mi.mesh = bm
-	mi.material_override = mat
-	corpo.add_child(mi)
+	if visual and not colide:
+		corpo.free()   # no modo visual o que se vê vem do cenário
+		return null
+	if not visual:
+		var mi := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		bm.size = tam
+		mi.mesh = bm
+		mi.material_override = mat
+		corpo.add_child(mi)
 	if colide:
 		var cs := CollisionShape3D.new()
 		var sh := BoxShape3D.new()
@@ -207,6 +218,10 @@ func _paredes() -> void:
 				bloco(c0 + Vector3(tam.x * 0.5, 0, tam.z * 0.5), Vector3(tam.x + 0.06, 0.6, tam.z + 0.06), _mat(Color("8c7c62")), false)
 			paredes += 1
 
+## Cobertura alta (contêiner, quiosque) ou baixa (caixote, floreira): regra fixa pela posição.
+func cobertura_alta(x: int, y: int) -> bool:
+	return (x * 7 + y * 3) % 3 == 0
+
 func _coberturas() -> void:
 	var caixote := _mat(Color("c48a4e"))
 	var conteiner := [_mat(Color("3f7f86")), _mat(Color("d2763a")), _mat(Color("5d6b7d"))]
@@ -216,7 +231,7 @@ func _coberturas() -> void:
 			if letra(x, y) != "c":
 				continue
 			var p := celula_mundo(x, y)
-			if (x * 7 + y * 3) % 3 == 0:
+			if cobertura_alta(x, y):
 				bloco(p, Vector3(COBERTURA, ALTURA_CONTEINER, COBERTURA), conteiner[n % 3], true, "Cobertura%d" % n)
 			else:
 				bloco(p, Vector3(COBERTURA, ALTURA_CAIXOTE, COBERTURA), caixote, true, "Cobertura%d" % n)
@@ -237,7 +252,7 @@ func _marcas() -> void:
 			l.text = ch
 			l.font_size = 512
 			l.pixel_size = 0.01
-			l.modulate = Color(cores[ch], 0.9)
+			l.modulate = Color(cores[ch], 0.75)
 			l.outline_size = 0
 			l.rotation_degrees = Vector3(-90, 0, 0)
 			l.position = centro_de(ch) + Vector3(0, 0.05, 0)

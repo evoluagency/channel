@@ -112,6 +112,12 @@ Defeitos encontrados:
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
 
+### Valdora PvP: cenários regionais e APK 0.5.1 (sessão 1.6, 15/11/2026)
+
+- Os 5 mapas ganharam o ambiente da região, com texturas procedurais, prédios locais, adereços e paisagem de fundo. A colisão continua a da grade. Detalhes em `PVP_v0.1.md`.
+- **Versão 0.5.1-pvp (código 105).** O link direto do APK fica na pré-versão do GitHub, porque o artefato do Actions não baixa sem login. Repositório público: o link também é público.
+- Testes: 21 de 21.
+
 ### Valdora PvP: arenas 3D e APK 0.5.0 (sessão 1.6, 15/11/2026)
 
 - **O dono encerrou o jogo de estratégia** (MUNDO, cidades e alianças). O foco é 100% o PvP; as seções sobre o MUNDO abaixo ficam só como histórico.
