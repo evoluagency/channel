@@ -176,8 +176,9 @@ jobs:
           TAG="valdora-$VER"
           cp game/dist/Valdora.apk "game/dist/Valdora-$VER.apk"
           SHA="$(sha256sum game/dist/Valdora.apk | cut -d' ' -f1)"
+          BYTES="$(stat -c%s game/dist/Valdora.apk)"
           URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/Valdora-$VER.apk"
-          printf '{"jogo":"Valdora","version_code":%s,"version_name":"%s","apk":"%s","sha256":"%s"}\n' "$CODE" "$VER" "$URL" "$SHA" > game/dist/versao.json
+          printf '{"jogo":"Valdora","version_code":%s,"version_name":"%s","apk":"%s","sha256":"%s","bytes":%s}\n' "$CODE" "$VER" "$URL" "$SHA" "$BYTES" > game/dist/versao.json
           cat game/dist/versao.json
           gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
           gh release create "$TAG" "game/dist/Valdora-$VER.apk" game/dist/Valdora.apk game/dist/versao.json game/dist/SHA256.txt \
