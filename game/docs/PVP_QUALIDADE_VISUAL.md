@@ -92,3 +92,39 @@ de terceiros. A identidade visual e a composição de jogo continuam próprias.
 representa fidelidade idêntica à de Last War. Modelos 3D autorais, animações,
 VFX e tratamento de personagem continuam sendo etapas distintas. Não gerar
 release nem acionar workflows antes de homologar os ajustes visualmente.
+
+
+### Fechamento de engenharia do mapa-piloto — revisão final
+
+Além da camada artística, a revisão final acrescentou:
+
+- Primitiva curva agrupada no mesmo `SurfaceTool`, sem corpo físico;
+- Folhagens simétricas tanto no perfil Baixa quanto em Média/Alta;
+- Desativação de projeção de sombras no piso auxiliar, espelho d'água e
+  folhagens adicionais da Esplanada para reduzir custo na GPU;
+- Contabilização de triângulos e elementos visuais nas propriedades de
+  diagnóstico da arena (somente metadados locais);
+- Teste **real de cena em Godot**, preparado em
+  `game/tests/pvp_esplanada_visual_smoke.gd`, que compara o total de
+  CollisionShapes do mapa anterior com o piloto visual e mede triângulos,
+  superfícies de material, presença de HUD e jogador. Pode salvar quatro PNG:
+  spawn, objetivo A, objetivo B e vista aérea.
+
+**Comandos de validação local sem GitHub Actions:**
+
+```sh
+python3 -I game/tests/test_pvp_esplanada_visual.py
+godot --headless --editor --path game --quit
+godot --headless --path game --script res://tests/pvp_esplanada_visual_smoke.gd
+xvfb-run -a godot --path game --rendering-driver opengl3 \
+  --script res://tests/pvp_esplanada_visual_smoke.gd \
+  -- --capturas=/tmp/valdora-esplanada
+```
+
+**Estado de homologação:** estrutura integrada ao repositório e auditada
+estaticamente. O ambiente de análise não possuía binário Godot nem acesso
+à rede necessário para obtê-lo. Portanto, os comandos acima não foram
+executados neste ciclo, as quatro imagens não foram geradas e não existe
+medição real de FPS neste registro. O avanço visual **não equivale à
+homologação em Android** e a publicação do APK permanece bloqueada até
+o smoke Godot e a comparação de capturas estarem aprovados.
