@@ -74,7 +74,7 @@ if [ "$MODE" != "--py" ]; then
     run "godot import" 300 "$GODOT_BIN" --headless --editor --path game --quit
     SMOKES=(core_smoke hero_smoke combat_smoke smoke update_smoke pck_smoke cp006_live_smoke cp011_city_v9_smoke)
     if [ "$MODE" = "--all" ] || [ "$MODE" = "--historico" ]; then
-      SMOKES+=(remote_update_smoke city_name_layout_smoke cp005_city_smoke cp007_city_visual_smoke city_visual_smoke)
+      SMOKES+=(remote_update_smoke city_name_layout_smoke cp005_city_smoke cp007_city_visual_smoke city_visual_smoke pvp_menu_smoke)
     fi
     if [ "$MODE" = "--historico" ]; then
       echo "  AVISO: CP008, CP009 e CP010 exigem manifesto nas revisões 7, 8 e 9; contra o atual falham por desenho."
