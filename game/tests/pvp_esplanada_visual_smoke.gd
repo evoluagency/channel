@@ -79,6 +79,20 @@ func _executar() -> void:
 			var imagem = root.get_texture().get_image()
 			_ok(imagem.save_png("%s/esplanada_%s.png" % [saida, nome]) == OK,
 				"Captura visual: " + nome)
+		# Vista aérea para inspecionar pavimentação, volumetria e skyline.
+		var aerea := Camera3D.new()
+		piloto.add_child(aerea)
+		aerea.fov = 50.0
+		aerea.far = 600.0
+		aerea.position = Vector3(-55, 70, 85)
+		aerea.look_at(Vector3(0, 0, 5))
+		aerea.make_current()
+		for i in 7:
+			await process_frame
+		await RenderingServer.frame_post_draw
+		var vista_aerea = root.get_texture().get_image()
+		_ok(vista_aerea.save_png("%s/esplanada_aerea.png" % saida) == OK,
+			"Captura visual aérea")
 	print("ESPLANADA_VISUAL_SMOKE %s (%d falhas)" % [
 		"PASSOU" if falhas.is_empty() else "FALHOU", falhas.size()
 	])
