@@ -59,6 +59,9 @@ carregada **apenas** quando `mapa.id == "esplanada"`.
   volumétrica adicional; toda a base já possui cobertura `c` e colisão.
 - **Entorno externo:** espelho d'água, guias de pedra, árvores de cerrado em
   camadas e acabamento das torres distantes, todos fora da área de combate.
+- **Colunata escultórica:** primitiva procedural de pilares genuinamente curvos
+  (`construtor.gd::coluna_curva`), com teto e profundidade no entorno externo,
+  sem colisores ou importação de modelos protegidos.
 - **Atmosfera:** iluminação ambiente e neblina calibradas apenas na Esplanada
   para reduzir saturação excessiva e melhorar separação entre planos.
 - **Qualidade móvel:** geometria unificada por material pelo construtor,
