@@ -146,6 +146,24 @@ O dono pediu o acabamento da arte conceitual, com o ambiente de cada região. Re
   - Pará: Açaí, Mercado do Peixe, Farinha, Café, Mercearia, Tacacá.
 - APK 0.5.2-pvp (versionCode 106). Testes: 21 de 21.
 
+## Aviso de atualização e APK 0.5.3 (15/11/2026)
+
+- **Arquivos:** `game/scripts/pvp/pvp_atualizador.gd`, chamado pelo menu ao abrir o app.
+- **Como funciona:**
+  - No Android, consulta `https://github.com/evoluagency/channel/releases/latest/download/versao.json`.
+  - Se o `version_code` publicado for maior que o `CLIENT_CODE` do app, mostra "Nova versão disponível".
+  - "Atualizar agora" abre o APK pelo navegador; o Android baixa e pede para instalar por cima. Os dados continuam.
+- **Limite do Android:** fora da Play Store nenhum app se instala sem a confirmação do usuário.
+- **Segurança:** só aceita um APK vindo das versões publicadas deste repositório (`/releases/download/`), do jogo "Valdora" e com versão maior. Sem internet, segue em silêncio.
+- **Workflow:** com `publicar_link`, cria uma versão normal do GitHub (não mais "pré-versão"), marcada como a mais recente, com:
+  - `Valdora-<versão>.apk`;
+  - `Valdora.apk`;
+  - `versao.json` (código, nome, link e SHA-256);
+  - `SHA256.txt`.
+- **Link fixo para o dono**, que sempre baixa a mais recente: `https://github.com/evoluagency/channel/releases/latest/download/Valdora.apk`.
+- **Testes:** o `pvp_menu_smoke` confere as regras do aviso (aceita versão maior do repositório; recusa versão menor, APK de fora e outro jogo) e que o aviso aparece.
+- **APK:** 0.5.3-pvp (versionCode 107). Ela é a primeira com o aviso, então precisa ser instalada uma vez à mão.
+
 ## Próximos passos (propostos)
 
 1. O dono avalia os menus e os mapas.

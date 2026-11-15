@@ -44,6 +44,20 @@ func _rodar() -> void:
 		if pasta != "":
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("%s/pvp_%s.png" % [pasta, t])
+	# aviso de atualização: aceita versão maior deste repositório e recusa o resto
+	var AT = load("res://scripts/pvp/pvp_atualizador.gd")
+	var boa := {"jogo": "Valdora", "version_code": 9999, "version_name": "9.9", "apk": "https://github.com/evoluagency/channel/releases/download/valdora-9.9/Valdora-9.9.apk"}
+	_ok(AT.avaliar(boa), "atualização: aceita versão maior do repositório")
+	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 1, "apk": boa.apk}), "atualização: recusa versão menor")
+	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 9999, "apk": "https://exemplo.com/x.apk"}), "atualização: recusa APK de fora")
+	_ok(not AT.avaliar({"jogo": "Outro", "version_code": 9999, "apk": boa.apk}), "atualização: recusa outro jogo")
+	menu.abrir("inicio")
+	menu.mostrar_atualizacao(boa)
+	await process_frame
+	_ok(menu.aviso_atualizacao != null and menu.aviso_atualizacao.is_visible_in_tree(), "atualização: aviso aparece")
+	if pasta != "":
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png("%s/pvp_aviso_atualizacao.png" % pasta)
 	print("PVP_MENU %s (%d falhas)" % ["PASSOU" if falhas.is_empty() else "FALHOU", falhas.size()])
 	quit(0 if falhas.is_empty() else 1)
 

@@ -141,8 +141,8 @@ jobs:
           stat -c '%n %s bytes' game/dist/Valdora.apk
           "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools/35.0.1/aapt" dump badging game/dist/Valdora.apk | grep -m1 "^package:" | tee game/dist/PACKAGE.txt
           grep -q "name='ink.evolu.valdora'" game/dist/PACKAGE.txt
-          grep -q "versionCode='106'" game/dist/PACKAGE.txt
-          grep -q 'version_code=106' game/release-control/version.txt
+          grep -q "versionCode='107'" game/dist/PACKAGE.txt
+          grep -q 'version_code=107' game/release-control/version.txt
           "${ANDROID_SDK_ROOT:-$ANDROID_HOME}/build-tools/35.0.1/apksigner" verify --verbose --print-certs game/dist/Valdora.apk > game/dist/SIGNATURE.txt
           grep -iq "c5950693bb5d5f36eeb8a38ef9a352202ed3962e68d3a27facc6db2aecbd76a7" game/dist/SIGNATURE.txt || {
             echo "::error::Assinatura do APK não corresponde ao certificado permanente."
@@ -164,7 +164,7 @@ jobs:
             game/dist/SIGNATURE.txt
           retention-days: 7
           if-no-files-found: error
-      - name: Link direto (pré-versão do GitHub)
+      - name: Link direto e aviso de atualização (versão do GitHub)
         if: ${{ inputs.publicar_link }}
         shell: bash
         env:
@@ -172,10 +172,16 @@ jobs:
         run: |
           set -euo pipefail
           VER="$(grep '^version_name=' game/release-control/version.txt | cut -d= -f2)"
+          CODE="$(grep '^version_code=' game/release-control/version.txt | cut -d= -f2)"
           TAG="valdora-$VER"
           cp game/dist/Valdora.apk "game/dist/Valdora-$VER.apk"
+          SHA="$(sha256sum game/dist/Valdora.apk | cut -d' ' -f1)"
+          URL="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/Valdora-$VER.apk"
+          printf '{"jogo":"Valdora","version_code":%s,"version_name":"%s","apk":"%s","sha256":"%s"}\n' "$CODE" "$VER" "$URL" "$SHA" > game/dist/versao.json
+          cat game/dist/versao.json
           gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
-          gh release create "$TAG" "game/dist/Valdora-$VER.apk" game/dist/SHA256.txt \
-            --repo "$GITHUB_REPOSITORY" --target "$(git rev-parse HEAD)" --prerelease \
-            --title "Valdora $VER (teste)" --notes "APK de teste do Valdora $VER. Instale por cima da versão anterior."
-          echo "Link: https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/Valdora-$VER.apk"
+          gh release create "$TAG" "game/dist/Valdora-$VER.apk" game/dist/Valdora.apk game/dist/versao.json game/dist/SHA256.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$(git rev-parse HEAD)" --latest \
+            --title "Valdora $VER" --notes "Valdora $VER. Instale por cima da versão anterior."
+          echo "Link fixo (sempre a mais recente): https://github.com/$GITHUB_REPOSITORY/releases/latest/download/Valdora.apk"
+          echo "Link desta versão: $URL"

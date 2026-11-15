@@ -9,6 +9,8 @@ const ICONE := preload("res://scripts/ui/pvp/pvp_icone.gd")
 const FUNDO := preload("res://scripts/ui/pvp/pvp_fundo.gd")
 const ARENA := preload("res://scripts/pvp/pvp_arena.gd")
 const CENA_ARENA := "res://scenes/pvp/ArenaPvP.tscn"
+const ATUALIZADOR := preload("res://scripts/pvp/pvp_atualizador.gd")
+var aviso_atualizacao: Control
 
 ## Barra lateral: [id da tela, ícone, rótulo]
 const LATERAL := [
@@ -39,6 +41,46 @@ func _ready() -> void:
 	add_child(fundo)
 	_moldura()
 	abrir("inicio")
+	var at = ATUALIZADOR.new()
+	add_child(at)
+	at.nova_versao.connect(mostrar_atualizacao)
+	at.iniciar()
+
+## Aviso de versão nova: "Atualizar agora" baixa o APK pelo navegador e o Android abre o instalador.
+func mostrar_atualizacao(d: Dictionary) -> void:
+	if aviso_atualizacao != null:
+		return
+	var fundo_escuro := ColorRect.new()
+	fundo_escuro.color = Color(0, 0, 0, 0.6)
+	fundo_escuro.set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_child(fundo_escuro)
+	aviso_atualizacao = fundo_escuro
+	var caixa := _painel(Color(T.PAINEL, 0.98))
+	caixa.set_anchors_preset(Control.PRESET_CENTER)
+	caixa.custom_minimum_size = Vector2(560, 0)
+	caixa.position = Vector2(-280, -150)
+	fundo_escuro.add_child(caixa)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 14)
+	caixa.add_child(v)
+	v.add_child(_titulo("Nova versão disponível", 30))
+	var t := _rotulo("Valdora %s está pronta. Toque em Atualizar: o download começa e o Android pede para instalar por cima. Seus dados continuam." % str(d.get("version_name", "")), 18, T.TEXTO, 600)
+	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	t.custom_minimum_size = Vector2(520, 0)
+	v.add_child(t)
+	var h := HBoxContainer.new()
+	h.add_theme_constant_override("separation", 12)
+	v.add_child(h)
+	var depois := _botao("Depois", "escuro", 18, 56)
+	depois.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	depois.pressed.connect(func():
+		aviso_atualizacao.queue_free()
+		aviso_atualizacao = null)
+	h.add_child(depois)
+	var agora := _botao("Atualizar agora", "laranja", 20, 56)
+	agora.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	agora.pressed.connect(func(): OS.shell_open(str(d.get("apk", ""))))
+	h.add_child(agora)
 
 # ---------------------------------------------------------------- estrutura
 

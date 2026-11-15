@@ -1,7 +1,7 @@
 VALDORA_ANDROID_RELEASE
-version_name=0.5.2-pvp
-version_code=106
+version_name=0.5.3-pvp
+version_code=107
 package=ink.evolu.valdora
 channel=release-android
-purpose=pvp_estabelecimentos
-upgrade_from=105
+purpose=pvp_aviso_atualizacao
+upgrade_from=106
