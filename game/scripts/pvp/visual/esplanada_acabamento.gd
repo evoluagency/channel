@@ -199,7 +199,7 @@ func _arvore_cerrado(p: Vector3, indice: int, lado: int) -> void:
 	var copa := p + Vector3(0, 3.5 * escala, 0)
 	var j := 1 if nivel == 0 else 3
 	for k in j:
-		var off: float = float(k - 1) * 0.72 * escala
+		var off: float = (float(k) - float(j - 1) * 0.5) * 0.72 * escala
 		_esfera(copa + Vector3(off, 0.18 * float(k % 2), float(lado) * off * 0.35),
 			Vector3(1.65, 1.05, 1.5) * escala,
 			"esp_folhagem", 8 if nivel == 0 else 10, 5 if nivel == 0 else 7)
