@@ -174,3 +174,28 @@ O dono pediu o acabamento da arte conceitual, com o ambiente de cada região. Re
    - o PvP online pede servidor de partida em tempo real, o que ainda não existe;
    - o Supabase gratuito não serve para tiro em tempo real; é preciso decidir a arquitetura antes de gastar;
    - o futuro do "MUNDO" (estratégia) ao lado do PvP: o que continua e o que pausa.
+
+
+## Atualização automática do APK — revisão 15/11/2026
+
+A 0.5.3-pvp (versionCode 107) ainda NÃO foi gerada nem publicada como release.
+A implementação desta branch corrige a etapa de download:
+- Ao abrir no Android, consulta `releases/latest/download/versao.json`.
+- Se houver `version_code` superior, mostra a tela de atualização e inicia
+  o `DownloadManager` do Android, sem exigir um toque para começar a baixar.
+- O manifesto de release declara `bytes` e `sha256`. O APK é validado
+  antes de habilitar o botão **Instalar atualização**.
+- A instalação é iniciada com URI de conteúdo do DownloadManager e requer
+  confirmação do usuário no instalador do Android; no Android 8+ pode exigir
+  autorização para instalar apps desta origem.
+- Downloads e estado são mantidos em diretório próprio do aplicativo e
+  `user://pvp_apk_download.json`, para evitar download duplicado.
+- A 0.5.3 é a primeira com a rotina: quem usa a 0.5.2 precisará instalar
+  a 0.5.3 uma vez manualmente. Atualizações posteriores serão baixadas
+  automaticamente, quando publicadas e se houver conexão.
+- **Homologação pendente:** smoke Godot 4.7.2, build Android assinado,
+  teste do DownloadManager e instalador no aparelho real.
+- Nenhum workflow foi executado neste ajuste; não foi criado deploy.
+- A distribuição é direta por GitHub, não pelo Google Play. Caso o jogo
+  seja publicado na Play Store, o sistema de atualização deverá utilizar
+  o mecanismo da própria loja e respeitar suas políticas.
