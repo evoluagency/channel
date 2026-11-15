@@ -58,6 +58,16 @@ func _rodar() -> void:
 					if bate.call(1.0) or bate.call(0.3):
 						erros_grade += 1
 		_ok(erros_grade == 0, "%s: %d células da grade sem a colisão certa" % [m.id, erros_grade])
+		# A camada artística piloto deve existir apenas na Esplanada.
+		# Executado no Godot real: complementa a verificação estática do Python.
+		var visuais: int = int(cena.get_meta("esplanada_elementos_visuais", 0))
+		var triangulos: int = int(cena.get_meta("esplanada_triangulos_cenario", 0))
+		if m.id == "esplanada":
+			_ok(visuais > 0, "esplanada: acabamento visual realmente construído")
+			_ok(triangulos > 0, "esplanada: malhas com triângulos")
+		else:
+			_ok(visuais == 0 and triangulos == 0, "%s: não recebe acabamento da Esplanada" % m.id)
+
 		var j = cena.jogador
 		for i in 40:
 			await physics_frame
