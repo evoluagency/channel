@@ -564,8 +564,9 @@ func _loja(p: Vector3, fora: Vector3, ao: Vector3, nome: String, tipo: String, c
 	var l = Label3D.new()
 	l.text = nome
 	l.font = T.fonte(900, false)
-	l.font_size = 64 if nome.length() <= 10 else 46
-	l.pixel_size = 0.006
+	# Mais amostras na fonte do letreiro, sem ampliar o tamanho em metros.
+	l.font_size = 96 if nome.length() <= 10 else 69
+	l.pixel_size = 0.004
 	l.modulate = Color("fff6e6")
 	l.outline_size = 10
 	l.outline_modulate = Color(0, 0, 0, 0.45)
@@ -743,8 +744,12 @@ func _luz() -> void:
 	sol.light_energy = s[1]
 	sol.rotation_degrees = Vector3(s[2], s[3], 0)
 	sol.shadow_enabled = true
+	sol.add_to_group("valdora_sombras")
+	var video = a.get_node_or_null("/root/ValdoraVideo")
+	if video != null:
+		sol.shadow_enabled = video.sombras
 	sol.directional_shadow_max_distance = 70.0
-	sol.shadow_blur = 1.2
+	sol.shadow_blur = 1.35
 	sol.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	a.add_child(sol)
 	var pre = DirectionalLight3D.new()
