@@ -92,6 +92,10 @@ func montar(arena) -> int:
 	if acabamento != null:
 		acabamento.entorno()
 	_luz()
+	if acabamento != null:
+		# Metadados apenas para auditoria gráfica, sem custo de rede ou física.
+		a.set_meta("esplanada_elementos_visuais", acabamento.elementos)
+		a.set_meta("esplanada_triangulos_cenario", c.triangulos())
 	return c.montar(a)
 
 # ---------------------------------------------------------------- materiais
