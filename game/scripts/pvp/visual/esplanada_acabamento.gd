@@ -160,6 +160,21 @@ func entorno() -> void:
 			Vector3(26.5, 0.20, 0.25), "esp_pedra")
 		_caixa(Vector3(lateral * 12.8, 0, z),
 			Vector3(0.25, 0.20, 8.0), "esp_pedra")
+	# Colunata modernista autoral com curvas reais; situada após a
+	# lâmina d'água e fora da grade jogável, sem colisão ou bloqueio de rota.
+	var z_colunas: float = -h * 0.5 - 30.0
+	var qtd_colunas: int = 7 if nivel == 0 else 9
+	for k in qtd_colunas:
+		var t: float = float(k) / float(qtd_colunas - 1)
+		var x: float = lerpf(-27.0, 27.0, t)
+		var desvio := Vector3((t - 0.5) * 2.2, 0, -1.15)
+		c.coluna_curva(Vector3(x, 0, z_colunas), 14.0, desvio,
+			0.75, 0.95, "esp_pedra", 6 if nivel == 0 else 10)
+		elementos += 1
+	_caixa(Vector3(0, 13.90, z_colunas - 1.15),
+		Vector3(58.5, 0.40, 3.3), "esp_pedra")
+	_caixa(Vector3(0, 13.60, z_colunas - 1.15),
+		Vector3(55.0, 0.12, 3.1), "esp_metal")
 	# Árvores do cerrado com copas segmentadas, fora dos muros.
 	for lado in [-1, 1]:
 		for k in 6:
