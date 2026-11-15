@@ -75,7 +75,7 @@ Velocidade de corrida usada: 5 m/s.
 
 **Arenas** (`game/scripts/pvp/pvp_arena.gd`, cena `game/scenes/pvp/ArenaPvP.tscn`):
 - Montadas direto da grade de `mapas_v0.1.json`, com célula de 3 m.
-- Paredes com colisão, juntadas em retrângulos de 27 a 41 blocos por mapa. Têm 4,2 m de altura; as da borda, 6 m.
+- Paredes com colisão, juntadas em retângulos de 27 a 41 blocos por mapa. Têm 4,2 m de altura; as da borda, 6 m.
 - Cerca invisível de 30 m em volta: ninguém sai do mapa.
 - Coberturas: caixotes de 1,15 m e contêineres de 2,4 m.
 - Bases e pontos A e B pintados no chão, com letra grande; portas das rotas em faixa amarela.
