@@ -847,9 +847,9 @@ func _tela_ajustes(a: Control) -> void:
 		lh.add_child(r)
 		var opc: Array = l[1]
 		var video = get_node_or_null("/root/ValdoraVideo") if ativa == 1 else null
-		var selecionada := video.valor_de(str(l[0])) if video != null else ""
+		var selecionada: String = video.valor_de(str(l[0])) if video != null else ""
 		for i in opc.size():
-			var ativa_opcao := selecionada == str(opc[i]) if video != null else i == opc.size() - 1
+			var ativa_opcao: bool = selecionada == str(opc[i]) if video != null else i == opc.size() - 1
 			var b := _botao(opc[i], "teal" if ativa_opcao else "escuro", 16, 50)
 			b.custom_minimum_size.x = 200 if opc.size() <= 2 else 150
 			if video != null:
