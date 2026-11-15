@@ -193,7 +193,7 @@ func montar(pai: Node3D, sombra := true) -> int:
 		mi.name = "Cenario_" + chave
 		mi.mesh = st.commit()
 		mi.material_override = _mat.get(chave)
-		if not sombra or chave.begins_with("agua") or chave.begins_with("luz"):
+		if not sombra or chave.begins_with("agua") or chave.begins_with("luz") or chave.begins_with("esp_piso") or chave == "esp_espelho" or chave == "esp_folhagem" or chave == "esp_flor":
 			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		pai.add_child(mi)
 		n += 1
