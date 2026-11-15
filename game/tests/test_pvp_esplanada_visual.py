@@ -8,6 +8,7 @@ import json
 root = Path(__file__).resolve().parents[1]
 art = (root / "scripts/pvp/visual/esplanada_acabamento.gd").read_text(encoding="utf-8")
 scene = (root / "scripts/pvp/visual/cenario.gd").read_text(encoding="utf-8")
+constructor = (root / "scripts/pvp/visual/construtor.gd").read_text(encoding="utf-8")
 arena = (root / "scripts/pvp/pvp_arena.gd").read_text(encoding="utf-8")
 mapas = json.loads((root / "data/pvp/mapas_v0.1.json").read_text(encoding="utf-8"))
 ids = {m["id"] for m in mapas["mapas"]}
@@ -32,6 +33,7 @@ checks = {
     "pontos de bomba preservados": 'if arena.letra(x, y) != ".":' in art,
     "fachadas só em paredes": "if borda or sx * sz < 12.0:" in art,
     "qualidade escalável": 'match str(video.qualidade):' in art,
+    "colunas curvas sem colisão": "c.coluna_curva(" in art and "func coluna_curva(" in constructor and "desvio * k0" in constructor,
     "materiais agrupados": all(
         f'c.{method}(' in art for method in ("sup", "liso", "agua")
     ),
