@@ -112,6 +112,13 @@ Defeitos encontrados:
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
 
+### Valdora PvP: arenas 3D e APK 0.5.0 (sessão 1.6, 15/11/2026)
+
+- **O dono encerrou o jogo de estratégia** (MUNDO, cidades e alianças). O foco é 100% o PvP; as seções sobre o MUNDO abaixo ficam só como histórico.
+- **Arenas 3D jogáveis** nos 5 mapas: delimitações tiradas das grades, primeira pessoa e controles de toque. O app agora abre no menu PvP.
+- **Versão 0.5.0-pvp (versionCode 104):** atualização por cima da 0.4.1, com o mesmo pacote e o mesmo certificado. O APK é gerado pelo workflow `valdora-android-release`, com OK do dono dado em 15/11/2026.
+- Testes locais: 21 de 21. Detalhes em `PVP_v0.1.md`.
+
 ### Valdora PvP: menus e mapas (sessão 1.6, 15/11/2026)
 
 - **Mudança de rumo do dono:**

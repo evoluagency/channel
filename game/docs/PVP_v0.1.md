@@ -66,11 +66,54 @@ Regras de equilíbrio conferidas em todos os mapas:
 
 Velocidade de corrida usada: 5 m/s.
 
+## Arenas 3D e APK 0.5.0 (15/11/2026, mesma sessão)
+
+**Decisões do dono:**
+- foco 100% no PvP;
+- o jogo de estratégia (MUNDO, cidades 3D e alianças) foi encerrado;
+- o APK novo é uma **atualização do Valdora instalado**: mesmo pacote `ink.evolu.valdora`, mesmo certificado e versionCode maior.
+
+**Arenas** (`game/scripts/pvp/pvp_arena.gd`, cena `game/scenes/pvp/ArenaPvP.tscn`):
+- Montadas direto da grade de `mapas_v0.1.json`, com célula de 3 m.
+- Paredes com colisão, juntadas em retrângulos de 27 a 41 blocos por mapa. Têm 4,2 m de altura; as da borda, 6 m.
+- Cerca invisível de 30 m em volta: ninguém sai do mapa.
+- Coberturas: caixotes de 1,15 m e contêineres de 2,4 m.
+- Bases e pontos A e B pintados no chão, com letra grande; portas das rotas em faixa amarela.
+- Visual de blocos (fase de teste), na paleta do Valdora.
+
+**Jogador em primeira pessoa** (`pvp_jogador.gd`):
+- corre a 5 m/s; agachado, a 2,4 m/s;
+- pula, mira e atira por raio (marca o impacto), com recarga de 24 + 90.
+
+**Interface da partida** (`pvp_hud.gd`):
+- joystick na metade esquerda, mira arrastando na metade direita;
+- tiro (contínuo segurando), recarga, pulo e agachar, com vários dedos ao mesmo tempo;
+- minimapa com o jogador, tempo e munição;
+- pausa, que volta ao menu.
+
+**Fluxo:**
+1. O app abre direto no menu PvP (`run/main_scene`).
+2. Jogar leva ao carregamento, com a planta do mapa escolhido.
+3. Entrar abre a arena.
+4. O mapa se troca em Selecionar modo → Mapa.
+
+**Testes:**
+- `pvp_arena_smoke`: cada célula de parede e de cobertura das 5 grades tem colisão, e cada célula de chão está livre; o jogador pousa na base de ataque e, correndo 4 s em 8 direções, não entra em parede nem sai do mapa; tiro e recarga.
+- `tools/run_valdora_tests.sh`: 21 de 21.
+
+**Versão:**
+- 0.5.0-pvp, versionCode 104, nos arquivos `export_presets.cfg`, `release-control/version.txt`, `update_contract.gd` (CLIENT_CODE) e no workflow de release.
+- Os smokes PvP entram no workflow.
+- O manifesto OTA aceita cliente a partir do 102.
+- A pasta `docs/` sai do APK.
+
+O código do jogo antigo continua no repositório, sem uso, porque os testes do sistema de atualização dependem dele. Remover fica para depois do APK homologado.
+
 ## Próximos passos (propostos)
 
 1. O dono avalia os menus e os mapas.
-2. Ligar a cena PvP ao início do app, atrás de um botão. Isso exige APK novo e OK do dono.
-3. Montar os mapas em 3D a partir da grade (bloqueio cinza), para testar a movimentação.
+2. Homologar o APK 0.5.0 no aparelho.
+3. Inimigos de treino e regras da rodada (plantar e desarmar).
 4. Arte de cada arena, junto com o trabalho do Codex em Brasília.
 5. Pendências que mudam o projeto:
    - o PvP online pede servidor de partida em tempo real, o que ainda não existe;

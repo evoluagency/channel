@@ -7,6 +7,8 @@ extends Control
 const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
 const ICONE := preload("res://scripts/ui/pvp/pvp_icone.gd")
 const FUNDO := preload("res://scripts/ui/pvp/pvp_fundo.gd")
+const ARENA := preload("res://scripts/pvp/pvp_arena.gd")
+const CENA_ARENA := "res://scenes/pvp/ArenaPvP.tscn"
 
 ## Barra lateral: [id da tela, ícone, rótulo]
 const LATERAL := [
@@ -18,7 +20,7 @@ const LATERAL := [
 	["ajustes", "engrenagem", "Ajustes"],
 	["chat", "chat", "Chat"],
 ]
-const TELAS := ["inicio", "modos", "inventario", "loja", "mercado", "cla", "ajustes", "chat", "carregando", "partida"]
+const TELAS := ["inicio", "modos", "inventario", "loja", "mercado", "cla", "ajustes", "chat", "carregando"]
 
 var tela := ""
 var fundo: Control
@@ -93,9 +95,9 @@ func abrir(id: String) -> void:
 		c.queue_free()
 	for c in topo_abas.get_children():
 		c.queue_free()
-	var cheia := id in ["carregando", "partida"]
+	var cheia := id == "carregando"
 	moldura.visible = not cheia
-	fundo.tom = "partida" if id == "partida" else "menu"
+	fundo.tom = "menu"
 	fundo.queue_redraw()
 	for k in _botoes_lateral:
 		_marcar_lateral(_botoes_lateral[k], k == id or (k == "inicio" and id == "modos"))
@@ -565,8 +567,18 @@ func _tela_modos(a: Control) -> void:
 	var mh := HBoxContainer.new()
 	mh.add_theme_constant_override("separation", 24)
 	mapas.add_child(mh)
-	mh.add_child(_rotulo("MAPAS", 15, T.TEXTO_2, 800))
-	mh.add_child(_rotulo("Aleatório (1)", 17, T.TEXTO, 700))
+	mh.add_child(_rotulo("MAPA", 15, T.TEXTO_2, 800))
+	var trocar := _botao(_nome_mapa(), "escuro", 17, 52)
+	trocar.custom_minimum_size.x = 220
+	trocar.pressed.connect(func():
+		var l := ARENA.lista()
+		var i := 0
+		for k in l.size():
+			if l[k].id == ARENA.mapa_escolhido:
+				i = k
+		ARENA.mapa_escolhido = l[(i + 1) % l.size()].id
+		abrir("modos"))
+	mh.add_child(trocar)
 	var sel := _botao("Selecionar modo", "laranja", 20, 56)
 	sel.custom_minimum_size.x = 280
 	sel.pressed.connect(abrir.bind("inicio"))
@@ -846,29 +858,35 @@ func _tela_carregando(a: Control) -> void:
 	var dl := _rotulo("   Dica: caixas raras têm mais chance de visuais especiais do que caixotes.", 18, T.TEXTO, 600)
 	dl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	dica.add_child(dl)
-	# minimapa (marcador)
+	# planta do mapa escolhido
+	var dados := ARENA.carregar(ARENA.mapa_escolhido)
 	var mapa := _painel(Color(T.PAINEL_2, 0.9))
-	mapa.position = Vector2(70, 110)
-	mapa.size = Vector2(470, 470)
+	mapa.position = Vector2(150, 90)
+	mapa.size = Vector2(380, 500)
 	a.add_child(mapa)
+	var planta := Control.new()
+	planta.custom_minimum_size = Vector2(24 * 14, 32 * 14)
+	planta.draw.connect(func():
+		var cores := {"#": Color(T.TEXTO_2, 0.6), "c": Color(T.TEXTO_2, 0.3), "A": Color("d9534a"), "B": Color("3f6fc9"),
+			"T": Color("3f8f5a"), "D": Color("b0603a"), "1": T.OURO, "2": T.OURO, "3": T.OURO}
+		var g: Array = dados.get("grade", [])
+		for y in g.size():
+			for x in String(g[y]).length():
+				var ch: String = String(g[y])[x]
+				if cores.has(ch):
+					planta.draw_rect(Rect2(x * 14, y * 14, 14, 14), cores[ch]))
 	var mc := CenterContainer.new()
 	mapa.add_child(mc)
-	var mv := VBoxContainer.new()
-	mc.add_child(mv)
-	var mi = ICONE.new("mapa", Color(T.TEXTO_2, 0.4), 160)
-	mi.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	mv.add_child(mi)
-	var ml := _rotulo("MINIMAPA", 16, T.TEXTO_2, 800)
-	ml.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	mv.add_child(ml)
+	mc.add_child(planta)
 	var info := VBoxContainer.new()
 	info.position = Vector2(620, 130)
 	info.custom_minimum_size = Vector2(600, 0)
 	info.add_theme_constant_override("separation", 10)
 	a.add_child(info)
-	info.add_child(_titulo("Brasília", 64))
+	info.add_child(_titulo(dados.get("nome", ""), 64))
+	info.add_child(_rotulo(dados.get("cidade", ""), 22, T.TEXTO_2, 700))
 	info.add_child(_rotulo("Desarmar", 26, T.LARANJA_CLARO, 800, true))
-	var d := _rotulo("Ataque e defesa em equipes de cinco. Plante ou desarme o dispositivo para vencer a rodada.", 20, T.TEXTO, 600)
+	var d := _rotulo("Ataque e defesa em equipes de cinco. Plante ou desarme o dispositivo para vencer a rodada.\n%s." % _maiuscula(String(dados.get("tema", ""))), 20, T.TEXTO, 600)
 	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	d.custom_minimum_size = Vector2(600, 0)
 	info.add_child(d)
@@ -886,116 +904,21 @@ func _tela_carregando(a: Control) -> void:
 	cl.anchor_left = 0.48; cl.anchor_top = 1.0; cl.anchor_bottom = 1.0
 	cl.offset_top = -94
 	a.add_child(cl)
-	var ir := _botao("Entrar (prévia)", "teal", 15, 48)
-	ir.anchor_left = 1.0; ir.anchor_right = 1.0
-	ir.offset_left = -220; ir.offset_right = -24; ir.offset_top = 84; ir.offset_bottom = 132
-	ir.pressed.connect(abrir.bind("partida"))
+	var ir := _botao("Entrar", "laranja", 26, 64)
+	ir.anchor_left = 1.0; ir.anchor_right = 1.0; ir.anchor_top = 1.0; ir.anchor_bottom = 1.0
+	ir.offset_left = -300; ir.offset_right = -40; ir.offset_top = -190; ir.offset_bottom = -126
+	ir.pressed.connect(func(): get_tree().change_scene_to_file(CENA_ARENA))
+	var volta := _voltar()
+	volta.anchor_left = 1.0; volta.anchor_right = 1.0
+	volta.offset_left = -80; volta.offset_right = -24; volta.offset_top = 84; volta.offset_bottom = 136
+	a.add_child(volta)
 	a.add_child(ir)
 
-## Interface da partida (só o layout; sem jogabilidade).
-func _tela_partida(a: Control) -> void:
-	# placar no topo
-	var placar := HBoxContainer.new()
-	placar.anchor_left = 0.5; placar.anchor_right = 0.5
-	placar.offset_left = -330; placar.offset_right = 330; placar.offset_top = 10
-	placar.add_theme_constant_override("separation", 6)
-	a.add_child(placar)
-	for i in 5:
-		placar.add_child(_avatar("", T.TEAL, 44))
-	var pt := _rotulo(" 0 ", 34, T.TEAL_CLARO, 900, true)
-	placar.add_child(pt)
-	var tempo := _rotulo(" 01:55 ", 22, T.TEXTO, 800)
-	tempo.add_theme_stylebox_override("normal", T.caixa(Color(T.NOITE, 0.8), 10))
-	tempo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	placar.add_child(tempo)
-	placar.add_child(_rotulo(" 0 ", 34, T.VERMELHO, 900, true))
-	for i in 5:
-		placar.add_child(_avatar("", T.VERMELHO, 44))
-	var aq := _rotulo("  AQUECIMENTO 00:53  ", 18, T.TEXTO, 800)
-	aq.add_theme_stylebox_override("normal", T.caixa(Color(T.NOITE, 0.7), 10))
-	aq.anchor_left = 0.5; aq.anchor_right = 0.5
-	aq.offset_left = -120; aq.offset_right = 120; aq.offset_top = 64
-	aq.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	a.add_child(aq)
-	# minimapa
-	var mm := _painel(Color(T.NOITE, 0.7))
-	mm.position = Vector2(16, 16)
-	mm.size = Vector2(180, 180)
-	a.add_child(mm)
-	var mmi = ICONE.new("mapa", Color(T.TEXTO_2, 0.4), 120)
-	mm.add_child(mmi)
-	# pausa e ajustes
-	for i in 2:
-		var b := _botao("", "escuro", 14, 52)
-		b.anchor_left = 1.0; b.anchor_right = 1.0
-		b.offset_left = -76 - i * 66; b.offset_right = -20 - i * 66
-		b.offset_top = 16; b.offset_bottom = 68
-		var ic = ICONE.new(["pausa", "engrenagem"][i], T.CREME, 30)
-		ic.position = Vector2(13, 10)
-		b.add_child(ic)
-		if i == 0:
-			b.pressed.connect(abrir.bind("inicio"))
-		a.add_child(b)
-	# mira
-	var mira := Control.new()
-	mira.set_anchors_preset(Control.PRESET_CENTER)
-	mira.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	mira.draw.connect(func():
-		for d in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
-			mira.draw_line(d * 6, d * 18, T.TEAL_CLARO, 3.0, true))
-	a.add_child(mira)
-	# controle de movimento
-	var joy := Control.new()
-	joy.anchor_top = 1.0; joy.anchor_bottom = 1.0
-	joy.offset_left = 40; joy.offset_top = -250; joy.offset_right = 250; joy.offset_bottom = -40
-	joy.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	joy.draw.connect(func():
-		var c := joy.size * 0.5
-		joy.draw_circle(c, joy.size.x * 0.5, Color(T.NOITE, 0.35))
-		joy.draw_arc(c, joy.size.x * 0.5 - 2, 0, TAU, 48, Color(T.CREME, 0.35), 3.0, true)
-		joy.draw_circle(c, joy.size.x * 0.2, Color(T.CREME, 0.55)))
-	a.add_child(joy)
-	# vida, colete, armas e munição
-	var base := HBoxContainer.new()
-	base.anchor_left = 0.5; base.anchor_right = 0.5; base.anchor_top = 1.0; base.anchor_bottom = 1.0
-	base.offset_left = -330; base.offset_right = 160; base.offset_top = -84; base.offset_bottom = -20
-	base.add_theme_constant_override("separation", 10)
-	a.add_child(base)
-	var vida := _painel(Color(T.NOITE, 0.75))
-	base.add_child(vida)
-	var vh := HBoxContainer.new()
-	vida.add_child(vh)
-	vh.add_child(_rotulo("+ 100", 24, T.VERDE, 900))
-	vh.add_child(_rotulo("   ◆ 50", 24, T.TEAL_CLARO, 900))
-	for i in 3:
-		var s := _painel(Color(T.NOITE, 0.75) if i else Color(T.LARANJA, 0.35), 12, 2)
-		s.custom_minimum_size = Vector2(96, 0)
-		var si = ICONE.new(["arma", "arma", "granada"][i], T.CREME, 34)
-		si.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		s.add_child(si)
-		base.add_child(s)
-	var mun := _rotulo("  24 / 90  ", 26, T.CREME, 900)
-	mun.add_theme_stylebox_override("normal", T.caixa(Color(T.NOITE, 0.75), 12))
-	mun.anchor_left = 1.0; mun.anchor_right = 1.0; mun.anchor_top = 1.0; mun.anchor_bottom = 1.0
-	mun.offset_left = -440; mun.offset_right = -280; mun.offset_top = -300; mun.offset_bottom = -252
-	mun.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	mun.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	a.add_child(mun)
-	# botões de ação
-	var acoes := [["tiro", 150, Vector2(-190, -200), T.LARANJA], ["recarregar", 84, Vector2(-330, -150), T.PAINEL_3],
-		["correr", 84, Vector2(-290, -260), T.PAINEL_3], ["agachar", 84, Vector2(-120, -310), T.PAINEL_3]]
-	for ac in acoes:
-		var b := Button.new()
-		var d: float = ac[1]
-		b.anchor_left = 1.0; b.anchor_right = 1.0; b.anchor_top = 1.0; b.anchor_bottom = 1.0
-		b.offset_left = ac[2].x; b.offset_top = ac[2].y
-		b.offset_right = ac[2].x + d; b.offset_bottom = ac[2].y + d
-		var cor: Color = ac[3]
-		var s := T.caixa(Color(cor, 0.85), int(d / 2), 4, Color(T.CREME, 0.6))
-		b.add_theme_stylebox_override("normal", s)
-		b.add_theme_stylebox_override("hover", s)
-		b.add_theme_stylebox_override("pressed", T.caixa(cor.darkened(0.2), int(d / 2), 4, T.CREME))
-		var ic = ICONE.new(ac[0], Color.WHITE, int(d * 0.5))
-		ic.position = Vector2(d * 0.25, d * 0.25)
-		b.add_child(ic)
-		a.add_child(b)
+func _nome_mapa() -> String:
+	for m in ARENA.lista():
+		if m.id == ARENA.mapa_escolhido:
+			return "%s" % m.nome
+	return "?"
+
+func _maiuscula(t: String) -> String:
+	return t.substr(0, 1).to_upper() + t.substr(1) if t != "" else t
