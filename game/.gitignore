@@ -17,3 +17,6 @@ dist/*.aab
 # Fixtures copiadas por tools/run_valdora_tests.sh e pelo workflow cp004-ota.
 tests/fixtures/manifest.json
 tests/fixtures/*.zip
+
+# importação local do Godot das imagens de documentação (não vão para o jogo)
+docs/**/*.import
