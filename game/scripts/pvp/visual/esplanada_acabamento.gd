@@ -90,7 +90,7 @@ func fachada(centro: Vector3, sx: float, sz: float, altura: float, faces: Array,
 		_caixa(face + fora * 0.22 + Vector3(0, 2.75, 0),
 			Vector3(comp - 0.40, 0.19, 0.76), "esp_pedra", rot)
 		var divisoes: int = maxi(2, mini(14, int(comp / 2.15)))
-		var visiveis: int = divisoes if nivel >= 1 else maxi(2, divisoes / 2)
+		var visiveis: int = divisoes if nivel >= 1 else maxi(2, int(float(divisoes) / 2.0))
 		for j in visiveis:
 			var q: float = (float(j) + 0.5) / float(visiveis) - 0.5
 			var pos: Vector3 = face + ao * q * (comp - 0.85)
