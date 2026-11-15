@@ -30,9 +30,13 @@ func _ready() -> void:
 static func avaliar(d: Dictionary) -> bool:
 	if str(d.get("jogo", "")) != "Valdora":
 		return false
-	if typeof(d.get("version_code")) != TYPE_INT or int(d.get("version_code", 0)) <= CONTRATO.CLIENT_CODE:
+	if typeof(d.get("version_code")) != TYPE_INT and typeof(d.get("version_code")) != TYPE_FLOAT:
 		return false
-	if typeof(d.get("bytes")) != TYPE_INT or int(d.get("bytes", 0)) < 1000000 or int(d.get("bytes", 0)) > MAX_APK:
+	if int(d.get("version_code", 0)) <= CONTRATO.CLIENT_CODE:
+		return false
+	if typeof(d.get("bytes")) != TYPE_INT and typeof(d.get("bytes")) != TYPE_FLOAT:
+		return false
+	if int(d.get("bytes", 0)) < 1000000 or int(d.get("bytes", 0)) > MAX_APK:
 		return false
 	if not CONTRATO.valid_sha(str(d.get("sha256", ""))):
 		return false
