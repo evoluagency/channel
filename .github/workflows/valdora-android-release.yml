@@ -61,6 +61,7 @@ jobs:
           python3 game/tools_validate.py
           python3 game/tests/test_static_contract.py
           python3 game/tests/test_combat_static_contract.py
+          python3 game/tests/test_pvp_visual_quality.py
           python3 game/tests/test_ota_contract.py
           python3 tools/ota_manifest.py --verify-existing
           mkdir -p game/tests/fixtures
