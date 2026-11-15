@@ -6,6 +6,24 @@ extends RefCounted
 ## Referência de acabamento: arte conceitual do dono (estilizado, quente, detalhado).
 
 const CONSTRUTOR := preload("res://scripts/pvp/visual/construtor.gd")
+const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
+
+## Estabelecimentos por região: [nome no letreiro, tipo da calçada, cor do toldo e do letreiro].
+const LOJAS := {
+	"esplanada": [["CAFÉ CERRADO", "cafe", "teal"], ["LIVRARIA", "revistas", "azul"], ["PADARIA", "cafe", "laranja"],
+		["FARMÁCIA", "nada", "verde"], ["RESTAURANTE IPÊ", "cafe", "amarelo"], ["BANCA", "revistas", "vermelho"]],
+	"porto": [["BOTEQUIM", "cafe", "verde"], ["PEIXARIA", "peixe", "azul"], ["ARMAZÉM 7", "caixas", "amarelo"],
+		["CAFÉ DO CAIS", "cafe", "vermelho"], ["ESTIVA", "caixas", "laranja"], ["SUCOS", "frutas", "teal"]],
+	"ladeira": [["ACARAJÉ", "frutas", "laranja"], ["SORVETERIA", "cafe", "teal"], ["ARTESANATO", "revistas", "vermelho"],
+		["PADARIA", "cafe", "amarelo"], ["CAPOEIRA", "nada", "verde"], ["CAFÉ BAIANO", "cafe", "azul"]],
+	"estacao": [["PASTELARIA", "cafe", "amarelo"], ["LANCHONETE", "cafe", "vermelho"], ["BANCA", "revistas", "verde"],
+		["FARMÁCIA", "nada", "teal"], ["BILHETERIA", "nada", "azul"], ["CAFÉ DA ESTAÇÃO", "cafe", "laranja"]],
+	"represa": [["AÇAÍ", "frutas", "vermelho"], ["MERCADO DO PEIXE", "peixe", "azul"], ["FARINHA", "caixas", "amarelo"],
+		["CAFÉ", "cafe", "verde"], ["MERCEARIA", "caixas", "laranja"], ["TACACÁ", "frutas", "teal"]],
+}
+const MAX_LOJAS := 14
+
+var _vagas = []          # [ponto na face, fora, ao longo]
 
 var a                 # pvp_arena.gd
 var c                 # construtor
@@ -58,6 +76,7 @@ func montar(arena) -> int:
 	_predios()
 	_coberturas()
 	_marcas()
+	_lojas()
 	_adereços()
 	_trilhos()
 	_fundo()
@@ -109,6 +128,9 @@ func _materiais() -> void:
 	for k in arv.size():
 		c.sup("folha%d" % k, 6, Color(arv[k]), Color(arv[k]).darkened(0.3), 2.5, 0.0, 0.9)
 	c.agua("agua", Color("3fc0c8"), Color("146a86"))
+	c.liso("verde", Color("3f9a52"), 0.6)
+	c.liso("amarelo", Color("f2b632"), 0.6)
+	c.liso("vitrine", Color("ffd9a0"), 0.3, 0.0, 0.55)
 
 # ---------------------------------------------------------------- chão
 
@@ -198,6 +220,14 @@ func _predios() -> void:
 			"colonial": _colonial(r, centro, sx, sz, alt, faces)
 			"tijolo": _estacao(centro, sx, sz, alt, cor, faces)
 			"palafita": _palafita(centro, sx, sz, alt, cor, faces)
+		# vagas de loja no térreo (só onde a calçada em frente é livre)
+		if rio_represa and (_na_borda(centro, sx, sz) or sx * sz >= 120.0):
+			continue
+		for lado in faces:
+			for v in _ao_longo(centro, sx, sz, lado, 5.0, 1.0):
+				var cel = a.mundo_celula(v[0] + v[1] * 1.6)
+				if a.letra(cel.x, cel.y) in [".", "1", "2", "3", "A", "B"]:
+					_vagas.append(v)
 
 ## Pontos ao longo de uma face, com o vetor para fora. passo = distância entre janelas.
 func _ao_longo(centro: Vector3, sx: float, sz: float, lado: String, passo: float, margem := 1.2) -> Array:
@@ -491,6 +521,82 @@ func _adereços() -> void:
 						_arvore(p - parede * 0.3, 1.0)
 				_:
 					pass
+
+# ---------------------------------------------------------------- estabelecimentos
+
+func _lojas() -> void:
+	var lista: Array = LOJAS.get(a.mapa.get("id", ""), LOJAS["esplanada"])
+	# espalha as lojas pelo mapa: sorteia vagas e não deixa duas lojas a menos de 9 m
+	var escolhidas = []
+	var ordem = range(_vagas.size())
+	for i in ordem.size():
+		var j = rng.randi_range(i, ordem.size() - 1)
+		var t = ordem[i]; ordem[i] = ordem[j]; ordem[j] = t
+	for i in ordem:
+		if escolhidas.size() >= MAX_LOJAS:
+			break
+		var v = _vagas[i]
+		var perto = false
+		for e in escolhidas:
+			if (e[0] as Vector3).distance_to(v[0]) < 9.0:
+				perto = true
+				break
+		if not perto:
+			escolhidas.append(v)
+	for k in escolhidas.size():
+		var v = escolhidas[k]
+		var loja: Array = lista[k % lista.size()]
+		_loja(v[0], v[1], v[2], loja[0], loja[1], loja[2])
+
+## Fachada de loja no térreo: moldura, vitrine iluminada, porta, toldo listrado, letreiro e calçada.
+func _loja(p: Vector3, fora: Vector3, ao: Vector3, nome: String, tipo: String, cor: String) -> void:
+	var rot = atan2(fora.x, fora.z)
+	var L := 3.6
+	var up = Vector3.UP
+	var moldura = "madeira" if tema.estilo in ["colonial", "palafita"] else "ferro"
+	c.caixa(p + fora * 0.08, Vector3(L, 3.1, 0.16), moldura, rot)
+	c.caixa(p + fora * 0.17 - ao * 0.45 + up * 0.55, Vector3(L - 1.6, 1.8, 0.04), "vitrine", rot)
+	c.caixa(p + fora * 0.17 + ao * (L * 0.5 - 0.65), Vector3(0.95, 2.35, 0.04), "vidro", rot)
+	for i in 5:
+		var faixa = cor if i % 2 == 0 else "creme"
+		c.caixa(p + fora * (0.3 + i * 0.24) + up * (2.9 - i * 0.11), Vector3(L + 0.2, 0.06, 0.26), faixa, rot)
+	c.caixa(p + fora * 0.2 + up * 3.15, Vector3(L, 0.7, 0.1), cor, rot)
+	var l = Label3D.new()
+	l.text = nome
+	l.font = T.fonte(900, false)
+	l.font_size = 64 if nome.length() <= 10 else 46
+	l.pixel_size = 0.006
+	l.modulate = Color("fff6e6")
+	l.outline_size = 10
+	l.outline_modulate = Color(0, 0, 0, 0.45)
+	l.position = p + fora * 0.27 + up * 3.5
+	l.rotation.y = rot
+	l.shaded = false
+	a.add_child(l)
+	# calçada da loja (encostada na parede, abaixo de 1 m: não atrapalha a passagem)
+	var calc = p + fora * 0.9
+	match tipo:
+		"cafe":
+			for s_ in [-1, 1]:
+				var m = calc + ao * s_ * 1.0
+				c.cilindro(m, 0.05, 0.75, "ferro", 6)
+				c.cilindro(m + up * 0.75, 0.38, 0.04, "creme", 10)
+				for q in [-0.5, 0.5]:
+					c.caixa(m + ao * q, Vector3(0.36, 0.45, 0.36), "madeira", rot)
+					c.caixa(m + ao * q * 1.25 + up * 0.45, Vector3(0.06, 0.45, 0.36), "madeira", rot)
+		"frutas", "peixe":
+			c.caixa(calc, Vector3(1.6, 0.75, 0.8), "madeira_clara", rot)
+			var cores = ["laranja", "vermelho", "amarelo", "verde"] if tipo == "frutas" else ["creme", "azul", "creme", "teal"]
+			for i in 6:
+				var f = calc + ao * (-0.6 + (i % 3) * 0.6) + fora * (-0.18 + (i / 3) * 0.36) + up * 0.85
+				c.esfera(f, Vector3(0.16, 0.12, 0.16), cores[i % 4], 6, 4)
+		"revistas":
+			c.caixa(calc - fora * 0.3, Vector3(1.4, 1.3, 0.35), "madeira", rot)
+			for i in 6:
+				c.caixa(calc - fora * 0.1 + ao * (-0.5 + (i % 3) * 0.5) + up * (0.35 + (i / 3) * 0.45), Vector3(0.38, 0.32, 0.03), ["vermelho", "azul", "amarelo"][i % 3], rot)
+		"caixas":
+			for i in 3:
+				c.caixa(calc + ao * (-0.7 + i * 0.7), Vector3(0.6, 0.5 + (i % 2) * 0.3, 0.6), "madeira_clara", rot + 0.1 * i)
 
 func _trilhos() -> void:
 	if a.mapa.get("id", "") != "estacao":

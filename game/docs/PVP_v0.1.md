@@ -133,6 +133,19 @@ O dono pediu o acabamento da arte conceitual, com o ambiente de cada região. Re
 - **Limite:** o nível da arte conceitual (pintura digital) não sai inteiro de geometria feita por código. A distância está em detalhe de modelagem (ornamentos, arcos, vegetação densa) e em texturas pintadas. Os próximos passos de arte são modelos dedicados por marco e mais adereços.
 - **APK 0.5.1-pvp (versionCode 105):** atualização por cima da 0.5.0. O link direto fica na pré-versão `valdora-0.5.1-pvp` do GitHub.
 
+## Estabelecimentos e APK 0.5.2 (15/11/2026)
+
+- Até 14 lojas por mapa no térreo dos prédios, espalhadas a pelo menos 9 m uma da outra e só onde a calçada em frente é livre.
+- Cada loja tem moldura, vitrine iluminada, porta de vidro, toldo listrado e letreiro com o nome.
+- Na calçada, encostados na parede: mesas e cadeiras de café, banca de frutas ou de peixe, expositor de revistas ou caixas.
+- Nomes por região:
+  - Brasília: Café Cerrado, Livraria, Padaria, Farmácia, Restaurante Ipê, Banca;
+  - Rio: Botequim, Peixaria, Armazém 7, Café do Cais, Estiva, Sucos;
+  - Salvador: Acarajé, Sorveteria, Artesanato, Padaria, Capoeira, Café Baiano;
+  - São Paulo: Pastelaria, Lanchonete, Banca, Farmácia, Bilheteria, Café da Estação;
+  - Pará: Açaí, Mercado do Peixe, Farinha, Café, Mercearia, Tacacá.
+- APK 0.5.2-pvp (versionCode 106). Testes: 21 de 21.
+
 ## Próximos passos (propostos)
 
 1. O dono avalia os menus e os mapas.
