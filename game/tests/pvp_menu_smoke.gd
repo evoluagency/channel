@@ -46,15 +46,26 @@ func _rodar() -> void:
 			root.get_texture().get_image().save_png("%s/pvp_%s.png" % [pasta, t])
 	# aviso de atualização: aceita versão maior deste repositório e recusa o resto
 	var AT = load("res://scripts/pvp/pvp_atualizador.gd")
-	var boa := {"jogo": "Valdora", "version_code": 9999, "version_name": "9.9", "apk": "https://github.com/evoluagency/channel/releases/download/valdora-9.9/Valdora-9.9.apk"}
+	var boa := {"jogo": "Valdora", "version_code": 9999, "version_name": "9.9.0", "bytes": 53282963, "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", "apk": "https://github.com/evoluagency/channel/releases/download/valdora-9.9.0/Valdora-9.9.0.apk"}
 	_ok(AT.avaliar(boa), "atualização: aceita versão maior do repositório")
-	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 1, "apk": boa.apk}), "atualização: recusa versão menor")
-	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 9999, "apk": "https://exemplo.com/x.apk"}), "atualização: recusa APK de fora")
-	_ok(not AT.avaliar({"jogo": "Outro", "version_code": 9999, "apk": boa.apk}), "atualização: recusa outro jogo")
+	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 1, "bytes": boa.bytes, "sha256": boa.sha256, "version_name": boa.version_name, "apk": boa.apk}), "atualização: recusa versão menor")
+	_ok(not AT.avaliar({"jogo": "Valdora", "version_code": 9999, "bytes": boa.bytes, "sha256": boa.sha256, "version_name": boa.version_name, "apk": "https://exemplo.com/x.apk"}), "atualização: recusa APK de fora")
+	_ok(not AT.avaliar({"jogo": "Outro", "version_code": 9999, "bytes": boa.bytes, "sha256": boa.sha256, "version_name": boa.version_name, "apk": boa.apk}), "atualização: recusa outro jogo")
+	var sem_hash := boa.duplicate()
+	sem_hash["sha256"] = "invalido"
+	_ok(not AT.avaliar(sem_hash), "atualização: exige hash válido")
+	var sem_tamanho := boa.duplicate()
+	sem_tamanho.erase("bytes")
+	_ok(not AT.avaliar(sem_tamanho), "atualização: exige tamanho declarado")
 	menu.abrir("inicio")
 	menu.mostrar_atualizacao(boa)
 	await process_frame
 	_ok(menu.aviso_atualizacao != null and menu.aviso_atualizacao.is_visible_in_tree(), "atualização: aviso aparece")
+	var barra_existe := false
+	for n in _todos(menu, []):
+		if n is ProgressBar:
+			barra_existe = true
+	_ok(barra_existe, "atualização: barra de progresso existe")
 	if pasta != "":
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("%s/pvp_aviso_atualizacao.png" % pasta)
