@@ -1,42 +1,64 @@
-# Valdora 1.7 (Mapa do Brasil em retrato, M3)
+# Valdora 1.7 (PvP: gráfico da arte conceitual em todo o jogo)
 
-Responda em português do Brasil, de forma direta. Branch de partida: `claude/zealous-tesla-kfhwld`. Leia antes de agir: `game/docs/ESTADO_DO_PROJETO.md`, `game/docs/sessoes/HANDOFF-1.6.md`, `game/docs/DESENHO_MUNDO_v0.1.md` (seções 3, 3.1 e 4.1; marcos M3 e M8), `game/docs/MUNDO_BRASIL_DADOS_v0.1.md` e `game/docs/ROTEIRO_APARELHO_M8.md`.
+Responda em português do Brasil, de forma direta. Branch: `claude/zealous-tesla-kfhwld`; desenvolva e faça push nela.
+
+Leia antes de agir, nesta ordem:
+
+- `game/docs/ESTADO_DO_PROJETO.md`: as três primeiras seções da 1.6.
+- `game/docs/PVP_v0.1.md`.
+- `game/docs/PVP_QUALIDADE_VISUAL.md`: diagnóstico feito pelo ChatGPT.
+- Código:
+  - `game/scripts/pvp/visual/` (`cenario.gd`, `construtor.gd`, `superficie.gdshader`, `agua.gdshader`, `esplanada_acabamento.gd` e `qualidade_video.gd`);
+  - `game/scripts/pvp/` (arena, jogador, interface da partida e atualizador);
+  - `game/scripts/ui/pvp/` (menus).
 
 ## Contexto
 
-- **Jogo:** moderno, de base e estratégia, com mapa real; nome provisório "MUNDO". Piloto Brasil, Fase A offline, **modo retrato**.
-- **Aprovado:** as 13 construções nas seis faixas, as curvas v0.2 e a economia v0.3 (`game/data/mundo_componentes_v0.3.json`, 15 prédios).
-- **Feito na 1.6 (M8, falta o aparelho):**
-  - Cidade 3D de 80 lotes em retrato em `tools/arte3d/cidade.tscn`, com arrastar e pinça nos limites.
-  - Fusão de malhas, LOD e selos 2D.
-  - Banco da cidade e Centro tecnológico nas seis faixas.
-  - Prefeitura no lugar do Quartel-general.
-  - Contagens em `game/docs/logs/cidade3d/`.
-- **Pendente do dono:**
-  - Avaliar a arte do Banco e do Centro tecnológico.
-  - Dar o OK (ou não) para o APK de teste da cidade e medir com o roteiro.
+- **Foco 100% no PvP.** É um jogo de tiro 5 × 5 em primeira pessoa no celular, com estrutura de menus de tiro competitivo mobile (referência: Standoff 2) e acabamento estilizado de jogo mobile premium (referência: Last War e a arte conceitual do dono).
+- **O jogo de estratégia (MUNDO, cidades, alianças) foi encerrado pelo dono.** Não retomar.
+- **Feito na 1.6:**
+  - menus em 10 telas;
+  - 5 mapas do modo Desarmar, com equilíbrio testado (`game/data/pvp/mapas_v0.1.json`);
+  - arenas 3D jogáveis, com cenários regionais e lojas: Brasília, Rio, Salvador, São Paulo e Pará;
+  - atualização automática do APK.
+- **Publicado:** APK 0.5.3-pvp (versionCode 107), que o dono instala pelo link fixo `https://github.com/evoluagency/channel/releases/latest/download/Valdora.apk`.
+- **Como gerar um APK novo:**
+  1. Suba o versionCode em `export_presets.cfg`, `release-control/version.txt`, `update_contract.gd` (`CLIENT_CODE`), nos 3 testes estáticos (`version/code=`) e no workflow (`versionCode=`).
+  2. Dispare o workflow `valdora-android-release.yml` na branch com `fonte=claude/zealous-tesla-kfhwld` e `publicar_link=true`.
+  3. O app instalado avisa e se atualiza sozinho.
+- **O ChatGPT também mexe nesta branch.** Antes de trabalhar: `git pull` e `GODOT=... tools/run_valdora_tests.sh` (hoje 22 de 22). Na 1.6 ele deixou 2 erros de sintaxe; `tools/godot_checar_scripts.sh` pega isso.
 
 ## Objetivo
 
-0. **Se o dono mandou as medições do aparelho:** registrar no `ESTADO_DO_PROJETO.md` e aplicar os cortes da seção 4 do roteiro, se preciso. Se mandou ajustes de arte do Banco ou do Centro tecnológico, fazer antes do resto.
-1. **M3: tela do mapa do Brasil em retrato**, num projeto ou cena de teste separado do jogo instalado:
-   - contornos de `game/data/mundo/BR.json`;
-   - arrastar e pinça com os limites da seção 3.1 (estado com pelo menos 60% da largura, até duas larguras de tela, caixa do estado mais meia tela);
-   - botão do país e botão de voltar ao próprio estado;
-   - toque num estado (áreas de toque maiores para DF, SE e AL).
-   - Reaproveitar a câmera de `tools/arte3d/cidade.gd`, com o mesmo controle de toque.
-2. **Smoke Godot e captura de tela** em 1080 × 2340 (proporção). Teste Python, se houver dado novo.
-3. **Registro:** atualizar `ESTADO_DO_PROJETO.md`, escrever `HANDOFF-1.7.md` e `PROMPT-1.8.md`.
+O dono quer o gráfico da arte conceitual dele em toda a atmosfera do jogo. Referência: telas "Heróis" e "Base" do Valdora, com praça de pedra creme, cúpulas verde-azuladas, arcos, estandartes verde-azulados com o V dourado, flores e trepadeiras, luz dourada de fim de tarde, cores saturadas e acabamento de desenho animado 3D. O ambiente de cada mapa continua refletindo a região real.
+
+1. **Luz e cor de todos os mapas:**
+   - sol dourado, sombra quente (não azul), verdes saturados, leve brilho nas luzes e neblina de profundidade;
+   - conferir sempre por capturas em `tests/pvp_cenario_capturas.gd` (com `xvfb-run` e `--rendering-driver opengl3`).
+2. **Detalhe nos cenários:**
+   - arcos, cúpulas trabalhadas, ornamentos e cornijas;
+   - floreiras com flores, trepadeiras nas paredes e vegetação mais cheia (copas em vários volumes);
+   - marcos de cada cidade mais reconhecíveis.
+   - Manter a colisão da grade e o orçamento do celular: até cerca de 80 malhas e 250 mil triângulos por arena.
+3. **Menus com cenário 3D ao fundo** (praça do Valdora), no lugar das silhuetas planas.
+4. **Personagens:**
+   - o acabamento de desenho animado dos heróis não sai por código;
+   - levantar modelos 3D gratuitos com licença livre (CC0) compatíveis, ou o caminho de imagem para 3D por IA;
+   - não propor gasto.
+5. **Registro e entrega:**
+   - testes;
+   - APK novo com o link fixo;
+   - atualizar `ESTADO_DO_PROJETO.md`, escrever `HANDOFF-1.7.md` e `PROMPT-1.8.md`.
 
 ## Regras
 
 - Único gasto pago: assinatura Claude.
-- Sem push na `main`, deploy, OTA, APK ou workflow sem OK explícito do dono.
-- Não alterar o jogo instalado (Valdora 0.4.1 e OTA rev 10). Chaves privadas nunca no repositório.
-- Não refazer etapas aprovadas; conferir o registro antes. Poupar contexto.
-- Pendências do dono (nome, cor final, atribuição do estado, territórios disputados, pacote do app, nomes dos heróis): perguntar só o que bloquear. A atribuição do estado afeta o M4, não o M3.
+- Sem push na `main` e sem deploy na Vercel.
+- O dono autorizou gerar APK pelo workflow e publicar o link.
+- Chaves privadas nunca no repositório. Não copiar arte, personagens nem nomes de outros jogos.
+- Poupar contexto. Perguntar só o que bloquear.
 
 ## Modelo
 
-- Opus: desenho da câmera e da seleção por toque.
-- Sonnet: depois do método fechado, capturas, testes e registro.
+- Opus para a direção de arte e a luz.
+- Sonnet para adereços repetitivos, capturas e testes.
