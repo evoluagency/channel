@@ -846,9 +846,14 @@ func _tela_ajustes(a: Control) -> void:
 		r.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lh.add_child(r)
 		var opc: Array = l[1]
+		var video = get_node_or_null("/root/ValdoraVideo") if ativa == 1 else null
+		var selecionada := video.valor_de(str(l[0])) if video != null else ""
 		for i in opc.size():
-			var b := _botao(opc[i], "teal" if i == opc.size() - 1 else "escuro", 16, 50)
+			var ativa_opcao := selecionada == str(opc[i]) if video != null else i == opc.size() - 1
+			var b := _botao(opc[i], "teal" if ativa_opcao else "escuro", 16, 50)
 			b.custom_minimum_size.x = 200 if opc.size() <= 2 else 150
+			if video != null:
+				b.pressed.connect(_selecionar_video.bind(str(l[0]), str(opc[i])))
 			lh.add_child(b)
 		lista.add_child(p)
 	var sc := _rolagem(lista)
@@ -857,13 +862,40 @@ func _tela_ajustes(a: Control) -> void:
 	v.add_child(sc)
 	var bb := HBoxContainer.new()
 	v.add_child(bb)
-	bb.add_child(_botao("Redefinir ao padrão", "escuro", 16, 50))
+	var redefinir := _botao("Redefinir ao padrão", "escuro", 16, 50)
+	if ativa == 1:
+		redefinir.pressed.connect(_restaurar_video)
+	bb.add_child(redefinir)
 	var e := Control.new()
 	e.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	bb.add_child(e)
 	var ap := _botao("Aplicar", "laranja", 18, 50)
 	ap.custom_minimum_size.x = 220
+	if ativa == 1:
+		ap.pressed.connect(_aplicar_video)
 	bb.add_child(ap)
+
+## Configurações reais: o usuário não precisa reiniciar para ajustar a nitidez.
+func _selecionar_video(categoria: String, valor: String) -> void:
+	var video = get_node_or_null("/root/ValdoraVideo")
+	if video == null:
+		return
+	video.definir(categoria, valor)
+	abrir("ajustes")
+
+func _restaurar_video() -> void:
+	var video = get_node_or_null("/root/ValdoraVideo")
+	if video == null:
+		return
+	video.restaurar()
+	abrir("ajustes")
+
+func _aplicar_video() -> void:
+	var video = get_node_or_null("/root/ValdoraVideo")
+	if video == null:
+		return
+	video.aplicar()
+	abrir("ajustes")
 
 func _tela_chat(a: Control) -> void:
 	_abas(["Amigos", "Sistema"])
