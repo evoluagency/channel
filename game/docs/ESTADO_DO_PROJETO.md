@@ -117,6 +117,14 @@ Defeitos encontrados:
 - **O dono encerrou o jogo de estratégia** (MUNDO, cidades e alianças). O foco é 100% o PvP; as seções sobre o MUNDO abaixo ficam só como histórico.
 - **Arenas 3D jogáveis** nos 5 mapas: delimitações tiradas das grades, primeira pessoa e controles de toque. O app agora abre no menu PvP.
 - **Versão 0.5.0-pvp (versionCode 104):** atualização por cima da 0.4.1, com o mesmo pacote e o mesmo certificado. O APK é gerado pelo workflow `valdora-android-release`, com OK do dono dado em 15/11/2026.
+- **APK 0.5.0-pvp gerado em 15/11/2026.**
+  - Execução 43729674199 do workflow, com fonte `claude/zealous-tesla-kfhwld` e commit `39fc8c0`.
+  - Passaram os testes estáticos e os 10 smokes Godot, inclusive os 2 do PvP e o OTA remoto.
+  - Exportação: `aapt` confirma `ink.evolu.valdora`, versionCode 104 e 0.5.0-pvp. O `apksigner` confirma o certificado permanente `C5:95:06…`.
+  - APK com 53.241.308 bytes. Artefato 14167872881, que expira em 22/11/2026.
+  - Na exportação apareceu o aviso antigo de `valdora_modules/city/city.gd` (a cópia do módulo Cidade). Ele não afeta o PvP.
+  - Falta homologar no aparelho.
+- O workflow de release ganhou a entrada `fonte`, que por padrão continua sendo `release/valdora-android`.
 - Testes locais: 21 de 21. Detalhes em `PVP_v0.1.md`.
 
 ### Valdora PvP: menus e mapas (sessão 1.6, 15/11/2026)
