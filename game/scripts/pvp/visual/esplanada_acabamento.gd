@@ -52,7 +52,7 @@ func pisos() -> void:
 			if arena.letra(x, y) != ".":
 				continue
 			var p: Vector3 = arena.celula_mundo(x, y)
-			var alternado := (x + y) % 6 == 0
+			var alternado: bool = (x + y) % 6 == 0
 			var chave := "esp_piso_claro" if alternado else "esp_piso"
 			c.plano(p + Vector3(0, 0.006, 0), Vector2(2.94, 2.94), chave)
 			elementos += 1

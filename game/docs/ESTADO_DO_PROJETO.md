@@ -112,6 +112,23 @@ Defeitos encontrados:
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
 
+### Revisão do trabalho do ChatGPT (sessão 1.6, 15/11/2026)
+
+- **Revisados os 36 commits do ChatGPT** (`d503fd6`..`8a0b66c`):
+  - download automático do APK pelo gerenciador de downloads do Android, com tamanho e SHA-256 conferidos e instalação com a confirmação do Android (permissão `REQUEST_INSTALL_PACKAGES`);
+  - opções de vídeo (MSAA, resolução, sombras e FPS);
+  - acabamento piloto da Esplanada;
+  - testes novos.
+- **Defeitos encontrados e corrigidos:**
+  - dois erros de sintaxe GDScript: em `pvp_menu.gd` (a tela inicial do app) e em `esplanada_acabamento.gd` (que derrubava o cenário de todos os mapas). O app abriria sem menu. Os smokes travavam (o do menu) ou falhavam (o das arenas), e o workflow de APK pararia neles. O ChatGPT não rodou o Godot.
+  - não havia alternativa se o download nativo falhasse. Agora aparece "Baixar pelo navegador".
+- **Prevenção:** `tools/godot_checar_scripts.sh` confere a sintaxe de todos os scripts PvP e entra no `run_valdora_tests.sh` e no workflow de release.
+- **Testes:** 22 de 22, mais o `pvp_esplanada_visual_smoke`.
+- **Atenção:**
+  - o download automático usa dados móveis (`setAllowedOverMetered`);
+  - a permissão `REQUEST_INSTALL_PACKAGES` exige justificativa na Play Store (M13);
+  - a ponte Android (JavaClassWrapper) só se prova no aparelho.
+
 ### Valdora PvP: cenários regionais e APK 0.5.1 (sessão 1.6, 15/11/2026)
 
 - Os 5 mapas ganharam o ambiente da região, com texturas procedurais, prédios locais, adereços e paisagem de fundo. A colisão continua a da grade. Detalhes em `PVP_v0.1.md`.

@@ -80,6 +80,8 @@ jobs:
           godot --version
       - name: Importar projeto
         run: godot --headless --editor --path game --quit
+      - name: Sintaxe dos scripts PvP
+        run: GODOT=godot tools/godot_checar_scripts.sh
       - name: Testes Godot de regras e cena
         run: |
           godot --headless --path game --script res://tests/core_smoke.gd

@@ -73,6 +73,7 @@ if [ "$MODE" != "--py" ]; then
     python3 -I tools/build_city_zip.py --version 1 --out "$LOGDIR/city-visual" >/dev/null 2>&1 \
       && cp "$LOGDIR/city-visual/city-1.zip" game/tests/fixtures/city_visual_trabalho.zip
     run "godot import" 300 "$GODOT_BIN" --headless --editor --path game --quit
+    run "sintaxe dos scripts PvP" 600 env GODOT="$GODOT_BIN" tools/godot_checar_scripts.sh
     SMOKES=(core_smoke hero_smoke combat_smoke smoke update_smoke pck_smoke cp006_live_smoke cp011_city_v9_smoke pvp_menu_smoke pvp_arena_smoke)
     if [ "$MODE" = "--all" ] || [ "$MODE" = "--historico" ]; then
       SMOKES+=(remote_update_smoke city_name_layout_smoke cp005_city_smoke cp007_city_visual_smoke city_visual_smoke)

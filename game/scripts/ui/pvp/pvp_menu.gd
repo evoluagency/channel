@@ -91,7 +91,11 @@ func mostrar_atualizacao(d: Dictionary) -> void:
 	instalar.disabled = true
 	botoes.add_child(instalar)
 	instalar.pressed.connect(func():
-		var retorno := atualizador.solicitar_instalacao()
+		if instalar.has_meta("navegador"):
+			# alternativa: baixar pelo navegador; o Android pede para instalar ao abrir o arquivo
+			OS.shell_open(str(d.get("apk", "")))
+			return
+		var retorno: String = atualizador.solicitar_instalacao()
 		if retorno == "permissao":
 			estado.text = "Autorize a instalação no Android e toque novamente em Instalar."
 		elif retorno != "":
@@ -106,7 +110,11 @@ func mostrar_atualizacao(d: Dictionary) -> void:
 			estado.text = "APK validado. Toque em Instalar atualização.")
 	atualizador.download_erro.connect(func(mensagem: String):
 		if is_instance_valid(estado):
-			estado.text = mensagem)
+			estado.text = mensagem + " Use o botão para baixar pelo navegador."
+		if is_instance_valid(instalar):
+			instalar.set_meta("navegador", true)
+			instalar.text = "BAIXAR PELO NAVEGADOR"
+			instalar.disabled = false)
 
 # ---------------------------------------------------------------- estrutura
 
