@@ -6,8 +6,13 @@ on:
         description: 'Branch de origem do código (padrão: release/valdora-android)'
         required: false
         default: 'release/valdora-android'
+      publicar_link:
+        description: 'Publicar o APK numa pré-versão do GitHub (link direto de download)'
+        type: boolean
+        required: false
+        default: false
 permissions:
-  contents: read
+  contents: write
 jobs:
   validar-e-exportar:
     runs-on: ubuntu-24.04
@@ -159,3 +164,18 @@ jobs:
             game/dist/SIGNATURE.txt
           retention-days: 7
           if-no-files-found: error
+      - name: Link direto (pré-versão do GitHub)
+        if: ${{ inputs.publicar_link }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VER="$(grep '^version_name=' game/release-control/version.txt | cut -d= -f2)"
+          TAG="valdora-$VER"
+          cp game/dist/Valdora.apk "game/dist/Valdora-$VER.apk"
+          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" "game/dist/Valdora-$VER.apk" game/dist/SHA256.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$(git rev-parse HEAD)" --prerelease \
+            --title "Valdora $VER (teste)" --notes "APK de teste do Valdora $VER. Instale por cima da versão anterior."
+          echo "Link: https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/Valdora-$VER.apk"
