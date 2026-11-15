@@ -6,6 +6,7 @@ extends RefCounted
 ## Referência de acabamento: arte conceitual do dono (estilizado, quente, detalhado).
 
 const CONSTRUTOR := preload("res://scripts/pvp/visual/construtor.gd")
+const ACABAMENTO_ESPLANADA := preload("res://scripts/pvp/visual/esplanada_acabamento.gd")
 const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
 
 ## Estabelecimentos por região: [nome no letreiro, tipo da calçada, cor do toldo e do letreiro].
@@ -27,6 +28,7 @@ var _vagas = []          # [ponto na face, fora, ao longo]
 
 var a                 # pvp_arena.gd
 var c                 # construtor
+var acabamento = null # visual premium exclusivo da Esplanada; nunca altera colisões
 var tema = {}
 var rng = RandomNumberGenerator.new()
 var C := 3.0
@@ -72,14 +74,23 @@ func montar(arena) -> int:
 	rng.seed = hash(a.mapa.get("id", ""))
 	c = CONSTRUTOR.new()
 	_materiais()
+	if a.mapa.get("id", "") == "esplanada":
+		acabamento = ACABAMENTO_ESPLANADA.new()
+		acabamento.preparar(a, c)
 	_chao()
+	if acabamento != null:
+		acabamento.pisos()
 	_predios()
 	_coberturas()
+	if acabamento != null:
+		acabamento.mobiliario()
 	_marcas()
 	_lojas()
 	_adereços()
 	_trilhos()
 	_fundo()
+	if acabamento != null:
+		acabamento.entorno()
 	_luz()
 	return c.montar(a)
 
@@ -220,6 +231,9 @@ func _predios() -> void:
 			"colonial": _colonial(r, centro, sx, sz, alt, faces)
 			"tijolo": _estacao(centro, sx, sz, alt, cor, faces)
 			"palafita": _palafita(centro, sx, sz, alt, cor, faces)
+		# Segunda pele arquitetônica: somente malha visual, fora da grade de colisão.
+		if acabamento != null:
+			acabamento.fachada(centro, sx, sz, alt, faces, borda)
 		# vagas de loja no térreo (só onde a calçada em frente é livre)
 		if rio_represa and (_na_borda(centro, sx, sz) or sx * sz >= 120.0):
 			continue
@@ -735,6 +749,12 @@ func _luz() -> void:
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.18
 	env.adjustment_contrast = 1.12
+	if acabamento != null:
+		# Brasília: manhã clara, cores quentes controladas e profundidade atmosférica.
+		env.ambient_light_energy = 0.58
+		env.adjustment_saturation = 1.12
+		env.adjustment_contrast = 1.08
+		env.fog_density = 0.0013
 	var we = WorldEnvironment.new()
 	we.environment = env
 	a.add_child(we)
