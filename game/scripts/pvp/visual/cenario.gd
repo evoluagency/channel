@@ -8,6 +8,7 @@ extends RefCounted
 const CONSTRUTOR := preload("res://scripts/pvp/visual/construtor.gd")
 const ACABAMENTO_ESPLANADA := preload("res://scripts/pvp/visual/esplanada_acabamento.gd")
 const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
+const CEU := preload("res://scripts/pvp/visual/ceu.gdshader")
 
 ## Estabelecimentos por região: [nome no letreiro, tipo da calçada, cor do toldo e do letreiro].
 const LOJAS := {
@@ -36,34 +37,34 @@ var C := 3.0
 ## Paletas e regras por região.
 const TEMAS := {
 	"esplanada": {
-		"ceu": ["3f86d9", "cfe6f2"], "sol": ["fff2dc", 1.05, -48.0, -40.0], "neblina": "d9e6ea",
-		"chao": [3, "cbc1ad", "b3a893", 1.2], "chao_fora": [10, "b4643c", "8f4a2c", 0.35],
-		"paredes": ["e9e3d6"], "socle": "c9c1b2", "janela": "2e6f86", "estilo": "moderno",
-		"altura": [5.0, 9.0], "arvore": ["ffc93c", "e85fa0"], "baixo": "floreira", "alto": "quiosque",
+		"ceu": ["2a7fdc", "f6e1bd"], "sol": ["ffd49a", 1.45, -33.0, -40.0], "neblina": "efd9bb", "ambiente": "d8b496", "nuvens": 0.55,
+		"chao": [0, "c9b3a0", "a38a78", 1.0], "chao_fora": [6, "86b84a", "5f9238", 0.35],
+		"paredes": ["f2e5cb"], "socle": "c9b28f", "janela": "1f7f86", "estilo": "moderno",
+		"altura": [5.0, 9.0], "arvore": ["5fae3c", "f2b33a", "e46a9e"], "baixo": "floreira", "alto": "quiosque",
 	},
 	"porto": {
-		"ceu": ["4f8fd0", "dceaf0"], "sol": ["ffe7c4", 1.05, -42.0, -55.0], "neblina": "dfe7ea",
-		"chao": [9, "e9e2d2", "5a5e64", 0.55], "chao_fora": [8, "6b6c70", "4c4d52", 1.0],
-		"paredes": ["a8533a", "b8653f", "8f4630"], "socle": "6f6a63", "janela": "33484f", "estilo": "armazem",
-		"altura": [5.5, 8.0], "arvore": ["4f9a3c"], "baixo": "caixotes", "alto": "conteiner",
+		"ceu": ["2f85d6", "f8e4c2"], "sol": ["ffd09a", 1.45, -30.0, -55.0], "neblina": "f0dcc2", "ambiente": "dbb49a", "nuvens": 0.6,
+		"chao": [9, "f1e6d2", "4f5358", 0.55], "chao_fora": [8, "7a736b", "5c5650", 1.0],
+		"paredes": ["b9573a", "c86a40", "9c4a30"], "socle": "7b6e60", "janela": "1f5f66", "estilo": "armazem",
+		"altura": [5.5, 8.0], "arvore": ["52a83a", "3f8f34"], "baixo": "caixotes", "alto": "conteiner",
 	},
 	"ladeira": {
-		"ceu": ["3d8be0", "f3e3c8"], "sol": ["ffe0b0", 1.1, -38.0, -30.0], "neblina": "f0e2cc",
-		"chao": [0, "a39a8c", "7c7468", 1.0], "chao_fora": [0, "a39a8c", "7c7468", 1.0],
-		"paredes": ["f2c230", "3c8fd0", "e86a8f", "54b06a", "f08a3a", "f5ead2", "8e6cc7"], "socle": "e9e0cc",
-		"janela": "2a3a48", "estilo": "colonial", "altura": [6.0, 9.5], "arvore": ["3f9a43"], "baixo": "carrinho", "alto": "barraca",
+		"ceu": ["2a82e0", "fbe3bd"], "sol": ["ffcf92", 1.5, -29.0, -30.0], "neblina": "f4dcc0", "ambiente": "e0b898", "nuvens": 0.45,
+		"chao": [0, "c4ad9a", "9a8472", 1.0], "chao_fora": [0, "c4ad9a", "9a8472", 1.0],
+		"paredes": ["f6c232", "2f8fd8", "ec6a92", "4fb868", "f58a36", "f6e8cc", "9a6cd0"], "socle": "eadcc2",
+		"janela": "234a5a", "estilo": "colonial", "altura": [6.0, 9.5], "arvore": ["46a83f", "6cbf45"], "baixo": "carrinho", "alto": "barraca",
 	},
 	"estacao": {
-		"ceu": ["5a8fc9", "e6e2d8"], "sol": ["ffe4c0", 1.0, -45.0, -65.0], "neblina": "e2ddd2",
-		"chao": [0, "b3a998", "8f8676", 1.0], "chao_fora": [8, "5e6066", "47494e", 1.2],
-		"paredes": ["b4523b", "a8492f"], "socle": "e8e0cf", "janela": "2c3b47", "estilo": "tijolo",
-		"altura": [6.5, 10.0], "arvore": ["4a8f3a"], "baixo": "banco", "alto": "banca",
+		"ceu": ["3a86d2", "f4dfc0"], "sol": ["ffcc90", 1.4, -31.0, -65.0], "neblina": "eed8bf", "ambiente": "d6b096", "nuvens": 0.65,
+		"chao": [0, "c4ae9b", "9c8573", 1.0], "chao_fora": [8, "6e6862", "54504b", 1.2],
+		"paredes": ["bd5a3c", "ad4d32"], "socle": "eadcc2", "janela": "22505c", "estilo": "tijolo",
+		"altura": [6.5, 10.0], "arvore": ["4f9a3a", "68b444"], "baixo": "banco", "alto": "banca",
 	},
 	"represa": {
-		"ceu": ["3f8bc9", "e2efe6"], "sol": ["fff0d0", 1.05, -50.0, -20.0], "neblina": "cfe0d6",
-		"chao": [4, "a87a4c", "7f5934", 1.0], "chao_fora": [6, "3f7a30", "2c5c24", 0.6],
-		"paredes": ["3f88b8", "4fa36a", "d0533f", "e8c24a", "f2efe6"], "socle": "6f5a40", "janela": "2a3438",
-		"estilo": "palafita", "altura": [4.6, 6.5], "arvore": ["2f8a3a", "3fa04a"], "baixo": "cestos", "alto": "barraco",
+		"ceu": ["2a86d0", "f4e6c4"], "sol": ["ffd8a0", 1.4, -34.0, -20.0], "neblina": "dfe2c4", "ambiente": "cdb592", "nuvens": 0.6, "densidade": 0.0032,
+		"chao": [4, "b9864f", "8a6038", 1.0], "chao_fora": [6, "52a23a", "36782a", 0.6],
+		"paredes": ["2f8fc8", "4fb06a", "e0583f", "f2c44a", "f6efe0"], "socle": "7a6244", "janela": "22444a",
+		"estilo": "palafita", "altura": [4.6, 6.5], "arvore": ["2f9a3a", "4fb04a", "79c24a"], "baixo": "cestos", "alto": "barraco",
 	},
 }
 
@@ -728,37 +729,46 @@ func _guindaste(p: Vector3) -> void:
 # ---------------------------------------------------------------- luz e céu
 
 func _luz() -> void:
+	# Direção de arte (arte conceitual do dono): fim de tarde dourado, sombra quente,
+	# cores saturadas, brilho leve nas luzes e neblina de profundidade.
 	var env = Environment.new()
 	env.background_mode = Environment.BG_SKY
 	var ceu = Sky.new()
-	var mc = ProceduralSkyMaterial.new()
-	mc.sky_top_color = Color(tema.ceu[0])
-	mc.sky_horizon_color = Color(tema.ceu[1])
-	mc.ground_horizon_color = Color(tema.ceu[1])
-	mc.ground_bottom_color = Color(tema.ceu[1]).darkened(0.4)
-	mc.sun_angle_max = 25.0
+	var mc = ShaderMaterial.new()
+	mc.shader = CEU
+	mc.set_shader_parameter("topo", Color(tema.ceu[0]))
+	mc.set_shader_parameter("horizonte", Color(tema.ceu[1]))
+	mc.set_shader_parameter("chao", Color(tema.neblina).darkened(0.3))
+	mc.set_shader_parameter("cor_sol", Color(tema.sol[0]))
+	mc.set_shader_parameter("nuvens", tema.get("nuvens", 0.5))
+	mc.set_shader_parameter("semente", float(absi(hash(a.mapa.get("id", ""))) % 97))
 	ceu.sky_material = mc
+	ceu.radiance_size = Sky.RADIANCE_SIZE_64
 	env.sky = ceu
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = 0.5
-	env.ambient_light_color = Color("f2e6d6")
-	env.ambient_light_sky_contribution = 0.35
+	# ambiente por cor (não pelo céu azul): a sombra fica quente, como na arte
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	env.ambient_light_color = Color(tema.get("ambiente", "d9b89c"))
+	env.ambient_light_energy = 0.44
 	env.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
-	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
-	env.tonemap_exposure = 1.0
+	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	env.tonemap_exposure = 0.98
+	env.tonemap_white = 6.0
+	env.glow_enabled = true
+	env.glow_intensity = 0.55
+	env.glow_strength = 1.0
+	env.glow_bloom = 0.04
+	env.glow_hdr_threshold = 1.05
+	env.glow_blend_mode = Environment.GLOW_BLEND_MODE_SOFTLIGHT
 	env.fog_enabled = true
 	env.fog_light_color = Color(tema.neblina)
-	env.fog_density = 0.0018
-	env.fog_sky_affect = 0.2
+	env.fog_light_energy = 1.0
+	env.fog_sun_scatter = 0.25
+	env.fog_density = tema.get("densidade", 0.0026)
+	env.fog_sky_affect = 0.0
 	env.adjustment_enabled = true
-	env.adjustment_saturation = 1.18
-	env.adjustment_contrast = 1.12
-	if acabamento != null:
-		# Brasília: manhã clara, cores quentes controladas e profundidade atmosférica.
-		env.ambient_light_energy = 0.58
-		env.adjustment_saturation = 1.12
-		env.adjustment_contrast = 1.08
-		env.fog_density = 0.0013
+	env.adjustment_saturation = 1.16
+	env.adjustment_contrast = 1.1
+	env.adjustment_brightness = 1.0
 	var we = WorldEnvironment.new()
 	we.environment = env
 	a.add_child(we)
@@ -773,12 +783,14 @@ func _luz() -> void:
 	if video != null:
 		sol.shadow_enabled = video.sombras
 	sol.directional_shadow_max_distance = 70.0
-	sol.shadow_blur = 1.35
-	sol.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
+	sol.shadow_blur = 1.6
+	sol.shadow_opacity = 0.95
+	sol.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY
 	a.add_child(sol)
+	# contraluz quente e fraco do lado oposto: dá volume sem esfriar a sombra
 	var pre = DirectionalLight3D.new()
-	pre.light_color = Color("bcd2f0")
-	pre.light_energy = 0.25
-	pre.rotation_degrees = Vector3(-25, s[3] + 160.0, 0)
+	pre.light_color = Color("ffc9a0")
+	pre.light_energy = 0.22
+	pre.rotation_degrees = Vector3(-20, s[3] + 170.0, 0)
 	pre.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	a.add_child(pre)

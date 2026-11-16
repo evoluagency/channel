@@ -22,18 +22,18 @@ func preparar(a, construtor) -> void:
 	_materiais()
 
 func _materiais() -> void:
-	c.sup("esp_piso", 0, Color("d7d5ca"), Color("b9b6aa"), 0.68, 0.08, 0.88)
-	c.sup("esp_piso_claro", 3, Color("e5e1d5"), Color("d3cec0"), 0.55, 0.06, 0.86)
-	c.sup("esp_pedra", 3, Color("f0ece2"), Color("dad7ca"), 0.42, 0.09, 0.75)
+	c.sup("esp_piso", 0, Color("c9b3a0"), Color("a38a78"), 0.68, 0.08, 0.88)
+	c.sup("esp_piso_claro", 3, Color("d6c4ae"), Color("bca88f"), 0.55, 0.06, 0.86)
+	c.sup("esp_pedra", 3, Color("f4e8d2"), Color("dccbae"), 0.42, 0.09, 0.75)
 	c.sup("esp_concreto", 3, Color("b8bdbb"), Color("989d9c"), 0.65, 0.14, 0.78)
-	c.liso("esp_vidro", Color("5b91a7"), 0.19, 0.22)
+	c.liso("esp_vidro", Color("2f8f94"), 0.19, 0.22)
 	c.liso("esp_vidro_escuro", Color("2d576e"), 0.26, 0.12)
-	c.liso("esp_brise", Color("e5e5d9"), 0.62, 0.04)
+	c.liso("esp_brise", Color("f2e6cf"), 0.62, 0.04)
 	c.liso("esp_metal", Color("596d76"), 0.42, 0.34)
 	c.liso("esp_detalhe", Color("bba982"), 0.72)
 	c.liso("esp_terra", Color("766653"), 0.92)
-	c.sup("esp_folhagem", 6, Color("4f8e54"), Color("2f6845"), 1.6, 0.08)
-	c.sup("esp_flor", 6, Color("d98d68"), Color("ae594b"), 1.4, 0.05)
+	c.sup("esp_folhagem", 6, Color("5fae3c"), Color("3a8030"), 1.6, 0.08)
+	c.sup("esp_flor", 6, Color("f2f0e6"), Color("f0b8cc"), 1.4, 0.05)
 	c.agua("esp_espelho", Color("78c6c8"), Color("397589"))
 
 func _caixa(pos: Vector3, tamanho: Vector3, material: String, rot := 0.0) -> void:

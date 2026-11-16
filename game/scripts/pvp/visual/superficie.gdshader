@@ -119,7 +119,7 @@ void fragment() {
 	uv *= escala;
 	vec2 r = padrao(uv, p_mundo.y);
 	vec3 cor = mix(cor_a.rgb, cor_b.rgb, clamp(r.x, 0.0, 1.0));
-	cor *= mix(0.45, 1.0, r.y);                                  // sulcos e juntas
+	cor *= mix(0.6, 1.0, r.y);                                  // sulcos e juntas
 	float mancha = fbm(p_mundo.xz * 0.15 + p_mundo.y * 0.1);
 	float baixo = 1.0 - smoothstep(0.0, 1.6, p_mundo.y);         // sujeira perto do chão
 	cor *= 1.0 - sujeira * (0.35 * baixo * step(n.y, 0.5) + 0.25 * smoothstep(0.55, 0.85, mancha));
@@ -129,4 +129,6 @@ void fragment() {
 	ROUGHNESS = rugosidade * mix(1.0, 0.85, r.y);
 	METALLIC = metal;
 	SPECULAR = 0.35;
+	RIM = 0.22;          // contorno de luz de desenho animado
+	RIM_TINT = 0.55;
 }
