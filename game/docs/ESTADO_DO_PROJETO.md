@@ -141,7 +141,12 @@ Defeitos encontrados:
   - o smoke do menu passava com o fundo sem compilar; agora confere a praça montada;
   - o prazo dos smokes subiu para 300 s, porque a arena leva cerca de 3 minutos numa máquina lenta.
 - **Testes:** 25 de 25 em `run_valdora_tests.sh`, com os 3 testes visuais PvP incluídos, entre eles o novo `test_pvp_arte_conceitual.py`.
-- **APK 0.5.4-pvp (código 108):** workflow `valdora-android-release` disparado da branch com `publicar_link=true`. Resultado abaixo.
+- **APK 0.5.4-pvp (código 108) publicado em 16/11/2026:**
+  - gerado pelo workflow `valdora-android-release`, execução 43842883778, do commit `ab288a5`;
+  - pré-versão `valdora-0.5.4-pvp`, com 53.341.674 bytes e SHA-256 `38f01538…ea32706a`;
+  - o link fixo `releases/latest/download/Valdora.apk` foi baixado e conferido (tamanho e SHA-256 batem com o `versao.json`);
+  - o app instalado (107) avisa e se atualiza;
+  - falta a homologação no aparelho: visual e FPS com glow e praça 3D.
 
 ### Revisão do trabalho do ChatGPT (sessão 1.6, 15/11/2026)
 
