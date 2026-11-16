@@ -1,4 +1,4 @@
-# Valdora 1.8 (PvP: interface e personagens no estilo da arte conceitual)
+# Valdora 1.8 (PvP: paintball, armas, interface e heróis no estilo da arte conceitual)
 
 Responda em português do Brasil, de forma direta. Branch: `claude/zealous-tesla-kfhwld`; desenvolva e faça push nela.
 
@@ -8,7 +8,8 @@ Leia antes de agir:
 - `game/docs/sessoes/HANDOFF-1.7.md`;
 - `game/docs/PVP_PERSONAGENS_CC0.md`;
 - referências do dono: `game/docs/imagens/referencia_1.7/` (base, heróis, arsenal, equipamento, partida_5x5, partida_terceira);
-- capturas atuais: `game/docs/imagens/pvp_1.7/`.
+- capturas atuais: `game/docs/imagens/pvp_1.7/`;
+- **heróis e armas:** `game/docs/PVP_REFERENCIAS_1.8.md` e as imagens em `game/docs/imagens/referencia_1.8/` (11 heróis, 30 armas de paintball, 30 aparências do marcador).
 
 ## Contexto
 
@@ -25,6 +26,11 @@ Leia antes de agir:
 
 ## Objetivo
 
+0. **Paintball** (as armas de referência disparam tinta):
+   - projétil de tinta com respingo colorido na parede, no chão e no adversário;
+   - shader de pintura procedural com as 30 aparências do marcador (camuflagens, chamas, raio, caveira, dourado e outras), como itens da loja;
+   - marcador de assalto com hopper em primeira pessoa;
+   - depois, o restante das 30 armas, por grupos (ver a ordem em `PVP_REFERENCIAS_1.8.md`).
 1. **Interface no estilo da arte:**
    - painéis navy translúcidos com borda clara e cantos grandes;
    - botão JOGAR laranja com brilho e ícone;
@@ -32,11 +38,11 @@ Leia antes de agir:
    - moedas no topo, como nas referências.
    - A praça 3D precisa aparecer atrás.
    - Na partida, o HUD também segue a arte: retratos dos times no placar, vida e escudo embaixo, joystick e botões redondos.
-2. **Personagens:**
+2. **Personagens** (alvo: os 11 heróis de `referencia_1.8`; o código não chega ao acabamento deles):
    - baixar o KayKit Adventurers e o Character Animations (CC0) e conferir o LICENSE do download;
    - recolorir na paleta do Valdora e usar como jogador e bots, com animações de andar, correr e atirar;
    - medir malhas e triângulos.
-3. **Arma em primeira pessoa** no estilo da arte (creme, verde-azulado e laranja), por código ou CC0 (Kenney Blaster Kit).
+3. **Arma em primeira pessoa:** coberta pelo item 0 (marcador de paintball).
 4. **Vitrine do herói** nas telas Heróis e Arsenal: pedestal com anel verde-azulado, como na arte.
 5. **Registro e entrega:**
    - testes;
