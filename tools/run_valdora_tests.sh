@@ -27,7 +27,7 @@ MODE="${1:-default}"
 case "$MODE" in default|--py|--all|--historico) ;; *) echo "Opção desconhecida: $MODE"; sed -n 3,15p "$0"; exit 2 ;; esac
 
 GODOT_BIN="${GODOT:-godot}"
-TIMEOUT_S="${VALDORA_SMOKE_TIMEOUT:-120}"
+TIMEOUT_S="${VALDORA_SMOKE_TIMEOUT:-300}"   # a arena PvP leva ~3 min em máquina lenta
 LOGDIR="$(mktemp -d)"
 NAMES=(); RESULTS=()
 
@@ -54,6 +54,9 @@ run "test_mundo_brasil"         120 python3 -I game/tests/test_mundo_brasil.py
 run "test_economia_mundo"       120 python3 -I game/tests/test_economia_mundo.py
 run "test_cidade3d"            60 python3 -I game/tests/test_cidade3d.py
 run "test_mapas_pvp"           60 python3 -I game/tests/test_mapas_pvp.py
+run "test_pvp_visual_quality"  60 python3 -I game/tests/test_pvp_visual_quality.py
+run "test_pvp_esplanada"       60 python3 -I game/tests/test_pvp_esplanada_visual.py
+run "test_pvp_arte_conceitual" 60 python3 -I game/tests/test_pvp_arte_conceitual.py
 run "ota_manifest --verify"     60 python3 -I tools/ota_manifest.py --verify-existing
 
 GODOT_MISSING=0
