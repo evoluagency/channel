@@ -9,6 +9,12 @@ const JOGADOR := preload("res://scripts/pvp/pvp_jogador.gd")
 const HUD := preload("res://scripts/pvp/pvp_hud.gd")
 const DADOS := "res://data/pvp/mapas_v0.1.json"
 const CENARIO := preload("res://scripts/pvp/visual/cenario.gd")
+const TINTA := preload("res://scripts/pvp/pvp_tinta.gd")
+const BOT := preload("res://scripts/pvp/pvp_bot.gd")
+const HEROI := preload("res://scripts/pvp/visual/heroi_visual.gd")
+## Cores de tinta dos times (sessão 1.8): verde-azulado claro para o seu, magenta para o adversário.
+const CORES_TIME := [Color("#21e0d0"), Color("#ff3d9a")]
+const DURACAO := 180.0
 
 const CELULA := 3.0
 const ALTURA_PAREDE := 4.2
@@ -20,6 +26,17 @@ const ALTURA_CONTEINER := 2.4
 static var mapa_escolhido := "esplanada"
 ## false: arena em blocos simples (teste de espaço); true: cenário da região (cenario.gd).
 static var visual := true
+## Confronto 5 x 5 com bots (4 aliados e 5 adversários). Os smokes de colisão desligam.
+static var com_bots := true
+static var heroi_jogador := "nilo"
+static var aparencia_jogador := "mare_alta"
+var tinta: Node3D
+var combatentes: Array = []
+var placar := [0, 0]
+var abates_recentes: Array = []   # [{autor, vitima, time, t}]
+var tempo := DURACAO
+var encerrada := false
+var _livres := {}                 # Vector2i -> true
 var chamadas_cenario := 0
 
 var mapa: Dictionary = {}
@@ -45,13 +62,108 @@ func _ready() -> void:
 	_cerca()
 	if visual:
 		chamadas_cenario = CENARIO.new().montar(self)
+	tinta = TINTA.new()
+	add_child(tinta)
 	jogador = JOGADOR.new()
+	jogador.arena = self
+	jogador.heroi_id = heroi_jogador
+	jogador.aparencia = aparencia_jogador
 	add_child(jogador)
 	jogador.global_position = centro_de("T") + Vector3(0, 1.0, 0)
 	jogador.olhar_para(centro_de("D"))
+	combatentes.append(jogador)
+	if com_bots:
+		_bots()
 	hud = HUD.new()
 	hud.arena = self
 	add_child(hud)
+
+func _bots() -> void:
+	var ids: Array = []
+	for h in HEROI.herois():
+		if h.id != heroi_jogador:
+			ids.append(h.id)
+	var aps: Array = []
+	for a in preload("res://scripts/pvp/visual/marcador.gd").aparencias():
+		aps.append(a.id)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(mapa_escolhido)
+	for i in 9:
+		var b := BOT.new()
+		b.arena = self
+		b.time = 0 if i < 4 else 1
+		b.heroi_id = ids[i % ids.size()]
+		b.aparencia = aps[(i * 7 + 3) % aps.size()]
+		add_child(b)
+		b.global_position = celula_aleatoria("T" if b.time == 0 else "D", rng) + Vector3(0, 0.1, 0)
+		combatentes.append(b)
+
+func _process(dt: float) -> void:
+	if encerrada or not com_bots:
+		return
+	tempo = maxf(0.0, tempo - dt)
+	if tempo <= 0.0:
+		encerrada = true
+
+func cor_time(t: int) -> Color:
+	return CORES_TIME[clampi(t, 0, 1)]
+
+func registrar_abate(autor: Node, vitima: Node) -> void:
+	if is_instance_valid(autor) and autor.get("time") != null and autor != vitima:
+		placar[int(autor.time)] += 1
+		autor.abates += 1
+	abates_recentes.push_front({"autor": String(autor.nome) if is_instance_valid(autor) else "?",
+		"vitima": String(vitima.nome), "time": int(autor.time) if is_instance_valid(autor) else -1, "t": Time.get_ticks_msec()})
+	if abates_recentes.size() > 4:
+		abates_recentes.pop_back()
+
+func livre(c: Vector2i) -> bool:
+	return not letra(c.x, c.y) in ["#", "c"]
+
+## Centro de uma célula sorteada com a letra pedida (base, ponto A ou B).
+func celula_aleatoria(ch: String, rng: RandomNumberGenerator) -> Vector3:
+	var lista := []
+	for y in altura:
+		for x in largura:
+			if letra(x, y) == ch:
+				lista.append(Vector2i(x, y))
+	if lista.is_empty():
+		return centro_de(ch)
+	var c: Vector2i = lista[(rng.randi() if rng != null else randi()) % lista.size()]
+	return celula_mundo(c.x, c.y)
+
+## Caminho pela grade (busca em largura, 8 vizinhos sem cortar quina). Devolve pontos no mundo.
+func caminho(de: Vector3, para: Vector3) -> Array:
+	var a := mundo_celula(de)
+	var b := mundo_celula(para)
+	if not livre(b):
+		return []
+	var veio := {a: a}
+	var fila := [a]
+	var i := 0
+	var achou := false
+	while i < fila.size():
+		var c: Vector2i = fila[i]
+		i += 1
+		if c == b:
+			achou = true
+			break
+		for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1), Vector2i(1, 1), Vector2i(1, -1), Vector2i(-1, 1), Vector2i(-1, -1)]:
+			var n: Vector2i = c + d
+			if veio.has(n) or not livre(n):
+				continue
+			if d.x != 0 and d.y != 0 and (not livre(Vector2i(c.x + d.x, c.y)) or not livre(Vector2i(c.x, c.y + d.y))):
+				continue
+			veio[n] = c
+			fila.append(n)
+	if not achou:
+		return []
+	var pts := []
+	var c2 := b
+	while c2 != a:
+		pts.push_front(celula_mundo(c2.x, c2.y))
+		c2 = veio[c2]
+	return pts
 
 static func carregar(id: String) -> Dictionary:
 	var f := FileAccess.open(DADOS, FileAccess.READ)

@@ -22,6 +22,9 @@ const TEXTO_2 := Color("#9fb3c6")
 const OURO := Color("#e9b13c")
 const VERDE := Color("#3fbf5f")
 const VERMELHO := Color("#e2534a")
+## Sessão 1.8: painéis de vidro navy translúcido com borda clara, como na arte conceitual.
+const VIDRO := Color(0.075, 0.125, 0.21, 0.8)
+const BORDA_VIDRO := Color(1, 1, 1, 0.26)
 
 ## Raridade dos itens (faixa de baixo dos cartões).
 const RARIDADE := {
@@ -83,4 +86,12 @@ static func caixa_botao(cor: Color, escura: Color, raio := RAIO_BOTAO, apertado 
 	s.shadow_color = Color(0, 0, 0, 0.3)
 	s.shadow_offset = Vector2(0, 3)
 	s.anti_aliasing = true
+	return s
+
+## Painel de vidro navy com borda clara e cantos grandes (arte conceitual).
+static func vidro(raio := 22, cor := VIDRO) -> StyleBoxFlat:
+	var s := caixa(cor, raio, 2, BORDA_VIDRO)
+	s.shadow_size = 6
+	s.shadow_color = Color(0, 0, 0, 0.25)
+	s.shadow_offset = Vector2(0, 3)
 	return s

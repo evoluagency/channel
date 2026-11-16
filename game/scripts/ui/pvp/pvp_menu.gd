@@ -1,6 +1,7 @@
 extends Control
-## Menus do Valdora PvP (sessão 1.6): só o layout, com espaços reservados.
-## Estrutura: barra lateral de ícones à esquerda, abas no topo, moedas à direita e conteúdo.
+## Menus do Valdora PvP. Sessão 1.8: estrutura da arte conceitual do dono, com logo e moedas
+## no topo, barra inferior BASE, HERÓIS, ARSENAL e MISSÕES, painéis navy translúcidos de
+## cantos grandes e a vitrine 3D (herói ou marcador no pedestal) sobre a praça do Valdora.
 ## Nenhum item, arma ou produto real: os cartões são marcadores com a cor da raridade.
 ## Cena de prévia: res://scenes/pvp/MenuPvP.tscn (o jogo instalado não usa esta cena).
 
@@ -10,28 +11,38 @@ const FUNDO := preload("res://scripts/ui/pvp/pvp_fundo.gd")
 const ARENA := preload("res://scripts/pvp/pvp_arena.gd")
 const CENA_ARENA := "res://scenes/pvp/ArenaPvP.tscn"
 const ATUALIZADOR := preload("res://scripts/pvp/pvp_atualizador.gd")
+const VITRINE := preload("res://scripts/ui/pvp/pvp_vitrine.gd")
+const HEROI := preload("res://scripts/pvp/visual/heroi_visual.gd")
+const MARCADOR := preload("res://scripts/pvp/visual/marcador.gd")
+const RETRATOS := preload("res://scripts/pvp/visual/retratos.gd")
+const PERFIL := "user://pvp_perfil.cfg"
 var aviso_atualizacao: Control
 var atualizador: Node
 
-## Barra lateral: [id da tela, ícone, rótulo]
-const LATERAL := [
-	["inicio", "jogar", "Jogar"],
-	["inventario", "arma", "Inventário"],
-	["loja", "moedas", "Loja"],
-	["mercado", "carrinho", "Mercado"],
-	["cla", "escudo", "Clã"],
-	["ajustes", "engrenagem", "Ajustes"],
-	["chat", "chat", "Chat"],
+## Barra de baixo: [id da tela, ícone, rótulo]
+const ABAS := [
+	["inicio", "base", "Base"],
+	["herois", "herois", "Heróis"],
+	["arsenal", "arsenal", "Arsenal"],
+	["modos", "missoes", "Missões"],
 ]
-const TELAS := ["inicio", "modos", "inventario", "loja", "mercado", "cla", "ajustes", "chat", "carregando"]
+## Atalhos do topo, ao lado das moedas: [ícone, tela, dica]
+const ATALHOS := [["moedas", "loja", "Loja"], ["escudo", "cla", "Clã"], ["chat", "chat", "Chat"], ["engrenagem", "ajustes", "Ajustes"]]
+const TELAS := ["inicio", "herois", "arsenal", "modos", "inventario", "loja", "mercado", "cla", "ajustes", "chat", "carregando"]
+## Atributos por função (só exibição nesta versão: o paintball ainda não diferencia heróis).
+const ATRIBUTOS := {"Batedor": [0.9, 0.6, 0.45], "Assalto": [0.65, 0.75, 0.6], "Precisão": [0.5, 0.92, 0.4],
+	"Suporte": [0.6, 0.5, 0.78], "Tático": [0.6, 0.66, 0.66], "Explosivos": [0.55, 0.86, 0.5], "Pesado": [0.35, 0.8, 0.92],
+	"Corpo a corpo": [0.86, 0.72, 0.5], "Reconhecimento": [0.82, 0.55, 0.5], "Rastreadora": [0.86, 0.6, 0.5]}
 
 var tela := ""
 var fundo: Control
-var lateral: VBoxContainer
+var lateral: HBoxContainer      # barra de baixo
 var topo_abas: HBoxContainer
 var topo_moedas: HBoxContainer
 var corpo: Control
-var moldura: Control      # lateral + topo (some na partida e no carregamento)
+var moldura: Control      # topo e barra de baixo (somem no carregamento)
+var heroi_visto := ""
+var aparencia_vista := ""
 var _botoes_lateral := {}
 var aba_atual := {}       # tela -> índice da aba
 
@@ -40,6 +51,7 @@ func _ready() -> void:
 	fundo = FUNDO.new()
 	fundo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(fundo)
+	_carregar_perfil()
 	_moldura()
 	abrir("inicio")
 	atualizador = ATUALIZADOR.new()
@@ -123,47 +135,107 @@ func _moldura() -> void:
 	moldura.set_anchors_preset(Control.PRESET_FULL_RECT)
 	moldura.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(moldura)
-	# barra lateral
-	var bl := PanelContainer.new()
-	bl.add_theme_stylebox_override("panel", T.caixa(Color(T.NOITE, 0.94), 0))
-	bl.anchor_bottom = 1.0
-	bl.offset_right = 96
-	moldura.add_child(bl)
-	lateral = VBoxContainer.new()
-	lateral.add_theme_constant_override("separation", 0)
-	bl.add_child(lateral)
-	var marca := _rotulo("V", 34, T.LARANJA, 900, true)
-	marca.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	marca.custom_minimum_size = Vector2(96, 64)
-	marca.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	lateral.add_child(marca)
-	for item in LATERAL:
-		var b := _botao_lateral(item[0], item[1], item[2])
-		lateral.add_child(b)
-		_botoes_lateral[item[0]] = b
-	# topo: abas da tela e moedas
+	# topo: título da tela (ou logo) à esquerda; moedas e atalhos à direita
 	var topo := HBoxContainer.new()
 	topo.anchor_right = 1.0
-	topo.offset_left = 112
+	topo.offset_left = 16
 	topo.offset_right = -16
 	topo.offset_top = 10
-	topo.offset_bottom = 66
-	topo.add_theme_constant_override("separation", 8)
+	topo.offset_bottom = 70
+	topo.add_theme_constant_override("separation", 10)
+	topo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	moldura.add_child(topo)
 	topo_abas = HBoxContainer.new()
 	topo_abas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	topo_abas.add_theme_constant_override("separation", 6)
+	topo_abas.add_theme_constant_override("separation", 8)
 	topo.add_child(topo_abas)
 	topo_moedas = HBoxContainer.new()
-	topo_moedas.add_theme_constant_override("separation", 10)
+	topo_moedas.add_theme_constant_override("separation", 8)
 	topo.add_child(topo_moedas)
-	topo_moedas.add_child(_moeda("C", "0", T.TEAL))
-	topo_moedas.add_child(_moeda("G", "0", T.OURO))
+	topo_moedas.add_child(_moeda("V", "1 250", T.OURO))
+	for at in ATALHOS:
+		topo_moedas.add_child(_botao_icone(at[0], at[1], at[2]))
+	# barra de baixo: as quatro áreas do jogo
+	var bb := PanelContainer.new()
+	var sb := T.vidro(26)
+	sb.content_margin_left = 8; sb.content_margin_right = 8; sb.content_margin_top = 6; sb.content_margin_bottom = 6
+	bb.add_theme_stylebox_override("panel", sb)
+	bb.anchor_top = 1.0; bb.anchor_bottom = 1.0; bb.anchor_right = 1.0
+	bb.offset_left = 36; bb.offset_right = -36; bb.offset_top = -84; bb.offset_bottom = -10
+	moldura.add_child(bb)
+	lateral = HBoxContainer.new()
+	lateral.add_theme_constant_override("separation", 6)
+	bb.add_child(lateral)
+	for item in ABAS:
+		var b := _botao_lateral(item[0], item[1], item[2])
+		lateral.add_child(b)
+		_botoes_lateral[item[0]] = b
 	# corpo
 	corpo = Control.new()
 	corpo.set_anchors_preset(Control.PRESET_FULL_RECT)
 	corpo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(corpo)
+
+func _botao_icone(icone: String, destino: String, dica: String) -> Button:
+	var b := Button.new()
+	b.custom_minimum_size = Vector2(56, 56)
+	b.tooltip_text = dica
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_stylebox_override("normal", T.vidro(16))
+	b.add_theme_stylebox_override("hover", T.vidro(16, Color(T.PAINEL_3, 0.85)))
+	b.add_theme_stylebox_override("pressed", T.vidro(16, Color(T.TEAL_ESCURO, 0.9)))
+	var ic = ICONE.new(icone, T.CREME, 30)
+	ic.position = Vector2(13, 13)
+	b.add_child(ic)
+	b.pressed.connect(abrir.bind(destino))
+	return b
+
+func _logo() -> Control:
+	var p := PanelContainer.new()
+	var s := T.vidro(28)
+	s.content_margin_left = 12; s.content_margin_right = 22; s.content_margin_top = 2; s.content_margin_bottom = 2
+	p.add_theme_stylebox_override("panel", s)
+	var h := HBoxContainer.new()
+	h.add_theme_constant_override("separation", 6)
+	p.add_child(h)
+	var v := _rotulo("V", 40, T.LARANJA, 900, true)
+	v.add_theme_color_override("font_outline_color", T.LARANJA_ESCURO)
+	v.add_theme_constant_override("outline_size", 6)
+	h.add_child(v)
+	var n := _titulo("Valdora", 34)
+	n.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	h.add_child(n)
+	return p
+
+func _cabecalho(titulo: String, volta := "inicio") -> void:
+	var b := _voltar()
+	b.pressed.disconnect(abrir.bind("inicio"))
+	b.pressed.connect(abrir.bind(volta))
+	topo_abas.add_child(b)
+	var p := PanelContainer.new()
+	var s := T.vidro(26)
+	s.content_margin_left = 22; s.content_margin_right = 26
+	p.add_theme_stylebox_override("panel", s)
+	var t := _titulo(titulo, 32)
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	p.add_child(t)
+	topo_abas.add_child(p)
+
+# ---------------------------------------------------------------- perfil (herói e aparência escolhidos)
+
+func _carregar_perfil() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(PERFIL) == OK:
+		ARENA.heroi_jogador = String(cfg.get_value("pvp", "heroi", ARENA.heroi_jogador))
+		ARENA.aparencia_jogador = String(cfg.get_value("pvp", "aparencia", ARENA.aparencia_jogador))
+	heroi_visto = ARENA.heroi_jogador
+	aparencia_vista = ARENA.aparencia_jogador
+
+func _salvar_perfil() -> void:
+	var cfg := ConfigFile.new()
+	cfg.set_value("pvp", "heroi", ARENA.heroi_jogador)
+	cfg.set_value("pvp", "aparencia", ARENA.aparencia_jogador)
+	cfg.save(PERFIL)
 
 func abrir(id: String) -> void:
 	tela = id
@@ -176,14 +248,15 @@ func abrir(id: String) -> void:
 	fundo.tom = "menu"
 	fundo.queue_redraw()
 	for k in _botoes_lateral:
-		_marcar_lateral(_botoes_lateral[k], k == id or (k == "inicio" and id == "modos"))
+		_marcar_lateral(_botoes_lateral[k], k == id or (k == "arsenal" and id in ["inventario", "mercado", "loja"]))
 	var area := Control.new()
 	area.set_anchors_preset(Control.PRESET_FULL_RECT)
+	area.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if not cheia:
-		area.offset_left = 112
-		area.offset_top = 78
+		area.offset_left = 16
+		area.offset_top = 80
 		area.offset_right = -16
-		area.offset_bottom = -16
+		area.offset_bottom = -96
 	corpo.add_child(area)
 	call("_tela_" + id, area)
 
@@ -203,9 +276,9 @@ func _titulo(texto: String, tam := 28) -> Label:
 	l.add_theme_constant_override("outline_size", 6)
 	return l
 
-func _painel(cor := Color(T.PAINEL, 0.92), raio := T.RAIO, borda := 2) -> PanelContainer:
+func _painel(cor := T.VIDRO, raio := 22, borda := 2) -> PanelContainer:
 	var p := PanelContainer.new()
-	var s := T.caixa(cor, raio, borda, T.BORDA, 6)
+	var s := T.caixa(cor, raio, borda, T.BORDA_VIDRO, 6)
 	s.content_margin_left = 12; s.content_margin_right = 12
 	s.content_margin_top = 10; s.content_margin_bottom = 10
 	p.add_theme_stylebox_override("panel", s)
@@ -219,8 +292,16 @@ func _botao(texto: String, tipo := "laranja", tam := 22, altura := 56) -> Button
 	var cores: Array = {"laranja": [T.LARANJA, T.LARANJA_ESCURO, T.LARANJA_CLARO],
 		"teal": [T.TEAL_ESCURO.lightened(0.08), Color("#0d5357"), T.TEAL],
 		"escuro": [T.PAINEL_3, Color("#1a2a3c"), T.PAINEL_3.lightened(0.12)]}[tipo]
-	b.add_theme_stylebox_override("normal", T.caixa_botao(cores[0], cores[1]))
-	b.add_theme_stylebox_override("hover", T.caixa_botao(cores[2], cores[1]))
+	var sn := T.caixa_botao(cores[0], cores[1], 20)
+	var sh := T.caixa_botao(cores[2], cores[1], 20)
+	if tipo == "laranja":
+		for st in [sn, sh]:
+			st.shadow_color = Color(T.LARANJA_CLARO, 0.45)
+			st.shadow_size = 10
+			st.shadow_offset = Vector2.ZERO
+			st.border_width_top = 2
+	b.add_theme_stylebox_override("normal", sn)
+	b.add_theme_stylebox_override("hover", sh)
 	b.add_theme_stylebox_override("pressed", T.caixa_botao(cores[1].lightened(0.15), cores[1], T.RAIO_BOTAO, true))
 	b.add_theme_stylebox_override("focus", T.caixa(Color(0, 0, 0, 0), T.RAIO_BOTAO, 2, T.TEAL_CLARO))
 	b.add_theme_font_override("font", T.fonte(900, true))
@@ -233,37 +314,44 @@ func _botao(texto: String, tipo := "laranja", tam := 22, altura := 56) -> Button
 
 func _botao_lateral(id: String, icone: String, texto: String) -> Button:
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(96, 86)
+	b.custom_minimum_size = Vector2(0, 60)
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b.tooltip_text = texto
-	b.flat = true
 	b.focus_mode = Control.FOCUS_NONE
 	b.pressed.connect(abrir.bind(id))
-	var v := VBoxContainer.new()
-	v.set_anchors_preset(Control.PRESET_FULL_RECT)
-	v.alignment = BoxContainer.ALIGNMENT_CENTER
-	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	v.add_theme_constant_override("separation", 2)
-	b.add_child(v)
-	var ic = ICONE.new(icone, T.TEXTO_2, 34)
-	ic.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	v.add_child(ic)
-	var l := _rotulo(texto, 12, T.TEXTO_2, 700)
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var h := HBoxContainer.new()
+	h.set_anchors_preset(Control.PRESET_FULL_RECT)
+	h.alignment = BoxContainer.ALIGNMENT_CENTER
+	h.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	h.add_theme_constant_override("separation", 12)
+	b.add_child(h)
+	var ic = ICONE.new(icone, T.CREME, 38)
+	ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	h.add_child(ic)
+	var l := _rotulo(texto.to_upper(), 24, T.CREME, 900, true)
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	v.add_child(l)
+	h.add_child(l)
 	b.set_meta("icone", ic)
 	b.set_meta("rotulo", l)
 	return b
 
 func _marcar_lateral(b: Button, ativo: bool) -> void:
 	var s := StyleBoxFlat.new()
-	s.bg_color = Color(T.TEAL, 0.16) if ativo else Color(0, 0, 0, 0)
-	s.border_width_left = 5 if ativo else 0
-	s.border_color = T.TEAL
+	s.set_corner_radius_all(20)
+	s.anti_aliasing = true
+	if ativo:
+		s.bg_color = Color(T.TEAL, 0.34)
+		s.set_border_width_all(3)
+		s.border_color = T.TEAL_CLARO
+		s.shadow_color = Color(T.TEAL_CLARO, 0.35)
+		s.shadow_size = 8
+	else:
+		s.bg_color = Color(0, 0, 0, 0)
 	b.add_theme_stylebox_override("normal", s)
-	b.add_theme_stylebox_override("hover", T.caixa(Color(1, 1, 1, 0.06), 0))
+	b.add_theme_stylebox_override("hover", s if ativo else T.caixa(Color(1, 1, 1, 0.06), 20))
 	b.add_theme_stylebox_override("pressed", s)
-	var c := T.TEAL_CLARO if ativo else T.TEXTO_2
+	var c := Color.WHITE if ativo else T.CREME
 	b.get_meta("icone").cor = c
 	b.get_meta("icone").queue_redraw()
 	b.get_meta("rotulo").add_theme_color_override("font_color", c)
@@ -307,6 +395,18 @@ func _moeda(simbolo: String, valor: String, cor: Color) -> Control:
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", 8)
 	p.add_child(h)
+	if simbolo == "V":
+		var mv = ICONE.new("moeda_v", cor, 40)
+		h.add_child(mv)
+		var vv := _rotulo(valor, 24, T.TEXTO, 900)
+		vv.custom_minimum_size = Vector2(80, 0)
+		vv.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		h.add_child(vv)
+		s.bg_color = T.VIDRO
+		s.border_color = T.BORDA_VIDRO
+		s.set_corner_radius_all(26)
+		s.content_margin_left = 8; s.content_margin_right = 14
+		return p
 	var m := Label.new()
 	m.text = simbolo
 	m.custom_minimum_size = Vector2(36, 36)
@@ -406,113 +506,270 @@ func _linha_sep() -> HSeparator:
 # ---------------------------------------------------------------- telas
 
 func _tela_inicio(a: Control) -> void:
-	var h := HBoxContainer.new()
-	h.set_anchors_preset(Control.PRESET_FULL_RECT)
-	h.add_theme_constant_override("separation", 16)
-	a.add_child(h)
-	# coluna da esquerda: perfil e amigos
-	var esq := VBoxContainer.new()
-	esq.custom_minimum_size = Vector2(320, 0)
-	esq.add_theme_constant_override("separation", 10)
-	h.add_child(esq)
-	var perfil := _painel()
-	esq.add_child(perfil)
-	var ph := HBoxContainer.new()
-	ph.add_theme_constant_override("separation", 12)
-	perfil.add_child(ph)
-	ph.add_child(_avatar("JG", T.LARANJA, 64))
+	topo_abas.add_child(_logo())
+	var h = HEROI.dados(ARENA.heroi_jogador)
+	# herói escolhido na vitrine, à esquerda
+	var vit = VITRINE.new()
+	vit.anchor_right = 0.5
+	vit.anchor_bottom = 1.0
+	a.add_child(vit)
+	vit.mostrar_heroi(String(h.id), ARENA.aparencia_jogador)
+	var pn := _painel(T.VIDRO, 22)
+	pn.anchor_top = 1.0; pn.anchor_bottom = 1.0
+	pn.offset_left = 8; pn.offset_top = -92; pn.offset_bottom = -6
 	var pv := VBoxContainer.new()
-	pv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	ph.add_child(pv)
-	pv.add_child(_rotulo("Jogador", 20, T.CREME, 900, true))
-	var nh := HBoxContainer.new()
-	pv.add_child(nh)
-	var nivel := _rotulo(" 1 ", 15, T.NOITE, 900)
-	nivel.add_theme_stylebox_override("normal", T.caixa(T.OURO, 8))
-	nh.add_child(nivel)
-	nh.add_child(_rotulo("  0 / 1.000 XP", 13, T.TEXTO_2, 600))
-	var xp := ProgressBar.new()
-	xp.custom_minimum_size = Vector2(0, 10)
-	xp.value = 30
-	xp.show_percentage = false
-	xp.add_theme_stylebox_override("background", T.caixa(T.NOITE, 5))
-	xp.add_theme_stylebox_override("fill", T.caixa(T.TEAL, 5))
-	pv.add_child(xp)
-	var amigos := _painel()
-	amigos.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	esq.add_child(amigos)
-	var av := VBoxContainer.new()
-	av.add_theme_constant_override("separation", 6)
-	amigos.add_child(av)
-	var ah := HBoxContainer.new()
-	av.add_child(ah)
-	ah.add_child(ICONE.new("pessoa", T.TEXTO_2, 26))
-	ah.add_child(_rotulo("  Amigos", 17, T.TEXTO, 700))
-	av.add_child(_linha_sep())
-	for i in 4:
-		var linha := HBoxContainer.new()
-		linha.add_theme_constant_override("separation", 10)
-		linha.add_child(_avatar("?", T.PAINEL_3.lightened(0.2), 40))
-		var lv := VBoxContainer.new()
-		lv.add_theme_constant_override("separation", 0)
-		lv.add_child(_rotulo("Amigo %d" % (i + 1), 15, T.TEXTO, 700))
-		lv.add_child(_rotulo("Online" if i == 0 else "Offline", 12, T.VERDE if i == 0 else T.TEXTO_2, 600))
-		linha.add_child(lv)
-		av.add_child(linha)
+	pv.add_theme_constant_override("separation", 0)
+	pn.add_child(pv)
+	pv.add_child(_titulo(String(h.nome), 32))
+	pv.add_child(_rotulo("%s · %s" % [h.funcao, h.origem], 17, T.CREME, 700))
+	a.add_child(pn)
+	# próxima missão, à direita
+	var pm := _painel(T.VIDRO, 26, 3)
+	pm.anchor_left = 1.0; pm.anchor_right = 1.0
+	pm.offset_left = -420; pm.offset_right = -4; pm.offset_top = 0
+	a.add_child(pm)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 10)
+	pm.add_child(v)
+	var t := _titulo("Próxima missão", 26)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(t)
+	v.add_child(_miniatura_mapa(ARENA.mapa_escolhido, Vector2(0, 150)))
+	var nm := _rotulo("Confronto 5 × 5", 30, T.CREME, 900)
+	nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.add_child(nm)
+	var trocar := _botao("Mapa: " + _nome_mapa(), "teal", 18, 50)
+	trocar.pressed.connect(func():
+		var l := ARENA.lista()
+		var i := 0
+		for k in l.size():
+			if l[k].id == ARENA.mapa_escolhido:
+				i = k
+		ARENA.mapa_escolhido = l[(i + 1) % l.size()].id
+		abrir("inicio"))
+	v.add_child(trocar)
+	var jogar := _botao("Jogar", "laranja", 44, 86)
+	var ji = ICONE.new("jogar", Color.WHITE, 40)
+	ji.position = Vector2(64, 20)
+	jogar.add_child(ji)
+	jogar.pressed.connect(abrir.bind("carregando"))
+	v.add_child(jogar)
+
+## Planta do mapa em miniatura, nas cores do Valdora (sem arte externa).
+func _miniatura_mapa(id: String, tam: Vector2) -> Control:
+	var dados := ARENA.carregar(id)
+	var c := Control.new()
+	c.custom_minimum_size = tam
+	c.draw.connect(func():
+		var g: Array = dados.get("grade", [])
+		if g.is_empty():
+			return
+		var s := c.size
+		c.draw_rect(Rect2(Vector2.ZERO, s), Color("2f6f6a"))
+		var lg := String(g[0]).length()
+		var e := minf(s.x / lg, s.y / g.size())
+		var o := (s - Vector2(lg, g.size()) * e) * 0.5
+		var cores := {"#": Color("e8dcc0"), "c": Color("c48a4e"), "A": Color("d9534a"), "B": Color("3f6fc9"), "T": T.TEAL_CLARO, "D": T.LARANJA}
+		for y in g.size():
+			for x in lg:
+				var ch: String = String(g[y])[x]
+				var cor: Color = cores.get(ch, Color("b9ab8f"))
+				c.draw_rect(Rect2(o + Vector2(x, y) * e, Vector2(e, e) + Vector2(0.5, 0.5)), cor)
+		c.draw_rect(Rect2(Vector2.ZERO, s), Color(1, 1, 1, 0.35), false, 3.0))
+	c.resized.connect(c.queue_redraw)
+	return c
+
+# ---------------------------------------------------------------- heróis
+
+func _tela_herois(a: Control) -> void:
+	_cabecalho("Heróis")
+	if heroi_visto == "":
+		heroi_visto = ARENA.heroi_jogador
+	var h = HEROI.dados(heroi_visto)
+	# lista à esquerda (retratos renderizados uma vez)
+	var lista := VBoxContainer.new()
+	lista.add_theme_constant_override("separation", 8)
+	var ids := []
+	for d in HEROI.herois():
+		ids.append(d.id)
+		lista.add_child(_cartao_heroi(d))
+	var sc := ScrollContainer.new()
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	sc.anchor_bottom = 1.0
+	sc.offset_right = 168
+	sc.add_child(lista)
+	a.add_child(sc)
+	RETRATOS.pedir(self, ids)
+	# vitrine no centro
+	var vit = VITRINE.new()
+	vit.anchor_left = 0.0; vit.anchor_right = 1.0; vit.anchor_bottom = 1.0
+	vit.offset_left = 170; vit.offset_right = -430
+	a.add_child(vit)
+	vit.mostrar_heroi(heroi_visto, ARENA.aparencia_jogador)
+	# ficha à direita
+	var pf := _painel(T.VIDRO, 26, 3)
+	pf.anchor_left = 1.0; pf.anchor_right = 1.0; pf.anchor_bottom = 1.0
+	pf.offset_left = -420; pf.offset_right = -4
+	a.add_child(pf)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 10)
+	pf.add_child(v)
+	v.add_child(_titulo(String(h.nome), 46))
+	var fl := _rotulo("  %s  " % String(h.funcao).to_upper(), 18, T.CREME, 900, true)
+	fl.add_theme_stylebox_override("normal", T.caixa(Color(T.TEAL, 0.35), 14, 2, T.TEAL_CLARO))
+	fl.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	v.add_child(fl)
+	v.add_child(_rotulo("Origem: %s" % h.origem, 16, T.TEXTO_2, 700))
+	var fr := _rotulo("“%s”" % h.frase, 17, T.CREME, 600, true)
+	fr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	v.add_child(fr)
+	var at: Array = ATRIBUTOS.get(String(h.funcao), [0.6, 0.6, 0.6])
+	for i in 3:
+		v.add_child(_barra(["Mobilidade", "Ataque", "Defesa"][i], at[i], T.TEAL_CLARO))
 	var esp := Control.new()
 	esp.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	av.add_child(esp)
-	av.add_child(_botao("Encontrar amigos", "escuro", 16, 48))
-	# centro: agente sobre o pedestal (espaço do modelo 3D)
-	var centro := Control.new()
-	centro.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	h.add_child(centro)
-	var ag := _agente()
-	ag.set_anchors_preset(Control.PRESET_FULL_RECT)
-	centro.add_child(ag)
-	var lid := _botao("", "escuro", 14, 52)
-	lid.custom_minimum_size = Vector2(64, 56)
-	lid.anchor_top = 1.0; lid.anchor_bottom = 1.0
-	lid.offset_top = -60; lid.offset_bottom = -4; lid.offset_right = 64
-	var li = ICONE.new("lideres", T.CREME, 30)
-	li.position = Vector2(17, 10)
-	lid.add_child(li)
-	centro.add_child(lid)
-	# direita: evento, atalhos e jogar
-	var dir := VBoxContainer.new()
-	dir.custom_minimum_size = Vector2(330, 0)
-	dir.add_theme_constant_override("separation", 10)
-	h.add_child(dir)
-	dir.add_child(_banner("Evento da temporada", "Arte do evento", T.LARANJA))
-	var atalhos := HBoxContainer.new()
-	atalhos.add_theme_constant_override("separation", 10)
-	dir.add_child(atalhos)
-	for at in [["presente", "Eventos"], ["passe", "Passe"]]:
-		var b := _botao("", "escuro", 14, 92)
+	v.add_child(esp)
+	var escolhido := heroi_visto == ARENA.heroi_jogador
+	var sel := _botao("Selecionado" if escolhido else "Selecionar", "teal" if escolhido else "laranja", 30, 72)
+	sel.pressed.connect(func():
+		ARENA.heroi_jogador = heroi_visto
+		_salvar_perfil()
+		abrir("herois"))
+	v.add_child(sel)
+
+func _cartao_heroi(d: Dictionary) -> Control:
+	var ativo: bool = d.id == heroi_visto
+	var p := PanelContainer.new()
+	p.custom_minimum_size = Vector2(150, 128)
+	p.add_theme_stylebox_override("panel", T.caixa(Color(T.PAINEL_2, 0.9), 18, 4 if ativo else 2, T.TEAL_CLARO if ativo else T.BORDA_VIDRO, 6))
+	p.mouse_filter = Control.MOUSE_FILTER_STOP
+	var tr := TextureRect.new()
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	tr.texture = RETRATOS.textura(d.id)
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	p.add_child(tr)
+	var faixa := _rotulo(String(d.nome).to_upper(), 18, T.CREME, 900, true)
+	faixa.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	faixa.size_flags_vertical = Control.SIZE_SHRINK_END
+	faixa.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.7))
+	faixa.add_theme_constant_override("outline_size", 6)
+	p.add_child(faixa)
+	if tr.texture == null:
+		var g = RETRATOS.pedir(self, [d.id])
+		g.pronto.connect(func(id):
+			if id == d.id and is_instance_valid(tr):
+				tr.texture = RETRATOS.textura(id))
+	p.gui_input.connect(func(ev):
+		if (ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT and not ev.pressed) or (ev is InputEventScreenTouch and not ev.pressed):
+			heroi_visto = d.id
+			abrir("herois"))
+	return p
+
+func _barra(nome: String, valor: float, cor: Color) -> Control:
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 2)
+	v.add_child(_rotulo(nome.to_upper(), 15, T.CREME, 800))
+	var b := ProgressBar.new()
+	b.value = valor * 100.0
+	b.show_percentage = false
+	b.custom_minimum_size = Vector2(0, 14)
+	b.add_theme_stylebox_override("background", T.caixa(Color(0, 0, 0, 0.35), 7))
+	b.add_theme_stylebox_override("fill", T.caixa(cor, 7))
+	v.add_child(b)
+	return v
+
+# ---------------------------------------------------------------- arsenal
+
+func _tela_arsenal(a: Control) -> void:
+	_cabecalho("Arsenal")
+	if aparencia_vista == "":
+		aparencia_vista = ARENA.aparencia_jogador
+	var ap := MARCADOR.aparencia(aparencia_vista)
+	# marcador no pedestal, no alto à esquerda
+	var vit = VITRINE.new(T.OURO)
+	vit.anchor_right = 1.0; vit.anchor_bottom = 0.62
+	vit.offset_right = -430
+	a.add_child(vit)
+	vit.mostrar_marcador(aparencia_vista)
+	# as 30 aparências embaixo, com miniatura renderizada uma vez
+	var g := _grade(6, 8)
+	var ids := []
+	for d in MARCADOR.aparencias():
+		ids.append("m:" + String(d.id))
+		g.add_child(_cartao_aparencia(d))
+	var sc := ScrollContainer.new()
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	sc.anchor_top = 0.62; sc.anchor_right = 1.0; sc.anchor_bottom = 1.0
+	sc.offset_right = -430; sc.offset_top = 4
+	g.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sc.add_child(g)
+	a.add_child(sc)
+	RETRATOS.pedir(self, ids)
+	# ficha à direita
+	var pf := _painel(T.VIDRO, 26, 3)
+	pf.anchor_left = 1.0; pf.anchor_right = 1.0; pf.anchor_bottom = 1.0
+	pf.offset_left = -420; pf.offset_right = -4
+	a.add_child(pf)
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 10)
+	pf.add_child(v)
+	var nome := _titulo(String(ap.nome), 36)
+	nome.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	v.add_child(nome)
+	var cor_r: Color = T.RARIDADE.get(String(ap.raridade), T.RARIDADE.comum)
+	var rl := _rotulo("  %s  " % {"comum": "COMUM", "incomum": "INCOMUM", "raro": "RARO", "epico": "ÉPICO", "lendario": "LENDÁRIO"}.get(String(ap.raridade), ""), 16, Color.WHITE, 900, true)
+	rl.add_theme_stylebox_override("normal", T.caixa(cor_r, 12))
+	rl.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	v.add_child(rl)
+	v.add_child(_rotulo("Marcador de assalto · arma principal", 16, T.TEXTO_2, 700))
+	for i in 3:
+		v.add_child(_barra(["Poder", "Cadência", "Controle"][i], [0.55, 0.82, 0.7][i], T.LARANJA_CLARO))
+	v.add_child(_rotulo("Tinta: %d de dano · %d por pente" % [25, 24], 15, T.TEXTO_2, 600))
+	var esp := Control.new()
+	esp.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(esp)
+	var h := HBoxContainer.new()
+	h.add_theme_constant_override("separation", 8)
+	v.add_child(h)
+	for at in [["Inventário", "inventario"], ["Mercado", "mercado"]]:
+		var b := _botao(at[0], "escuro", 16, 50)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var bv := VBoxContainer.new()
-		bv.set_anchors_preset(Control.PRESET_FULL_RECT)
-		bv.alignment = BoxContainer.ALIGNMENT_CENTER
-		bv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var ic = ICONE.new(at[0], T.LARANJA_CLARO, 36)
-		ic.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		bv.add_child(ic)
-		var l := _rotulo(at[1].to_upper(), 15, T.CREME, 900, true)
-		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		bv.add_child(l)
-		b.add_child(bv)
-		atalhos.add_child(b)
-	dir.add_child(_banner("Missão do dia", "Arte da missão", T.TEAL))
-	var esp2 := Control.new()
-	esp2.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	dir.add_child(esp2)
-	var modo := _botao("Selecionar modo de jogo", "teal", 17, 52)
-	modo.pressed.connect(abrir.bind("modos"))
-	dir.add_child(modo)
-	var jogar := _botao("Jogar", "laranja", 40, 84)
-	jogar.pressed.connect(abrir.bind("carregando"))
-	dir.add_child(jogar)
+		b.pressed.connect(abrir.bind(at[1]))
+		h.add_child(b)
+	var equipada := aparencia_vista == ARENA.aparencia_jogador
+	var eq := _botao("Equipada" if equipada else "Equipar", "teal" if equipada else "laranja", 30, 72)
+	eq.pressed.connect(func():
+		ARENA.aparencia_jogador = aparencia_vista
+		_salvar_perfil()
+		abrir("arsenal"))
+	v.add_child(eq)
+
+func _cartao_aparencia(d: Dictionary) -> Control:
+	var ativo: bool = d.id == aparencia_vista
+	var p := PanelContainer.new()
+	p.custom_minimum_size = Vector2(0, 86)
+	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var cor_r: Color = T.RARIDADE.get(String(d.raridade), T.RARIDADE.comum)
+	p.add_theme_stylebox_override("panel", T.caixa(Color(T.PAINEL_2, 0.9), 14, 3 if ativo else 2, T.TEAL_CLARO if ativo else Color(cor_r, 0.8)))
+	p.mouse_filter = Control.MOUSE_FILTER_STOP
+	p.tooltip_text = String(d.nome)
+	var tr := TextureRect.new()
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tr.texture = RETRATOS.textura("m:" + String(d.id))
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	p.add_child(tr)
+	if tr.texture == null:
+		var g = RETRATOS.pedir(self, ["m:" + String(d.id)])
+		g.pronto.connect(func(id):
+			if id == "m:" + String(d.id) and is_instance_valid(tr):
+				tr.texture = RETRATOS.textura(id))
+	p.gui_input.connect(func(ev):
+		if (ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT and not ev.pressed) or (ev is InputEventScreenTouch and not ev.pressed):
+			aparencia_vista = d.id
+			abrir("arsenal"))
+	return p
 
 ## Banner de evento: painel com degradê e texto; a arte entra depois.
 func _banner(titulo: String, marcador: String, cor: Color) -> Control:
@@ -963,7 +1220,7 @@ func _tela_carregando(a: Control) -> void:
 	dica.anchor_right = 1.0
 	dica.offset_bottom = 64
 	a.add_child(dica)
-	var dl := _rotulo("   Dica: caixas raras têm mais chance de visuais especiais do que caixotes.", 18, T.TEXTO, 600)
+	var dl := _rotulo("   Dica: o escudo absorve a tinta antes da vida. Use as coberturas para recarregar.", 18, T.TEXTO, 600)
 	dl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	dica.add_child(dl)
 	# planta do mapa escolhido
@@ -993,8 +1250,8 @@ func _tela_carregando(a: Control) -> void:
 	a.add_child(info)
 	info.add_child(_titulo(dados.get("nome", ""), 64))
 	info.add_child(_rotulo(dados.get("cidade", ""), 22, T.TEXTO_2, 700))
-	info.add_child(_rotulo("Desarmar", 26, T.LARANJA_CLARO, 800, true))
-	var d := _rotulo("Ataque e defesa em equipes de cinco. Plante ou desarme o dispositivo para vencer a rodada.\n%s." % _maiuscula(String(dados.get("tema", ""))), 20, T.TEXTO, 600)
+	info.add_child(_rotulo("Confronto 5 × 5 · paintball", 26, T.LARANJA_CLARO, 800, true))
+	var d := _rotulo("Dois times de cinco, três minutos. Cada adversário pintado vale um ponto; quem pintar mais vence.\n%s." % _maiuscula(String(dados.get("tema", ""))), 20, T.TEXTO, 600)
 	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	d.custom_minimum_size = Vector2(600, 0)
 	info.add_child(d)
