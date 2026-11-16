@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **15/11/2026** (sessão 1.6, PvP). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **16/11/2026** (sessão 1.7, PvP). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -111,6 +111,37 @@ Defeitos encontrados:
   - Disputa entre países nos dias 1 a 15 de cada temporada a partir da 2ª.
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
+
+### Valdora PvP: gráfico da arte conceitual e APK 0.5.4 (sessão 1.7, 16/11/2026)
+
+- **Alvo visual:** as 6 telas de referência do dono (Base, Heróis, Arsenal, Equipamento e duas de partida) em `imagens/referencia_1.7/`. Capturas da sessão (antes, luz, detalhe, menu) em `imagens/pvp_1.7/`.
+- **Luz e cor dos 5 mapas:**
+  - céu estilizado com nuvens de desenho animado e halo dourado (`visual/ceu.gdshader`);
+  - sol baixo dourado; ambiente por cor quente, para a sombra não ficar azul;
+  - tonemap filmic, brilho leve nas lanternas e neblina de profundidade;
+  - paletas regionais mais saturadas e contorno de luz (rim) no shader das superfícies.
+- **Detalhe dos cenários:**
+  - kit `visual/ornamentos.gd`: arcadas, cornijas, balaustradas, cúpulas verde-azuladas com nervuras e pináculo dourados, estandartes com ponta e V dourado, lampiões acesos, jardineiras com flores, trepadeiras e árvores em vários volumes;
+  - marcos: Cristo no Corcovado e Theatro Municipal no Porto; cúpulas na igreja e Elevador Lacerda na Ladeira; Theatro e torre com cúpula na Estação; Ver-o-Peso e mata viva no limite da Represa.
+- **Orçamento medido** (Godot 4.7.2, GL Compatibility), dentro do limite de 80 malhas e 250 mil triângulos por arena:
+
+  | Mapa | Malhas | Triângulos |
+  |---|---|---|
+  | Esplanada | 51 | 132 mil |
+  | Porto | 40 | 83 mil |
+  | Ladeira | 45 | 172 mil |
+  | Estação | 38 | 129 mil |
+  | Represa | 41 | 105 mil |
+
+  Colisão intacta: o smoke da Esplanada compara os colisores (62) com o mapa original.
+- **Menus:** o fundo virou a praça do Valdora em 3D (`visual/praca_valdora.gd`, 23 malhas e 23 mil triângulos), com chafariz, prédio de cúpula e arco, estandartes, arcada com trepadeiras e café. A praça para de renderizar quando o fundo some.
+- **Personagens:** o acabamento de desenho animado dos heróis não sai por código. Levantamento em `PVP_PERSONAGENS_CC0.md`; recomendação: KayKit (CC0) recolorido para a partida e imagem para 3D local (TripoSR ou TRELLIS) para os heróis de vitrine.
+- **Defeitos de processo corrigidos:**
+  - `godot_checar_scripts.sh` dava "0 erros" quando o Godot não era encontrado; agora sai com código 2;
+  - o smoke do menu passava com o fundo sem compilar; agora confere a praça montada;
+  - o prazo dos smokes subiu para 300 s, porque a arena leva cerca de 3 minutos numa máquina lenta.
+- **Testes:** 25 de 25 em `run_valdora_tests.sh`, com os 3 testes visuais PvP incluídos, entre eles o novo `test_pvp_arte_conceitual.py`.
+- **APK 0.5.4-pvp (código 108):** workflow `valdora-android-release` disparado da branch com `publicar_link=true`. Resultado abaixo.
 
 ### Revisão do trabalho do ChatGPT (sessão 1.6, 15/11/2026)
 
