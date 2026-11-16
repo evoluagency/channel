@@ -26,7 +26,7 @@ Leia antes de agir:
 
 ## Objetivo
 
-0. **Paintball** (as armas de referência disparam tinta):
+0. **Paintball** (decidido pelo dono: todas as armas disparam tinta; o 11º herói é o Brasil):
    - projétil de tinta com respingo colorido na parede, no chão e no adversário;
    - shader de pintura procedural com as 30 aparências do marcador (camuflagens, chamas, raio, caveira, dourado e outras), como itens da loja;
    - marcador de assalto com hopper em primeira pessoa;

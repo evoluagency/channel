@@ -24,7 +24,7 @@ São 11 heróis de corpo inteiro e 10 retratos, num estilo de desenho animado 3D
 | 8 | Japão | armadura vermelha de samurai, katana |
 | 9 | Europa | aviadora com óculos, jaqueta de pele, emblema da UE |
 | 10 | Povo indígena | cocar de penas, pintura no rosto, colar de dentes |
-| 11 | Brasil (a confirmar) | macacão preto e amarelo, óculos na testa |
+| 11 | Brasil (confirmado pelo dono) | macacão preto e amarelo, óculos na testa |
 
 Antes de publicar, rever com cuidado os trajes étnicos e religiosos:
 
@@ -34,7 +34,7 @@ Antes de publicar, rever com cuidado os trajes étnicos e religiosos:
 
 Esses trajes costumam gerar reclamações de estereótipo nas lojas e nas redes. Recomendo tratar cada um como homenagem, com nome próprio, história e consulta, e não como "fantasia".
 
-## 2. Armas (`armas_30.jpg`): tema **paintball**
+## 2. Armas (`armas_30.jpg`): tema **paintball** (confirmado pelo dono em 16/11/2026)
 
 São 30 armas que disparam tinta, com respingos coloridos. Os nomes vêm da arte:
 

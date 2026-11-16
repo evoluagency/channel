@@ -298,6 +298,8 @@ Ainda abertos: o `GDD Mestre v0.4.1` não está no repositório, e os documentos
 
 O dono delegou as decisões em 11/11/2026. Ele pode reverter qualquer uma.
 
+- **PvP é paintball (decisão do dono, 16/11/2026):** todas as armas disparam tinta, com respingo colorido no cenário e no adversário. Referências: `PVP_REFERENCIAS_1.8.md`.
+- **Heróis (decisão do dono, 16/11/2026):** o 11º herói da referência (macacão preto e amarelo, óculos na testa) é o representante do Brasil.
 - GDD: reconstruído a partir do código e dos CP, marcado como reconstruído. A cópia do dono prevalece se aparecer.
 - `release/valdora-android` é o tronco do jogo. A `main` fica só com site e OTA até a G2.
 - Testes locais e gratuitos. Workflow manual do GitHub só em marco fechado.
