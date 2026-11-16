@@ -57,6 +57,7 @@ run "test_mapas_pvp"           60 python3 -I game/tests/test_mapas_pvp.py
 run "test_pvp_visual_quality"  60 python3 -I game/tests/test_pvp_visual_quality.py
 run "test_pvp_esplanada"       60 python3 -I game/tests/test_pvp_esplanada_visual.py
 run "test_pvp_arte_conceitual" 60 python3 -I game/tests/test_pvp_arte_conceitual.py
+run "test_pvp_paintball"       60 python3 -I game/tests/test_pvp_paintball.py
 run "ota_manifest --verify"     60 python3 -I tools/ota_manifest.py --verify-existing
 
 GODOT_MISSING=0

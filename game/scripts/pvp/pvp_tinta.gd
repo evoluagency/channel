@@ -18,6 +18,9 @@ const CAMADAS := 1 | 2          # cenário e personagens
 var bolas: MultiMeshInstance3D
 var respingos: MultiMeshInstance3D
 var _voando := []               # [{p, v, cor, autor, dano, t}]
+var _granadas := []             # [{p, v, cor, autor, dano, t, no}]
+var total_explosoes := 0
+const RAIO_GRANADA := 4.0
 var _proximo := 0
 var total_respingos := 0
 var total_acertos_corpo := 0
@@ -27,16 +30,13 @@ func _ready() -> void:
 	name = "Tinta"
 	var mb := MultiMesh.new()
 	mb.transform_format = MultiMesh.TRANSFORM_3D
-	mb.use_colors = true
+	mb.use_custom_data = true
 	mb.instance_count = MAX_BOLAS
 	mb.visible_instance_count = 0
 	var esf := SphereMesh.new()
 	esf.radius = 0.055; esf.height = 0.11; esf.radial_segments = 8; esf.rings = 4
-	var mbm := StandardMaterial3D.new()
-	mbm.vertex_color_use_as_albedo = true
-	mbm.roughness = 0.25
-	mbm.emission_enabled = true
-	mbm.emission = Color(0.25, 0.25, 0.25)
+	var mbm := ShaderMaterial.new()
+	mbm.shader = _shader_bola()
 	esf.material = mbm
 	mb.mesh = esf
 	bolas = MultiMeshInstance3D.new()
@@ -46,7 +46,6 @@ func _ready() -> void:
 	add_child(bolas)
 	var mr := MultiMesh.new()
 	mr.transform_format = MultiMesh.TRANSFORM_3D
-	mr.use_colors = true
 	mr.use_custom_data = true
 	mr.instance_count = MAX_RESPINGOS
 	mr.visible_instance_count = 0
@@ -67,7 +66,99 @@ func disparar(origem: Vector3, direcao: Vector3, cor: Color, autor: Node, dano :
 		_voando.pop_front()
 	_voando.append({"p": origem, "v": direcao.normalized() * velocidade, "cor": cor, "autor": autor, "dano": dano, "t": 0.0})
 
+## Granada de tinta (arma 14): voa em arco e estoura no primeiro toque (ou em 2,2 s),
+## pintando tudo em volta e ferindo adversários com linha de visão até RAIO_GRANADA.
+func granada(origem: Vector3, velocidade: Vector3, cor: Color, autor: Node, dano := 70.0) -> void:
+	var no := preload("res://scripts/pvp/visual/marcador.gd").nova_granada(String(autor.get("aparencia")) if is_instance_valid(autor) and autor.get("aparencia") != null else "mare_alta")
+	no.scale = Vector3.ONE * 1.6
+	add_child(no)
+	no.global_position = origem
+	_granadas.append({"p": origem, "v": velocidade, "cor": cor, "autor": autor, "dano": dano, "t": 0.0, "no": no})
+
+func _granadas_passo(dt: float) -> void:
+	if _granadas.is_empty():
+		return
+	var espaco := get_world_3d().direct_space_state
+	var vivas := []
+	for g in _granadas:
+		var v: Vector3 = g.v
+		v.y -= 14.0 * dt
+		var nova: Vector3 = g.p + v * dt
+		var q := PhysicsRayQueryParameters3D.create(g.p, nova, CAMADAS)
+		if is_instance_valid(g.autor) and g.autor is CollisionObject3D:
+			q.exclude = [g.autor.get_rid()]
+		var r := espaco.intersect_ray(q)
+		g.t += dt
+		if not r.is_empty() or g.t > 2.2:
+			var ponto: Vector3 = nova if r.is_empty() else r.position
+			var normal: Vector3 = Vector3.UP if r.is_empty() else r.normal
+			g.no.queue_free()
+			explodir(ponto, normal, g.cor, g.autor, g.dano)
+			continue
+		g.p = nova
+		g.v = v
+		g.no.global_position = nova
+		g.no.rotate_x(dt * 9.0)
+		vivas.append(g)
+	_granadas = vivas
+
+func explodir(ponto: Vector3, normal: Vector3, cor: Color, autor: Node, dano: float) -> void:
+	total_explosoes += 1
+	var centro := ponto + normal * 0.3
+	var espaco := get_world_3d().direct_space_state
+	# respingos em volta: raios do centro até as superfícies próximas
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(centro)
+	respingo(ponto, normal, cor, 2.2)
+	for i in 16:
+		var d := Vector3(rng.randf_range(-1, 1), rng.randf_range(-0.6, 1), rng.randf_range(-1, 1)).normalized()
+		var q := PhysicsRayQueryParameters3D.create(centro, centro + d * RAIO_GRANADA * 0.9, 1)
+		var r := espaco.intersect_ray(q)
+		if not r.is_empty():
+			respingo(r.position, r.normal, cor, rng.randf_range(0.8, 1.5))
+	# dano em área a quem não é do time de quem jogou
+	var arena = get_parent()
+	var time_autor = autor.get("time") if is_instance_valid(autor) else -1
+	var lista: Array = []
+	if arena != null and "combatentes" in arena:
+		lista = arena.combatentes
+	for c in lista:
+		if not is_instance_valid(c) or c.morto or c.time == time_autor:
+			continue
+		var dist: float = c.peito().distance_to(centro)
+		if dist > RAIO_GRANADA:
+			continue
+		var q := PhysicsRayQueryParameters3D.create(centro, c.peito(), 1)
+		if not espaco.intersect_ray(q).is_empty():
+			continue
+		total_acertos_corpo += 1
+		if is_instance_valid(autor) and autor.has_method("registrar_acerto_corpo"):
+			autor.registrar_acerto_corpo()
+		c.levar_tinta(dano * (1.0 - dist / RAIO_GRANADA * 0.6), cor, autor, c.peito(), (c.peito() - centro).normalized())
+	_estouro(centro, cor)
+
+## Bolha de tinta que cresce e some (0,35 s).
+func _estouro(p: Vector3, cor: Color) -> void:
+	var mi := MeshInstance3D.new()
+	var esf := SphereMesh.new()
+	esf.radius = 1.0; esf.height = 2.0; esf.radial_segments = 16; esf.rings = 8
+	mi.mesh = esf
+	var m := StandardMaterial3D.new()
+	m.albedo_color = Color(cor, 0.7)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(mi)
+	mi.global_position = p
+	mi.scale = Vector3.ONE * 0.3
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(mi, "scale", Vector3.ONE * 2.6, 0.35).set_ease(Tween.EASE_OUT)
+	tw.tween_property(m, "albedo_color:a", 0.0, 0.35)
+	tw.chain().tween_callback(mi.queue_free)
+
 func _physics_process(dt: float) -> void:
+	_granadas_passo(dt)
 	if _voando.is_empty():
 		bolas.multimesh.visible_instance_count = 0
 		return
@@ -97,7 +188,7 @@ func _physics_process(dt: float) -> void:
 		var d: Vector3 = vivos[i].v.normalized()
 		var bs := Basis.looking_at(d, Vector3.UP if absf(d.y) < 0.95 else Vector3.RIGHT).scaled(Vector3(1, 1, 1.6))
 		mm.set_instance_transform(i, Transform3D(bs, vivos[i].p))
-		mm.set_instance_color(i, vivos[i].cor)
+		mm.set_instance_custom_data(i, vivos[i].cor)
 
 func _bater(b: Dictionary, r: Dictionary) -> void:
 	var alvo = r.collider
@@ -129,8 +220,7 @@ func respingo(ponto: Vector3, normal: Vector3, cor: Color, tamanho := -1.0) -> v
 	# deslocamento mínimo e crescente: respingos sobrepostos não piscam entre si
 	var p := ponto + n * (0.012 + float(i % 12) * 0.0008)
 	mm.set_instance_transform(i, Transform3D(bs.scaled(Vector3(s, s, 1)), p))
-	mm.set_instance_color(i, cor)
-	mm.set_instance_custom_data(i, Color(randf(), 0, 0, 0))
+	mm.set_instance_custom_data(i, Color(cor.r, cor.g, cor.b, randf()))
 	total_respingos += 1
 
 ## Mancha que acompanha o corpo atingido (some depois de alguns segundos).
@@ -150,6 +240,18 @@ func manchar_corpo(corpo: Node3D, ponto: Vector3, normal: Vector3, cor: Color) -
 	var cima := Vector3.UP if absf(n.y) < 0.9 else Vector3.FORWARD
 	mi.global_basis = Basis.looking_at(-n, cima)
 	get_tree().create_timer(5.0).timeout.connect(mi.queue_free)
+
+static var _sh_bola: Shader
+## Bola de tinta: cor da instância (INSTANCE_CUSTOM) com brilho de tinta molhada.
+static func _shader_bola() -> Shader:
+	if _sh_bola == null:
+		_sh_bola = Shader.new()
+		_sh_bola.code = """shader_type spatial;
+varying vec3 v_cor;
+void vertex() { v_cor = INSTANCE_CUSTOM.rgb; }
+void fragment() { ALBEDO = v_cor; ROUGHNESS = 0.2; SPECULAR = 0.7; EMISSION = v_cor * 0.35; }
+"""
+	return _sh_bola
 
 func _material_corpo(cor: Color) -> StandardMaterial3D:
 	var k := cor.to_html()

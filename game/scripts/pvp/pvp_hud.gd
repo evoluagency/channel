@@ -36,6 +36,8 @@ var _dano_t := 0.0
 var _acertos_vistos := 0
 var _autor_queda := ""
 var _feed_visto := -1
+var _slots: Array = []          # painéis das 3 armas
+var _arma_vista := -1
 
 const RAIO_JOY := 84.0
 const NAVY := Color(0.07, 0.12, 0.2, 0.72)
@@ -236,7 +238,7 @@ func _base() -> void:
 	for c in hv.get_children():
 		if c is Label: c.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(pv)
-	# espaços de arma: marcador (ativo), pistola e granada de tinta (em breve)
+	# espaços de arma: marcador, pistola e granada de tinta (toque para trocar)
 	var hs := HBoxContainer.new()
 	hs.anchor_top = 1.0; hs.anchor_bottom = 1.0
 	hs.offset_left = 500; hs.offset_top = -74; hs.offset_bottom = -18
@@ -244,13 +246,18 @@ func _base() -> void:
 	hs.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(hs)
 	for i in 3:
-		var ativo := i == 0
-		var p := _painel(Color(0.05, 0.09, 0.15, 0.8), 12, 3 if ativo else 2, T.OURO if ativo else Color(1, 1, 1, 0.2))
+		var p := _painel(Color(0.05, 0.09, 0.15, 0.8), 12, 2)
 		p.custom_minimum_size = Vector2(110 if i < 2 else 74, 56)
-		var ic = ICONE.new(["marcador", "pistola", "granada"][i], T.CREME if ativo else Color(T.CREME, 0.45), 40)
+		p.mouse_filter = Control.MOUSE_FILTER_STOP
+		var ic = ICONE.new(["marcador", "pistola", "granada"][i], T.CREME, 40)
 		ic.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		p.add_child(ic)
+		p.set_meta("icone", ic)
+		p.gui_input.connect(func(ev):
+			if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT and not DisplayServer.is_touchscreen_available():
+				arena.jogador.trocar_arma(i))
 		hs.add_child(p)
+		_slots.append(p)
 	# munição
 	var pm := _painel(NAVY, 18)
 	pm.anchor_left = 1.0; pm.anchor_right = 1.0; pm.anchor_top = 1.0; pm.anchor_bottom = 1.0
@@ -294,6 +301,10 @@ func _input(ev: InputEvent) -> void:
 		var tam := get_viewport().get_visible_rect().size
 		if ev.pressed:
 			var b = _botao_em(ev.position)
+			for k in _slots.size():
+				if _slots[k].get_global_rect().has_point(ev.position):
+					arena.jogador.trocar_arma(k)
+					return
 			if b != null:
 				b.dedo = ev.index
 				_acao(b.acao, true)
@@ -411,12 +422,19 @@ func _process(dt: float) -> void:
 	_placar[0].text = str(arena.placar[0])
 	_placar[1].text = str(arena.placar[1])
 	var j = arena.jogador
-	if _tiro_seguido:
+	if _tiro_seguido and j.automatica():
 		_cadencia += dt
-		if _cadencia >= 0.12:
+		if _cadencia >= j.cadencia():
 			_cadencia = 0.0
 			j.atirar()
-	_rotulo_municao.text = "%d / %d" % [j.municao, j.reserva]
+	_rotulo_municao.text = ("%d" % j.municao) if j.arma_atual == 2 else ("%d / %d" % [j.municao, j.reserva])
+	if j.arma_atual != _arma_vista:
+		_arma_vista = j.arma_atual
+		for k in _slots.size():
+			var ativo: bool = k == j.arma_atual
+			_slots[k].add_theme_stylebox_override("panel", _caixa(Color(0.05, 0.09, 0.15, 0.85 if ativo else 0.7), 12, 3 if ativo else 2, T.OURO if ativo else Color(1, 1, 1, 0.2)))
+			_slots[k].get_meta("icone").cor = T.CREME if ativo else Color(T.CREME, 0.5)
+			_slots[k].get_meta("icone").queue_redraw()
 	_rotulo_vida.text = str(int(ceil(j.vida)))
 	_rotulo_escudo.text = str(int(ceil(j.escudo)))
 	if j.acertos_corpo != _acertos_vistos:

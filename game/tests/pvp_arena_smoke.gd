@@ -149,6 +149,30 @@ func _bots(pasta: String) -> void:
 			andaram += 1
 	_ok(andaram >= 5, "bots: pelo menos 5 andaram mais de 3 m (%d)" % andaram)
 	_ok(cena.tinta.total_respingos + cena.tinta.total_acertos_corpo > 0, "bots: atiraram tinta (%d respingos, %d no corpo)" % [cena.tinta.total_respingos, cena.tinta.total_acertos_corpo])
+	# pistola e granada de tinta (sessão 1.8)
+	var j0 = cena.jogador
+	if j0.morto:
+		j0.renascer()
+	j0.vida = 9999.0
+	j0.girar(0, 160)   # olha para o chão à frente
+	j0.trocar_arma(1)
+	var pm: int = j0.municao
+	for i in 20:
+		await physics_frame   # troca de arma leva 0,25 s
+	j0.atirar()
+	_ok(j0.arma_atual == 1 and j0.municao == pm - 1, "armas: pistola dispara (%d -> %d)" % [pm, j0.municao])
+	j0.trocar_arma(2)
+	for i in 30:
+		await physics_frame
+	var exp_antes: int = cena.tinta.total_explosoes
+	var resp_antes: int = cena.tinta.total_respingos
+	j0.atirar()
+	for i in 200:
+		await physics_frame
+		if cena.tinta.total_explosoes > exp_antes:
+			break
+	_ok(cena.tinta.total_explosoes == exp_antes + 1 and cena.tinta.total_respingos >= resp_antes + 4, "armas: granada estoura e pinta em volta (%d respingos)" % (cena.tinta.total_respingos - resp_antes))
+	j0.trocar_arma(0)
 	print("BOTS ok: %d andaram, %d respingos, %d acertos no corpo, placar %s, %d ms" % [andaram, cena.tinta.total_respingos, cena.tinta.total_acertos_corpo, cena.placar, Time.get_ticks_msec() - t0])
 	if pasta != "":
 		var b = null

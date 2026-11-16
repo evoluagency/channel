@@ -9,6 +9,8 @@ const DADOS := "res://data/pvp/aparencias.json"
 const PADRAO := "mare_alta"
 
 static var _malha: ArrayMesh
+static var _malha_pistola: ArrayMesh
+static var _malha_granada: ArrayMesh
 static var _aparencias: Array = []
 static var _mats := {}
 static var _preto: StandardMaterial3D
@@ -30,6 +32,21 @@ static func novo(id := PADRAO) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	mi.name = "Marcador"
 	mi.mesh = malha()
+	aplicar(mi, id)
+	return mi
+
+## Pistola de tinta (arma 06) e granada de tinta (arma 14), com a mesma pintura.
+static func nova_pistola(id := PADRAO) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	mi.name = "Pistola"
+	mi.mesh = malha_pistola()
+	aplicar(mi, id)
+	return mi
+
+static func nova_granada(id := PADRAO) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	mi.name = "Granada"
+	mi.mesh = malha_granada()
 	aplicar(mi, id)
 	return mi
 
@@ -114,6 +131,39 @@ static func malha() -> ArrayMesh:
 	for st in partes:
 		st.commit(_malha)
 	return _malha
+
+static func malha_pistola() -> ArrayMesh:
+	if _malha_pistola != null:
+		return _malha_pistola
+	var partes := [SurfaceTool.new(), SurfaceTool.new(), SurfaceTool.new()]
+	for st in partes:
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var X := Basis(Vector3.RIGHT, PI * 0.5)
+	_caixa(partes[0], Vector3(0.045, 0.06, 0.22), Vector3(0, 0.02, -0.08))          # ferrolho pintado
+	_caixa(partes[1], Vector3(0.04, 0.12, 0.05), Vector3(0, -0.06, 0.0), Basis(Vector3.RIGHT, -0.22))  # punho
+	_caixa(partes[1], Vector3(0.01, 0.01, 0.06), Vector3(0, -0.025, -0.06))         # guarda-mato
+	_cilindro(partes[1], 0.013, 0.07, Vector3(0, 0.025, -0.22), X)                  # cano
+	_caixa(partes[1], Vector3(0.012, 0.016, 0.02), Vector3(0, 0.058, -0.17))        # alça
+	_cilindro(partes[2], 0.022, 0.09, Vector3(0, -0.035, 0.07), Basis(Vector3.RIGHT, 0.9))  # cilindro de ar
+	_malha_pistola = ArrayMesh.new()
+	for st in partes:
+		st.commit(_malha_pistola)
+	return _malha_pistola
+
+static func malha_granada() -> ArrayMesh:
+	if _malha_granada != null:
+		return _malha_granada
+	var partes := [SurfaceTool.new(), SurfaceTool.new(), SurfaceTool.new()]
+	for st in partes:
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	_esfera(partes[0], Vector3(0.05, 0.06, 0.05), Vector3.ZERO)                     # corpo de tinta
+	_cilindro(partes[1], 0.018, 0.03, Vector3(0, 0.068, 0))                         # bocal
+	_caixa(partes[1], Vector3(0.012, 0.05, 0.02), Vector3(0.028, 0.06, 0), Basis(Vector3.BACK, -0.4))  # alavanca
+	_esfera(partes[2], Vector3(0.012, 0.012, 0.012), Vector3(-0.022, 0.085, 0))     # pino
+	_malha_granada = ArrayMesh.new()
+	for st in partes:
+		st.commit(_malha_granada)
+	return _malha_granada
 
 static func _anexar(st: SurfaceTool, m: PrimitiveMesh, t: Transform3D) -> void:
 	st.append_from(m, 0, t)

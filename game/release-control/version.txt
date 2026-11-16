@@ -1,7 +1,7 @@
 VALDORA_ANDROID_RELEASE
-version_name=0.5.4-pvp
-version_code=108
+version_name=0.6.0-pvp
+version_code=109
 package=ink.evolu.valdora
 channel=release-android
-purpose=pvp_arte_conceitual
-upgrade_from=107
+purpose=pvp_paintball_herois
+upgrade_from=108

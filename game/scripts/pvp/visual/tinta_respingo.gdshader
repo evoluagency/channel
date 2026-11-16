@@ -1,6 +1,7 @@
 shader_type spatial;
 // Respingo de tinta do paintball (sessão 1.8). Um quadrado por respingo, num MultiMesh:
-// a cor vem de COLOR (cor da instância) e a semente do formato de INSTANCE_CUSTOM.x.
+// cor (rgb) e semente do formato (a) vêm de INSTANCE_CUSTOM: no GL Compatibility a cor da
+// instância não chega de forma confiável pelo COLOR.
 // Formato procedural: miolo com borda ondulada, pingos em volta e escorrido leve.
 // Corte por alpha scissor (sem ordenar transparência; barato no celular).
 render_mode cull_disabled, depth_prepass_alpha;
@@ -9,8 +10,8 @@ varying vec4 v_cor;
 varying float v_semente;
 
 void vertex() {
-	v_cor = COLOR;
-	v_semente = INSTANCE_CUSTOM.x;
+	v_cor = vec4(INSTANCE_CUSTOM.rgb, 1.0);
+	v_semente = INSTANCE_CUSTOM.a;
 }
 
 float hash(float n) { return fract(sin(n) * 43758.5453); }

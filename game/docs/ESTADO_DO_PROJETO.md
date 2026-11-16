@@ -1,6 +1,6 @@
 # Valdora — Estado do projeto
 
-Registro único do que está pronto, publicado e pendente. Atualizado em **16/11/2026** (sessão 1.7, PvP). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
+Registro único do que está pronto, publicado e pendente. Atualizado em **16/11/2026** (sessão 1.8, PvP). Quando outro documento contradiz este, vale este até o outro ser corrigido. Atualize este arquivo ao fechar cada marco, e só ele.
 
 Plano de continuidade (lacunas e fases): https://claude.ai/artifact/8PDe8WWqE8aftgsBwSU1rU
 
@@ -111,6 +111,33 @@ Defeitos encontrados:
   - Disputa entre países nos dias 1 a 15 de cada temporada a partir da 2ª.
 - **Regras:** `game/docs/ECONOMIA_v0.3.md`. Os detalhes da disputa entre países (grupos, pontos, prêmios, tratados) são proposta a confirmar.
 - **Testes:** `game/tests/test_economia_mundo.py` 37/37; o `--py` passa 8/8. Nada do jogo instalado mudou.
+
+### Valdora PvP: paintball, heróis KayKit, bots 5 × 5 e interface da arte (sessão 1.8, 16/11/2026)
+
+- **Paintball** (decisão do dono): todas as armas disparam tinta.
+  - `pvp/pvp_tinta.gd`: bolas com trajetória e gravidade, respingos procedurais na parede e no chão (`visual/tinta_respingo.gdshader`, até 180, os mais antigos são reciclados) e mancha que acompanha o corpo atingido; bolas e respingos em dois MultiMesh (duas chamadas de desenho);
+  - cor de tinta por time: verde-azulado claro (seu time) e magenta (adversário). No GL Compatibility a cor da instância vai por `INSTANCE_CUSTOM` (pelo `COLOR` saía preta).
+- **30 aparências do marcador** (`data/pvp/aparencias.json`, nomes próprios) num shader só, `visual/pintura_marcador.gdshader`: camuflagem, respingos, chamas, raio, listras, digital, colmeia, tigre, metal gravado, gelo, floral, neon, galáxia e folhagem, mais emblemas (coração, estrela, caveira, X, coroa). Sem textura pintada.
+- **Armas em primeira pessoa** (`visual/marcador.gd`, baixo polígono por código): marcador de assalto com funil (hopper), pistola de tinta e granada de tinta, com a aparência escolhida e braços (manga verde-azulada, punho laranja, luva preta). Coice, balanço ao andar e recuo perto da parede. Granada: arco, estouro com 16 respingos em volta e dano em área com linha de visão.
+- **11 heróis** (`data/pvp/herois.json`; Nilo é o Brasil):
+  - corpo KayKit Adventurers 1.0 (CC0; LICENSE conferido e versionado em `assets/pvp/personagens/`), baixado do repositório oficial do autor no GitHub;
+  - GLB podados por `tools/pvp/podar_glb.py`: sem armas medievais, 16 de 76 animações, de 3,5 MB para cerca de 870 KB cada (5 corpos, 4,3 MB);
+  - textura de cada herói gerada por `tools/pvp/recolorir_herois.py` (roupa e tom de pele por faixa da paleta, 120 KB no total);
+  - 4.148 triângulos e 6 malhas por herói (Knight); retratos renderizados uma vez num SubViewport (`visual/retratos.gd`).
+- **Bots** (`pvp/pvp_bot.gd`): 4 aliados e 5 adversários, caminho pela grade (busca em largura), alvo mais perto com linha de visão, imprecisão, morte com animação e volta em 5 s. Partida de 3 minutos; o time que pintar mais vence. Jogador com vida 100 e escudo 50 e volta em 4 s.
+- **HUD da partida** (`pvp/pvp_hud.gd`): placar com os retratos dos dois times e o tempo, "CONFRONTO 5 × 5", minimapa com o nome do mapa e os aliados, abates recentes, vida e escudo, 3 espaços de arma (toque para trocar), munição, joystick com setas, botões redondos e tiro laranja com aro; marcador de acerto, borda de dano, aviso de queda, pausa e tela de fim.
+- **Menus** (`ui/pvp/pvp_menu.gd`):
+  - topo com logo, moeda e atalhos (loja, clã, chat, ajustes);
+  - barra inferior BASE, HERÓIS, ARSENAL e MISSÕES;
+  - painéis navy translúcidos de cantos grandes e botão JOGAR laranja com brilho;
+  - vitrine 3D (`ui/pvp/pvp_vitrine.gd`) com pedestal e anel aceso;
+  - Heróis com lista de retratos, ficha e SELECIONAR;
+  - Arsenal com o marcador no pedestal, as 30 aparências e EQUIPAR;
+  - herói e aparência salvos em `user://pvp_perfil.cfg`.
+- **Ficaram aquém da arte:** os heróis KayKit são "chibi", e a arte tem proporção heroica. Faltam o rosto detalhado e os acessórios (cocar, turbante, óculos de Nilo). Os atributos da ficha (mobilidade, ataque, defesa) só aparecem na tela: ainda não mudam a partida.
+- **Capturas:** `imagens/pvp_1.8/`.
+- **Testes:** 26 de 26 em `run_valdora_tests.sh`, com o novo `test_pvp_paintball.py`. O `pvp_arena_smoke` passou a provar a bola de tinta e o respingo nos 5 mapas, e mais 9 bots com herói e marcador, bots andando e atirando, pistola e granada.
+- **Versão:** 0.6.0-pvp, código 109 (APK: ver abaixo).
 
 ### Valdora PvP: gráfico da arte conceitual e APK 0.5.4 (sessão 1.7, 16/11/2026)
 

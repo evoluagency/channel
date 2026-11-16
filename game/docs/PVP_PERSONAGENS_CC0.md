@@ -2,7 +2,13 @@
 
 O acabamento de desenho animado dos heróis da arte (Nilo, Mara, Otto) **não sai por código**:
 precisa de modelo 3D esculpido, com rig e animação. O código só monta cenário. Os caminhos
-gratuitos estão abaixo. Nenhum envolve gasto, e nada foi baixado ainda.
+gratuitos estão abaixo. Nenhum envolve gasto.
+
+**Atualização da sessão 1.8:** o KayKit Adventurers 1.0 foi baixado do repositório oficial do autor
+(`KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0` no GitHub; o itch.io é bloqueado pela rede
+das sessões). O `LICENSE.txt` diz CC0 e está versionado em `assets/pvp/personagens/`. Os GLB já trazem
+76 animações (andar, correr, mirar e atirar com duas mãos, morrer), então o pacote Character
+Animations não foi necessário. Uso, poda e recoloração: `ESTADO_DO_PROJETO.md`, sessão 1.8.
 
 ## 1. Modelos prontos com licença CC0 (sem atribuição, uso comercial)
 

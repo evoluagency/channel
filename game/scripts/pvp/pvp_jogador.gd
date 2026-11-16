@@ -25,8 +25,23 @@ var forma: CapsuleShape3D
 var mover := Vector2.ZERO       # vindo do joystick (-1..1)
 var agachado := false
 var pedir_pulo := false
-var municao := 24
-var reserva := 90
+## Armas (sessão 1.8): 0 marcador de assalto, 1 pistola de tinta, 2 granada de tinta.
+const ARMAS := [
+	{"nome": "Marcador", "pente": 24, "reserva": 90, "cadencia": 0.12, "dano": 25.0, "automatica": true},
+	{"nome": "Pistola", "pente": 12, "reserva": 48, "cadencia": 0.26, "dano": 34.0, "automatica": false},
+	{"nome": "Granada", "pente": 2, "reserva": 0, "cadencia": 0.9, "dano": 70.0, "automatica": false},
+]
+var arma_atual := 0
+var _pente := [24, 12, 2]
+var _reserva := [90, 48, 0]
+var _espera := 0.0
+var municao: int:
+	get: return _pente[arma_atual]
+	set(v): _pente[arma_atual] = v
+var reserva: int:
+	get: return _reserva[arma_atual]
+	set(v): _reserva[arma_atual] = v
+var modelos: Array = []         # um nó por arma, dentro de "arma"
 var acertos := 0
 var disparos := 0
 var time := 0
@@ -84,6 +99,17 @@ func _montar_arma() -> void:
 	marcador.scale = Vector3.ONE * 0.52
 	marcador.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	arma.add_child(marcador)
+	var pistola := MARCADOR.nova_pistola(aparencia)
+	pistola.scale = Vector3.ONE * 0.62
+	pistola.position = Vector3(-0.03, 0.0, 0.08)
+	var granada := MARCADOR.nova_granada(aparencia)
+	granada.scale = Vector3.ONE * 0.75
+	granada.position = Vector3(-0.02, -0.02, 0.02)
+	for n in [pistola, granada]:
+		n.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		n.visible = false
+		arma.add_child(n)
+	modelos = [marcador, pistola, granada]
 	var manga := StandardMaterial3D.new()
 	manga.albedo_color = T.TEAL_ESCURO
 	manga.roughness = 0.8
@@ -95,7 +121,10 @@ func _montar_arma() -> void:
 	# braço direito: segura o punho e vem de baixo à direita
 	_braco(Vector3(0.0, -0.08, 0.01), Vector3(0.06, -0.22, 0.4), manga, punho, luva)
 	# braço esquerdo: segura o guarda-mão e vem da esquerda
+	var antes := arma.get_child_count()
 	_braco(Vector3(-0.012, -0.045, -0.3), Vector3(-0.3, -0.24, 0.16), manga, punho, luva)
+	for k in range(antes, arma.get_child_count()):
+		arma.get_child(k).set_meta("esquerdo", true)
 
 func _braco(mao: Vector3, ombro: Vector3, manga: Material, punho: Material, luva: Material) -> void:
 	var s := 0.52
@@ -133,8 +162,26 @@ func _braco(mao: Vector3, ombro: Vector3, manga: Material, punho: Material, luva
 
 func trocar_aparencia(id: String) -> void:
 	aparencia = id
-	if marcador != null:
-		MARCADOR.aplicar(marcador, id)
+	for m in modelos:
+		MARCADOR.aplicar(m, id)
+
+func trocar_arma(i: int) -> void:
+	if i == arma_atual or i < 0 or i >= ARMAS.size() or morto:
+		return
+	arma_atual = i
+	_espera = 0.25
+	for k in modelos.size():
+		modelos[k].visible = k == i
+	# o braço esquerdo só segura o marcador
+	for b in arma.get_children():
+		if b.has_meta("esquerdo"):
+			b.visible = i == 0
+
+func automatica() -> bool:
+	return bool(ARMAS[arma_atual].automatica)
+
+func cadencia() -> float:
+	return float(ARMAS[arma_atual].cadencia)
 
 func olho() -> Vector3:
 	return camera.global_position
@@ -179,6 +226,8 @@ func _unhandled_input(ev: InputEvent) -> void:
 			atirar()
 	elif ev.is_action_pressed("pvp_recarregar"):
 		recarregar()
+	elif ev is InputEventKey and ev.pressed and ev.keycode in [KEY_1, KEY_2, KEY_3]:
+		trocar_arma(ev.keycode - KEY_1)
 	elif ev is InputEventKey and ev.pressed and ev.keycode == KEY_ESCAPE:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
@@ -202,11 +251,15 @@ func pular() -> void:
 	pedir_pulo = true
 
 func atirar() -> void:
-	if municao <= 0 or morto:
+	if municao <= 0 or morto or _espera > 0.0:
 		return
 	municao -= 1
 	disparos += 1
 	_coice = 1.0
+	_espera = cadencia() * 0.8
+	if arma_atual == 2:
+		_lancar_granada()
+		return
 	var origem := camera.global_position
 	var fim := origem - camera.global_transform.basis.z * 120.0
 	var q := PhysicsRayQueryParameters3D.create(origem, fim, 1 | 2)
@@ -218,11 +271,18 @@ func atirar() -> void:
 		var boca := marcador.global_transform * Vector3(0, 0.004, -0.69)
 		if origem.distance_to(ponto) < 1.2:
 			boca = origem
-		arena.tinta.disparar(boca, ponto - boca, arena.cor_time(time), self, DANO)
+		arena.tinta.disparar(boca, ponto - boca, arena.cor_time(time), self, float(ARMAS[arma_atual].dano))
 	else:
 		if not r.is_empty():
 			registrar_acerto()
 	atirou.emit(not r.is_empty(), ponto)
+
+func _lancar_granada() -> void:
+	if arena == null or arena.tinta == null:
+		return
+	var dir := -camera.global_transform.basis.z
+	var origem := camera.global_position + dir * 0.5 + Vector3(0, -0.1, 0)
+	arena.tinta.granada(origem, dir * 15.0 + Vector3(0, 4.0, 0), arena.cor_time(time), self, float(ARMAS[2].dano))
 
 func registrar_acerto() -> void:
 	acertos += 1
@@ -254,14 +314,16 @@ func renascer() -> void:
 	morto = false
 	vida = 100.0
 	escudo = 50.0
-	municao = 24
-	reserva = maxi(reserva, 90)
+	_pente = [24, 12, 2]
+	_reserva = [maxi(_reserva[0], 90), maxi(_reserva[1], 48), 0]
 	if arena != null:
 		global_position = arena.celula_aleatoria("T", null) + Vector3(0, 0.1, 0)
 		olhar_para(arena.centro_de("D"))
 
 func recarregar() -> void:
-	var falta := 24 - municao
+	if arma_atual == 2:
+		return
+	var falta: int = int(ARMAS[arma_atual].pente) - municao
 	var pega := mini(falta, reserva)
 	municao += pega
 	reserva -= pega
@@ -304,6 +366,7 @@ func _animar_arma(dt: float, rapidez: float) -> void:
 	if arma == null:
 		return
 	_coice = maxf(0.0, _coice - dt * 9.0)
+	_espera = maxf(0.0, _espera - dt)
 	_balanco += dt * rapidez * 1.9
 	var anda := minf(1.0, rapidez / VELOCIDADE)
 	var recuo := 0.0

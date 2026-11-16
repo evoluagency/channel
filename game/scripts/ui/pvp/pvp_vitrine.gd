@@ -72,7 +72,7 @@ func _enquadrar(arma: bool) -> void:
 
 func _pedestal(mundo: Node3D) -> void:
 	var pedra := StandardMaterial3D.new()
-	pedra.albedo_color = Color("a89a80")
+	pedra.albedo_color = Color("8c8170")
 	pedra.roughness = 0.9
 	var topo := StandardMaterial3D.new()
 	topo.albedo_color = Color("2c3646")
