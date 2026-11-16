@@ -4,6 +4,10 @@
 # Uso: GODOT=/caminho/godot tools/godot_checar_scripts.sh
 set -u
 G="${GODOT:-godot}"
+# Sem o binário a checagem não pode dizer "0 erros": falha explicitamente.
+if ! command -v "$G" >/dev/null 2>&1 && [ ! -x "$G" ]; then
+  echo "Godot não encontrado ($G). Defina GODOT=/caminho/godot."; exit 2
+fi
 cd "$(dirname "$0")/../game" || exit 2
 falhas=0
 for f in $(ls scripts/pvp/*.gd scripts/pvp/visual/*.gd scripts/ui/pvp/*.gd tests/pvp_*.gd 2>/dev/null); do

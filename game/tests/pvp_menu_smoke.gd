@@ -27,6 +27,11 @@ func _rodar() -> void:
 	var pasta: String = args.get("capturas", "")
 	if pasta != "":
 		DirAccess.make_dir_recursive_absolute(pasta)
+	# fundo 3D: a praça do Valdora precisa montar (script compilado, malhas e câmera)
+	var praca = menu.fundo.get("praca")
+	_ok(praca != null and praca.malhas > 0 and praca.camera != null, "fundo: praça 3D montada")
+	if praca != null:
+		_ok(praca.malhas <= 40 and praca.triangulos <= 60000, "fundo: praça dentro do orçamento (%d malhas, %d triângulos)" % [praca.malhas, praca.triangulos])
 	for t in menu.TELAS:
 		menu.abrir(t)
 		for i in 4:
