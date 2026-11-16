@@ -178,6 +178,36 @@ func coluna_curva(base: Vector3, altura: float, desvio: Vector3, largura: float,
 	_quad(st, topo + Vector3(-hx, 0, -hz), topo + Vector3(hx, 0, -hz),
 		topo + Vector3(hx, 0, hz), topo + Vector3(-hx, 0, hz))
 
+## Arco (meio anel extrudado) em pé numa fachada. base = centro da linha das impostas;
+## rot = giro em Y; o arco fica no plano XY local, com espessura prof em Z local.
+func arco(base: Vector3, r_int: float, r_ext: float, prof: float, chave: String, rot := 0.0, seg := 8) -> void:
+	var st := _s(chave)
+	var bs := Basis(Vector3.UP, rot)
+	var hz := prof * 0.5
+	for i in seg:
+		var a0 := PI * i / seg
+		var a1 := PI * (i + 1) / seg
+		var i0 := Vector3(cos(a0) * r_int, sin(a0) * r_int, 0); var i1 := Vector3(cos(a1) * r_int, sin(a1) * r_int, 0)
+		var e0 := Vector3(cos(a0) * r_ext, sin(a0) * r_ext, 0); var e1 := Vector3(cos(a1) * r_ext, sin(a1) * r_ext, 0)
+		var f := Vector3(0, 0, hz); var t := Vector3(0, 0, -hz)
+		_quad(st, base + bs * (i0 + f), base + bs * (e0 + f), base + bs * (e1 + f), base + bs * (i1 + f))   # frente
+		_quad(st, base + bs * (e0 + t), base + bs * (i0 + t), base + bs * (i1 + t), base + bs * (e1 + t))   # trás
+		_quad(st, base + bs * (e0 + f), base + bs * (e0 + t), base + bs * (e1 + t), base + bs * (e1 + f))   # extradorso
+		_quad(st, base + bs * (i0 + t), base + bs * (i0 + f), base + bs * (i1 + f), base + bs * (i1 + t))   # intradorso
+
+## Meio disco cheio (tímpano/fundo escuro dentro de um arco), plano XY local.
+func meio_disco(base: Vector3, raio: float, chave: String, rot := 0.0, seg := 8) -> void:
+	var st := _s(chave)
+	var bs := Basis(Vector3.UP, rot)
+	var n := bs * Vector3(0, 0, 1)
+	for i in seg:
+		var a0 := PI * i / seg
+		var a1 := PI * (i + 1) / seg
+		for v in [base, base + bs * Vector3(cos(a1) * raio, sin(a1) * raio, 0), base + bs * Vector3(cos(a0) * raio, sin(a0) * raio, 0)]:
+			st.set_normal(n)
+			st.add_vertex(v)
+		_tri += 1
+
 ## Plano horizontal (água, marcações no chão).
 func plano(centro: Vector3, t: Vector2, chave: String) -> void:
 	var st := _s(chave)

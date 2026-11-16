@@ -60,7 +60,7 @@ func _rodar() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("%s/%s_aerea.png" % [saida, id])
-		print("CAPTURAS %s ok (%d malhas de cenário)" % [id, cena.chamadas_cenario])
+		print("CAPTURAS %s ok (%d malhas de cenário, %d triângulos)" % [id, cena.chamadas_cenario, cena.get_meta("cenario_triangulos", 0)])
 		cena.queue_free()
 		await process_frame
 	quit()

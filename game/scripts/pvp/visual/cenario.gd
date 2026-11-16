@@ -9,6 +9,7 @@ const CONSTRUTOR := preload("res://scripts/pvp/visual/construtor.gd")
 const ACABAMENTO_ESPLANADA := preload("res://scripts/pvp/visual/esplanada_acabamento.gd")
 const T := preload("res://scripts/ui/pvp/pvp_tema.gd")
 const CEU := preload("res://scripts/pvp/visual/ceu.gdshader")
+const ORN := preload("res://scripts/pvp/visual/ornamentos.gd")
 
 ## Estabelecimentos por região: [nome no letreiro, tipo da calçada, cor do toldo e do letreiro].
 const LOJAS := {
@@ -30,6 +31,8 @@ var _vagas = []          # [ponto na face, fora, ao longo]
 var a                 # pvp_arena.gd
 var c                 # construtor
 var acabamento = null # visual premium exclusivo da Esplanada; nunca altera colisões
+var orn               # kit de ornamentos da arte conceitual (todos os mapas)
+var _arcadas := 0
 var tema = {}
 var rng = RandomNumberGenerator.new()
 var C := 3.0
@@ -75,6 +78,9 @@ func montar(arena) -> int:
 	rng.seed = hash(a.mapa.get("id", ""))
 	c = CONSTRUTOR.new()
 	_materiais()
+	orn = ORN.new()
+	var video = a.get_node_or_null("/root/ValdoraVideo")
+	orn.preparar(c, rng, video != null and str(video.qualidade) == "Baixa")
 	if a.mapa.get("id", "") == "esplanada":
 		acabamento = ACABAMENTO_ESPLANADA.new()
 		acabamento.preparar(a, c)
@@ -93,6 +99,7 @@ func montar(arena) -> int:
 	if acabamento != null:
 		acabamento.entorno()
 	_luz()
+	a.set_meta("cenario_triangulos", c.triangulos())
 	if acabamento != null:
 		# Metadados apenas para auditoria gráfica, sem custo de rede ou física.
 		a.set_meta("esplanada_elementos_visuais", acabamento.elementos)
@@ -239,14 +246,40 @@ func _predios() -> void:
 		# Segunda pele arquitetônica: somente malha visual, fora da grade de colisão.
 		if acabamento != null:
 			acabamento.fachada(centro, sx, sz, alt, faces, borda)
+		var com_arcada = []
+		if tema.estilo != "palafita":
+			for lado in faces:
+				var comp_f = sx if lado in ["n", "s"] else sz
+				if comp_f >= 6.0 and _arcadas < 6 and rng.randf() < (0.55 if borda else 0.18):
+					com_arcada.append(lado)
+					_arcadas += 1
+		_ornar(centro, sx, sz, alt, faces, com_arcada)
 		# vagas de loja no térreo (só onde a calçada em frente é livre)
 		if rio_represa and (_na_borda(centro, sx, sz) or sx * sz >= 120.0):
 			continue
 		for lado in faces:
+			if lado in com_arcada:
+				continue
 			for v in _ao_longo(centro, sx, sz, lado, 5.0, 1.0):
 				var cel = a.mundo_celula(v[0] + v[1] * 1.6)
 				if a.letra(cel.x, cel.y) in [".", "1", "2", "3", "A", "B"]:
 					_vagas.append(v)
+
+## Ornamentos da arte conceitual nas faces livres: arcada no térreo, trepadeiras e cornija.
+func _ornar(centro: Vector3, sx: float, sz: float, alt: float, faces: Array, com_arcada: Array) -> void:
+	var pedra = {"moderno": "orn_pedra", "armazem": "friso", "colonial": "friso", "tijolo": "friso"}.get(tema.estilo, "orn_pedra")
+	for lado in faces:
+		var fora = {"n": Vector3(0, 0, -1), "s": Vector3(0, 0, 1), "o": Vector3(-1, 0, 0), "l": Vector3(1, 0, 0)}[lado]
+		var ao = Vector3(1, 0, 0) if lado in ["n", "s"] else Vector3(0, 0, 1)
+		var comp = sx if lado in ["n", "s"] else sz
+		var face = centro + fora * ((sz if lado in ["n", "s"] else sx) * 0.5)
+		if lado in com_arcada:
+			orn.arcada(face + fora * 0.2, fora, ao, comp - 0.8, minf(4.2, alt - 0.8), pedra)
+		# trepadeiras descendo da cornija (não no Porto industrial, poucas na Estação)
+		var chance = {"moderno": 0.45, "armazem": 0.3, "colonial": 0.4, "tijolo": 0.3, "palafita": 0.25}.get(tema.estilo, 0.3)
+		if rng.randf() < chance:
+			var u = rng.randf_range(-0.35, 0.35) * comp
+			orn.trepadeira(face + ao * u + Vector3(0, alt - 0.2, 0), fora, ao, alt * rng.randf_range(0.35, 0.7), rng.randf_range(1.8, 3.2))
 
 ## Pontos ao longo de uma face, com o vetor para fora. passo = distância entre janelas.
 func _ao_longo(centro: Vector3, sx: float, sz: float, lado: String, passo: float, margem := 1.2) -> Array:
@@ -271,6 +304,10 @@ func _janela(base: Vector3, fora: Vector3, ao: Vector3, larg: float, alt: float,
 	if venezianas != "":
 		for s in [-1, 1]:
 			c.caixa(base + fora * 0.1 + ao * s * (larg * 0.5 + 0.33), Vector3(0.6, alt + 0.1, 0.06), venezianas, rot)
+	if base.y > 2.2 and rng.randf() < 0.22:
+		# jardineira com flores sob a janela (acima da cabeça: não interfere no combate)
+		c.caixa(base + fora * 0.25 - Vector3(0, 0.42, 0), Vector3(larg + 0.2, 0.32, 0.36), moldura, rot)
+		orn.moita(base + fora * 0.3 - Vector3(0, 0.02, 0), 0.32)
 
 func _corpo(centro: Vector3, sx: float, sz: float, alt: float, cor: String) -> void:
 	c.caixa(centro, Vector3(sx, alt, sz), cor)
@@ -360,7 +397,7 @@ func _igreja(centro: Vector3, sx: float, sz: float, alt: float) -> void:
 		var t = centro + Vector3(s * sx * 0.32, 0, 0)
 		c.caixa(t, Vector3(2.4, h + 5.0, 2.4), "friso")
 		c.caixa(t + Vector3(0, h + 5.0, 0), Vector3(2.0, 1.4, 2.0), "azulejo")
-		c.cilindro(t + Vector3(0, h + 6.4, 0), 1.0, 2.0, "azulejo", 8, 0.0)
+		orn.cupula(t + Vector3(0, h + 6.4, 0), 1.05, 0.5, "friso")
 		c.caixa(t + Vector3(0, h + 3.2, 1.21), Vector3(0.9, 1.6, 0.1), "escuro")
 	c.telhado(centro + Vector3(0, h + 0.5, 0), Vector3(sx * 0.6, 0, sz * 0.8), 2.4, "telha", 0.2)
 
@@ -424,11 +461,24 @@ func _na_borda(centro: Vector3, sx: float, sz: float) -> bool:
 
 ## Mata fechada no limite do mapa (Represa): barranco de terra e árvores altas.
 func _mata(centro: Vector3, sx: float, sz: float, alt: float) -> void:
-	c.caixa(centro, Vector3(sx, alt, sz), "folha0")
-	var n = int(sx * sz / 9.0)
-	for i in n:
-		var p = centro + Vector3(rng.randf_range(-sx, sx) * 0.5, alt - 1.0, rng.randf_range(-sz, sz) * 0.5)
-		c.esfera(p + Vector3(0, 1.5, 0), Vector3(2.2, 1.8, 2.2) * rng.randf_range(0.8, 1.4), "folha%d" % rng.randi_range(0, tema.arvore.size() - 1), 7, 4)
+	# núcleo escuro (atrás) e camadas de copas por cima e pela frente: parede viva, não uma caixa
+	c.caixa(centro, Vector3(maxf(1.0, sx - 3.0), alt * 0.8, maxf(1.0, sz - 3.0)), "orn_folha")
+	var passo = 2.2
+	var nx = maxi(1, int(sx / passo))
+	var nz = maxi(1, int(sz / passo))
+	for ix in nx:
+		for iz in nz:
+			var borda_x = ix == 0 or ix == nx - 1
+			var borda_z = iz == 0 or iz == nz - 1
+			if not (borda_x or borda_z):
+				continue
+			var p = centro + Vector3(((ix + 0.5) / nx - 0.5) * sx, 0, ((iz + 0.5) / nz - 0.5) * sz)
+			for k in 3:
+				var y = alt * (0.25 + k * 0.33) + rng.randf_range(-0.4, 0.4)
+				var r = rng.randf_range(0.95, 1.1) if k == 0 else rng.randf_range(1.3, 1.7)
+				c.esfera(p + Vector3(rng.randf_range(-0.2, 0.2), y, rng.randf_range(-0.2, 0.2)), Vector3(r, r * 0.85, r), "orn_folha_clara" if (ix + iz + k) % 3 == 0 else "folha%d" % rng.randi_range(0, tema.arvore.size() - 1), 8, 5)
+			if rng.randf() < 0.3:
+				orn.flores(p + Vector3(0, 0.3, 0), 0.8, 5)
 
 func _rio(centro: Vector3, sx: float, sz: float) -> void:
 	c.plano(centro + Vector3(0, 0.06, 0), Vector2(sx, sz), "agua")
@@ -630,17 +680,11 @@ func _trilhos() -> void:
 			c.caixa(Vector3(0, 0.08, z + s_), Vector3(w, 0.1, 0.1), "ferro")
 
 func _poste(p: Vector3) -> void:
-	c.cilindro(p, 0.08, 3.4, "ferro", 6)
-	c.caixa(p + Vector3(0, 3.4, 0), Vector3(0.35, 0.45, 0.35), "ferro")
-	c.caixa(p + Vector3(0, 3.45, 0), Vector3(0.25, 0.3, 0.25), "luz")
+	orn.lampiao(p)
 
 ## Estandarte verde-azulado com o emblema em V (identidade Valdora).
 func _bandeira(p: Vector3, parede: Vector3) -> void:
-	var rot = atan2(-parede.x, -parede.z)
-	c.caixa(p + Vector3(0, 3.8, 0), Vector3(1.0, 0.08, 0.08), "ouro", rot)
-	c.caixa(p + Vector3(0, 2.0, 0), Vector3(0.85, 1.8, 0.04), "teal", rot)
-	c.caixa(p - parede * 0.03 + Vector3(0, 2.5, 0), Vector3(0.45, 0.45, 0.04), "ouro", rot + PI * 0.25)
-	c.caixa(p + Vector3(0, 1.85, 0), Vector3(0.85, 0.2, 0.05), "ouro", rot)
+	orn.estandarte(p + Vector3(0, 0.4, 0), -parede)
 
 func _arvore(p: Vector3, e: float) -> void:
 	var folha = "folha%d" % rng.randi_range(0, tema.arvore.size() - 1)
@@ -652,9 +696,7 @@ func _arvore(p: Vector3, e: float) -> void:
 			var d = Vector3(cos(ang), 0, sin(ang))
 			c.caixa(p + Vector3(0, 5.0 * e, 0) + d * 0.9 * e, Vector3(1.9 * e, 0.08, 0.5 * e), folha, -ang)
 		return
-	c.cilindro(p, 0.13 * e, 2.4 * e, "tronco", 6, 0.08 * e)
-	c.esfera(p + Vector3(0, 3.0 * e, 0), Vector3(1.3, 1.0, 1.3) * e, folha, 8, 5)
-	c.esfera(p + Vector3(0.5, 3.6 * e, 0.3) * Vector3(e, 1, e), Vector3(0.9, 0.75, 0.9) * e, folha, 7, 4)
+	orn.arvore(p, e * 0.8, folha)
 
 # ---------------------------------------------------------------- paisagem de fundo
 
@@ -690,6 +732,8 @@ func _fundo() -> void:
 			c.esfera(Vector3(-w * 0.5 - 70, -10, -60), Vector3(40, 60, 30), "folha0", 10, 6, true)
 			for k in 4:
 				_guindaste(Vector3(w * 0.5 + 8, 0, -h * 0.5 + 15 + k * 22))
+			_cristo(Vector3(-w * 0.5 - 70, 0, -60))
+			_theatro(Vector3(-18, 0, -h * 0.5 - 34), 1.0)
 		"ladeira":
 			c.plano(Vector3(0, 0.05, -h * 0.5 - 90), Vector2(w + 400, 120), "agua")
 			for i in 30:
@@ -697,14 +741,16 @@ func _fundo() -> void:
 				var cor = "parede%d" % rng.randi_range(0, tema.paredes.size() - 1)
 				c.caixa(p, Vector3(5, 7, 6), cor)
 				c.telhado(p + Vector3(0, 7, 0), Vector3(5, 0, 6), 1.5, "telha", 0.3)
-			c.caixa(Vector3(w * 0.5 + 25, 0, -h * 0.5 - 20), Vector3(8, 32, 8), "parede5")
+			_elevador_lacerda(Vector3(w * 0.5 + 25, 0, -h * 0.5 - 20))
 		"estacao":
 			# torre do relógio de tijolo e prédios altos ao fundo
 			var t = Vector3(0, 0, -h * 0.5 - 18)
 			c.caixa(t, Vector3(7, 30, 7), "parede0")
 			c.caixa(t + Vector3(0, 30, 0), Vector3(8, 1, 8), "friso")
 			c.cilindro(t + Vector3(0, 22, 3.6), 2.2, 0.2, "creme", 16)
-			c.cilindro(t + Vector3(0, 31, 0), 3.5, 5.0, "zinco", 4, 0.0)
+			c.cilindro(t + Vector3(0, 31, 0), 3.5, 5.0, "orn_cupula", 4, 0.0)
+			orn.cupula(t + Vector3(0, 36, 0), 0.6, 0.2, "friso")
+			_theatro(Vector3(w * 0.5 + 30, 0, -h * 0.5 - 10), 1.2)
 			for i in 26:
 				var p = Vector3(rng.randf_range(-w - 40, w + 40), 0, rng.randf_range(-h - 40, -h * 0.5 - 30))
 				var alt = rng.randf_range(20, 55)
@@ -715,8 +761,56 @@ func _fundo() -> void:
 				if absf(p.x) > w * 0.5 + 4 or absf(p.z) > h * 0.5 + 4:
 					_arvore(p, rng.randf_range(1.6, 2.6))
 			c.caixa(Vector3(0, 0, -h * 0.5 - 30), Vector3(w + 60, 22, 10), "concreto")
+			_ver_o_peso(Vector3(w * 0.5 + 26, 0, 8))
 			for k in 8:
 				c.caixa(Vector3(-w * 0.5 + k * 12, 2, -h * 0.5 - 24.9), Vector3(6, 16, 0.2), "agua")
+
+## Cristo Redentor no alto do Corcovado (Rio): morro verde e estátua clara de braços abertos.
+func _cristo(p: Vector3) -> void:
+	var topo = p + Vector3(0, 52, 0)
+	c.caixa(topo, Vector3(3.0, 1.6, 3.0), "orn_pedra")
+	c.cilindro(topo + Vector3(0, 1.6, 0), 1.0, 7.5, "creme", 8, 0.75)
+	c.caixa(topo + Vector3(0, 7.0, 0), Vector3(11.0, 1.1, 1.1), "creme")
+	c.esfera(topo + Vector3(0, 9.6, 0), Vector3(0.85, 1.0, 0.85), "creme", 8, 5)
+
+## Theatro municipal (Rio e São Paulo): corpo creme, colunata, cúpulas verde-azuladas douradas.
+func _theatro(p: Vector3, e: float) -> void:
+	var sx = 26.0 * e; var sz = 18.0 * e; var alt = 13.0 * e
+	c.caixa(p, Vector3(sx, alt, sz), "orn_pedra")
+	orn.cornija(p, sx, sz, alt)
+	for i in 8:
+		c.cilindro(p + Vector3((i - 3.5) * sx / 9.0, 0, sz * 0.5 + 1.2), 0.45 * e, alt * 0.7, "orn_pedra", 8)
+	c.caixa(p + Vector3(0, alt * 0.7, sz * 0.5 + 1.2), Vector3(sx * 0.9, 0.8, 1.6), "orn_pedra")
+	orn.cupula(p + Vector3(0, alt, 0), 5.0 * e, 2.0 * e)
+	for s_ in [-1, 1]:
+		orn.cupula(p + Vector3(s_ * sx * 0.42, alt, sz * 0.36), 1.8 * e, 1.4 * e)
+	orn.estandarte(p + Vector3(-sx * 0.25, alt * 0.35, sz * 0.5 + 0.2), Vector3(0, 0, 1), 4.0 * e, 1.4 * e)
+	orn.estandarte(p + Vector3(sx * 0.25, alt * 0.35, sz * 0.5 + 0.2), Vector3(0, 0, 1), 4.0 * e, 1.4 * e)
+
+## Elevador Lacerda (Salvador): torre art déco clara com casa de máquinas e passarela.
+func _elevador_lacerda(p: Vector3) -> void:
+	c.caixa(p, Vector3(7, 34, 6), "friso")
+	for k in 9:
+		c.caixa(p + Vector3(0, 3.0 + k * 3.4, 3.02), Vector3(1.0, 2.0, 0.1), "vidro")
+	c.caixa(p + Vector3(0, 34, 0), Vector3(9, 5, 8), "friso")
+	c.caixa(p + Vector3(0, 39, 0), Vector3(9.6, 0.6, 8.6), "socle")
+	c.caixa(p + Vector3(-8, 31, 0), Vector3(10, 2.2, 3.0), "friso")
+	for k in 4:
+		c.caixa(p + Vector3(0, 35.2, 4.05), Vector3(7.6, 0.3, 0.1) if k == 0 else Vector3(1.2, 2.6, 0.1), "vidro" if k > 0 else "teal")
+
+## Ver-o-Peso (Belém): mercado de ferro azul-acinzentado com quatro torreões pontudos.
+func _ver_o_peso(p: Vector3) -> void:
+	c.liso("vop", Color("6f8fa6"), 0.5, 0.3)
+	c.caixa(p, Vector3(14, 6, 26), "vop")
+	c.caixa(p + Vector3(0, 6, 0), Vector3(14.6, 0.5, 26.6), "creme")
+	c.telhado(p + Vector3(0, 6.5, 0), Vector3(14, 0, 26), 3.0, "zinco", 0.3)
+	for x in [-1, 1]:
+		for z in [-1, 1]:
+			var t = p + Vector3(x * 7.0, 0, z * 13.0)
+			c.caixa(t, Vector3(3.0, 10.0, 3.0), "vop")
+			c.caixa(t + Vector3(0, 10, 0), Vector3(3.4, 0.4, 3.4), "creme")
+			c.cilindro(t + Vector3(0, 10.4, 0), 2.1, 5.0, "zinco", 4, 0.0)
+			c.esfera(t + Vector3(0, 15.6, 0), Vector3.ONE * 0.3, "orn_ouro", 5, 3)
 
 func _guindaste(p: Vector3) -> void:
 	for x in [-1, 1]:
