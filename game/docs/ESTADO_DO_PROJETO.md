@@ -137,7 +137,11 @@ Defeitos encontrados:
 - **Ficaram aquém da arte:** os heróis KayKit são "chibi", e a arte tem proporção heroica. Faltam o rosto detalhado e os acessórios (cocar, turbante, óculos de Nilo). Os atributos da ficha (mobilidade, ataque, defesa) só aparecem na tela: ainda não mudam a partida.
 - **Capturas:** `imagens/pvp_1.8/`.
 - **Testes:** 26 de 26 em `run_valdora_tests.sh`, com o novo `test_pvp_paintball.py`. O `pvp_arena_smoke` passou a provar a bola de tinta e o respingo nos 5 mapas, e mais 9 bots com herói e marcador, bots andando e atirando, pistola e granada.
-- **Versão:** 0.6.0-pvp, código 109 (APK: ver abaixo).
+- **APK 0.6.0-pvp (código 109) publicado em 16/11/2026:**
+  - gerado pelo workflow `valdora-android-release`, execução 43862833591, do commit `f6dfc8a`;
+  - release `valdora-0.6.0-pvp` com 55.149.890 bytes (1,8 MB a mais que a 0.5.4, por causa dos heróis) e SHA-256 `4a5244f1…5583c9e`;
+  - o link fixo `releases/latest/download/Valdora.apk` foi baixado e conferido: tamanho e SHA-256 batem com o `versao.json`;
+  - falta a homologação no aparelho: FPS, toque e leitura do HUD.
 
 ### Valdora PvP: gráfico da arte conceitual e APK 0.5.4 (sessão 1.7, 16/11/2026)
 
